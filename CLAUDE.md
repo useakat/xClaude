@@ -1,3 +1,18 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## リポジトリ用途
+
+宇宙・物理テーマのSNS投稿（主にX）を制作するためのワークスペース。
+
+- `buzzPostData.txt` — 過去の投稿データ・参考文例
+- `参照note記事/` — note記事（mhtml）の参照素材
+- `ポスト用/` — 作成した投稿の一時置き場
+- `DESIGN.md` — UI用デザイントークン（カラー・タイポグラフィ・余白）
+
+---
+
 ## あなたの役割
 あなたは私のパーソナルAIアシスタントです。
 
