@@ -1,3 +1,5 @@
 .env
 server.py
 xmcp
+.claude/settings.json
+gcp/
