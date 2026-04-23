@@ -5,8 +5,11 @@
 
 ユーザーからの依頼（テーマ）: $ARGUMENTS
 
-$ARGUMENTSが空の場合は、まず `/root/xClaude/onePointNeta.md` を読み込む。
-「未使用ネタ」セクションから、以下の観点でXのインプレッションが取れそうなネタを1つ自分で選ぶ：
+$ARGUMENTSが空の場合は、まず以下を実行して未使用ネタの一覧を取得する：
+```
+python3 /root/xClaude/sheets_manager.py list one-point --unused-only --full
+```
+取得した一覧から、以下の観点でXのインプレッションが取れそうなネタを1つ自分で選ぶ：
 
 - 直感を裏切る意外性がある
 - 身近なものと宇宙・科学がつながる
@@ -14,11 +17,12 @@ $ARGUMENTSが空の場合は、まず `/root/xClaude/onePointNeta.md` を読み�
 - 難易度が易〜中（難しすぎると伝わらない）
 
 選んだネタの「冒頭1行案」「仕組みのポイント」「感情的締め案」を参考にして投稿を作成する。
-ネタ番号と選んだ理由を1行だけ最後に添える（例：「ネタ[3]：意外性と身近さの組み合わせが強いため」）。
+ネタ番号と選んだ理由を1行だけ最後に添える（例：「No.3：意外性と身近さの組み合わせが強いため」）。
 
-投稿本文を出力した後、使用したネタを `/root/xClaude/onePointNeta.md` から削除し、`/root/xClaude/onePointNeta-used.md` に追記する。
-- `onePointNeta-used.md` が存在しない場合は新規作成する
-- 追記形式：ネタブロック全体をそのまま末尾に追加する
+投稿本文を出力した後、使用したネタを以下のコマンドで使用済みにする：
+```
+python3 /root/xClaude/sheets_manager.py mark-used one-point [No番号]
+```
 
 # 高インプレッションを生む投稿の構造（必ず従う）
 
