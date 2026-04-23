@@ -5,6 +5,9 @@ import argparse
 import asyncio
 import sys
 
+import os
+import tempfile
+
 from notebooklm import NotebookLMClient
 from notebooklm.types import InfographicOrientation, InfographicDetail, InfographicStyle
 
@@ -84,6 +87,77 @@ async def cmd_infographic(args):
             print("✓ 生成完了（ダウンロードは --output で指定）")
 
 
+async def cmd_make_infographic(args):
+    orientation_map = {
+        "landscape": InfographicOrientation.LANDSCAPE,
+        "portrait": InfographicOrientation.PORTRAIT,
+        "square": InfographicOrientation.SQUARE,
+    }
+    detail_map = {
+        "concise": InfographicDetail.CONCISE,
+        "standard": InfographicDetail.STANDARD,
+        "detailed": InfographicDetail.DETAILED,
+    }
+    style_map = {
+        "auto": InfographicStyle.AUTO_SELECT,
+        "sketch-note": InfographicStyle.SKETCH_NOTE,
+        "professional": InfographicStyle.PROFESSIONAL,
+        "bento-grid": InfographicStyle.BENTO_GRID,
+        "editorial": InfographicStyle.EDITORIAL,
+        "instructional": InfographicStyle.INSTRUCTIONAL,
+        "bricks": InfographicStyle.BRICKS,
+        "clay": InfographicStyle.CLAY,
+        "anime": InfographicStyle.ANIME,
+        "kawaii": InfographicStyle.KAWAII,
+        "scientific": InfographicStyle.SCIENTIFIC,
+    }
+
+    # テキスト取得
+    if args.file:
+        with open(args.file, encoding="utf-8") as f:
+            text = f.read()
+        source_title = os.path.basename(args.file)
+    elif args.text:
+        text = args.text
+        source_title = args.title
+    else:
+        print("エラー: --text または --file を指定してください", file=sys.stderr)
+        sys.exit(1)
+
+    async with await NotebookLMClient.from_storage() as client:
+        # ノートブック作成
+        nb = await client.notebooks.create(args.title)
+        nb_id = nb.id
+        print(f"✓ ノートブック作成: {nb_id}")
+
+        try:
+            # テキストソース追加
+            await client.sources.add_text(nb_id, source_title, text)
+            print(f"✓ ソース追加: {source_title}")
+
+            # インフォグラフィック生成
+            print("インフォグラフィックを生成中（数分かかります）...")
+            status = await client.artifacts.generate_infographic(
+                nb_id,
+                instructions=args.instructions or None,
+                orientation=orientation_map[args.orientation],
+                detail_level=detail_map[args.detail],
+                style=style_map[args.style],
+            )
+            task_id = status.task_id if hasattr(status, "task_id") else None
+            if task_id:
+                status = await client.artifacts.wait_for_completion(nb_id, task_id, timeout=300)
+
+            # ダウンロード
+            await client.artifacts.download_infographic(nb_id, args.output)
+            print(f"✓ 保存: {args.output}")
+
+        finally:
+            if not args.keep:
+                await client.notebooks.delete(nb_id)
+                print(f"✓ ノートブック削除: {nb_id}")
+
+
 async def cmd_delete(args):
     async with await NotebookLMClient.from_storage() as client:
         await client.notebooks.delete(args.notebook_id)
@@ -125,6 +199,18 @@ def main():
     p_info.add_argument("--detail", choices=["concise", "standard", "detailed"], default="standard", help="詳細度")
     p_info.add_argument("--output", help="保存先パス（例: output.png）")
 
+    # make-infographic
+    p_make = sub.add_parser("make-infographic", help="テキスト/ファイルからインフォグラフィックを生成")
+    p_make.add_argument("--text", default="", help="インライン入力テキスト")
+    p_make.add_argument("--file", default="", help="テキストファイルのパス")
+    p_make.add_argument("--title", default="Infographic", help="ノートブックタイトル")
+    p_make.add_argument("--instructions", default="", help="生成の指示（任意）")
+    p_make.add_argument("--orientation", choices=["landscape", "portrait", "square"], default="landscape")
+    p_make.add_argument("--detail", choices=["concise", "standard", "detailed"], default="standard")
+    p_make.add_argument("--style", choices=["auto","sketch-note","professional","bento-grid","editorial","instructional","bricks","clay","anime","kawaii","scientific"], default="sketch-note")
+    p_make.add_argument("--output", required=True, help="保存先PNGパス（例: output.png）")
+    p_make.add_argument("--keep", action="store_true", help="生成後もノートブックを残す")
+
     # delete
     p_del = sub.add_parser("delete", help="ノートブック削除")
     p_del.add_argument("notebook_id", help="ノートブックID")
@@ -138,6 +224,7 @@ def main():
         "ask": cmd_ask,
         "audio": cmd_audio,
         "infographic": cmd_infographic,
+        "make-infographic": cmd_make_infographic,
         "delete": cmd_delete,
     }
 
