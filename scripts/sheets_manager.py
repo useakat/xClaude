@@ -27,7 +27,7 @@ NEWS_HEADERS = ["No", "カテゴリ", "タイトル", "概要", "ポイント", 
 def get_client():
     creds_path = os.environ.get(
         "GOOGLE_SERVICE_ACCOUNT_JSON",
-        os.path.join(os.path.dirname(os.path.abspath(__file__)), "gcp", "charming-well-464402-u4-a7fefbac9372.json"),
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "gcp", "charming-well-464402-u4-a7fefbac9372.json"),
     )
     if not os.path.exists(creds_path):
         print(f"エラー: 認証ファイルが見つかりません: {creds_path}", file=sys.stderr)
