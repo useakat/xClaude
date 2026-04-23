@@ -12,14 +12,14 @@ newsTopics シートへの保存・mark-used は不要。
 ### $ARGUMENTS が No.番号の場合（例: No.3）
 以下を実行して指定ネタの詳細を取得する：
 ```
-python3 /root/xClaude/sheets_manager.py list news --unused-only --full
+python3 /root/xClaude/scripts/sheets_manager.py list news --unused-only --full
 ```
 指定番号のネタを使って投稿を作成し、最後に mark-used を実行する。
 
 ### $ARGUMENTS が空の場合
 以下を実行して未使用ニュースの一覧を取得する：
 ```
-python3 /root/xClaude/sheets_manager.py list news --unused-only --full
+python3 /root/xClaude/scripts/sheets_manager.py list news --unused-only --full
 ```
 取得した一覧から、以下の観点でXのインプレッションが取れそうなニュースを1つ自分で選ぶ：
 
@@ -33,7 +33,7 @@ python3 /root/xClaude/sheets_manager.py list news --unused-only --full
 
 投稿本文を出力した後、使用したネタを以下のコマンドで使用済みにする：
 ```
-python3 /root/xClaude/sheets_manager.py mark-used news [No番号]
+python3 /root/xClaude/scripts/sheets_manager.py mark-used news [No番号]
 ```
 
 # 高インプレッションを生む投稿の構造（必ず従う）
