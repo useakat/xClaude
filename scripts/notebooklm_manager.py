@@ -6,6 +6,7 @@ import asyncio
 import sys
 
 from notebooklm import NotebookLMClient
+from notebooklm.types import InfographicOrientation, InfographicDetail, InfographicStyle
 
 
 async def cmd_list(args):
@@ -53,6 +54,36 @@ async def cmd_audio(args):
             print("✓ 生成完了（ダウンロードは --output で指定）")
 
 
+async def cmd_infographic(args):
+    orientation_map = {
+        "landscape": InfographicOrientation.LANDSCAPE,
+        "portrait": InfographicOrientation.PORTRAIT,
+        "square": InfographicOrientation.SQUARE,
+    }
+    detail_map = {
+        "concise": InfographicDetail.CONCISE,
+        "standard": InfographicDetail.STANDARD,
+        "detailed": InfographicDetail.DETAILED,
+    }
+    async with await NotebookLMClient.from_storage() as client:
+        print("インフォグラフィックを生成中...")
+        status = await client.artifacts.generate_infographic(
+            args.notebook_id,
+            instructions=args.instructions or None,
+            orientation=orientation_map[args.orientation],
+            detail_level=detail_map[args.detail],
+        )
+        task_id = status.task_id if hasattr(status, "task_id") else None
+        if task_id:
+            print(f"  タスクID: {task_id}（完了待ち）")
+            status = await client.artifacts.wait_for_completion(args.notebook_id, task_id)
+        if args.output:
+            await client.artifacts.download_infographic(args.notebook_id, args.output)
+            print(f"✓ 保存: {args.output}")
+        else:
+            print("✓ 生成完了（ダウンロードは --output で指定）")
+
+
 async def cmd_delete(args):
     async with await NotebookLMClient.from_storage() as client:
         await client.notebooks.delete(args.notebook_id)
@@ -86,6 +117,14 @@ def main():
     p_audio.add_argument("notebook_id", help="ノートブックID")
     p_audio.add_argument("--output", help="保存先パス（例: output.mp3）")
 
+    # infographic
+    p_info = sub.add_parser("infographic", help="インフォグラフィックを生成")
+    p_info.add_argument("notebook_id", help="ノートブックID")
+    p_info.add_argument("--instructions", default="", help="生成の指示（任意）")
+    p_info.add_argument("--orientation", choices=["landscape", "portrait", "square"], default="landscape", help="向き")
+    p_info.add_argument("--detail", choices=["concise", "standard", "detailed"], default="standard", help="詳細度")
+    p_info.add_argument("--output", help="保存先パス（例: output.png）")
+
     # delete
     p_del = sub.add_parser("delete", help="ノートブック削除")
     p_del.add_argument("notebook_id", help="ノートブックID")
@@ -98,6 +137,7 @@ def main():
         "add-source": cmd_add_source,
         "ask": cmd_ask,
         "audio": cmd_audio,
+        "infographic": cmd_infographic,
         "delete": cmd_delete,
     }
 
