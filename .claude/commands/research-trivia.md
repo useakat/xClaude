@@ -14,16 +14,33 @@ X（旧Twitter）で「実は、〇〇は△△だ」という形式でバズる
 
 ## リサーチ手順
 
-1. `onePointNeta.md` を読み込み、既存ネタと重複しないよう確認する
-2. WebSearchで「宇宙 驚き 事実」「physics surprising facts」「astronomy trivia」などで検索
-3. `onePointPostData.txt` の投稿済みネタとも重複しないか確認
-4. 条件を満たすネタを10件以上収集
-5. 以下のフォーマットで出力
-6. **出力後、収集したネタを `onePointNeta.md` の末尾に追記保存する**（番号は既存の続き番号を使う）
+1. 以下を実行して既存ネタのテーマ一覧を取得し、重複しないよう確認する：
+   ```
+   python3 /root/xClaude/sheets_manager.py list one-point
+   ```
+2. WebSearchで以下の2カテゴリを分けて検索し、それぞれ5件ずつ計10件収集する：
+   - **【宇宙・物理・素粒子】5件**: 「宇宙 驚き 事実」「素粒子 不思議」「physics surprising facts」「quantum mechanics trivia」などで検索
+   - **【科学全般】5件**: 「生物 驚き 事実」「化学 不思議」「human body facts」「biology trivia」「chemistry surprising」などで検索
+3. 条件を満たすネタをカテゴリ別に5件ずつ選ぶ
+4. 以下のフォーマットで出力
+5. **出力後、収集した各ネタを Google Sheets に保存する：**
+   ```
+   python3 /root/xClaude/sheets_manager.py add-one-point \
+     --theme "テーマ" \
+     --hook "冒頭1行案" \
+     --connection "身近さ接続" \
+     --mechanism "仕組みのポイント" \
+     --closing "感情的締め案" \
+     --difficulty "難易度" \
+     --source "出典メモ"
+   ```
+   ネタ10件分、それぞれこのコマンドを実行する。
 
 ## 出力形式
 
-各ネタを以下の形式で出力する：
+カテゴリごとにまとめて出力する：
+
+### 【宇宙・物理・素粒子】
 
 ---
 **ネタ [番号]**
@@ -36,13 +53,20 @@ X（旧Twitter）で「実は、〇〇は△△だ」という形式でバズる
 出典メモ: （URL or 概要）
 ---
 
+### 【科学全般】
+
+---
+**ネタ [番号]**
+（同上）
+---
+
 ## 既出ネタ（重複禁止）
 
-投稿済み（`onePointPostData.txt`）:
+Google Sheets（`sheets_manager.py list one-point` の出力）を必ず確認して重複を避けること。
+
+投稿済み:
 - 金が金色なのは相対性理論のせい
 - 火星の夕焼けは青っぽい
 - 木星の大赤斑はだんだん小さくなってきている
 - 月は地球からどんどん遠ざかっている（毎年3.8cm）
 - 金星は「自転1回」が「1年」より長い
-
-ネタ帳保存済み（`onePointNeta.md`）も必ず読み込んで重複を避けること。
