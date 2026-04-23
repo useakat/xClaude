@@ -137,9 +137,15 @@ async def cmd_make_infographic(args):
 
             # インフォグラフィック生成
             print("インフォグラフィックを生成中（数分かかります）...")
+            instructions_parts = []
+            if args.infographic_title:
+                instructions_parts.append(f"タイトルは「{args.infographic_title}」にしてください。")
+            if args.instructions:
+                instructions_parts.append(args.instructions)
+            instructions = " ".join(instructions_parts) or None
             status = await client.artifacts.generate_infographic(
                 nb_id,
-                instructions=args.instructions or None,
+                instructions=instructions,
                 orientation=orientation_map[args.orientation],
                 detail_level=detail_map[args.detail],
                 style=style_map[args.style],
@@ -204,7 +210,8 @@ def main():
     p_make.add_argument("--text", default="", help="インライン入力テキスト")
     p_make.add_argument("--file", default="", help="テキストファイルのパス")
     p_make.add_argument("--title", default="Infographic", help="ノートブックタイトル")
-    p_make.add_argument("--instructions", default="", help="生成の指示（任意）")
+    p_make.add_argument("--infographic-title", default="", help="インフォグラフィックのタイトル")
+    p_make.add_argument("--instructions", default="", help="生成の追加指示（任意）")
     p_make.add_argument("--orientation", choices=["landscape", "portrait", "square"], default="landscape")
     p_make.add_argument("--detail", choices=["concise", "standard", "detailed"], default="standard")
     p_make.add_argument("--style", choices=["auto","sketch-note","professional","bento-grid","editorial","instructional","bricks","clay","anime","kawaii","scientific"], default="sketch-note")
