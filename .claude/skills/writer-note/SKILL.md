@@ -4,7 +4,7 @@
 # ネタの取り扱い
 - noteNeta シートからネタを選ぶ際は、必ず以下のコマンドで「未使用」ネタのみを対象にする：
   ```
-  python3 /root/xClaude/sheets_manager.py list note-neta --unused-only
+  python3 /root/xClaude/scripts/sheets_manager.py list note-neta --unused-only
   ```
 - ステータスが「使用済み」または「ボツ」のネタは使わないこと。
 - ユーザーが特定のネタ番号を指定した場合も、上記コマンドで「未使用」であることを確認してから進めること。
@@ -175,10 +175,10 @@ H2-1
 
 1. **文字数カウント**: 空白を除いた文字数を計測する
 2. **6000字チェック**: 6000字未満であれば、不足しているセクションを特定して加筆し、再度カウントする。6000字以上になるまでこのステップを繰り返す
-3. **note下書き保存**: `send_note_draft.py` を使って下書きを保存する。ユーザーへの確認は不要
+3. **note下書き保存**: `scripts/send_note_draft.py` を使って下書きを保存する。ユーザーへの確認は不要
 4. **ネタを使用済みに更新**: 使用したネタが Google Sheets の noteNeta シートにある場合、以下のコマンドで「使用済み」に更新する：
    ```
-   python3 /root/xClaude/sheets_manager.py mark-used note-neta [No番号]
+   python3 /root/xClaude/scripts/sheets_manager.py mark-used note-neta [No番号]
    ```
    ユーザーがネタ番号を指定していない場合は、タイトルや内容から対応する No を特定して実行する。
 5. 保存完了後、文字数と編集URLをユーザーに報告する
