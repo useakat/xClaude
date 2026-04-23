@@ -13,7 +13,7 @@ import json
 import requests
 from dotenv import load_dotenv
 
-load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+load_dotenv(os.path.join(os.path.dirname(__file__), "..", ".env"))
 
 NOTE_SESSION = os.getenv("NOTE_SESSION")  # .env に _note_session_v5 の値を設定
 
