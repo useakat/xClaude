@@ -16,7 +16,7 @@ X（旧Twitter）で「実は、〇〇は△△だ」という形式でバズる
 
 1. 以下を実行して既存ネタのテーマ一覧を取得し、重複しないよう確認する：
    ```
-   python3 /root/xClaude/scripts/sheets_manager.py list one-point
+   python3 $HOME/xClaude/scripts/sheets_manager.py list one-point
    ```
 2. WebSearchで以下の2カテゴリを分けて検索し、それぞれ5件ずつ計10件収集する：
    - **【宇宙・物理・素粒子】5件**: 「宇宙 驚き 事実」「素粒子 不思議」「physics surprising facts」「quantum mechanics trivia」などで検索
@@ -25,7 +25,7 @@ X（旧Twitter）で「実は、〇〇は△△だ」という形式でバズる
 4. 以下のフォーマットで出力
 5. **出力後、収集した各ネタを Google Sheets に保存する：**
    ```
-   python3 /root/xClaude/scripts/sheets_manager.py add-one-point \
+   python3 $HOME/xClaude/scripts/sheets_manager.py add-one-point \
      --theme "テーマ" \
      --hook "冒頭1行案" \
      --connection "身近さ接続" \
