@@ -1,4 +1,10 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# dependencies = [
+#   "gspread",
+#   "google-auth-oauthlib",
+# ]
+# ///
 """Google Sheets manager for ポストネタ管理."""
 
 import argparse
