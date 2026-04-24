@@ -13,7 +13,7 @@ newsTopics シートへの保存・mark-used は不要。
 ### $ARGUMENTS が No.番号の場合（例: No.3）
 以下を実行して指定ネタの詳細を取得する：
 ```
-python3 $HOME/xClaude/scripts/sheets_manager.py list news --unused-only --full
+python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list news --unused-only --full
 ```
 内容把握後、投稿を書く前にユーザーへ「どの点が刺さったか」を質問する。
 回答後に投稿を作成し、最後に mark-used を実行する。
@@ -21,7 +21,7 @@ python3 $HOME/xClaude/scripts/sheets_manager.py list news --unused-only --full
 ### $ARGUMENTS が空の場合
 以下を実行して未使用ニュースの一覧を取得する：
 ```
-python3 $HOME/xClaude/scripts/sheets_manager.py list news --unused-only --full
+python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list news --unused-only --full
 ```
 取得した一覧から、以下の観点でXのインプレッションが取れそうなニュースを1つ自分で選ぶ：
 
@@ -35,7 +35,7 @@ python3 $HOME/xClaude/scripts/sheets_manager.py list news --unused-only --full
 
 投稿本文を出力した後、使用したネタ（Sheetsから選んだ場合のみ）を以下のコマンドで使用済みにする：
 ```
-python3 $HOME/xClaude/scripts/sheets_manager.py mark-used news [No番号]
+python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used news [No番号]
 ```
 
 # 高インプレッションを生む投稿の構造（必ず従う）
@@ -84,7 +84,7 @@ python3 $HOME/xClaude/scripts/sheets_manager.py mark-used news [No番号]
 # 出力後の保存手順
 
 本文を出力したら、以下のファイルに保存する：
-- 保存先: `$HOME/xClaude/ポスト用/`
+- 保存先: `$(git rev-parse --show-toplevel)/ポスト用/`
 - ファイル名: `YYYY-MM-DD_[テーマや記事タイトルを短く].md`（例: `2026-04-23_中性子星の密度.md`）
 - 保存内容:
   ```

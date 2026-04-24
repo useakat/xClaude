@@ -15,33 +15,33 @@ notebooklm login
 
 ### ノートブック一覧
 ```
-python3 $HOME/xClaude/scripts/notebooklm_manager.py list
+python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py list
 ```
 
 ### ノートブック作成（URLソース付き）
 ```
-python3 $HOME/xClaude/scripts/notebooklm_manager.py create "タイトル" \
+python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py create "タイトル" \
   --urls "https://..." "https://..."
 ```
 
 ### ソース追加
 ```
-python3 $HOME/xClaude/scripts/notebooklm_manager.py add-source [notebook_id] "https://..."
+python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py add-source [notebook_id] "https://..."
 ```
 
 ### 質問・要約
 ```
-python3 $HOME/xClaude/scripts/notebooklm_manager.py ask [notebook_id] "質問文"
+python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py ask [notebook_id] "質問文"
 ```
 
 ### 音声概要（ポッドキャスト）生成
 ```
-python3 $HOME/xClaude/scripts/notebooklm_manager.py audio [notebook_id] --output podcast.mp3
+python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py audio [notebook_id] --output podcast.mp3
 ```
 
 ### ノートブック削除
 ```
-python3 $HOME/xClaude/scripts/notebooklm_manager.py delete [notebook_id]
+python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py delete [notebook_id]
 ```
 
 ## 典型的なワークフロー

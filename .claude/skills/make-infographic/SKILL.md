@@ -19,18 +19,18 @@
 
 ```bash
 # テキスト直接渡しの場合
-python3 $HOME/xClaude/scripts/notebooklm_manager.py make-infographic \
+python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py make-infographic \
   --text "（テキスト内容）" \
   --title "（ノートブックタイトル）" \
   --infographic-title "（インフォグラフィックのタイトル）" \
-  --output $HOME/xClaude/ポスト用/infographic_YYYY-MM-DD.png
+  --output $(git rev-parse --show-toplevel)/ポスト用/infographic_YYYY-MM-DD.png
 
 # ファイル指定の場合
-python3 $HOME/xClaude/scripts/notebooklm_manager.py make-infographic \
+python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py make-infographic \
   --file /path/to/file.txt \
   --title "（ノートブックタイトル）" \
   --infographic-title "（インフォグラフィックのタイトル）" \
-  --output $HOME/xClaude/ポスト用/infographic_YYYY-MM-DD.png
+  --output $(git rev-parse --show-toplevel)/ポスト用/infographic_YYYY-MM-DD.png
 ```
 
 - `--infographic-title` はインフォグラフィック画像内のタイトル。指定がなければ省略。

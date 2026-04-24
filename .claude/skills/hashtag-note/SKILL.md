@@ -13,7 +13,7 @@ $ARGUMENTS が **数字のみ**の場合は note 記事ID として扱い、以�
 python3 -c "
 import os, requests
 from dotenv import load_dotenv
-load_dotenv('$HOME/xClaude/.env')
+load_dotenv('$(git rev-parse --show-toplevel)/.env')
 session = os.getenv('NOTE_SESSION')
 r = requests.get(
     'https://note.com/api/v2/notes/$ARGUMENTS',
