@@ -4,7 +4,7 @@
 # ネタの取り扱い
 - noteNeta シートからネタを選ぶ際は、必ず以下のコマンドで「未使用」ネタのみを対象にする：
   ```
-  uv run $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list note-neta --unused-only
+  python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list note-neta --unused-only
   ```
 - ステータスが「使用済み」または「ボツ」のネタは使わないこと。
 - ユーザーが特定のネタ番号を指定した場合も、上記コマンドで「未使用」であることを確認してから進めること。
@@ -178,7 +178,7 @@ H2-1
 3. **note下書き保存**: `scripts/send_note_draft.py` を使って下書きを保存する。ユーザーへの確認は不要
 4. **ネタを使用済みに更新**: 使用したネタが Google Sheets の noteNeta シートにある場合、以下のコマンドで「使用済み」に更新する：
    ```
-   uv run $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used note-neta [No番号]
+   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used note-neta [No番号]
    ```
    ユーザーがネタ番号を指定していない場合は、タイトルや内容から対応する No を特定して実行する。
 5. 保存完了後、文字数と編集URLをユーザーに報告する

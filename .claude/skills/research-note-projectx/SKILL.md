@@ -17,7 +17,7 @@ note 記事（約6000字）の題材となる、探査機・探査車・宇宙�
 
 1. 以下を実行して既存ネタのタイトル一覧を取得し、重複しないよう確認する：
    ```
-   uv run $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list note-neta
+   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list note-neta
    ```
 2. `参照note記事/` フォルダ内のファイル名を確認し、既存記事テーマと重複しないよう確認する
 3. WebSearchで以下のキーワードで検索する：
@@ -28,7 +28,7 @@ note 記事（約6000字）の題材となる、探査機・探査車・宇宙�
 5. 以下のフォーマットで出力する
 6. **出力後、収集した各ネタを Google Sheets に保存する：**
    ```
-   uv run $(git rev-parse --show-toplevel)/scripts/sheets_manager.py add-note-neta \
+   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py add-note-neta \
      --title "タイトル案" \
      --mission "主人公(ミッション名)" \
      --era "時代・背景" \
