@@ -7,7 +7,7 @@
 
 $ARGUMENTSが空の場合は、まず以下を実行して未使用ネタの一覧を取得する：
 ```
-uv run $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list one-point --unused-only --full
+python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list one-point --unused-only --full
 ```
 取得した一覧から、以下の観点でXのインプレッションが取れそうなネタを1つ自分で選ぶ：
 
@@ -21,7 +21,7 @@ uv run $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list one-point
 
 投稿本文を出力した後、使用したネタを以下のコマンドで使用済みにする：
 ```
-uv run $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used one-point [No番号]
+python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used one-point [No番号]
 ```
 
 # 高インプレッションを生む投稿の構造（必ず従う）
