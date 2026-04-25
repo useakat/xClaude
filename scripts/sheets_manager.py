@@ -31,13 +31,22 @@ NEWS_HEADERS = ["No", "カテゴリ", "タイトル", "概要", "ポイント", 
 
 
 def get_client():
+    import json
+    # 環境変数にJSONの内容が直接入っている場合（コンテナ環境向け）
+    json_content = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT")
+    if json_content:
+        info = json.loads(json_content)
+        creds = Credentials.from_service_account_info(info, scopes=SCOPES)
+        return gspread.authorize(creds)
+
+    # ファイルパス（通常環境）
     creds_path = os.environ.get(
         "GOOGLE_SERVICE_ACCOUNT_JSON",
         os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "gcp", "charming-well-464402-u4-a7fefbac9372.json"),
     )
     if not os.path.exists(creds_path):
         print(f"エラー: 認証ファイルが見つかりません: {creds_path}", file=sys.stderr)
-        print("セットアップ方法: SHEETS_SETUP.md を参照してください", file=sys.stderr)
+        print("GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT 環境変数にJSONを設定するか、ファイルを配置してください", file=sys.stderr)
         sys.exit(1)
     creds = Credentials.from_service_account_file(creds_path, scopes=SCOPES)
     return gspread.authorize(creds)
