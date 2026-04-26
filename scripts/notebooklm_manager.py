@@ -145,6 +145,7 @@ async def cmd_make_infographic(args):
             instructions = " ".join(instructions_parts) or None
             status = await client.artifacts.generate_infographic(
                 nb_id,
+                language=args.language,
                 instructions=instructions,
                 orientation=orientation_map[args.orientation],
                 detail_level=detail_map[args.detail],
@@ -212,6 +213,7 @@ def main():
     p_make.add_argument("--title", default="Infographic", help="ノートブックタイトル")
     p_make.add_argument("--infographic-title", default="", help="インフォグラフィックのタイトル")
     p_make.add_argument("--instructions", default="", help="生成の追加指示（任意）")
+    p_make.add_argument("--language", default="ja", help="言語コード（例: ja, en）デフォルト: ja")
     p_make.add_argument("--orientation", choices=["landscape", "portrait", "square"], default="landscape")
     p_make.add_argument("--detail", choices=["concise", "standard", "detailed"], default="standard")
     p_make.add_argument("--style", choices=["auto","sketch-note","professional","bento-grid","editorial","instructional","bricks","clay","anime","kawaii","scientific"], default="sketch-note")
