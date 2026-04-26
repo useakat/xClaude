@@ -58,11 +58,7 @@ python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py make-info
 
 ## 生成後の処理
 
-インフォグラフィックの生成が完了したら、続けて Google Drive に同期する：
-
-```bash
-uv run $(git rev-parse --show-toplevel)/scripts/sync_to_drive.py
-```
+インフォグラフィックの生成が完了したら、続けて `/sync-to-drive` スキルを実行して Google Drive の `outputs` フォルダへアップロードする。
 
 ## 完了後の報告
 
