@@ -16,17 +16,24 @@ from pathlib import Path
 import gspread
 from google.oauth2.service_account import Credentials
 
-SPREADSHEET_ID = "1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM"
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
 ]
 DB_DIR = Path(__file__).parent.parent / "database"
 
-SHEET_MAP = {
-    "onePointNeta.csv": "onePointNeta",
-    "noteNeta.csv": "noteNeta",
-    "newsTopics.csv": "newsTopics",
+# スプレッドシートごとの同期マップ: {spreadsheet_id: {csv_filename: sheet_name}}
+SYNC_CONFIG = {
+    "1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM": {
+        "onePointNeta.csv": "onePointNeta",
+        "noteNeta.csv": "noteNeta",
+        "newsTopics.csv": "newsTopics",
+    },
+    "1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc": {
+        "persona.csv": "persona",
+        "pain.csv": "pain",
+        "what.csv": "what",
+    },
 }
 
 
@@ -59,22 +66,23 @@ def sync_csv_to_sheet(ws, csv_path: Path):
 
 def main():
     client = get_client()
-    ss = client.open_by_key(SPREADSHEET_ID)
 
-    for filename, sheet_name in SHEET_MAP.items():
-        csv_path = DB_DIR / filename
-        if not csv_path.exists():
-            print(f"スキップ: {filename} が見つかりません")
-            continue
-        try:
+    for ss_id, sheet_map in SYNC_CONFIG.items():
+        ss = client.open_by_key(ss_id)
+        for filename, sheet_name in sheet_map.items():
+            csv_path = DB_DIR / filename
+            if not csv_path.exists():
+                print(f"スキップ: {filename} が見つかりません")
+                continue
             try:
-                ws = ss.worksheet(sheet_name)
-            except gspread.WorksheetNotFound:
-                ws = ss.add_worksheet(title=sheet_name, rows=1000, cols=20)
-            count = sync_csv_to_sheet(ws, csv_path)
-            print(f"✓ {sheet_name}: {count}件 同期完了")
-        except Exception as e:
-            print(f"✗ {sheet_name}: {e}", file=sys.stderr)
+                try:
+                    ws = ss.worksheet(sheet_name)
+                except gspread.WorksheetNotFound:
+                    ws = ss.add_worksheet(title=sheet_name, rows=1000, cols=20)
+                count = sync_csv_to_sheet(ws, csv_path)
+                print(f"✓ {sheet_name}: {count}件 同期完了")
+            except Exception as e:
+                print(f"✗ {sheet_name}: {e}", file=sys.stderr)
 
 
 if __name__ == "__main__":

@@ -23,10 +23,20 @@ GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT=（GCPサービスアカウントJSONの内�
 
 ## 同期対象
 
+**スプレッドシート① `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`**
+
 | CSVファイル | Sheetsシート名 |
 |------------|--------------|
 | `database/onePointNeta.csv` | onePointNeta |
 | `database/noteNeta.csv` | noteNeta |
 | `database/newsTopics.csv` | newsTopics |
+
+**スプレッドシート② `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`**
+
+| CSVファイル | Sheetsシート名 |
+|------------|--------------|
+| `database/persona.csv` | persona |
+| `database/pain.csv` | pain |
+| `database/what.csv` | what |
 
 シートの内容を全件クリアしてCSVの内容で上書きする（一方向同期）。
