@@ -2,3 +2,5 @@ persona_id,label,pain_domain,awareness_level,channel_affinity,description
 PE001,一般の中年の方,emotion,problem_aware,post/note,理想と現実の間で立ち止まっている30〜40代、知的好奇心はある
 PE002,Claude Code で自動化したい人,x_post,problem_aware,post/note,Claude Code を導入したけどうまく使えてない気がしてる人
 PE003,忙しい知的好奇心旺盛な人,science_curiosity,unaware,post,科学に興味はあるが自分で調べる時間・余裕がない30〜50代
+PE007,安定志向だが物足りないサラリーマン,emotion,unaware,post,安定した仕事に就いているが意味のある生き方をしたいと内心感じている
+PE012,SNS発信を始めたいが自信がない人,x_post,problem_aware,post/note,発信したいことはあるが自分が発信する意味があるのか迷っている
