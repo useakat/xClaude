@@ -1,0 +1,3 @@
+persona_id,label,pain_domain,awareness_level,channel_affinity,description
+PE001,一般の中年の方,emotion,problem_aware,post/note,理想と現実の間で立ち止まっている30〜40代、知的好奇心はある
+PE002,Claude Code で自動化したい人,x_post,problem_aware,post/note,Claude Code を導入したけどうまく使えてない気がしてる人
