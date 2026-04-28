@@ -19,10 +19,14 @@ python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list one-poin
 選んだネタの「冒頭1行案」「仕組みのポイント」「感情的締め案」を参考にして投稿を作成する。
 ネタ番号と選んだ理由を1行だけ最後に添える（例：「No.3：意外性と身近さの組み合わせが強いため」）。
 
-投稿本文を出力した後、使用したネタを以下のコマンドで使用済みにする：
+投稿本文を出力した後、使用したネタの「ステータス」を `database/onePointNeta.csv` で「使用済み」に更新する。
+
+以下のコマンドで更新（[No番号] は実際の番号に置き換え）：
+```bash
+python3 $(git rev-parse --show-toplevel)/scripts/update_neta_status.py one-point [No番号] 使用済み
 ```
-python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used one-point [No番号]
-```
+
+またはスクリプトがない場合は、CSV をエディタで開いて該当行の「ステータス」列を「使用済み」に変更。
 
 # 高インプレッションを生む投稿の構造（必ず従う）
 
