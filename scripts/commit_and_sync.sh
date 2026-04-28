@@ -36,6 +36,10 @@ if [ "$CURRENT_BRANCH" != "main" ] && [ "$CURRENT_BRANCH" != "master" ]; then
   git checkout main
   git pull origin main
   git merge "$CURRENT_BRANCH" --no-edit
+
+  echo "🗑️  ブランチを削除..."
+  git branch -d "$CURRENT_BRANCH"
+  git push origin --delete "$CURRENT_BRANCH" 2>/dev/null || true
 fi
 
 echo "🚀 リモートにpush..."
