@@ -14,8 +14,15 @@ CLIENT_SECRET = GCP_DIR / "client_secret_598918260393-ac06gl6iaunh0lvvn7bdss5837
 TOKEN_PATH = GCP_DIR / "gmail_token.json"
 
 def main():
-    flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRET), SCOPES)
-    creds = flow.run_local_server(port=8977)
+    flow = InstalledAppFlow.from_client_secrets_file(
+        str(CLIENT_SECRET), SCOPES,
+        redirect_uri="urn:ietf:wg:oauth:2.0:oob"
+    )
+    auth_url, _ = flow.authorization_url(prompt="consent")
+    print(f"\n以下のURLをブラウザで開いて認証してください：\n\n{auth_url}\n")
+    code = input("認証後に表示されたコードを貼り付けてください: ").strip()
+    flow.fetch_token(code=code)
+    creds = flow.credentials
     TOKEN_PATH.write_text(creds.to_json())
     print(f"✓ 認証完了: {TOKEN_PATH}")
 
