@@ -42,7 +42,11 @@ Gmail MCP で以下を順番に実行する：
 1. 対象メールに「投稿済み」ラベルを付ける（ラベルが存在しない場合は先に作成する）
 2. INBOX ラベルを外してアーカイブする（unlabel_thread で labelId="INBOX" を削除）
 
-### STEP 6: 完了
+### STEP 6: 投稿記録
+以下のコマンドで投稿を記録する（<X投稿URL> は STEP 4 で取得したURL）：
+python3 $REPO_ROOT/scripts/record_output.py "<X投稿URL>" W003
+
+### STEP 7: 完了
 投稿した X の URL とメールの件名を出力する。
 " --allowedTools "Bash,mcp__claude_ai_Gmail__search_threads,mcp__claude_ai_Gmail__get_thread,mcp__claude_ai_Gmail__list_labels,mcp__claude_ai_Gmail__create_label,mcp__claude_ai_Gmail__label_message,mcp__claude_ai_Gmail__label_thread"
 
