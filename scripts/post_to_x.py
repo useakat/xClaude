@@ -61,7 +61,7 @@ def post_to_x(text: str, image_path: str = None, reply_to: str = None, dry_run: 
     response = client.create_tweet(
         text=text,
         media_ids=media_ids if media_ids else None,
-        reply_to_tweet_id=reply_to if reply_to else None,
+        in_reply_to_tweet_id=reply_to if reply_to else None,
     )
 
     tweet_id = response.data["id"]
