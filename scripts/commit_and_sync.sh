@@ -13,6 +13,7 @@ fi
 COMMIT_MSG="$1"
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 REPO_ROOT=$(git rev-parse --show-toplevel)
+DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||' || echo "master")
 
 cd "$REPO_ROOT"
 
@@ -30,11 +31,11 @@ git commit -m "$COMMIT_MSG
 
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 
-# mainブランチでない場合、mainにmerge
-if [ "$CURRENT_BRANCH" != "main" ] && [ "$CURRENT_BRANCH" != "master" ]; then
-  echo "🔄 現在のブランチ ($CURRENT_BRANCH) をmainにmerge..."
-  git checkout main
-  git pull origin main
+# デフォルトブランチでない場合、マージ
+if [ "$CURRENT_BRANCH" != "$DEFAULT_BRANCH" ]; then
+  echo "🔄 現在のブランチ ($CURRENT_BRANCH) を $DEFAULT_BRANCH にmerge..."
+  git checkout "$DEFAULT_BRANCH"
+  git pull origin "$DEFAULT_BRANCH"
   git merge "$CURRENT_BRANCH" --no-edit
 
   echo "🗑️  ブランチを削除..."
@@ -43,6 +44,6 @@ if [ "$CURRENT_BRANCH" != "main" ] && [ "$CURRENT_BRANCH" != "master" ]; then
 fi
 
 echo "🚀 リモートにpush..."
-git push origin main
+git push origin "$DEFAULT_BRANCH"
 
 echo "✓ 同期完了"
