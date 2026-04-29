@@ -39,15 +39,22 @@ Gmail MCP で以下のクエリで検索する：
 最新1件のスレッドを取得し：
 1. 本文から [投稿文] と [/投稿文] で囲まれたテキストを抽出する
 2. [投稿文] タグが存在しない、または中身が空の場合は「投稿文タグなし、スキップ」と出力して終了する（確認は不要）
-3. メッセージIDを取得し、以下のコマンドで添付画像をダウンロードする（exit code 0 なら画像あり、1 なら画像なし）：
+3. 本文から [リプ] と [/リプ] で囲まれたテキストを抽出する（タグがなければリプなし）
+4. メッセージIDを取得し、以下のコマンドで添付画像をダウンロードする（exit code 0 なら画像あり、1 なら画像なし）：
 python3 $REPO_ROOT/scripts/download_gmail_attachment.py <message_id> /tmp/xpost_image.png
 
-### STEP 4: X に投稿
+### STEP 4a: [投稿文] を X に投稿し、tweet_id を取得
 画像あり（上記コマンドが成功）の場合：
 python3 $REPO_ROOT/scripts/post_to_x.py --text \"（抽出したテキスト）\" --image /tmp/xpost_image.png
 
 画像なしの場合：
 python3 $REPO_ROOT/scripts/post_to_x.py --text \"（抽出したテキスト）\"
+
+投稿完了後、出力に含まれる tweet URL から tweet_id を取得する（URLの末尾の数字）。
+
+### STEP 4b: [リプ] があればセルフリプとして投稿
+STEP 3 で [リプ] テキストが抽出されていた場合のみ実行する：
+python3 $REPO_ROOT/scripts/post_to_x.py --text \"（リプテキスト）\" --reply-to <tweet_id>
 
 ### STEP 5: 「投稿済み」ラベルを付与してアーカイブ
 Gmail MCP で以下を順番に実行する：

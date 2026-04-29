@@ -4,6 +4,7 @@ Post text (and optional image) to X (Twitter).
 Usage:
   python3 post_to_x.py --text "投稿テキスト"
   python3 post_to_x.py --text "投稿テキスト" --image /path/to/image.png
+  python3 post_to_x.py --text "リプ文" --reply-to <tweet_id>
   python3 post_to_x.py --dry-run --text "テスト" --image /path/to/image.png
 """
 
@@ -15,7 +16,7 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent.parent / ".env")
 
-def post_to_x(text: str, image_path: str = None, dry_run: bool = False) -> bool:
+def post_to_x(text: str, image_path: str = None, reply_to: str = None, dry_run: bool = False) -> bool:
     import tweepy
 
     api_key        = os.getenv("X_OAUTH_CONSUMER_KEY")
@@ -32,6 +33,8 @@ def post_to_x(text: str, image_path: str = None, dry_run: bool = False) -> bool:
         print(f"テキスト: {text}")
         if image_path:
             print(f"画像: {image_path}")
+        if reply_to:
+            print(f"リプ先: {reply_to}")
         print("--- (実際には投稿しません) ---")
         return True
 
@@ -58,6 +61,7 @@ def post_to_x(text: str, image_path: str = None, dry_run: bool = False) -> bool:
     response = client.create_tweet(
         text=text,
         media_ids=media_ids if media_ids else None,
+        reply_to_tweet_id=reply_to if reply_to else None,
     )
 
     tweet_id = response.data["id"]
@@ -69,7 +73,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--text", required=True, help="投稿テキスト")
     parser.add_argument("--image", help="画像ファイルパス（省略可）")
+    parser.add_argument("--reply-to", help="リプライ先のtweetID")
     parser.add_argument("--dry-run", action="store_true", help="実際には投稿しない")
     args = parser.parse_args()
 
-    post_to_x(args.text, args.image, args.dry_run)
+    post_to_x(args.text, args.image, args.reply_to, args.dry_run)
