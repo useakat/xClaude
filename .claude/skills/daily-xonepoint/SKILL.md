@@ -16,20 +16,20 @@
 
 以下をすべて実行する：
 
-1. 今日の日付（YYYYMMDD形式）で `outputs/drafts/YYYYMMDD_xonepoint.md` に出力全体を保存する（drafts/ ディレクトリがなければ作成）
+1. 今日の日付（YYYYMMDD形式）と時刻（HH:mm:ss 形式）で `outputs/drafts/YYYYMMDD-HH:mm:ss_xonepoint.md` に出力全体を保存する（drafts/ ディレクトリがなければ作成）
 2. 以下のスクリプトでリポジトリに保存・mainブランチに同期する：
 ```bash
-bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh "daily: xonepoint 原稿 YYYYMMDD"
+bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh "daily: xonepoint 原稿 YYYYMMDD-HH:mm:ss"
 ```
 
 ### STEP 5: メール通知
 
-保存した `outputs/drafts/YYYYMMDD_xonepoint.md` の内容を読み込み、Gmail の MCP ツールを使って以下の内容でメールの下書きを作成する：
+保存した `outputs/drafts/YYYYMMDD-HH:mm:ss_xonepoint.md` の内容を読み込み、Gmail の MCP ツールを使って以下の内容でメールの下書きを作成する：
 
 - 宛先: useakat@gmail.com
-- 件名: 【ワンポイント解説】YYYYMMDD の原稿ができました
-- 本文: `outputs/drafts/YYYYMMDD_xonepoint.md` の内容をそのまま貼り付ける
+- 件名: 【ワンポイント解説】YYYYMMDD HH:mm:ss の原稿ができました
+- 本文: `outputs/drafts/YYYYMMDD-HH:mm:ss_xonepoint.md` の内容をそのまま貼り付ける
 
 下書き作成後、可能であればそのまま送信する。
 
-> YYYYMMDD は実行日の実際の日付に置き換えること。
+> YYYYMMDDやHH:mm:ss は実行日の実際の日付や時刻に置き換えること。
