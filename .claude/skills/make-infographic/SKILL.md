@@ -58,9 +58,14 @@ python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py make-info
 
 ## 生成後の処理
 
-インフォグラフィックの生成が完了したら、続けて `/sync-to-drive` スキルを実行して Google Drive の `outputs` フォルダへアップロードする。
+1. `/sync-to-drive` スキルを実行して Google Drive の `outputs` フォルダへアップロードする。
+2. アップロード成功を確認したら、今回生成したファイルをローカルから削除する：
+```bash
+rm outputs/infographic_YYYY-MM-DD_1.png outputs/infographic_YYYY-MM-DD_2.png ...
+```
+（エラーが出た場合は削除せずユーザーに報告する）
 
 ## 完了後の報告
 
-- 1枚の場合：保存先パスと Drive へのアップロード結果を報告する。
-- 複数枚の場合：生成した全パスをリストで、Drive へのアップロード結果とあわせて報告する。
+- 1枚の場合：Drive へのアップロード結果とローカル削除結果を報告する。
+- 複数枚の場合：生成した全ファイルのアップロード・削除結果をリストで報告する。
