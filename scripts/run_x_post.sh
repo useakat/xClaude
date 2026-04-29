@@ -27,10 +27,11 @@ Gmail MCP で以下のクエリで検索する：
 最新1件のスレッドを取得し：
 1. 本文から [投稿文] と [/投稿文] で囲まれたテキストを抽出する
 2. [投稿文] タグが存在しない、または中身が空の場合は「投稿文タグなし、スキップ」と出力して終了する（確認は不要）
-3. 添付画像（PNG/JPG）があれば /tmp/xpost_image.png に保存する
+3. メッセージIDを取得し、以下のコマンドで添付画像をダウンロードする（exit code 0 なら画像あり、1 なら画像なし）：
+python3 $REPO_ROOT/scripts/download_gmail_attachment.py <message_id> /tmp/xpost_image.png
 
 ### STEP 4: X に投稿
-画像ありの場合：
+画像あり（上記コマンドが成功）の場合：
 python3 $REPO_ROOT/scripts/post_to_x.py --text \"（抽出したテキスト）\" --image /tmp/xpost_image.png
 
 画像なしの場合：
