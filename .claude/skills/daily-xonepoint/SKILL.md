@@ -17,7 +17,10 @@
 以下をすべて実行する：
 
 1. 今日の日付（YYYYMMDD形式）で `outputs/drafts/YYYYMMDD_xonepoint.md` に出力全体を保存する（drafts/ ディレクトリがなければ作成）
-2. `git add -A && git commit -m "Add daily post draft (YYYYMMDD)" && git push` でリポジトリに保存する
+2. 以下のスクリプトでリポジトリに保存・mainブランチに同期する：
+```bash
+bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh "daily: xonepoint 原稿 YYYYMMDD"
+```
 
 ### STEP 5: メール通知
 
