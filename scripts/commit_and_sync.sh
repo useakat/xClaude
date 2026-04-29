@@ -13,7 +13,8 @@ fi
 COMMIT_MSG="$1"
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 REPO_ROOT=$(git rev-parse --show-toplevel)
-DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||' || echo "master")
+DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's|refs/remotes/origin/||')
+DEFAULT_BRANCH=${DEFAULT_BRANCH:-master}
 
 cd "$REPO_ROOT"
 
