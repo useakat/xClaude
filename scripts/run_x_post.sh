@@ -37,9 +37,10 @@ python3 $REPO_ROOT/scripts/post_to_x.py --text \"（抽出したテキスト）\
 画像なしの場合：
 python3 $REPO_ROOT/scripts/post_to_x.py --text \"（抽出したテキスト）\"
 
-### STEP 5: 「投稿済み」ラベルを付与
-Gmail MCP で対象メールに「投稿済み」ラベルを付ける。
-ラベルが存在しない場合は先に作成してから付ける。
+### STEP 5: 「投稿済み」ラベルを付与してアーカイブ
+Gmail MCP で以下を順番に実行する：
+1. 対象メールに「投稿済み」ラベルを付ける（ラベルが存在しない場合は先に作成する）
+2. INBOX ラベルを外してアーカイブする（unlabel_thread で labelId="INBOX" を削除）
 
 ### STEP 6: 完了
 投稿した X の URL とメールの件名を出力する。
