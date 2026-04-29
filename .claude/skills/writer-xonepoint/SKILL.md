@@ -6,8 +6,8 @@
 ユーザーからの依頼（テーマ）: $ARGUMENTS
 
 $ARGUMENTSが空の場合は、まず以下を実行して未使用ネタの一覧を取得する：
-```
-python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list one-point --unused-only --full
+```bash
+python3 $(git rev-parse --show-toplevel)/scripts/csv_reader.py list one-point --unused-only --full
 ```
 取得した一覧から、以下の観点でXのインプレッションが取れそうなネタを1つ自分で選ぶ：
 
