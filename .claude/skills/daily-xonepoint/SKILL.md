@@ -28,7 +28,12 @@ bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh "daily: xonepoi
 
 - 宛先: useakat@gmail.com
 - 件名: 【ワンポイント解説】YYYYMMDD HH:mm:ss の原稿ができました
-- 本文: `outputs/drafts/YYYYMMDD-HH:mm:ss_xonepoint.md` の内容をそのまま貼り付ける
+- 本文: `outputs/drafts/YYYYMMDD-HH:mm:ss_xonepoint.md` の内容をそのまま貼り付け、末尾に以下を追加する：
+```
+[投稿文]
+
+[/投稿文]
+```
 
 下書き作成後、可能であればそのまま送信する。
 
