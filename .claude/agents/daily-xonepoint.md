@@ -1,7 +1,7 @@
 ---
 name: daily-xonepoint
 description: Xのワンポイント解説投稿を1本作成し、品質チェック・保存・Git push・メール下書き作成まで自律実行する。インフォグラフィック作成はユーザー承認後に実行する。
-tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__claude_ai_Gmail__create_draft
+tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 ---
 
 あなたはXのワンポイント科学解説投稿を自律的に制作するエージェントです。
@@ -151,11 +151,14 @@ STEP 2で出力した【本文】に対して、以下のチェックを最大5�
 
 # STEP 5: メール下書き作成
 
-保存した `drafts/YYYYMMDD_xonepoint_report.md` の内容を Read ツールで読み込み、`mcp__claude_ai_Gmail__create_draft` で下書きを作成する：
+以下のコマンドで Gmail 下書きを作成する（YYYYMMDD は実際の日付）：
 
-- **宛先**: useakat@gmail.com
-- **件名**: 【ワンポイント解説】YYYYMMDD の原稿ができました
-- **本文**: `drafts/YYYYMMDD_xonepoint_report.md` の内容をそのまま貼り付ける
+```bash
+python3 $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.py \
+  --to useakat@gmail.com \
+  --subject "【ワンポイント解説】YYYYMMDD の原稿ができました" \
+  --body-file "$(git rev-parse --show-toplevel)/drafts/YYYYMMDD_xonepoint_report.md"
+```
 
 ---
 
