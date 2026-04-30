@@ -93,6 +93,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 禁止事項
 - ファイルを削除しない
 - 確認なしに外部へ送信しない
+- スクリプト（.sh / .py など）の新規作成・編集は、必ずユーザーに確認してから実行する
 
 ## Git ルール
 - 一通りの変更が完了したら、必ず `git commit & push` する
