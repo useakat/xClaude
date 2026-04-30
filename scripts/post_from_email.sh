@@ -32,8 +32,6 @@ cd "$REPO_ROOT"
 Gmail MCP で以下のクエリで検索する（件数制限なし、全件取得）：
 クエリ: subject:$SUBJECT_KEYWORD -label:投稿済み
 
-スキップリスト $REPO_ROOT/logs/skip_list.txt が存在する場合、そこに記載された thread_id のスレッドは結果から除外する。
-
 ### STEP 2: メールがなければ終了
 投稿対象メールが見つからなければ「投稿対象メールなし」と出力して終了する。
 
@@ -42,7 +40,8 @@ Gmail MCP で以下のクエリで検索する（件数制限なし、全件取�
 1. 本文から [投稿文] と [/投稿文] で囲まれたテキストを抽出する
 2. [投稿文] タグが存在しない、または中身が空の場合：
    - 「投稿文タグなし、スキップ」と出力する
-   - そのスレッドの thread_id を $REPO_ROOT/logs/skip_list.txt に追記する（1行1件、重複があっても構わない）
+   - 以下のコマンドで「投稿済み」ラベルを付与してアーカイブする（THREAD_ID はそのスレッドのID）：
+     gws gmail users threads modify --params \"{\\\"userId\\\": \\\"me\\\", \\\"id\\\": \\\"THREAD_ID\\\"}\" --json '{\"addLabelIds\": [\"Label_103\"], \"removeLabelIds\": [\"INBOX\"]}'
    - 終了する（確認は不要）
 3. 本文から [リプ] と [/リプ] で囲まれたテキストを抽出する（タグがなければリプなし）
 4. メッセージIDを取得し、以下のコマンドで添付画像をダウンロードする（exit code 0 なら画像あり、1 なら画像なし）：
@@ -62,8 +61,8 @@ STEP 3 で [リプ] テキストが抽出されていた場合のみ実行する
 python3 $REPO_ROOT/scripts/post_to_x.py --text \"（リプテキスト）\" --reply-to <tweet_id>
 
 ### STEP 5: 「投稿済み」ラベルを付与してアーカイブ
-以下のコマンドを実行する（<thread_id> はSTEP 3 で取得したスレッドID）：
-gws gmail users threads modify --params "{\"userId\": \"me\", \"id\": \"<thread_id>\"}" --json '{"addLabelIds": ["Label_103"], "removeLabelIds": ["INBOX"]}'
+以下のコマンドを実行する（THREAD_ID は STEP 3 で取得したスレッドIDに置き換える）：
+gws gmail users threads modify --params \"{\\\"userId\\\": \\\"me\\\", \\\"id\\\": \\\"THREAD_ID\\\"}\" --json '{\"addLabelIds\": [\"Label_103\"], \"removeLabelIds\": [\"INBOX\"]}'
 
 ### STEP 6: 投稿記録
 以下のコマンドで投稿を記録する（<X投稿URL> は STEP 4 で取得したURL）：
