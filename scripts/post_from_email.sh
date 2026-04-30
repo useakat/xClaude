@@ -29,28 +29,35 @@ cd "$REPO_ROOT"
 ## ループ処理
 
 ### STEP 1: 未処理メールを検索
-Gmail MCP で以下のクエリで検索する（全件取得）：
-クエリ: subject:$SUBJECT_KEYWORD -label:投稿済み
+以下の Bash コマンドで未処理スレッドを検索する（2>/dev/null で keyring ログを除去）：
+PARAMS=\$(python3 -c \"import json; print(json.dumps({'userId': 'me', 'q': 'subject:$SUBJECT_KEYWORD -label:投稿済み', 'maxResults': 50}))\")
+gws gmail users threads list --params \"\$PARAMS\" 2>/dev/null
+
+結果の threads 配列が空またはキーが存在しなければ STEP 2 へ。
 
 ### STEP 2: メールがなければ終了
-投稿対象メールが見つからなければ「投稿対象メールなし」と出力してループを終了する。
+「投稿対象メールなし」と出力してループを終了する。
 
 ### STEP 3: 最古のスレッドを確認
-検索結果の中で受信日時が最も古い1件（internalDate が最小のもの）を選択し：
+STEP 1 の結果から threads 配列の最後の要素（最古）の id を THREAD_ID とする。
+以下で本文と message_id を取得する：
+python3 $REPO_ROOT/scripts/get_gmail_body.py THREAD_ID
 
-1. 本文から [投稿文] と [/投稿文] で囲まれたテキストを抽出する
+出力は JSON 形式で message_id と body が含まれる。
+
+1. body から [投稿文] と [/投稿文] で囲まれたテキストを抽出する
 
 2. [投稿文] タグが存在しない、または中身が空の場合：
-   - 「投稿文タグなし、スキップ: <件名>」と出力する
-   - 以下のコマンドで「投稿済み」ラベルのみ付与する（アーカイブはしない。THREAD_ID はそのスレッドのID）：
+   - 「投稿文タグなし、スキップ: THREAD_ID」と出力する
+   - 以下のコマンドで「投稿済み」ラベルのみ付与する（アーカイブはしない）：
      gws gmail users threads modify --params \"{\\\"userId\\\": \\\"me\\\", \\\"id\\\": \\\"THREAD_ID\\\"}\" --json '{\"addLabelIds\": [\"Label_103\"]}'
    - STEP 1 に戻る
 
 3. [投稿文] が存在する場合は以降のステップへ進む
 
-4. 本文から [リプ] と [/リプ] で囲まれたテキストを抽出する（タグがなければリプなし）
+4. body から [リプ] と [/リプ] で囲まれたテキストを抽出する（タグがなければリプなし）
 
-5. メッセージIDを取得し、以下のコマンドで添付画像をダウンロードする（exit code 0 なら画像あり、1 なら画像なし）：
+5. message_id を使い、以下のコマンドで添付画像をダウンロードする（exit code 0 なら画像あり、1 なら画像なし）：
 python3 $REPO_ROOT/scripts/download_gmail_attachment.py <message_id> /tmp/xpost_image.png
 
 ### STEP 4a: [投稿文] を X に投稿し、tweet_id を取得
@@ -76,6 +83,6 @@ python3 $REPO_ROOT/scripts/record_output.py \"<X投稿URL>\" $HOW_ID
 
 ### STEP 7: 完了（ループ終了）
 投稿した X の URL とメールの件名を出力してループを終了する。
-" --allowedTools "Bash,mcp__claude_ai_Gmail__search_threads,mcp__claude_ai_Gmail__get_thread" 2>&1 | tee -a "$LOG_PATH"
+" --allowedTools "Bash" 2>&1 | tee -a "$LOG_PATH"
 
 echo "[$LOG_DATE] 完了" | tee -a "$LOG_PATH"
