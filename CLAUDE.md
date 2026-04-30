@@ -94,6 +94,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ファイルを削除しない
 - 確認なしに外部へ送信しない
 - スクリプト（.sh / .py など）の新規作成・編集は、必ずユーザーに確認してから実行する
+- X（Twitter）への投稿は cron による定時実行以外では行わない。テスト・動作確認目的であっても、ユーザーから明示的に「投稿してよい」と指示されない限り実行禁止
 
 ## Git ルール
 - 一通りの変更が完了したら、必ず `git commit & push` する
