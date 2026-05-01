@@ -9,7 +9,9 @@
       "Bash(git -C /root/xClaude status)",
       "Bash(python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py make-infographic *)",
       "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_drive.sh)",
-      "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_sheets.sh)"
+      "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_sheets.sh)",
+      "Bash(bash $(git rev-parse --show-toplevel)/scripts/drive_put.sh *)",
+      "Bash(bash $(git rev-parse --show-toplevel)/scripts/drive_get.sh *)"
     ]
   },
   "mcpServers": {

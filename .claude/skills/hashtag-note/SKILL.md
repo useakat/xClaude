@@ -1,13 +1,19 @@
 あなたは note 記事のハッシュタグ選定の専門家です。
 与えられた記事に対して、ハッシュタグ辞書PDFから最適なハッシュタグを選び出します。
 
-対象記事（記事ID・タイトル・本文のいずれか）: $ARGUMENTS
+対象記事（note 記事ID・Drive ファイルID・タイトル・本文のいずれか）: $ARGUMENTS
 
 ## 作業手順
 
 ### Step 0: 引数の種類を判定して記事を取得する
 
-$ARGUMENTS が **数字のみ**の場合は note 記事ID として扱い、以下のコマンドで記事を取得する：
+引数の形式を以下の優先順位で判定する：
+
+1. **数字のみ**（例: `1234567890`）→ **note 記事ID モード**
+2. **25〜44 文字の英数字＋`-_`、空白なし、改行なし**（例: `1MfgiTHn8qKubkdxf2H6RGM7xdlMzgXIX`）→ **Drive ファイルID モード**
+3. 上記以外 → **テキストモード**
+
+#### モードA: note 記事ID
 
 ```bash
 python3 -c "
@@ -25,9 +31,41 @@ print('本文:', d.get('body', '')[:3000])
 "
 ```
 
-取得したタイトルと本文を記事内容として以降の手順で使用する。
+取得したタイトルと本文を記事内容として以降の手順で使用する。**ハッシュタグの追記処理はせず、最終タグセットを表示するのみ。**
 
-$ARGUMENTS が記事ID以外（テキスト）の場合は、そのまま記事内容として扱う。
+#### モードB: Drive ファイルID
+
+drive_put.sh は **ローカルファイル名と同名の Drive ファイルがあれば更新**するので、ダウンロード時に元ファイル名を保持すること。
+
+```bash
+# 1. Drive メタデータからファイル名を取得
+FILENAME=$(gws drive files get --params '{"fileId": "'$ARGUMENTS'", "fields": "name"}' 2>/dev/null \
+  | python3 -c "import json,sys; print(json.load(sys.stdin)['name'])")
+LOCAL_PATH="/tmp/$FILENAME"
+
+# 2. 元ファイル名でダウンロード
+bash $(git rev-parse --show-toplevel)/scripts/drive_get.sh $ARGUMENTS "$LOCAL_PATH"
+```
+
+ダウンロードしたファイルを Read で読み込み、タイトルと本文を取得してタグ選定（Step 1〜4）を実施する。
+
+選定が終わったら最終タグセットを **同じローカルファイル末尾に追記** し、Drive を更新する：
+
+```bash
+# 末尾にタグを追記
+echo "" >> "$LOCAL_PATH"
+echo "<!-- ハッシュタグ -->" >> "$LOCAL_PATH"
+echo "#タグA #タグB #タグC ..." >> "$LOCAL_PATH"
+
+# Drive に反映（同名ファイルなので更新される）
+bash $(git rev-parse --show-toplevel)/scripts/drive_put.sh "$LOCAL_PATH"
+```
+
+ユーザーへの報告には **更新後の Drive URL** を含めること。
+
+#### モードC: テキスト
+
+引数のテキストをそのまま記事内容として扱う。**ハッシュタグの追記処理はせず、最終タグセットを表示するのみ。**
 
 ### Step 1: PDFを読み込む
 
