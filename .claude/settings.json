@@ -11,7 +11,8 @@
       "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_drive.sh)",
       "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_sheets.sh)",
       "Bash(bash $(git rev-parse --show-toplevel)/scripts/drive_put.sh *)",
-      "Bash(bash $(git rev-parse --show-toplevel)/scripts/drive_get.sh *)"
+      "Bash(bash $(git rev-parse --show-toplevel)/scripts/drive_get.sh *)",
+      "Bash(python3 $(git rev-parse --show-toplevel)/scripts/send_gmail.py *)"
     ]
   },
   "mcpServers": {
