@@ -2,14 +2,88 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## リポジトリ用途
+## プロジェクトの目的
 
-宇宙・物理テーマのSNS投稿（主にX）を制作するためのワークスペース。
+宇宙・物理テーマの発信（主に X と note）を制作するためのワークスペース。
 
 - `buzzPostData.txt` — 過去の投稿データ・参考文例
 - `参照note記事/` — note記事（mhtml）の参照素材
-- `ポスト用/` — 作成した投稿の一時置き場
 - `DESIGN.md` — UI用デザイントークン（カラー・タイポグラフィ・余白）
+
+---
+
+## プロジェクト構造
+
+```
+xClaude/
+├── .claude/
+│   ├── skills/                       # AIスキル定義（slash command として呼ぶ）
+│   │   ├── writer-note/              # note 記事執筆（宇宙・物理ナラティブ）
+│   │   ├── writer-xonepoint/         # X 用ワンポイント解説
+│   │   ├── writer-xnews/             # X ニュース投稿
+│   │   ├── writer-xstory/            # X 用ストーリー投稿
+│   │   ├── check/                    # 一般品質レビュー
+│   │   ├── check-fact/               # ファクトチェック（テキスト/Drive ID 自動分岐）
+│   │   ├── hashtag-note/             # note ハッシュタグ選定
+│   │   ├── research/                 # 一般調査
+│   │   ├── research-trivia/          # ワンポイントネタ発掘
+│   │   ├── research-note-projectx/   # note 記事ネタ発掘
+│   │   ├── analyze-target/           # persona / pain / what 設計
+│   │   ├── make-infographic/         # NotebookLM でインフォグラフィック生成
+│   │   ├── notebooklm/               # NotebookLM 操作
+│   │   ├── sync-to-drive/            # outputs/ → Drive 同期
+│   │   ├── sync-to-sheets/           # database/CSV → Sheets 同期
+│   │   └── daily-xonepoint/          # 1日1本ワンポイント投稿の全自動
+│   ├── agents/                       # 自律エージェント定義
+│   │   ├── daily-xonepoint.md
+│   │   └── x-post-from-email.md
+│   ├── settings.json                 # チーム共通設定（権限・MCP サーバー）
+│   └── settings.local.json           # 個人ローカル設定
+│
+├── database/                         # CSV データベース（Google Sheets の実体）
+│   ├── onePointNeta.csv              # ワンポイント解説ネタ
+│   ├── noteNeta.csv                  # note 記事ネタ
+│   ├── newsTopics.csv                # ニュースネタ
+│   ├── persona.csv                   # 想定ペルソナ
+│   ├── pain.csv                      # 読者の悩み
+│   ├── what.csv                      # 提供価値
+│   └── outputs.csv                   # 生成済み投稿の記録
+│
+├── scripts/                          # 自動化スクリプト群
+│   ├── sync_to_sheets.sh             # database/ → Google Sheets 同期（gws CLI）
+│   ├── sync_to_drive.sh              # outputs/ → Google Drive 同期（gws CLI）
+│   ├── drive_put.sh                  # ローカル md → Drive アップロード/更新
+│   ├── drive_get.sh                  # Drive ファイル ID 指定でローカル DL
+│   ├── send_gmail.py                 # Gmail 送信（writer-note 完了通知）
+│   ├── create_gmail_draft.py         # Gmail 下書き作成（daily-xonepoint）
+│   ├── get_gmail_body.py             # Gmail スレッド本文抽出
+│   ├── gmail_label.py                # Gmail ラベル操作
+│   ├── post_from_email.sh            # メール起点 X 投稿 cron
+│   ├── post_to_x.py                  # X 投稿
+│   ├── notebooklm_manager.py         # NotebookLM クライアント
+│   ├── sheets_manager.py             # ローカル CSV 管理（add/list/mark-used）
+│   ├── send_note_draft.py            # note.com への下書き保存
+│   └── …                             # 他補助スクリプト
+│
+├── outputs/                          # 生成成果物
+│   ├── drafts-note/                  # note 記事原稿（Drive と同期）
+│   └── drafts/                       # X 投稿原稿
+│
+├── scheduled_posts/                  # 予約投稿用テキスト
+├── logs/                             # 各種実行ログ（X 投稿・skip リスト）
+├── gcp/                              # Google 認証情報（要 gitignore）
+│   ├── gmail_token.json              # Gmail API ユーザー認証
+│   ├── drive_token.json              # Drive API ユーザー認証
+│   └── *-service-account.json        # サービスアカウント鍵
+├── xmcp/                             # 自前 X MCP サーバー
+│
+├── CLAUDE.md                         # 本ファイル（Claude Code 向けガイド）
+├── DESIGN.md                         # UI デザイントークン
+└── note_xmcp_setup.md                # X MCP セットアップ手順
+```
+
+外部認証は gws CLI（`~/.config/gws/`）と Python スクリプト用トークン（`gcp/`）の2系統。
+データベースの実体は `database/*.csv` で、`scripts/sync_to_sheets.sh` で Google Sheets に一方向同期する。
 
 ---
 
