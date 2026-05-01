@@ -5,3 +5,4 @@ PE003,忙しい知的好奇心旺盛な人,science_curiosity,unaware,post,科学
 PE004,後ろめたさを抱えながら本音を押し殺している人,emotion,problem_aware,post/note,できるならそうしたいと思っているが後ろめたくて認められずにいる30〜50代
 PE007,安定志向だが物足りないサラリーマン,emotion,unaware,post,安定した仕事に就いているが意味のある生き方をしたいと内心感じている
 PE012,SNS発信を始めたいが自信がない人,x_post,problem_aware,post/note,発信したいことはあるが自分が発信する意味があるのか迷っている
+PE013,AI活用でコンテンツ制作を効率化したい発信者,x_post,solution_seeking,post/note,発信は続けているが作業量に疲弊しAIで効率化したいと思い始めている30〜50代
