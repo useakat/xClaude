@@ -10,7 +10,7 @@
 ## 実行コマンド
 
 ```bash
-uv run $(git rev-parse --show-toplevel)/scripts/sync_to_drive.py
+bash $(git rev-parse --show-toplevel)/scripts/sync_to_drive.sh
 ```
 
 ## 初回認証セットアップ（一度だけ）
