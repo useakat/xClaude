@@ -67,9 +67,13 @@ xClaude/
 │   ├── send_note_draft.py            # note.com への下書き保存
 │   └── …                             # 他補助スクリプト
 │
+├── style/                            # 文体・口調スタイル定義（skill が参照）
+│   └── style-note-story.md           # note 記事「執念の物語」型のスタイル
+│
 ├── outputs/                          # 生成成果物
 │   ├── drafts-note/                  # note 記事原稿（Drive と同期）
-│   └── drafts/                       # X 投稿原稿
+│   ├── drafts/                       # X 投稿原稿
+│   └── research-plans/               # research-plan / deep-research の出力
 │
 ├── scheduled_posts/                  # 予約投稿用テキスト
 ├── logs/                             # 各種実行ログ（X 投稿・skip リスト）
