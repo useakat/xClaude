@@ -22,6 +22,7 @@ xClaude/
 │   │   ├── writer-xonepoint/         # X 用ワンポイント解説
 │   │   ├── writer-xnews/             # X ニュース投稿
 │   │   ├── writer-xstory/            # X 用ストーリー投稿
+│   │   ├── note-quick/               # スタイルだけ適用してチャットに本文出力（軽量版）
 │   │   ├── check/                    # 一般品質レビュー
 │   │   ├── check-fact/               # ファクトチェック（テキスト/Drive ID 自動分岐）
 │   │   ├── hashtag-note/             # note ハッシュタグ選定
