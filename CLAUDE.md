@@ -27,6 +27,7 @@ xClaude/
 │   │   ├── hashtag-note/             # note ハッシュタグ選定
 │   │   ├── research/                 # 一般調査
 │   │   ├── research-plan/            # Deep Research プロンプト設計
+│   │   ├── deep-research/            # 調査プロンプトを基に Web 深掘り調査
 │   │   ├── research-trivia/          # ワンポイントネタ発掘
 │   │   ├── research-note-projectx/   # note 記事ネタ発掘
 │   │   ├── analyze-target/           # persona / pain / what 設計
