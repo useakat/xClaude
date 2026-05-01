@@ -262,13 +262,22 @@ H2-1
    - 本文はそのままMarkdown形式で書き出す
    - ファイル名の `<短いタイトル>` は記事タイトルから20文字以内で作る（スペースは`_`に置換）
    - 保存にはWriteツールを使う
-4. **ネタを使用済みに更新**: 使用したネタが Google Sheets の noteNeta シートにある場合、以下のコマンドで「使用済み」に更新する：
+4. **Google Drive にアップロード**: 以下のコマンドで `drafts-note` フォルダにアップロードする：
+   ```
+   bash $(git rev-parse --show-toplevel)/scripts/drive_put.sh outputs/drafts-note/YYYY-MM-DD_<短いタイトル>.md
+   ```
+   出力に含まれる **ファイルID** と **Drive URL** を控えておく。以降の check-fact / hashtag-note skill にこのファイルIDを渡してユーザーが作業する。
+5. **ネタを使用済みに更新**: 使用したネタが Google Sheets の noteNeta シートにある場合、以下のコマンドで「使用済み」に更新する：
    ```
    python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used note-neta [No番号]
    ```
    ユーザーがネタ番号を指定していない場合は、タイトルや内容から対応する No を特定して実行する。
-5. 保存完了後、文字数と保存先ファイルパスをユーザーに報告する
-6. **演出セルフチェック**: 以下を満たしているか確認する。満たしていなければ書き直す
+6. 完了後、以下を一括でユーザーに報告する：
+   - 文字数
+   - ローカル保存先パス
+   - Drive ファイルID
+   - Drive URL
+7. **演出セルフチェック**: 以下を満たしているか確認する。満たしていなければ書き直す
    - 導入部にH2が付いていない（H1直下から本文が始まる）
    - 各H2セクション末尾に `---` がある
    - H3見出しを使っていない
