@@ -291,12 +291,42 @@ H2-1
    ```
    ユーザーがネタ番号を指定していない場合は、タイトルや内容から対応する No を特定して実行する。
 
-8. 完了後、以下を一括でユーザーに報告する：
+8. **作業完了メール送信**: 以下のコマンドで useakat@gmail.com に完了通知を送る。
+   メール本文は一時ファイルに書き出してから渡す：
+
+   ```bash
+   cat > /tmp/writer_note_mail.txt << 'EOF'
+   note 記事の原稿ができました。
+
+   タイトル: <記事タイトル>
+   文字数: <文字数>
+   Drive URL: <Drive URL>
+   Drive ファイルID: <ファイルID>
+
+   ファクトチェックで修正した点:
+   - <修正点1>
+   - <修正点2>
+
+   次のステップ:
+   1. Drive で内容を確認・修正
+   2. /check-fact <ファイルID> で再ファクトチェック
+   3. /hashtag-note <ファイルID> でハッシュタグ追記
+   4. note にコピペ投稿
+   EOF
+
+   python3 $(git rev-parse --show-toplevel)/scripts/send_gmail.py \
+     --to useakat@gmail.com \
+     --subject "【note原稿】YYYY-MM-DD <短いタイトル> の原稿ができました" \
+     --body-file /tmp/writer_note_mail.txt
+   ```
+
+9. 完了後、以下を一括でユーザーに報告する：
    - 文字数
    - ファクトチェックで指摘・修正した箇所の概要（あれば）
    - ローカル保存先パス
    - Drive ファイルID
    - Drive URL
+   - 完了通知メール送信済みである旨
 
 # 本文執筆後に提案してよいもの
 本文の後で、必要に応じて以下を提案してよい。
