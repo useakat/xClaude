@@ -139,7 +139,24 @@
       "Bash(echo \"テスト下書きです。動作確認後に削除します。\")",
       "Bash(python3 /root/xClaude/scripts/create_gmail_draft.py --to useakat@gmail.com --subject '【テスト】create_gmail_draft.py 動作確認' --body-file /tmp/test_draft.txt)",
       "Bash(gws drive *)",
-      "Bash(python3 -c \"import json; d=json.load\\(open\\('/root/xClaude/gcp/drive_token.json'\\)\\); print\\('scopes:', d.get\\('scopes'\\)\\); print\\('has_refresh:', bool\\(d.get\\('refresh_token'\\)\\)\\)\")"
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('/root/xClaude/gcp/drive_token.json'\\)\\); print\\('scopes:', d.get\\('scopes'\\)\\); print\\('has_refresh:', bool\\(d.get\\('refresh_token'\\)\\)\\)\")",
+      "Read(//tmp/**)",
+      "Bash(chmod +x /root/xClaude/scripts/sync_to_drive.sh)",
+      "Bash(bash /root/xClaude/scripts/sync_to_drive.sh)",
+      "Bash(gws sheets *)",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('/root/.config/gws/credentials.json'\\)\\); print\\('scopes:', d.get\\('scopes'\\)\\)\")",
+      "Bash(jobs -l)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2\\)\\)\")",
+      "Bash(chmod +x /root/xClaude/scripts/sync_to_sheets.sh)",
+      "Bash(bash /root/xClaude/scripts/sync_to_sheets.sh)",
+      "Bash(curl -s -H 'Authorization: Bearer __TRACKED_VAR__' https://sheets.googleapis.com/v4/spreadsheets/__TRACKED_VAR__/values/onePointNeta%21A1:B1)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('URL:', d['url']\\); print\\('method:', d['method']\\)\")",
+      "Bash(gws --help)",
+      "Bash(gws schema *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('scopes:', d.get\\('scopes', d.get\\('auth', 'no scope info'\\)\\)\\)\")",
+      "Bash(mv /root/.config/gws/credentials.json /tmp/gws_creds_bak.json)",
+      "Bash(cp /root/.config/gws/token_cache.json /tmp/gws_tcache_bak.json)",
+      "Bash(mv /root/.config/gws/token_cache.json /tmp/gws_tcache_moved.json)"
     ]
   }
 }

@@ -1,25 +1,12 @@
 # sync-to-sheets
 
-`database/` の CSV ファイルを Google Sheets に同期する。
+`database/` の CSV ファイルを Google Sheets に同期する（gws CLI 使用）。
 
 ## 実行コマンド
 
 ```bash
-uv run $(git rev-parse --show-toplevel)/scripts/sync_to_sheets.py
+bash $(git rev-parse --show-toplevel)/scripts/sync_to_sheets.sh
 ```
-
-## 認証の準備（初回のみ）
-
-以下のいずれかが必要：
-
-**方法A: 環境変数（推奨）**
-`.env` に以下を追加：
-```
-GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT=（GCPサービスアカウントJSONの内容をそのまま）
-```
-
-**方法B: GCPファイル**
-`gcp/charming-well-464402-u4-a7fefbac9372.json` をプロジェクトルートに配置。
 
 ## 同期対象
 
@@ -39,4 +26,18 @@ GOOGLE_SERVICE_ACCOUNT_JSON_CONTENT=（GCPサービスアカウントJSONの内�
 | `database/pain.csv` | pain |
 | `database/what.csv` | what |
 
-シートの内容を全件クリアしてCSVの内容で上書きする（一方向同期）。
+各シートを `values clear` で全件クリアし、CSV の内容で `values update`（一方向同期）。
+
+## 認証
+
+gws の OAuth 認証（`https://www.googleapis.com/auth/spreadsheets` スコープ必須）。
+スプレッドシートは認証ユーザー（useakat@gmail.com）と共有されている必要がある。
+
+## 注意
+
+`~/.config/gws/credentials.json`（旧スコープのみの平文認証情報）が存在すると、gws の直接 API がそれを優先して使い 404 エラーになる。
+存在する場合は削除すること。gws は `credentials.enc`（暗号化、フルスコープ）にフォールバックする。
+
+## 完了後の報告
+
+スクリプトの出力をそのまま報告する。
