@@ -26,6 +26,7 @@ xClaude/
 │   │   ├── check-fact/               # ファクトチェック（テキスト/Drive ID 自動分岐）
 │   │   ├── hashtag-note/             # note ハッシュタグ選定
 │   │   ├── research/                 # 一般調査
+│   │   ├── research-plan/            # Deep Research プロンプト設計
 │   │   ├── research-trivia/          # ワンポイントネタ発掘
 │   │   ├── research-note-projectx/   # note 記事ネタ発掘
 │   │   ├── analyze-target/           # persona / pain / what 設計
@@ -86,6 +87,10 @@ xClaude/
 データベースの実体は `database/*.csv` で、`scripts/sync_to_sheets.sh` で Google Sheets に一方向同期する。
 
 ---
+
+## 基本設定
+**ファイル保存時のルール**: 
+- 生成されるファイル名が既存のファイルと重複する場合、ファイル名の末尾に「_vX」（Xはバージョン番号）を付与して保存し、既存のファイルを上書きしないこと。バージョン番号は、既存のファイル名に続く最も小さい未使用の数字を使用すること。
 
 ## あなたの役割
 あなたは私のパーソナルAIアシスタントです。
