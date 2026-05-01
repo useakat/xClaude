@@ -8,28 +8,14 @@
       "Bash(git -C /root/xClaude commit *)",
       "Bash(git -C /root/xClaude status)",
       "Bash(python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py make-infographic *)",
-      "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_drive.sh)"
+      "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_drive.sh)",
+      "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_sheets.sh)"
     ]
   },
   "mcpServers": {
     "xmcp": {
       "type": "http",
       "url": "http://127.0.0.1:8000/mcp"
-    },
-    "mcp-google-sheets": {
-      "command": "/root/.local/bin/uvx",
-      "args": ["mcp-google-sheets@latest"],
-      "env": {
-        "SERVICE_ACCOUNT_PATH": "/root/xClaude/gcp/charming-well-464402-u4-a7fefbac9372.json"
-      }
-    },
-    "mcp-gsheets": {
-      "command": "npx",
-      "args": ["-y", "mcp-gsheets@latest"],
-      "env": {
-        "GOOGLE_PROJECT_ID": "charming-well-464402-u4",
-        "GOOGLE_APPLICATION_CREDENTIALS": "/root/xClaude/gcp/charming-well-464402-u4-a7fefbac9372.json"
-      }
     }
   }
 }
