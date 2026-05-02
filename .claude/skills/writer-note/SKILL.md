@@ -324,7 +324,7 @@ style/style-note-story.md
    4. note にコピペ投稿
    EOF
 
-   python3 $(git rev-parse --show-toplevel)/scripts/send_gmail.py \
+   bash $(git rev-parse --show-toplevel)/scripts/send_gmail.sh \
      --to useakat@gmail.com \
      --subject "【note原稿】YYYY-MM-DD <短いタイトル> の原稿ができました" \
      --body-file /tmp/writer_note_mail.txt

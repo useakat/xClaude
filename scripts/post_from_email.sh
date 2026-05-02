@@ -72,7 +72,7 @@ print(ts[-1]['id'] if ts else '')
   log "処理対象 thread_id=$THREAD_ID"
 
   # STEP 2: 本文と message_id を取得
-  BODY_JSON=$(python3 scripts/get_gmail_body.py "$THREAD_ID" 2>/dev/null)
+  BODY_JSON=$(bash scripts/get_gmail_body.sh "$THREAD_ID" 2>/dev/null)
   if [ -z "$BODY_JSON" ]; then
     log "本文取得失敗。スキップしてラベル付与: $THREAD_ID"
     gws gmail users threads modify \
@@ -99,7 +99,7 @@ print(ts[-1]['id'] if ts else '')
 
   # 添付画像 DL
   HAS_IMAGE=0
-  if python3 scripts/download_gmail_attachment.py "$MESSAGE_ID" "$TMP_IMAGE" >/dev/null 2>&1; then
+  if bash scripts/download_gmail_attachment.sh "$MESSAGE_ID" "$TMP_IMAGE" >/dev/null 2>&1; then
     HAS_IMAGE=1
     log "添付画像あり"
   fi
