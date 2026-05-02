@@ -1,26 +1,34 @@
 ---
 title: 変更ログ
-description: プロジェクトの主な変更履歴
+description: プロジェクトの変更履歴。各エントリに詳細報告書へのリンクを付ける。
+---
+
+変更1件につき1エントリ。概要を読んで詳細が必要なら報告書へ。
+
 ---
 
 ## 2026-05-02
 
-- **style/style-xonepoint.md** 作成（v2.0）  
-  スプレッドシートの実投稿10件を分析し、13の観点でスタイルを定義
+### Wiki システム構築
+Starlight + GitHub Pages を使ったプロジェクト Wiki を新設。`docs/` が Markdown ソース、`starlight/` がビルド設定。
+→ [詳細報告書](reports/20260502_wiki_setup)
 
-- **writer-xonepoint スキル** style-xonepoint.md を参照するよう更新
+### X ワンポイント投稿スタイルガイド作成
+実投稿10件をスプレッドシートから抽出・分析し、13の観点でスタイルを定義した `style/style-xonepoint.md` を作成。
+→ [詳細報告書](reports/20260502_style_xonepoint)
 
-- **daily-xonepoint スキル** style-xonepoint.md を参照するよう更新
+### writer-xonepoint・daily-xonepoint スキルのスタイルガイド参照化
+両スキルに `style/style-xonepoint.md` への参照を追加。文体の詳細ルールを外部ガイドに委譲。
+→ [詳細報告書](reports/20260502_skill_style_reference)
 
-- **締め言葉ルール追加**  
-  最後の1文は「読者の日常生活につながる1文」で終わるよう強制
+### 投稿締め言葉ルールの追加
+X ワンポイント投稿の最後の1文を「読者の日常生活につながる1文」で締めるルールを強制。
+→ [詳細報告書](reports/20260502_closing_rule)
 
-- **CLAUDE.md 実装ルール追加**  
-  Google サービス連携は gws CLI に統一・スクリプト化優先のルールを明文化
+### Google サービス連携・スクリプト化ルールの追加
+gws CLI への統一とスクリプト化優先の原則を CLAUDE.md に明文化。
+→ [詳細報告書](reports/20260502_implementation_rules)
 
-- **daily-xonepoint エージェント改善**  
-  STEP 5 のメール作成を MCP ツールから gws CLI スクリプトに変更  
-  STEP 3 のチェックを `/check` から `/check-fact` に変更
-
-- **xClaude Wiki 構築開始**  
-  Starlight + GitHub Pages による wiki システムを導入
+### daily-xonepoint 自動化改善
+STEP 3 を `/check-fact` に変更、STEP 5 のメール作成を gws CLI スクリプトに変更。エージェントをスリム化しスキルに処理を集約。
+→ [詳細報告書](reports/20260502_daily_xonepoint_improvement)
