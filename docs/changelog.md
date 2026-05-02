@@ -29,6 +29,10 @@ X ワンポイント投稿の最後の1文を「読者の日常生活につな�
 gws CLI への統一とスクリプト化優先の原則を CLAUDE.md に明文化。
 → [詳細報告書](reports/20260502_implementation_rules)
 
+### 報告書・変更ログ運用フローの整備
+変更ログと報告書を1対1対応させる構造を設計。テンプレート作成・旧 reports/ 削除・CLAUDE.md にルール追加。
+→ [詳細報告書](reports/20260502_reporting_workflow)
+
 ### daily-xonepoint 自動化改善
 STEP 3 を `/check-fact` に変更、STEP 5 のメール作成を gws CLI スクリプトに変更。エージェントをスリム化しスキルに処理を集約。
 → [詳細報告書](reports/20260502_daily_xonepoint_improvement)

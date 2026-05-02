@@ -9,3 +9,4 @@ description: プロジェクトの変更・実装に関する詳細報告書。�
 
 - [Wiki システム構築](20260502_wiki_setup) — Starlight + GitHub Pages による Wiki 新設
 - [Google サービス連携・スクリプト化ルールの追加](20260502_implementation_rules) — CLAUDE.md に実装ルールを明文化
+- [報告書・変更ログ運用フローの整備](20260502_reporting_workflow) — 変更ログと報告書の1対1対応構造を整備
