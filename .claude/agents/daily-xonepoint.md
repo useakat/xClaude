@@ -154,7 +154,7 @@ STEP 2で出力した【本文】に対して、以下のチェックを最大5�
 以下のコマンドで Gmail 下書きを作成する（YYYYMMDD は実際の日付）：
 
 ```bash
-python3 $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.py \
+bash $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.sh \
   --to useakat@gmail.com \
   --subject "【ワンポイント解説】YYYYMMDD の原稿ができました" \
   --body-file "$(git rev-parse --show-toplevel)/drafts/YYYYMMDD_xonepoint_report.md"
