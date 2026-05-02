@@ -4,7 +4,9 @@ date: YYYY-MM-DD
 tags: [skill, workflow, style, bugfix, wiki, infra]
 ---
 
-<!-- changelog.md の対応エントリにリンクを張ること -->
+← [変更ログへ](../changelog.md#見出しのアンカー)
+
+<!-- リンクは必ず .md 拡張子付きで書くこと（例: ../changelog.md, ./20260502_xxx.md） -->
 
 ## 背景・動機
 
