@@ -1,6 +1,7 @@
 {
   "permissions": {
     "allow": [
+      "Read",
       "Bash(curl -s http://127.0.0.1:8000*)",
       "Bash(python3 /root/xClaude/scripts/notebooklm_manager.py make-infographic)",
       "Bash(git -C /root/xClaude push)",
