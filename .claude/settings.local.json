@@ -156,7 +156,32 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('scopes:', d.get\\('scopes', d.get\\('auth', 'no scope info'\\)\\)\\)\")",
       "Bash(mv /root/.config/gws/credentials.json /tmp/gws_creds_bak.json)",
       "Bash(cp /root/.config/gws/token_cache.json /tmp/gws_tcache_bak.json)",
-      "Bash(mv /root/.config/gws/token_cache.json /tmp/gws_tcache_moved.json)"
+      "Bash(mv /root/.config/gws/token_cache.json /tmp/gws_tcache_moved.json)",
+      "Bash(python3 -c \"import json,sys; t=sys.stdin.read\\(\\); i=t.find\\('{'\\); d=json.loads\\(t[i:]\\); [print\\(s\\) for s in d['scopes'] if 'drive' in s]\")",
+      "Bash(chmod +x /root/xClaude/scripts/send_gmail.py)",
+      "Bash(python3 /root/xClaude/scripts/send_gmail.py --to useakat@gmail.com --subject '【テスト】send_gmail.py 動作確認' --body-file /tmp/test_gmail_body.txt)",
+      "Bash(python3 /root/xClaude/scripts/sheets_manager.py --help)",
+      "Bash(python3 /root/xClaude/scripts/sheets_manager.py add-one-point --help)",
+      "Bash(python3 /root/xClaude/scripts/sheets_manager.py add-one-point --theme '深海の赤い生き物 × 光の吸収' --hook 実は、深海では赤い生き物は黒く見える。 --connection 魚屋・水族館で見る赤い魚の体色 --mechanism 物が「赤く見える」のは、光に含まれる赤色成分が反射されて目に入るから。だが太陽光のうち赤色成分は水中で最も早く吸収され、深海にはほとんど届かない。反射すべき赤い光が存在しないので、赤い体色の生物は黒っぽく・暗く見える。 --closing 深海では「赤」が最強の保護色になる。バグった海すぎる。 --difficulty 易 --source ユーザー提供（光の波長吸収・体色見え方）)",
+      "Bash(bash scripts/sync_to_sheets.sh)",
+      "Bash(awk -F/ '{print $1}')",
+      "mcp__claude_ai_Gmail__search_threads",
+      "mcp__claude_ai_Gmail__get_thread",
+      "Bash(python3 scripts/get_gmail_body.py 19de08c0726f2fc4)",
+      "Bash(python3 /root/xClaude/scripts/extract_tag.py 投稿文)",
+      "Bash(chmod +x /root/xClaude/scripts/post_from_email.sh)",
+      "Bash(bash /root/xClaude/scripts/post_from_email.sh --dry-run \"【ワンポイント解説】\" W003 x_post_xonepoint.log)",
+      "Bash(bash /root/xClaude/scripts/post_from_email.sh \"【ワンポイント解説】\" W003 x_post_xonepoint.log)",
+      "Bash(bash /root/xClaude/scripts/drive_put.sh /root/xClaude/outputs/drafts-note/2026-05-02_AIに壊された自動化をshellで復活させた話.md)",
+      "Bash(xargs ls *)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(s['properties']['title']\\) for s in d.get\\('sheets',[]\\)]\")",
+      "WebFetch(domain:developers.notion.com)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\('mcpServers:', list\\(d.get\\('mcpServers',{}\\).keys\\(\\)\\)\\)\")",
+      "Bash(git -C /root/xClaude log --oneline -5)",
+      "Bash(python3 -c \"from googleapiclient.discovery import build; from google.oauth2.credentials import Credentials; print\\('依存OK'\\)\")",
+      "Bash(chmod +x /root/xClaude/scripts/create_gmail_draft.sh /root/xClaude/scripts/send_gmail.sh /root/xClaude/scripts/get_gmail_body.sh /root/xClaude/scripts/download_gmail_attachment.sh)",
+      "Bash(bash /root/xClaude/scripts/download_gmail_attachment.sh 19de41a769a82476 /tmp/test_dl.png)",
+      "Bash(bash scripts/post_from_email.sh --dry-run \"【ワンポイント解説】\" W003 x_post_xonepoint.log)"
     ]
   }
 }

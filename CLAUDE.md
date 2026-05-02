@@ -184,3 +184,4 @@ xClaude/
 
 ## Git ルール
 - 一通りの変更が完了したら、必ず `git commit & push` する
+- **commit 前に、そのチャットで実行許可を受けたコマンド（bash/gws など）をすべてリストアップして、ユーザーに `settings.json` の `permissions.allow` に追加するか確認する。** このステップにより、次回以降同じコマンドは許可なく実行できるようになる
