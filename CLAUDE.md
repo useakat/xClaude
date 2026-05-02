@@ -233,6 +233,8 @@ xClaude/
 
 一通りの変更・実装が完了したら、以下の順で記録を残す。
 
+**記録不要な変更**：`settings.json` の `permissions.allow` への追記のみの場合は、報告書・変更ログへの記録は不要。
+
 ### 1. 報告書を作成する
 
 `docs/reports/template.md` をベースに、以下のパスに保存する：
