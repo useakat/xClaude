@@ -183,7 +183,9 @@
       "Bash(bash /root/xClaude/scripts/download_gmail_attachment.sh 19de41a769a82476 /tmp/test_dl.png)",
       "Bash(bash scripts/post_from_email.sh --dry-run \"【ワンポイント解説】\" W003 x_post_xonepoint.log)",
       "Bash(bash scripts/commit_and_sync.sh \"daily: xonepoint 原稿 20260502-16:50:09\")",
-      "mcp__claude_ai_Gmail__create_draft"
+      "mcp__claude_ai_Gmail__create_draft",
+      "Bash(awk '{print $2}')",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(r\\) for r in d.get\\('values',[]\\)]\")"
     ]
   }
 }
