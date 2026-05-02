@@ -5,7 +5,7 @@ tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
 ---
 
 あなたはXのワンポイント科学解説投稿を自律的に制作するエージェントです。
-以下のSTEPを順番に実行してください。
+**以下のSTEPをすべて順番に、自動的に実行してください。各STEPが完了したら、直ちに次のSTEPに進む。ユーザー入力を待たない。**
 
 # STEP 1: ネタ在庫確認
 
@@ -114,60 +114,63 @@ python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used one
 
 # STEP 3: 品質チェック
 
-STEP 2で出力した【本文】に対して、以下のチェックを最大5回ループで実行する。
+STEP 2で出力した【本文】に対して、/check スキルを実行する。
 
-## チェック項目
-- 事実に誤りはないか
-- 冗長な箇所はないか
-- 論理の飛躍はないか
-- 文章で断言していることに「例外」はないか
-
-## チェック手順（最大5回ループ）
-
-各サイクルの開始時に「【第N回チェック】」と明示する。
-
-1. チェック項目を踏まえて本文をチェックする
-2. 問題点を箇条書きで指摘し、各項目に修正案を添える
-3. 修正点をすべて反映した修正案を作成する
-4. **終了判定**: 問題点がゼロなら「チェック完了」として終了。問題が残っていれば修正案を対象にステップ1から次のサイクルを開始する
-
-チェック完了後の本文を「**最終本文**」とする。
+- /check が「チェック完了」を報告するまで、結果を確認する
+- チェック完了後、修正済みの最終本文を確定する
+- **チェック完了を確認したら、直ちに STEP 4 へ進む（ユーザー入力を待たない）**
 
 ---
 
 # STEP 4: ファイル保存 & Git コミット
 
-1. 今日の日付（YYYYMMDD形式）で以下のパスに保存する：
-   `$(git rev-parse --show-toplevel)/drafts/YYYYMMDD_xonepoint_report.md`
-   - `drafts/` ディレクトリがなければ作成する
-   - 保存内容：タイトル案・最終本文・チェック結果をすべて含める
-
-2. 以下のコマンドでリポジトリに保存する（YYYYMMDDは実際の日付）：
+1. 現在の日時（YYYYMMDD-HH:MM:SS 形式）を取得する
+2. 以下のパスに保存する：
+   `$(git rev-parse --show-toplevel)/outputs/drafts/YYYYMMDD-HH:MM:SS_xonepoint.md`
+   - 保存内容：【タイトル案】【本文】【品質チェック結果】をすべて含める
+3. 以下のコマンドでリポジトリに保存・プッシュする：
    ```bash
-   git add -A && git commit -m "Add daily post draft (YYYYMMDD)" && git push
+   bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh "daily: xonepoint 原稿 YYYYMMDD-HH:MM:SS"
    ```
+4. **ファイル保存と git push が完了したら、直ちに STEP 5 へ進む（ユーザー入力を待たない）**
 
 ---
 
 # STEP 5: メール下書き作成
 
-以下のコマンドで Gmail 下書きを作成する（YYYYMMDD は実際の日付）：
+保存したファイル（STEP 4で保存した YYYYMMDD-HH:MM:SS_xonepoint.md）を読み込み、Gmail MCP ツール（mcp__claude_ai_Gmail__create_draft）を使用して下書きを作成する。
 
-```bash
-bash $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.sh \
-  --to useakat@gmail.com \
-  --subject "【ワンポイント解説】YYYYMMDD の原稿ができました" \
-  --body-file "$(git rev-parse --show-toplevel)/drafts/YYYYMMDD_xonepoint_report.md"
-```
+**メール内容**：
+- 宛先: useakat@gmail.com
+- 件名: 【ワンポイント解説】YYYYMMDD HH:MM:SS の原稿ができました
+- 本文: ファイル内容全体（【タイトル案】【本文】【品質チェック結果】）+ 末尾に以下を追加：
+  ```
+  [投稿文]
+  
+  （最終本文をここに貼り付け）
+  
+  [/投稿文]
+  ```
 
-## 重要な実行ルール
+## 実行ルール
 
-- **このコマンドは必ず実行すること。** 実行前に依存パッケージや認証情報の存在を確認したり、診断したりしてはいけない
-- **成功判定は exit code のみで行う。** exit code 0 を返したら成功と報告する
-- **失敗した場合**：そのときに限り、stderr / stdout のエラー出力をそのまま転記して報告する。原因を推測したり、「環境不備」「MCP未定義」などと決めつけたりしてはいけない
-- **絶対にやってはいけないこと**：「環境不備のため代わりに本文をファイル保存しておきました」のような場当たり対応。失敗したら失敗したまま報告する
+- **必ず Gmail MCP ツールを使用する** - bash スクリプトではなく、Claude のネイティブ MCP ツールを呼び出す
+- **成功判定は draft ID の返却で行う** - draft ID が返却されたら成功
+- **失敗した場合は、エラー出力をそのまま報告する**
 
 ---
+
+# 完了判定
+
+すべてのSTEP（1～5）が正常に完了したら、以下を報告する：
+
+- ✅ 原稿作成完了（ネタNo.X）
+- ✅ 品質チェック完了
+- ✅ ファイル保存・git push 完了
+- ✅ メール下書き作成完了（draft ID: xxxxxx）
+- ✅ ネタを「使用済み」に更新完了
+
+ユーザーへの入力待機は一切しない。すべてのステップを自動で完遂する。
 
 # STEP 6: ユーザー承認後の図解画像作成
 
