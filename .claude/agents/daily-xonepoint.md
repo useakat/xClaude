@@ -160,6 +160,13 @@ python3 $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.py \
   --body-file "$(git rev-parse --show-toplevel)/drafts/YYYYMMDD_xonepoint_report.md"
 ```
 
+## 重要な実行ルール
+
+- **このコマンドは必ず実行すること。** 実行前に依存パッケージや認証情報の存在を確認したり、診断したりしてはいけない
+- **成功判定は exit code のみで行う。** exit code 0 を返したら成功と報告する
+- **失敗した場合**：そのときに限り、stderr / stdout のエラー出力をそのまま転記して報告する。原因を推測したり、「環境不備」「MCP未定義」などと決めつけたりしてはいけない
+- **絶対にやってはいけないこと**：「環境不備のため代わりに本文をファイル保存しておきました」のような場当たり対応。失敗したら失敗したまま報告する
+
 ---
 
 # STEP 6: ユーザー承認後の図解画像作成
