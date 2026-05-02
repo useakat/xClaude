@@ -114,9 +114,9 @@ python3 $(git rev-parse --show-toplevel)/scripts/update_neta_status.py one-point
 
 # STEP 3: 品質チェック
 
-STEP 2で出力した【本文】に対して、/check スキルを実行する。
+STEP 2で出力した【本文】に対して、/check-fact スキルを実行する。
 
-- /check が「チェック完了」を報告するまで、結果を確認する
+- /check-fact が「チェック完了」を報告するまで、結果を確認する
 - チェック完了後、修正済みの最終本文を確定する
 - **チェック完了を確認したら、直ちに STEP 4 へ進む（ユーザー入力を待たない）**
 
