@@ -27,6 +27,19 @@
       "Bash(grep *)"
     ]
   },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys; cmd=json.load(sys.stdin).get('tool_input',{}).get('command',''); exit(0 if 'git commit' in cmd else 1)\" && echo '{\"systemMessage\": \"コミット前確認: 今回のセッションで新規に許可した操作（Bash/Tool）を settings.json に追記しましたか？\"}' || true"
+          }
+        ]
+      }
+    ]
+  },
   "mcpServers": {
     "xmcp": {
       "type": "http",
