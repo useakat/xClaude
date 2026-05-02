@@ -138,24 +138,29 @@ STEP 2で出力した【本文】に対して、/check スキルを実行する�
 
 # STEP 5: メール下書き作成
 
-保存したファイル（STEP 4で保存した YYYYMMDD-HH:MM:SS_xonepoint.md）を読み込み、Gmail MCP ツール（mcp__claude_ai_Gmail__create_draft）を使用して下書きを作成する。
+保存したファイル（STEP 4で保存した YYYYMMDD-HH:MM:SS_xonepoint.md）を読み込み、gws CLI ベースの bash スクリプトを使用して Gmail 下書きを作成する。
 
-**メール内容**：
-- 宛先: useakat@gmail.com
-- 件名: 【ワンポイント解説】YYYYMMDD HH:MM:SS の原稿ができました
-- 本文: ファイル内容全体（【タイトル案】【本文】【品質チェック結果】）+ 末尾に以下を追加：
-  ```
-  [投稿文]
-  
-  （最終本文をここに貼り付け）
-  
-  [/投稿文]
-  ```
+1. STEP 4 で保存したファイルの内容を読み込む
+2. ファイル内容の末尾に以下を追加して、一時ファイルを作成：
+   ```
+   [投稿文]
+   
+   （最終本文）
+   
+   [/投稿文]
+   ```
+3. 以下のコマンドで Gmail 下書きを作成する：
+   ```bash
+   bash $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.sh \
+     --to useakat@gmail.com \
+     --subject "【ワンポイント解説】YYYYMMDD HH:MM:SS の原稿ができました" \
+     --body-file "<一時ファイルパス>"
+   ```
 
 ## 実行ルール
 
-- **必ず Gmail MCP ツールを使用する** - bash スクリプトではなく、Claude のネイティブ MCP ツールを呼び出す
-- **成功判定は draft ID の返却で行う** - draft ID が返却されたら成功
+- **gws CLI ベースの bash スクリプトを使用する** - MCP ツールではなく、`scripts/create_gmail_draft.sh` を呼び出す
+- **成功判定は exit code 0 と draft ID の表示で行う** - スクリプトが「✓ 下書き作成完了 (id: xxxxxx)」を返したら成功
 - **失敗した場合は、エラー出力をそのまま報告する**
 
 ---
