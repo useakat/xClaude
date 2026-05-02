@@ -210,5 +210,10 @@ xClaude/
 
 ## Git ルール
 - 一通りの変更が完了したら、必ず `git commit & push` する
-- **【対話型チャットの場合】commit 前に、そのチャットで実行許可を受けたコマンド（bash/gws など）をすべてリストアップして、ユーザーに `settings.json` の `permissions.allow` に追加するか確認する。** このステップにより、次回以降同じコマンドは許可なく実行できるようになる
+- **【対話型チャットの場合】commit 前に、そのチャットで実行許可を受けた新規の操作（bash/gws コマンド、Tool 操作など）がないか確認する**：
+  - **新規の実行許可がある場合のみ**: 以下をリストアップしてユーザーに確認
+    - bash/gws コマンド（post_from_email.sh、gws gmail など）
+    - Tool 操作（Read、Write、Edit など）
+    - 確認後、`settings.json` の `permissions.allow` に新規コマンドを追加する
+  - **新規の実行許可がない場合**: 確認なく `git commit & push` 実行
 - **【routine / agent の場合】実装時にあらかじめ必要な権限ルールを `.claude/settings.json` の `permissions.allow` に登録してから実行する。** routine/agent はユーザーとの対話ができないため、事前設定が必須
