@@ -1,12 +1,20 @@
 #!/bin/bash
-# Gmail メールを X に投稿する汎用スクリプト
-# Usage: bash post_from_email.sh <件名キーワード> <howID> <ログファイル名>
-# Example: bash post_from_email.sh "【ワンポイント解説】" W003 x_post_xonepoint.log
+# Gmail メールを X に投稿する汎用スクリプト（全 shell 化版）
+# Usage: bash post_from_email.sh [--dry-run] <件名キーワード> <howID> <ログファイル名>
+# Example:
+#   bash post_from_email.sh "【ワンポイント解説】" W003 x_post_xonepoint.log
+#   bash post_from_email.sh --dry-run "【ワンポイント解説】" W003 x_post_xonepoint.log
 
-set -e
+set -uo pipefail
 
-SUBJECT_KEYWORD="$1"
-HOW_ID="$2"
+DRY_RUN=0
+if [ "${1:-}" = "--dry-run" ]; then
+  DRY_RUN=1
+  shift
+fi
+
+SUBJECT_KEYWORD="${1:-}"
+HOW_ID="${2:-}"
 LOG_FILE="${3:-x_post.log}"
 
 if [ -z "$SUBJECT_KEYWORD" ] || [ -z "$HOW_ID" ]; then
@@ -15,74 +23,152 @@ if [ -z "$SUBJECT_KEYWORD" ] || [ -z "$HOW_ID" ]; then
 fi
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-LOG_DATE=$(date '+%Y-%m-%d %H:%M:%S JST')
 LOG_PATH="$REPO_ROOT/logs/$LOG_FILE"
+POSTED_LABEL_ID="Label_103"
+TMP_IMAGE="/tmp/xpost_image.png"
 
 mkdir -p "$REPO_ROOT/logs"
-echo "[$LOG_DATE] 開始 (subject:$SUBJECT_KEYWORD, howID:$HOW_ID)" | tee -a "$LOG_PATH"
+
+log() {
+  echo "[$(date '+%Y-%m-%d %H:%M:%S JST')] $*" | tee -a "$LOG_PATH"
+}
+
+if [ $DRY_RUN -eq 1 ]; then
+  log "開始 [DRY RUN] (subject:$SUBJECT_KEYWORD, howID:$HOW_ID)"
+else
+  log "開始 (subject:$SUBJECT_KEYWORD, howID:$HOW_ID)"
+fi
 
 cd "$REPO_ROOT"
 
-/usr/bin/claude -p "
-以下の手順をループで実行してください。投稿が完了するか、対象メールがなくなるまで繰り返します。
+LOOP_COUNT=0
+MAX_LOOPS=20
 
-## ループ処理
+while [ $LOOP_COUNT -lt $MAX_LOOPS ]; do
+  LOOP_COUNT=$((LOOP_COUNT + 1))
 
-### STEP 1: 未処理メールを検索
-以下の Bash コマンドで未処理スレッドを検索する（2>/dev/null で keyring ログを除去）：
-PARAMS=\$(python3 -c \"import json; print(json.dumps({'userId': 'me', 'q': 'subject:$SUBJECT_KEYWORD -label:投稿済み', 'maxResults': 50}))\")
-gws gmail users threads list --params \"\$PARAMS\" 2>/dev/null
+  # STEP 1: 未処理スレッド一覧を取得
+  PARAMS=$(SUBJECT="$SUBJECT_KEYWORD" python3 -c "
+import json, os
+print(json.dumps({
+    'userId': 'me',
+    'q': f\"subject:{os.environ['SUBJECT']} -label:投稿済み\",
+    'maxResults': 50,
+}))")
+  THREADS_JSON=$(gws gmail users threads list --params "$PARAMS" 2>/dev/null)
 
-結果の threads 配列が空またはキーが存在しなければ STEP 2 へ。
+  THREAD_ID=$(echo "$THREADS_JSON" | python3 -c "
+import json, sys
+d = json.load(sys.stdin)
+ts = d.get('threads', [])
+print(ts[-1]['id'] if ts else '')
+")
 
-### STEP 2: メールがなければ終了
-「投稿対象メールなし」と出力してループを終了する。
+  if [ -z "$THREAD_ID" ]; then
+    log "投稿対象メールなし。ループ終了"
+    break
+  fi
 
-### STEP 3: 最古のスレッドを確認
-STEP 1 の結果から threads 配列の最後の要素（最古）の id を THREAD_ID とする。
-以下で本文と message_id を取得する：
-python3 $REPO_ROOT/scripts/get_gmail_body.py THREAD_ID
+  log "処理対象 thread_id=$THREAD_ID"
 
-出力は JSON 形式で message_id と body が含まれる。
+  # STEP 2: 本文と message_id を取得
+  BODY_JSON=$(python3 scripts/get_gmail_body.py "$THREAD_ID" 2>/dev/null)
+  if [ -z "$BODY_JSON" ]; then
+    log "本文取得失敗。スキップしてラベル付与: $THREAD_ID"
+    gws gmail users threads modify \
+      --params "{\"userId\":\"me\",\"id\":\"$THREAD_ID\"}" \
+      --json "{\"addLabelIds\":[\"$POSTED_LABEL_ID\"]}" 2>/dev/null >/dev/null
+    continue
+  fi
+  MESSAGE_ID=$(echo "$BODY_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('message_id',''))")
+  BODY=$(echo "$BODY_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('body',''))")
 
-1. body から [投稿文] と [/投稿文] で囲まれたテキストを抽出する
+  # [投稿文] タグ抽出
+  POST_TEXT=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py 投稿文 2>/dev/null || true)
 
-2. [投稿文] タグが存在しない、または中身が空の場合：
-   - 「投稿文タグなし、スキップ: THREAD_ID」と出力する
-   - 以下のコマンドで「投稿済み」ラベルのみ付与する（アーカイブはしない）：
-     gws gmail users threads modify --params \"{\\\"userId\\\": \\\"me\\\", \\\"id\\\": \\\"THREAD_ID\\\"}\" --json '{\"addLabelIds\": [\"Label_103\"]}'
-   - STEP 1 に戻る
+  if [ -z "$POST_TEXT" ]; then
+    log "[投稿文] タグなし／空 → ラベル付与のみ: $THREAD_ID"
+    gws gmail users threads modify \
+      --params "{\"userId\":\"me\",\"id\":\"$THREAD_ID\"}" \
+      --json "{\"addLabelIds\":[\"$POSTED_LABEL_ID\"]}" 2>/dev/null >/dev/null
+    continue
+  fi
 
-3. [投稿文] が存在する場合は以降のステップへ進む
+  # [リプ] タグ抽出（任意）
+  REPLY_TEXT=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py リプ 2>/dev/null || true)
 
-4. body から [リプ] と [/リプ] で囲まれたテキストを抽出する（タグがなければリプなし）
+  # 添付画像 DL
+  HAS_IMAGE=0
+  if python3 scripts/download_gmail_attachment.py "$MESSAGE_ID" "$TMP_IMAGE" >/dev/null 2>&1; then
+    HAS_IMAGE=1
+    log "添付画像あり"
+  fi
 
-5. message_id を使い、以下のコマンドで添付画像をダウンロードする（exit code 0 なら画像あり、1 なら画像なし）：
-python3 $REPO_ROOT/scripts/download_gmail_attachment.py <message_id> /tmp/xpost_image.png
+  # ---- DRY RUN 分岐 ----
+  if [ $DRY_RUN -eq 1 ]; then
+    log "[DRY RUN] 投稿テキスト ($(echo -n "$POST_TEXT" | wc -m)字):"
+    echo "----- POST_TEXT -----" | tee -a "$LOG_PATH"
+    echo "$POST_TEXT" | tee -a "$LOG_PATH"
+    echo "---------------------" | tee -a "$LOG_PATH"
+    if [ -n "$REPLY_TEXT" ]; then
+      log "[DRY RUN] リプテキスト ($(echo -n "$REPLY_TEXT" | wc -m)字):"
+      echo "----- REPLY_TEXT -----" | tee -a "$LOG_PATH"
+      echo "$REPLY_TEXT" | tee -a "$LOG_PATH"
+      echo "----------------------" | tee -a "$LOG_PATH"
+    fi
+    if [ $HAS_IMAGE -eq 1 ]; then
+      python3 scripts/post_to_x.py --dry-run --text "$POST_TEXT" --image "$TMP_IMAGE" 2>&1 | tee -a "$LOG_PATH"
+    else
+      python3 scripts/post_to_x.py --dry-run --text "$POST_TEXT" 2>&1 | tee -a "$LOG_PATH"
+    fi
+    log "[DRY RUN] ラベル付与・INBOX解除・record_output はスキップ"
+    log "[DRY RUN] 1 ループで終了（同じメールが何度も処理されないように）"
+    rm -f "$TMP_IMAGE"
+    break
+  fi
+  # ---- DRY RUN 分岐おわり ----
 
-### STEP 4a: [投稿文] を X に投稿し、tweet_id を取得
-画像あり（上記コマンドが成功）の場合：
-python3 $REPO_ROOT/scripts/post_to_x.py --text \"（抽出したテキスト）\" --image /tmp/xpost_image.png
+  # X 投稿
+  log "X 投稿実行..."
+  if [ $HAS_IMAGE -eq 1 ]; then
+    POST_OUTPUT=$(python3 scripts/post_to_x.py --text "$POST_TEXT" --image "$TMP_IMAGE" 2>&1)
+  else
+    POST_OUTPUT=$(python3 scripts/post_to_x.py --text "$POST_TEXT" 2>&1)
+  fi
+  POST_RC=$?
+  echo "$POST_OUTPUT" >> "$LOG_PATH"
 
-画像なしの場合：
-python3 $REPO_ROOT/scripts/post_to_x.py --text \"（抽出したテキスト）\"
+  TWEET_URL=$(echo "$POST_OUTPUT" | grep -oE 'https://x\.com/i/web/status/[0-9]+' | tail -1)
+  TWEET_ID="${TWEET_URL##*/}"
 
-投稿完了後、出力に含まれる tweet URL から tweet_id を取得する（URLの末尾の数字）。
+  if [ $POST_RC -ne 0 ] || [ -z "$TWEET_URL" ]; then
+    log "X 投稿失敗。ループ終了 (thread:$THREAD_ID)"
+    rm -f "$TMP_IMAGE"
+    break
+  fi
 
-### STEP 4b: [リプ] があればセルフリプとして投稿
-STEP 3 で [リプ] テキストが抽出されていた場合のみ実行する：
-python3 $REPO_ROOT/scripts/post_to_x.py --text \"（リプテキスト）\" --reply-to <tweet_id>
+  log "投稿成功: $TWEET_URL"
 
-### STEP 5: 「投稿済み」ラベルを付与してアーカイブ
-以下のコマンドを実行する（THREAD_ID は STEP 3 で取得したスレッドID）：
-gws gmail users threads modify --params \"{\\\"userId\\\": \\\"me\\\", \\\"id\\\": \\\"THREAD_ID\\\"}\" --json '{\"addLabelIds\": [\"Label_103\"], \"removeLabelIds\": [\"INBOX\"]}'
+  # リプライ投稿
+  if [ -n "$REPLY_TEXT" ] && [ -n "$TWEET_ID" ]; then
+    log "リプ投稿実行..."
+    REPLY_OUTPUT=$(python3 scripts/post_to_x.py --text "$REPLY_TEXT" --reply-to "$TWEET_ID" 2>&1)
+    echo "$REPLY_OUTPUT" >> "$LOG_PATH"
+  fi
 
-### STEP 6: 投稿記録
-以下のコマンドで投稿を記録する（<X投稿URL> は STEP 4 で取得したURL）：
-python3 $REPO_ROOT/scripts/record_output.py \"<X投稿URL>\" $HOW_ID
+  # ラベル付与＋INBOX削除
+  gws gmail users threads modify \
+    --params "{\"userId\":\"me\",\"id\":\"$THREAD_ID\"}" \
+    --json "{\"addLabelIds\":[\"$POSTED_LABEL_ID\"],\"removeLabelIds\":[\"INBOX\"]}" 2>/dev/null >/dev/null
 
-### STEP 7: 完了（ループ終了）
-投稿した X の URL とメールの件名を出力してループを終了する。
-" --allowedTools "Bash" 2>&1 | tee -a "$LOG_PATH"
+  # 投稿記録
+  python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" 2>&1 | tee -a "$LOG_PATH"
 
-echo "[$LOG_DATE] 完了" | tee -a "$LOG_PATH"
+  rm -f "$TMP_IMAGE"
+done
+
+if [ $LOOP_COUNT -ge $MAX_LOOPS ]; then
+  log "ループ上限 ($MAX_LOOPS) に到達したため終了"
+fi
+
+log "完了"
