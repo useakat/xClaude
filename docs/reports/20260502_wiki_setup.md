@@ -4,7 +4,7 @@ date: 2026-05-02
 tags: [wiki, infra]
 ---
 
-← [変更ログへ](../changelog#wiki-システム構築)
+← [変更ログへ](../changelog.md#wiki-システム構築)
 
 ## 背景・動機
 
