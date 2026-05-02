@@ -36,3 +36,11 @@ gws CLI への統一とスクリプト化優先の原則を CLAUDE.md に明文�
 ### daily-xonepoint 自動化改善
 STEP 3 を `/check-fact` に変更、STEP 5 のメール作成を gws CLI スクリプトに変更。エージェントをスリム化しスキルに処理を集約。
 → [詳細報告書](../reports/20260502_daily_xonepoint_improvement.md)
+
+### Wiki構築で使用した操作を permissions.allow に追加
+Wiki 構築作業中に使用した Write・Edit・mkdir・cp・npm・grep を事後確認し `settings.json` に追記。
+→ [詳細報告書](../reports/20260502_settings_permissions_wiki.md)
+
+### git commit 前の確認フックを追加
+`settings.json` に `PreToolUse` フックを追加し、`git commit` 実行前に settings.json 確認を Claude の文脈に自動挿入する。
+→ [詳細報告書](../reports/20260502_precommit_hook.md)
