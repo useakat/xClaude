@@ -226,3 +226,34 @@ xClaude/
     - 確認後、`settings.json` の `permissions.allow` に新規コマンドを追加する
   - **新規の実行許可がない場合**: 確認なく `git commit & push` 実行
 - **【routine / agent の場合】実装時にあらかじめ必要な権限ルールを `.claude/settings.json` の `permissions.allow` に登録してから実行する。** routine/agent はユーザーとの対話ができないため、事前設定が必須
+
+---
+
+## 報告書・変更ログの記録ルール
+
+一通りの変更・実装が完了したら、以下の順で記録を残す。
+
+### 1. 報告書を作成する
+
+`docs/reports/template.md` をベースに、以下のパスに保存する：
+
+```
+docs/reports/YYYYMMDD_<タイトルをスネークケース>.md
+```
+
+**必須項目**：背景・動機 / 実施内容 / 変更ファイル / 確認結果  
+**任意項目**：設計判断 / 今後の課題
+
+### 2. 変更ログにエントリを追加する
+
+`docs/changelog.md` に1変更1エントリで追記する：
+
+```markdown
+### <変更タイトル>
+<概要を1〜2行>
+→ [詳細報告書](reports/YYYYMMDD_<ファイル名>)
+```
+
+### 3. git commit & push する
+
+Wiki（GitHub Pages）に自動反映される。
