@@ -18,7 +18,13 @@
       "Bash(bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh *)",
       "Bash(python3 $(git rev-parse --show-toplevel)/scripts/csv_reader.py *)",
       "Bash(python3 $(git rev-parse --show-toplevel)/scripts/update_neta_status.py *)",
-      "Bash(gws gmail users threads modify *)"
+      "Bash(gws gmail users threads modify *)",
+      "Write",
+      "Edit",
+      "Bash(mkdir -p *)",
+      "Bash(cp -r *)",
+      "Bash(npm *)",
+      "Bash(grep *)"
     ]
   },
   "mcpServers": {
