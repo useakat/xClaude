@@ -15,10 +15,10 @@ export default defineConfig({
         {
           label: 'はじめに',
           items: [
-            { label: 'プロジェクト概要', slug: 'index' },
-            { label: 'アーキテクチャ', slug: 'architecture' },
-            { label: 'データベース', slug: 'database' },
-            { label: '変更ログ', slug: 'changelog' },
+            { label: 'プロジェクト概要', link: '/' },
+            { label: 'アーキテクチャ', link: '/architecture' },
+            { label: 'データベース', link: '/database' },
+            { label: '変更ログ', link: '/changelog' },
           ],
         },
         {
