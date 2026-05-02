@@ -181,7 +181,8 @@
       "Bash(python3 -c \"from googleapiclient.discovery import build; from google.oauth2.credentials import Credentials; print\\('依存OK'\\)\")",
       "Bash(chmod +x /root/xClaude/scripts/create_gmail_draft.sh /root/xClaude/scripts/send_gmail.sh /root/xClaude/scripts/get_gmail_body.sh /root/xClaude/scripts/download_gmail_attachment.sh)",
       "Bash(bash /root/xClaude/scripts/download_gmail_attachment.sh 19de41a769a82476 /tmp/test_dl.png)",
-      "Bash(bash scripts/post_from_email.sh --dry-run \"【ワンポイント解説】\" W003 x_post_xonepoint.log)"
+      "Bash(bash scripts/post_from_email.sh --dry-run \"【ワンポイント解説】\" W003 x_post_xonepoint.log)",
+      "Bash(bash scripts/commit_and_sync.sh \"daily: xonepoint 原稿 20260502-16:50:09\")"
     ]
   }
 }
