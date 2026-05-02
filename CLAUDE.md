@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## プロジェクト Wiki
+
+**https://useakat.github.io/xClaude/**
+
+プロジェクトの詳細な仕様・スキル説明・ワークフロー解説は Wiki を参照してください。
+ソースは `docs/` ディレクトリにあります（Markdown で直接 Read 可能）。
+
+---
+
 ## プロジェクトの目的
 
 宇宙・物理テーマの発信（主に X と note）を制作するためのワークスペース。
