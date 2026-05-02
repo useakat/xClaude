@@ -248,12 +248,10 @@ docs/reports/YYYYMMDD_<タイトルをスネークケース>.md
 
 ### 2. 変更ログにエントリを追加する
 
-`docs/changelog.md` に1変更1エントリで追記する：
+`docs/changelog.md` に1変更1エントリで追記する（日付セクション内の箇条書き、2行以内）：
 
 ```markdown
-### <変更タイトル>
-<概要を1〜2行>
-→ [詳細報告書](reports/YYYYMMDD_<ファイル名>)
+- **<変更タイトル>** — <概要を1行>。[→報告書](../reports/YYYYMMDD_<ファイル名>.md)
 ```
 
 ### 3. git commit & push する
