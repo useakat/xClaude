@@ -12,7 +12,9 @@
       "Bash(bash $(git rev-parse --show-toplevel)/scripts/sync_to_sheets.sh)",
       "Bash(bash $(git rev-parse --show-toplevel)/scripts/drive_put.sh *)",
       "Bash(bash $(git rev-parse --show-toplevel)/scripts/drive_get.sh *)",
-      "Bash(python3 $(git rev-parse --show-toplevel)/scripts/send_gmail.py *)"
+      "Bash(bash $(git rev-parse --show-toplevel)/scripts/post_from_email.sh *)",
+      "Bash(bash $(git rev-parse --show-toplevel)/scripts/send_gmail.sh *)",
+      "Bash(gws gmail users threads modify *)"
     ]
   },
   "mcpServers": {
