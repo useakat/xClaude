@@ -184,4 +184,5 @@ xClaude/
 
 ## Git ルール
 - 一通りの変更が完了したら、必ず `git commit & push` する
-- **commit 前に、そのチャットで実行許可を受けたコマンド（bash/gws など）をすべてリストアップして、ユーザーに `settings.json` の `permissions.allow` に追加するか確認する。** このステップにより、次回以降同じコマンドは許可なく実行できるようになる
+- **【対話型チャットの場合】commit 前に、そのチャットで実行許可を受けたコマンド（bash/gws など）をすべてリストアップして、ユーザーに `settings.json` の `permissions.allow` に追加するか確認する。** このステップにより、次回以降同じコマンドは許可なく実行できるようになる
+- **【routine / agent の場合】実装時にあらかじめ必要な権限ルールを `.claude/settings.json` の `permissions.allow` に登録してから実行する。** routine/agent はユーザーとの対話ができないため、事前設定が必須
