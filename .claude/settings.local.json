@@ -185,7 +185,16 @@
       "Bash(bash scripts/commit_and_sync.sh \"daily: xonepoint 原稿 20260502-16:50:09\")",
       "mcp__claude_ai_Gmail__create_draft",
       "Bash(awk '{print $2}')",
-      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(r\\) for r in d.get\\('values',[]\\)]\")"
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(r\\) for r in d.get\\('values',[]\\)]\")",
+      "Bash(npm install *)",
+      "Bash(cp -r /root/xClaude/docs/* /root/xClaude/starlight/src/content/docs/)",
+      "Bash(npm run *)",
+      "Bash(python3 -c \"import json,sys; cmd=json.load\\(sys.stdin\\).get\\('tool_input',{}\\).get\\('command',''\\); exit\\(0 if 'git commit' in cmd else 1\\)\")",
+      "Bash(gws docs *)",
+      "mcp__claude_ai_Google_Drive__read_file_content",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('mcpServers',{}\\), indent=2, ensure_ascii=False\\)\\)\")",
+      "Bash(curl -s \"https://api.twitter.com/2/openapi.json\")",
+      "Bash(git -C /root/xClaude diff CLAUDE.md)"
     ]
   }
 }
