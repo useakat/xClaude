@@ -1,5 +1,6 @@
 #!/bin/bash
 # Usage: drive_get.sh <file-id> <output-path>
+export PATH="/usr/local/bin:$PATH"
 # Drive のファイル ID を指定してローカルにダウンロード
 
 set -e

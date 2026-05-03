@@ -1,5 +1,6 @@
 #!/bin/bash
 # database/ CSV → Google Sheets への一方向同期（gws CLI使用）
+export PATH="/usr/local/bin:$PATH"
 # 各シートをクリアしてCSVの内容で上書き
 
 set -e

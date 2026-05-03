@@ -1,5 +1,6 @@
 #!/bin/bash
 # Gmail メールを送信する（gws CLI 版）
+export PATH="/usr/local/bin:$PATH"
 # Usage: bash send_gmail.sh --to <email> --subject <subject> --body-file <file>
 # Exit code 0: 成功 / 1: エラー
 

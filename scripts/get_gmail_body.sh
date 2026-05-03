@@ -1,5 +1,6 @@
 #!/bin/bash
 # Gmail スレッドの最新メッセージから本文と message_id を JSON で出力する（gws CLI 版）
+export PATH="/usr/local/bin:$PATH"
 # Usage: bash get_gmail_body.sh <thread_id>
 # Output: {"message_id": "...", "body": "..."}
 # Exit code 1: エラー

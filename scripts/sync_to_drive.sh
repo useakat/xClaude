@@ -1,5 +1,6 @@
 #!/bin/bash
 # outputs/ → Google Drive への一方向同期（gws CLI使用）
+export PATH="/usr/local/bin:$PATH"
 # Drive に同名ファイルが存在する場合はスキップ（上書きしない）
 
 set -e
