@@ -11,17 +11,17 @@ newsTopics シートへの保存・mark-used は不要。
 内容把握後、投稿を書く前にユーザーへ「どの点が刺さったか」を質問する。
 
 ### $ARGUMENTS が No.番号の場合（例: No.3）
-以下を実行して指定ネタの詳細を取得する：
+以下を呼び出して全ネタを取得し、A列（No）が指定番号の行を抽出する：
 ```
-python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list news --unused-only --full
+sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="newsTopics!A:Z")
 ```
 内容把握後、投稿を書く前にユーザーへ「どの点が刺さったか」を質問する。
 回答後に投稿を作成し、最後に mark-used を実行する。
 
 ### $ARGUMENTS が空の場合
-以下を実行して未使用ニュースの一覧を取得する：
+以下を呼び出して全ネタを取得し、G列（ステータス）が「未使用」の行のみを抽出する：
 ```
-python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list news --unused-only --full
+sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="newsTopics!A:Z")
 ```
 取得した一覧から、以下の観点でXのインプレッションが取れそうなニュースを1つ自分で選ぶ：
 
@@ -33,9 +33,9 @@ python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list news --u
 選んだニュースの「概要」「ポイント」「ソース」を読み込み、**自分でどの点が最も刺さるかを考える**。
 ニュース番号・選んだ理由・刺さったポイントを1〜2行で示してから、そのポイントを軸に投稿を作成する。
 
-投稿本文を出力した後、使用したネタ（Sheetsから選んだ場合のみ）を以下のコマンドで使用済みにする：
+投稿本文を出力した後、使用したネタ（Sheetsから選んだ場合のみ）を使用済みにする。sheets_get_values の結果から No に対応する行番号 R を特定し、以下を呼び出す：
 ```
-python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py mark-used news [No番号]
+sheets_update_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="newsTopics!G{R}", values=[["使用済み"]])
 ```
 
 # 高インプレッションを生む投稿の構造（必ず従う）

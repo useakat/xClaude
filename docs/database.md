@@ -1,9 +1,9 @@
 ---
 title: データベース構造
-description: database/ 以下の CSV ファイルの構造と用途
+description: Google Sheets がデータの正。database/ の CSV は参照用アーカイブ。
 ---
 
-データの実体は `database/*.csv`。`scripts/sync_to_sheets.sh` で Google Sheets に一方向同期する。
+データの実体は **Google Sheets**（mcp-gsheets 経由で読み書き）。`database/*.csv` は参照用アーカイブで更新不要。
 
 ## ファイル一覧
 
@@ -31,15 +31,12 @@ description: database/ 以下の CSV ファイルの構造と用途
 | 出典メモ | 参照した情報源 |
 | ステータス | 未使用 / 使用済み |
 
-## ネタ管理スクリプト
+## ネタ管理（mcp-gsheets）
 
-```bash
-# 未使用ネタ一覧を表示
-python3 scripts/csv_reader.py list one-point --unused-only --full
+スプレッドシート SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`
 
-# ネタを使用済みに更新
-python3 scripts/update_neta_status.py one-point [No番号] 使用済み
-
-# ネタを追加
-python3 scripts/sheets_manager.py add-one-point --theme "..." --hook "..."
-```
+| 操作 | mcp-gsheets ツール |
+|---|---|
+| 未使用ネタ一覧 | `sheets_get_values(spreadsheetId=SS1, range="onePointNeta!A:Z")` → I列=「未使用」でフィルタ |
+| ネタを使用済みに更新 | `sheets_update_values(spreadsheetId=SS1, range="onePointNeta!I{行}", values=[["使用済み"]])` |
+| ネタを追加 | `sheets_append_values(spreadsheetId=SS1, range="onePointNeta!A:A", values=[[...]])` |

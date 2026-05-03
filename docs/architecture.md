@@ -38,14 +38,14 @@ outputs/（原稿）  →  Gmail 下書き / X 投稿
 
 ## 設計原則
 
-**Google サービス連携は gws CLI に統一**
-Gmail・Drive・Sheets との連携はすべて `gws` コマンドを使ったシェルスクリプト経由で実装する。Python SDK や MCP ツールは使わない。
+**Google サービス連携**
+Gmail・Drive の連携は `gws` CLI（シェルスクリプト経由）で実装する。Sheets の読み書きは mcp-gsheets MCP ツール（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）を使う。
 
 **スクリプト化優先**
 データ I/O・API 呼び出し・git 操作など繰り返し実行する処理はスクリプト化する。Claude はコンテンツ生成と判断に集中する。
 
-**データベースの実体は CSV**
-`database/*.csv` がデータの正とし、`scripts/sync_to_sheets.sh` で Google Sheets に一方向同期する。
+**データベースの実体は Google Sheets**
+`database/*.csv` は参照用アーカイブで更新不要。Sheets が唯一の正データ。
 
 ## 認証
 

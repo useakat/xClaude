@@ -14,27 +14,23 @@ X（旧Twitter）で「実は、〇〇は△△だ」という形式でバズる
 
 ## リサーチ手順
 
-1. 以下を実行して既存ネタのテーマ一覧を取得し、重複しないよう確認する：
+1. 以下を呼び出して既存ネタの一覧を取得し、重複しないよう確認する：
    ```
-   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list one-point
+   sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!A:Z")
    ```
 2. WebSearchで以下の2カテゴリを分けて検索し、それぞれ5件ずつ計10件収集する：
    - **【宇宙・物理・素粒子】5件**: 「宇宙 驚き 事実」「素粒子 不思議」「physics surprising facts」「quantum mechanics trivia」などで検索
    - **【科学全般】5件**: 「生物 驚き 事実」「化学 不思議」「human body facts」「biology trivia」「chemistry surprising」などで検索
 3. 条件を満たすネタをカテゴリ別に5件ずつ選ぶ
 4. 以下のフォーマットで出力
-5. **出力後、収集した各ネタを Google Sheets に保存する：**
+5. **出力後、収集した各ネタを Google Sheets に保存する。No は既存の最大 No + 1 から連番で採番する（10件分実行）：**
    ```
-   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py add-one-point \
-     --theme "テーマ" \
-     --hook "冒頭1行案" \
-     --connection "身近さ接続" \
-     --mechanism "仕組みのポイント" \
-     --closing "感情的締め案" \
-     --difficulty "難易度" \
-     --source "出典メモ"
+   sheets_append_values(
+     spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM",
+     range="onePointNeta!A:A",
+     values=[[No, テーマ, 冒頭1行案, 身近さ接続, 仕組みのポイント, 感情的締め案, 難易度, 出典メモ, "未使用", YYYY-MM-DD]]
+   )
    ```
-   ネタ10件分、それぞれこのコマンドを実行する。
 
 ## 出力形式
 
@@ -62,7 +58,7 @@ X（旧Twitter）で「実は、〇〇は△△だ」という形式でバズる
 
 ## 既出ネタ（重複禁止）
 
-Google Sheets（`scripts/sheets_manager.py list one-point` の出力）を必ず確認して重複を避けること。
+`sheets_get_values` で取得した一覧を必ず確認して重複を避けること。
 
 投稿済み:
 - 金が金色なのは相対性理論のせい
