@@ -32,7 +32,8 @@
       "Bash(git -C /root/xClaude log *)",
       "Bash(cat *)",
       "Bash(ls *)",
-      "Bash(find *)"
+      "Bash(find *)",
+      "Bash(bash /root/xClaude/scripts/commit_and_sync.sh *)"	
     ]
   },
   "mcpServers": {
