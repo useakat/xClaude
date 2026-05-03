@@ -1,6 +1,6 @@
 ---
 name: reporter-daily
-description: X・note 運用の日報を作成し、docs/reports/daily/ に保存する。スプレッドシートから当日の数値を取得し、投稿実績をもとに特記事項をAI生成する。
+description: X・note 運用の日報を作成し、docs/reports/daily/ に保存する。スプレッドシートから前日の数値を取得し、投稿実績をもとに特記事項をAI生成する。
 tools: Bash, Read, Write, Edit, Glob, Grep
 ---
 
@@ -11,7 +11,7 @@ tools: Bash, Read, Write, Edit, Glob, Grep
 
 # STEP 1: 対象日付の決定
 
-引数があればその日付を使用する。なければ当日を使用する。
+引数があればその日付を使用する。なければ**前日**を使用する。
 
 ```bash
 python3 -c "
@@ -22,7 +22,7 @@ if args:
     from datetime import datetime
     d = datetime.strptime(args[0], '%Y-%m-%d').date()
 else:
-    d = date.today()
+    d = date.today() - timedelta(days=1)
 print(d.strftime('%Y-%m-%d'))
 print(d.strftime('%Y/%m/%d'))
 print(d.strftime('%-m月%-d日'))
@@ -36,109 +36,41 @@ print(d.strftime('%-m月%-d日'))
 
 ---
 
-# STEP 2: 日次記録シートから当日データ取得
+# STEP 2: 日次記録シートから対象日データ取得
 
-```bash
-SPREADSHEET_ID="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"
-DATE_SHEET="[STEP1で取得した DATE_SHEET]"
+`sheets_get_values` MCP ツールで日次記録シートを取得する：
 
-gws sheets spreadsheets values get \
-  --params "{\"spreadsheetId\": \"${SPREADSHEET_ID}\", \"range\": \"日次記録!A:AB\"}" \
-  2>/dev/null | python3 -c "
-import json, sys
-
-date_sheet = '${DATE_SHEET}'
-d = json.load(sys.stdin)
-rows = d.get('values', [])
-header = rows[0] if rows else []
-
-def idx(name):
-    try: return header.index(name)
-    except: return -1
-
-result = None
-for row in rows[1:]:
-    if row and row[0] == date_sheet:
-        result = row
-        break
-
-def val(row, name, default=''):
-    i = idx(name)
-    if i < 0 or i >= len(row): return default
-    return row[i].strip() if row[i] else default
-
-if result:
-    posts    = val(result, 'ポスト数')
-    quotes   = val(result, '引用数')
-    self_rep = val(result, 'セルフリプ数', '0')
-    other_rep= val(result, 'リプ数（他人）', '0')
-    try:
-        replies = str(int(self_rep or 0) + int(other_rep or 0))
-    except:
-        replies = ''
-    print(f'posts={posts}')
-    print(f'quotes={quotes}')
-    print(f'replies={replies}')
-else:
-    print('posts=')
-    print('quotes=')
-    print('replies=')
-    print('WARNING: 当日データなし', file=sys.stderr)
-"
+```
+sheets_get_values(
+  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
+  range="日次記録!A:AB"
+)
 ```
 
-取得した `posts`・`quotes`・`replies` を記憶する。
+返却された行から A列（日付）が `DATE_SHEET` に一致する行を探す。見つかったら以下の列を取得する：
+- `ポスト数` → `posts`
+- `引用数` → `quotes`
+- `セルフリプ数` + `リプ数（他人）` の合計 → `replies`
+
+行が見つからない場合は `posts`・`quotes`・`replies` を空として続行する。
 
 ---
 
-# STEP 3: 投稿一覧シートから当日の投稿を取得
+# STEP 3: 投稿一覧シートから対象日の投稿を取得
 
-```bash
-SPREADSHEET_ID="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"
-DATE_SHEET="[STEP1で取得した DATE_SHEET]"
+`sheets_get_values` MCP ツールで投稿一覧シートを取得する：
 
-gws sheets spreadsheets values get \
-  --params "{\"spreadsheetId\": \"${SPREADSHEET_ID}\", \"range\": \"自分の投稿一覧!A:P\"}" \
-  2>/dev/null | python3 -c "
-import json, sys
-
-date_sheet = '${DATE_SHEET}'
-d = json.load(sys.stdin)
-rows = d.get('values', [])
-header = rows[0] if rows else []
-
-def idx(name):
-    try: return header.index(name)
-    except: return -1
-
-posts = []
-for row in rows[1:]:
-    if not row: continue
-    dt = row[0] if row else ''
-    if not dt.startswith(date_sheet): continue
-
-    def val(name, default=''):
-        i = idx(name)
-        return row[i].strip() if i >= 0 and i < len(row) and row[i] else default
-
-    kind   = val('ツイート種類')
-    text   = val('ツイート本文')[:80].replace('\n', ' ')
-    imp    = val('インプレッション')
-    likes  = val('いいね')
-    rt     = val('リツイート')
-    bkm    = val('ブックマーク')
-
-    posts.append(f'[{kind}] {text}… | インプ:{imp} いいね:{likes} RT:{rt} ブクマ:{bkm}')
-
-if posts:
-    for p in posts:
-        print(p)
-else:
-    print('(当日の投稿記録なし)')
-"
+```
+sheets_get_values(
+  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
+  range="自分の投稿一覧!A:P"
+)
 ```
 
-取得した投稿一覧を記憶する。
+返却された行から A列（日時）が `DATE_SHEET` で始まる行を全て抽出する。各行について以下を取得する：
+- `ツイート種類`・`ツイート本文`（先頭80字）・`インプレッション`・`いいね`・`リツイート`・`ブックマーク`
+
+抽出した投稿一覧を記憶する。
 
 ---
 
@@ -187,13 +119,11 @@ git -C /root/xClaude rev-parse --show-toplevel
 
 # STEP 6: インデックス更新
 
-`docs/reports/daily/index.md` を読み込み、末尾に以下を追記する（既に存在する場合はスキップ）：
+`docs/reports/daily/index.md` を読み込み、日付の降順になるよう既存リストの先頭に以下を挿入する（既に存在する場合はスキップ）：
 
 ```markdown
 - [[DATE_ISO]]([DATE_ISO].md)
 ```
-
-日付の降順になるよう、既存リストの先頭に挿入する。
 
 ---
 
@@ -210,6 +140,6 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 
 ```
 ✅ 日報作成完了: [DATE_JP]
-   ポスト数: [posts] / 引用: [quotes] / リプライ: [replies]
+   ポスト数: [posts] / 引用: [quotes] / リプライ: [releases]
    保存先: docs/reports/daily/[DATE_ISO].md
 ```
