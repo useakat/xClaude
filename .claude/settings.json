@@ -26,7 +26,8 @@
       "Bash(npm *)",
       "Bash(grep *)",
       "Bash(gws sheets spreadsheets get *)",
-      "Bash(gws sheets spreadsheets values get *)"
+      "Bash(gws sheets spreadsheets values get *)",
+      "Bash(git -C /root/xClaude diff *)"
     ]
   },
   "hooks": {
@@ -36,7 +37,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import json,sys; cmd=json.load(sys.stdin).get('tool_input',{}).get('command',''); exit(0 if 'git commit' in cmd else 1)\" && echo '{\"systemMessage\": \"コミット前確認: 今回のセッションで新規に許可した操作（Bash/Tool）を settings.json に追記しましたか？\"}' || true"
+            "command": "python3 -c \"import json,sys; cmd=json.load(sys.stdin).get('tool_input',{}).get('command',''); exit(0 if 'git commit' in cmd or 'commit_and_sync.sh' in cmd else 1)\" && echo '{\"systemMessage\": \"コミット前確認: 今回のセッションで新規に許可した操作（Bash/Tool）を settings.json に追記しましたか？\"}' || true"
           }
         ]
       }
