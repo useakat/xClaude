@@ -38,16 +38,35 @@ print(d.strftime('%-m月%-d日'))
 
 # STEP 2: 日次記録シートから対象日データ取得
 
-`sheets_get_values` MCP ツールで日次記録シートを取得する：
+**2-1. 最終行番号を取得する**
 
 ```
 sheets_get_values(
   spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="日次記録!A:AB"
+  range="日次記録!A:A"
 )
 ```
 
-返却された行から A列（日付）が `DATE_SHEET` に一致する行を探す。見つかったら以下の列を取得する：
+返却された配列の長さを `N` とする（ヘッダー行を含む）。
+最新10行の開始行: `start = max(2, N - 9)`（1-indexed）
+
+**2-2. ヘッダー＋最新10行を取得する**
+
+```
+sheets_get_values(
+  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
+  range="日次記録!A1:AB1"
+)
+```
+
+```
+sheets_get_values(
+  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
+  range="日次記録!A{start}:AB{N}"
+)
+```
+
+取得した2つの結果を結合し（ヘッダー行 + データ行）、A列（日付）が `DATE_SHEET` に一致する行を探す。見つかったら以下の列を取得する：
 - `ポスト数` → `posts`
 - `引用数` → `quotes`
 - `セルフリプ数` + `リプ数（他人）` の合計 → `replies`
