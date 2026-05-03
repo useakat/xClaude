@@ -42,12 +42,21 @@
       "url": "http://127.0.0.1:8000/mcp"
     },
     "mcp-gsheets": {
-      "command": "npx",
-      "args": ["-y", "mcp-gsheets@latest"],
-      "env": {
-        "GOOGLE_PROJECT_ID": "charming-well-464402-u4",
-        "GOOGLE_APPLICATION_CREDENTIALS": "/root/xClaude/gcp/charming-well-464402-u4-a7fefbac9372.json"
-      }
+      "type": "http",
+      "url": "http://127.0.0.1:8001/mcp"
     }
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pkill -f 'supergateway.*mcp-gsheets' 2>/dev/null; sleep 1; GOOGLE_APPLICATION_CREDENTIALS=/root/xClaude/gcp/charming-well-464402-u4-a7fefbac9372.json GOOGLE_PROJECT_ID=charming-well-464402-u4 npx -y supergateway --port 8001 --outputTransport streamableHttp --stdio 'npx -y mcp-gsheets@latest' > /tmp/mcp-gsheets.log 2>&1 &",
+            "async": true
+          }
+        ]
+      }
+    ]
   }
 }
