@@ -93,15 +93,39 @@ sheets_get_values(
 
 ---
 
-# STEP 4: 特記事項の生成
+# STEP 4: 変更ログから対象日の開発作業を取得
 
-STEP 2・3 で取得したデータをもとに、以下のルールで④特記事項を生成する。
+以下のコマンドで `docs/changelog.md` から `DATE_ISO` セクションのエントリを抽出する：
+
+```bash
+python3 -c "
+import re, sys
+date_iso = sys.argv[1]
+with open('docs/changelog.md') as f:
+    content = f.read()
+m = re.search(r'## ' + re.escape(date_iso) + r'\n(.*?)(?=\n## |\Z)', content, re.DOTALL)
+if m:
+    entries = m.group(1).strip()
+    print(entries if entries else '(変更なし)')
+else:
+    print('(変更なし)')
+" -- "DATE_ISO"
+```
+
+取得した内容を `changelog_entries` として記憶する。
+
+---
+
+# STEP 5: 特記事項の生成
+
+STEP 2・3・4 で取得したデータをもとに、以下のルールで④特記事項を生成する。
 
 ## 生成ルール
 
 - 投稿ごとに「トピック + 数値 + 一言感想」を書く
 - 特にインプレッションが高かった投稿（目安：5,000以上）は詳しく触れる
 - note執筆・ツール設定・セミナー参加など、投稿以外の活動も推論して記載する
+- `changelog_entries` が「(変更なし)」でなければ、「・[開発] 」プレフィックスで変更ログの内容を1〜2行にまとめて含める
 - 投稿がなかった日は「0投稿。〇〇に注力した日。」と記載する
 - 文体: ゆるい・フランク。等身大のメモ書きトーン
 - 1人称: 「僕」
@@ -111,7 +135,7 @@ STEP 2・3 で取得したデータをもとに、以下のルールで④特記
 
 ---
 
-# STEP 5: ファイル保存
+# STEP 6: ファイル保存
 
 以下のパスに日報ファイルを保存する：
 `[REPO_ROOT]/docs/reports/daily/[DATE_ISO].md`
@@ -136,7 +160,7 @@ git -C /root/xClaude rev-parse --show-toplevel
 
 ---
 
-# STEP 6: インデックス更新
+# STEP 7: インデックス更新
 
 `docs/reports/daily/index.md` を読み込み、日付の降順になるよう既存リストの先頭に以下を挿入する（既に存在する場合はスキップ）：
 
@@ -146,7 +170,7 @@ git -C /root/xClaude rev-parse --show-toplevel
 
 ---
 
-# STEP 7: Git コミット & プッシュ
+# STEP 8: Git コミット & プッシュ
 
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
