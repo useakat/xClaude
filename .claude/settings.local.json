@@ -197,7 +197,9 @@
       "Bash(git -C /root/xClaude diff CLAUDE.md)",
       "Bash(git -C /root/xClaude log --oneline -30)",
       "Bash(git -C /root/xClaude log --name-only --pretty=format:\"COMMIT: %h %s\" -10)",
-      "Bash(python3 -c \"from datetime import date; print\\(date.today\\(\\).strftime\\('%Y%m%d'\\)\\); print\\(date.today\\(\\).strftime\\('%Y-%m-%d'\\)\\)\")"
+      "Bash(python3 -c \"from datetime import date; print\\(date.today\\(\\).strftime\\('%Y%m%d'\\)\\); print\\(date.today\\(\\).strftime\\('%Y-%m-%d'\\)\\)\")",
+      "Bash(gh run *)",
+      "Bash(xargs -I{} basename {})"
     ]
   }
 }
