@@ -205,7 +205,8 @@
       "Bash(git -C /root/xClaude log --oneline -15)",
       "Bash(git -C /root/xClaude log --name-only --pretty=format:\"COMMIT: %h %s\" -8)",
       "Bash(bash /root/xClaude/scripts/commit_and_sync.sh \"fix\\(scripts\\): エージェント環境で gws CLI が見つからないエラーを修正\")",
-      "Bash(gws config *)"
+      "Bash(gws config *)",
+      "Bash(python3 -c \"from datetime import date; print\\(date.today\\(\\).strftime\\('%Y%m%d'\\)\\)\")"
     ]
   }
 }
