@@ -27,7 +27,8 @@
       "Bash(grep *)",
       "Bash(gws sheets spreadsheets get *)",
       "Bash(gws sheets spreadsheets values get *)",
-      "Bash(git -C /root/xClaude diff *)"
+      "Bash(git -C /root/xClaude diff *)",
+      "Bash(gh run list *)"
     ]
   },
   "hooks": {
@@ -37,7 +38,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import json,sys; cmd=json.load(sys.stdin).get('tool_input',{}).get('command',''); exit(0 if 'git commit' in cmd or 'commit_and_sync.sh' in cmd else 1)\" && echo '{\"systemMessage\": \"コミット前確認: 今回のセッションで新規に許可した操作（Bash/Tool）を settings.json に追記しましたか？\"}' || true"
+            "command": "python3 -c \"import json,sys; cmd=json.load(sys.stdin).get('tool_input',{}).get('command',''); is_commit='git commit' in cmd or 'commit_and_sync.sh' in cmd; is_ok='[pre-commit-ok]' in cmd; print(json.dumps({'decision':'block','reason':'コミット前確認: 今回のセッションで新規に許可した操作をユーザーに示し、 settings.json に追記する操作を確認し、追記すべき操作を追記しましたか？ 追記済みであれば # [pre-commit-ok] を末尾に付けて再実行してください。'})) if is_commit and not is_ok else None\""
           }
         ]
       }
