@@ -1,5 +1,6 @@
 #!/bin/bash
 # Gmail メールを X に投稿する汎用スクリプト（全 shell 化版）
+export PATH="/usr/local/bin:$PATH"
 # Usage: bash post_from_email.sh [--dry-run] <件名キーワード> <howID> <ログファイル名>
 # Example:
 #   bash post_from_email.sh "【ワンポイント解説】" W003 x_post_xonepoint.log

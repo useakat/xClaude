@@ -1,5 +1,6 @@
 #!/bin/bash
 # Gmail メッセージから画像添付ファイルをダウンロードする（gws CLI 版）
+export PATH="/usr/local/bin:$PATH"
 # Usage: bash download_gmail_attachment.sh <message_id> <output_path>
 # Exit code 0: 添付保存成功 / 1: 添付なし or エラー
 

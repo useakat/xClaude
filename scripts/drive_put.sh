@@ -1,5 +1,6 @@
 #!/bin/bash
 # Usage: drive_put.sh <local-file>
+export PATH="/usr/local/bin:$PATH"
 # ローカルファイルを Drive の drafts-note フォルダにアップロード/更新
 # 同名ファイルが存在すれば更新（Drive のリビジョン履歴に残る）、なければ新規作成
 # 標準出力: file_id<TAB>drive_url

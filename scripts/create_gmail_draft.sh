@@ -1,5 +1,6 @@
 #!/bin/bash
 # Gmail 下書きを作成する（gws CLI 版）
+export PATH="/usr/local/bin:$PATH"
 # Usage: bash create_gmail_draft.sh --to <email> --subject <subject> --body-file <file>
 # Exit code 0: 成功 / 1: エラー
 
