@@ -3,3 +3,5 @@ server.py
 xmcp
 .claude/settings.local.json
 gcp/
+*~
+\#*\#
