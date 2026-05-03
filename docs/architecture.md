@@ -13,8 +13,9 @@ xClaude/
 │   ├── settings.json    チーム共通設定（権限・MCP サーバー）
 │   └── settings.local.json  個人ローカル設定
 │
-├── database/            CSV データベース（Google Sheets の実体）
-├── scripts/             自動化スクリプト群
+├── database/            参照用アーカイブ（読み取り専用・更新不要）
+├── unused-scripts/      廃止済みスクリプト（アーカイブ）
+├── scripts/             自動化スクリプト群（Gmail/Drive は gws CLI 経由）
 ├── style/               文体・口調スタイル定義
 ├── outputs/             生成成果物
 ├── docs/                このドキュメント（Wiki）
@@ -28,25 +29,34 @@ xClaude/
 ユーザー / cron
     ↓
 Claude Code（スキル実行）
-    ↓
-scripts/（bash/Python）  ←→  Google Workspace（gws CLI）
-    ↓
-database/（CSV）  ←→  Google Sheets
-    ↓
-outputs/（原稿）  →  Gmail 下書き / X 投稿
+    ├── mcp-gsheets ──→ Google Sheets（SS1/SS2）← 唯一の正データ
+    │
+    └── scripts/（bash/Python）
+            ↓
+        gws CLI
+            ├── Gmail（下書き作成・送信）
+            └── Drive（ファイル同期）
+                            ↓
+                    outputs/（原稿）→ X 投稿
 ```
 
 ## 設計原則
 
+**データベースの実体は Google Sheets**
+`database/*.csv` は参照用アーカイブで更新不要。Sheets が唯一の正データ。スキルは mcp-gsheets ツールを直接呼び出して読み書きする。
+
 **Google サービス連携**
-Gmail・Drive の連携は `gws` CLI（シェルスクリプト経由）で実装する。Sheets の読み書きは mcp-gsheets MCP ツール（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）を使う。
+- Sheets: mcp-gsheets MCP ツール（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）
+- Gmail・Drive: `gws` CLI（シェルスクリプト経由）
 
 **スクリプト化優先**
 データ I/O・API 呼び出し・git 操作など繰り返し実行する処理はスクリプト化する。Claude はコンテンツ生成と判断に集中する。
 
-**データベースの実体は Google Sheets**
-`database/*.csv` は参照用アーカイブで更新不要。Sheets が唯一の正データ。
-
 ## 認証
 
-外部サービスの認証は `~/.config/gws/` に統一されている。`gcp/` 配下のトークン類は `scripts/sync_to_drive.py` のみが使用する。
+| サービス | 認証方式 | 設定場所 |
+|---|---|---|
+| Gmail / Drive | gws CLI トークン | `~/.config/gws/` |
+| Google Sheets | サービスアカウント鍵 | `.mcp.json` → `gcp/*.json` |
+
+mcp-gsheets の認証は `.mcp.json` で設定する。ローカルセッションは `GOOGLE_APPLICATION_CREDENTIALS`（ファイルパス）、クラウドセッションは `GOOGLE_SERVICE_ACCOUNT_KEY`（JSON 文字列）。
