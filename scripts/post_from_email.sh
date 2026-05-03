@@ -53,7 +53,7 @@ while [ $LOOP_COUNT -lt $MAX_LOOPS ]; do
 import json, os
 print(json.dumps({
     'userId': 'me',
-    'q': f\"subject:{os.environ['SUBJECT']} -label:投稿済み\",
+    'q': f\"subject:{os.environ['SUBJECT']} -label:投稿済み -is:draft\",
     'maxResults': 50,
 }))")
   THREADS_JSON=$(gws gmail users threads list --params "$PARAMS" 2>/dev/null)
