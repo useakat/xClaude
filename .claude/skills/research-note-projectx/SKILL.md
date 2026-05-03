@@ -15,9 +15,9 @@ note 記事（約6000字）の題材となる、探査機・探査車・宇宙�
 
 ## リサーチ手順
 
-1. 以下を実行して既存ネタのタイトル一覧を取得し、重複しないよう確認する：
+1. 以下を呼び出して既存ネタの一覧を取得し、重複しないよう確認する：
    ```
-   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list note-neta
+   sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="noteNeta!A:Z")
    ```
 2. `参照note記事/` フォルダ内のファイル名を確認し、既存記事テーマと重複しないよう確認する
 3. WebSearchで以下のキーワードで検索する：
@@ -26,21 +26,14 @@ note 記事（約6000字）の題材となる、探査機・探査車・宇宙�
    - 「探査車 危機 救出」「宇宙開発 執念」「mission impossible space」
 4. 条件を満たすネタを5件以上収集する
 5. 以下のフォーマットで出力する
-6. **出力後、収集した各ネタを Google Sheets に保存する：**
+6. **出力後、収集した各ネタを Google Sheets に保存する。No は既存の最大 No + 1 から連番で採番する（件数分実行）：**
    ```
-   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py add-note-neta \
-     --title "タイトル案" \
-     --mission "主人公(ミッション名)" \
-     --era "時代・背景" \
-     --crisis "危機の内容" \
-     --turning-point "逆転のポイント" \
-     --science "科学的見どころ" \
-     --drama "人間ドラマの核心" \
-     --structure "記事展開のヒント" \
-     --difficulty "難易度" \
-     --source "出典メモ"
+   sheets_append_values(
+     spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM",
+     range="noteNeta!A:A",
+     values=[[No, タイトル案, 主人公(ミッション名), 時代・背景, 危機の内容, 逆転のポイント, 科学的見どころ, 人間ドラマの核心, 記事展開のヒント, 難易度, 出典メモ, "未使用", YYYY-MM-DD]]
+   )
    ```
-   ネタ件数分、それぞれこのコマンドを実行する。
 
 ## 出力フォーマット
 

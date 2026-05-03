@@ -13,15 +13,11 @@ bash scripts/sync_to_drive.sh
 
 または `/sync-to-drive` スキルで実行。
 
-## database/ → Sheets 同期
+## database/ → Sheets 同期（廃止済み）
 
-`database/*.csv` の内容を Google Sheets に一方向同期する。
-
-```bash
-bash scripts/sync_to_sheets.sh
-```
-
-または `/sync-to-sheets` スキルで実行。
+Google Sheets が唯一のデータストアになったため、database/ → Sheets の同期は不要。
+各スキルは mcp-gsheets ツールを直接使用して Sheets を読み書きする。
+`/sync-to-sheets` スキルも廃止済み。
 
 ## 個別ファイルの操作
 

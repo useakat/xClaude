@@ -52,17 +52,16 @@ xClaude/
 │   ├── settings.json                 # チーム共通設定（権限・MCP サーバー）
 │   └── settings.local.json           # 個人ローカル設定
 │
-├── database/                         # CSV データベース（Google Sheets の実体）
-│   ├── onePointNeta.csv              # ワンポイント解説ネタ
-│   ├── noteNeta.csv                  # note 記事ネタ
-│   ├── newsTopics.csv                # ニュースネタ
-│   ├── persona.csv                   # 想定ペルソナ
-│   ├── pain.csv                      # 読者の悩み
-│   ├── what.csv                      # 提供価値
-│   └── outputs.csv                   # 生成済み投稿の記録
+├── database/                         # 参照用アーカイブ（読み取り専用・更新不要）
+│   ├── onePointNeta.csv              # ワンポイント解説ネタ（Sheets が正）
+│   ├── noteNeta.csv                  # note 記事ネタ（Sheets が正）
+│   ├── newsTopics.csv                # ニュースネタ（Sheets が正）
+│   ├── persona.csv                   # 想定ペルソナ（Sheets が正）
+│   ├── pain.csv                      # 読者の悩み（Sheets が正）
+│   ├── what.csv                      # 提供価値（Sheets が正）
+│   └── outputs.csv                   # 生成済み投稿の記録（Sheets が正）
 │
-├── scripts/                          # 自動化スクリプト群（Gmail/Drive/Sheets はすべて gws CLI 経由）
-│   ├── sync_to_sheets.sh             # database/ → Google Sheets 同期
+├── scripts/                          # 自動化スクリプト群（Gmail/Drive は gws CLI 経由）
 │   ├── sync_to_drive.sh              # outputs/ → Google Drive 同期
 │   ├── drive_put.sh                  # ローカル md → Drive アップロード/更新
 │   ├── drive_get.sh                  # Drive ファイル ID 指定でローカル DL
@@ -73,7 +72,6 @@ xClaude/
 │   ├── post_from_email.sh            # メール起点 X 投稿 cron
 │   ├── post_to_x.py                  # X 投稿
 │   ├── notebooklm_manager.py         # NotebookLM クライアント
-│   ├── sheets_manager.py             # ローカル CSV 管理（add/list/mark-used）
 │   ├── send_note_draft.py            # note.com への下書き保存
 │   └── …                             # 他補助スクリプト
 │
@@ -99,7 +97,7 @@ xClaude/
 ```
 
 外部認証は基本 gws CLI（`~/.config/gws/`）に統一。`gcp/` 配下のトークン類は `scripts/sync_to_drive.py` のみが使用する（その他の Python スクリプトは gws 化済み）。
-データベースの実体は `database/*.csv` で、`scripts/sync_to_sheets.sh` で Google Sheets に一方向同期する。
+データベースの実体は **Google Sheets**（mcp-gsheets 経由で読み書き）。`database/*.csv` は参照用アーカイブで更新不要。
 
 ---
 
@@ -194,25 +192,25 @@ xClaude/
 ## 実装ルール
 
 ### Google サービス連携
-- **Google サービス（Gmail、Drive、Sheets など）との連携は、必ず gws CLI を使って実装する**
-- Python SDK や MCP ツールではなく、bash スクリプト経由で gws CLI を呼び出す
-- メリット：認証管理の統一、トークン節約、実装の簡潔性
+- **Gmail・Drive の連携は gws CLI を使って実装する**（bash スクリプト経由）
+- **Sheets の読み書きは mcp-gsheets MCP ツールを使う**（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）
+  - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics / outputs）
+  - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what）
 
 ### スクリプト化の原則
 - **確実な処理実行とトークン節約のため、スクリプト化できる処理はなるべく bash / Python スクリプトを作成して実行する**
 - Claude が直接実行するのではなく、スクリプト化することで再現性と信頼性が向上する
 
 **スクリプト化に向いている処理**：
-- データ読み書き（CSV、JSON、YAML）
 - ファイル操作（保存、削除、移動、圧縮）
-- API 呼び出し（Gmail、Drive、Sheets、X など）
+- API 呼び出し（Gmail、Drive、X など）
 - git 操作（commit、push、branch 管理）
 - テキスト変換・整形・バリデーション
-- データベース操作
 
 **スクリプト化に向かない処理**：
 - コンテンツ作成（ブログ、SNS 投稿文など）
 - 創造的な判断が必要な作業
+- Sheets 読み書き（mcp-gsheets ツールを直接呼ぶ方が簡潔）
 - 複雑な条件分岐が多い処理（可読性が落ちるため、Claude が判断する方が良い場合もある）
 
 ---

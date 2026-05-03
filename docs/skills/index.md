@@ -41,5 +41,5 @@ description: Claude Code で使用できるスキルの一覧
 | `/make-infographic` | NotebookLM でインフォグラフィック生成 |
 | `/notebooklm` | NotebookLM 操作 |
 | `/sync-to-drive` | outputs/ → Drive 同期 |
-| `/sync-to-sheets` | database/CSV → Sheets 同期 |
+| `/sync-to-sheets` | ~~database/CSV → Sheets 同期（廃止済み）~~ |
 | `/hashtag-note` | note ハッシュタグ選定 |

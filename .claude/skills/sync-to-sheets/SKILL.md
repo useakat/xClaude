@@ -1,6 +1,8 @@
-# sync-to-sheets
+# sync-to-sheets（廃止済み）
 
-`database/` の CSV ファイルを Google Sheets に同期する（gws CLI 使用）。
+> **このスキルは廃止されました。** database/ CSV → Sheets の一方向同期は不要となり、Google Sheets が唯一のデータストアになりました。各スキルは mcp-gsheets（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）を直接使用します。
+
+~~`database/` の CSV ファイルを Google Sheets に同期する（gws CLI 使用）。~~
 
 ## 実行コマンド
 

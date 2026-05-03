@@ -10,23 +10,12 @@
 
 引数 `$ARGUMENTS` の形式に応じて入力ソースを切り替える：
 
-1. **数字のみ**（例: `42`）→ noteNeta.csv のネタ番号として扱う。下記コマンドで該当ネタを取得：
-   ```bash
-   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list note-neta --full \
-     | python3 -c "
-   import sys, json
-   target = '$ARGUMENTS'
-   for line in sys.stdin:
-       if line.startswith(f'No.{target}') or line.startswith(f'No.{target.zfill(2)}'):
-           print(line)
-   "
+1. **数字のみ**（例: `42`）→ noteNeta シートのネタ番号として扱う。以下を呼び出して全件取得し、A列（No）が一致する行を抽出する：
    ```
-   取得できなければ `list note-neta` の全件から該当 No を目視で特定する。
+   sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="noteNeta!A:Z")
+   ```
 
-2. **`select` または引数なし** → 未使用ネタから1つ選んでもらうため、以下を実行して候補をユーザーに提示：
-   ```bash
-   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list note-neta --unused-only
-   ```
+2. **`select` または引数なし** → 未使用ネタから1つ選んでもらうため、上記を呼び出して L列（ステータス）が「未使用」の行のみをユーザーに提示する：
    ユーザーがネタ番号を答えたら 1. の流れに合流する。
 
 3. **テキスト**（テーマ名・キーワード・自由記述）→ noteNeta は経由せず、そのまま調査対象として使う。

@@ -14,7 +14,7 @@ description: X ワンポイント解説投稿を作成するスキル
 /writer-xonepoint 宇宙エレベーター
 ```
 
-引数なしの場合、`database/onePointNeta.csv` から未使用ネタを自動選定する。
+引数なしの場合、Google Sheets の onePointNeta シートから未使用ネタを自動選定する（mcp-gsheets 経由）。
 
 ## 出力
 

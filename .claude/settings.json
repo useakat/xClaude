@@ -10,14 +10,11 @@
       "Bash(git -C /root/xClaude status)",
       "Bash(python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/notebooklm_manager.py make-infographic *)",
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/sync_to_drive.sh)",
-      "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/sync_to_sheets.sh)",
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/drive_put.sh *)",
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/drive_get.sh *)",
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/post_from_email.sh *)",
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/send_gmail.sh *)",
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh *)",
-      "Bash(python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/csv_reader.py *)",
-      "Bash(python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/update_neta_status.py *)",
       "Bash(gws gmail users threads modify *)",
       "Write",
       "Edit",
@@ -25,7 +22,6 @@
       "Bash(cp -r *)",
       "Bash(npm *)",
       "Bash(grep *)",
-      "Bash(gws sheets spreadsheets get *)",
       "Bash(gws sheets spreadsheets values get *)",
       "Bash(git -C /root/xClaude diff *)",
       "Bash(gh run list *)",
@@ -33,8 +29,7 @@
       "Bash(cat *)",
       "Bash(ls *)",
       "Bash(find *)",
-      "Bash(bash /root/xClaude/scripts/commit_and_sync.sh *)",
-      "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/push_database.sh)"
+      "Bash(bash /root/xClaude/scripts/commit_and_sync.sh *)"
     ]
   },
   "hooks": {

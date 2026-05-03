@@ -9,18 +9,13 @@ tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__claude_ai_
 
 # STEP 1: ネタ在庫確認
 
-以下を実行して未使用ネタ数を確認する：
+以下を呼び出して未使用ネタ数を確認する：
 
-```bash
-python3 -c "
-import csv
-from pathlib import Path
-db = Path('$(git rev-parse --show-toplevel)/database')
-def count(f): return sum(1 for r in csv.DictReader(open(db/f)) if r.get('ステータス')=='未使用')
-op = count('onePointNeta.csv')
-print(f'onePoint未使用:{op}件')
-"
 ```
+sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!A:Z")
+```
+
+取得した行の I列（ステータス）が「未使用」の件数をカウントする。
 
 未使用が **10件未満** の場合は、次のSTEPの前にSTEP 1aを実行する。
 
@@ -29,8 +24,8 @@ print(f'onePoint未使用:{op}件')
 以下の手順でネタを10件収集し、`database/onePointNeta.csv` に追記する。
 
 1. 既存ネタ一覧を取得して重複を避ける：
-   ```bash
-   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py list one-point
+   ```
+   sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!A:Z")
    ```
 
 2. WebSearchで以下を検索し、各5件ずつ計10件収集する：
@@ -43,16 +38,13 @@ print(f'onePoint未使用:{op}件')
    - 科学的に正確（出典確認できる）
    - 150〜200字でまとめられる
 
-4. 採用ネタを以下のコマンドで保存する（10件分実行）：
-   ```bash
-   python3 $(git rev-parse --show-toplevel)/scripts/sheets_manager.py add-one-point \
-     --theme "テーマ" \
-     --hook "冒頭1行案" \
-     --connection "身近さ接続" \
-     --mechanism "仕組みのポイント" \
-     --closing "感情的締め案" \
-     --difficulty "難易度" \
-     --source "出典メモ"
+4. 採用ネタを以下で保存する（10件分実行）。No は既存の最大 No + 1 から連番で採番する：
+   ```
+   sheets_append_values(
+     spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM",
+     range="onePointNeta!A:A",
+     values=[[No, テーマ, 冒頭1行案, 身近さ接続, 仕組みのポイント, 感情的締め案, 難易度, 出典メモ, "未使用", YYYY-MM-DD]]
+   )
    ```
 
 ---
@@ -73,10 +65,10 @@ print(f'onePoint未使用:{op}件')
 
 ## ネタ選定
 
-以下を実行して未使用ネタ一覧を取得する：
+以下を呼び出して全ネタを取得し、I列（ステータス）が「未使用」の行のみを抽出する：
 
-```bash
-python3 $(git rev-parse --show-toplevel)/scripts/csv_reader.py list one-point --unused-only --full
+```
+sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!A:Z")
 ```
 
 以下の観点でインプレッションが取れそうなネタを1つ選ぶ：
@@ -116,9 +108,9 @@ python3 $(git rev-parse --show-toplevel)/scripts/csv_reader.py list one-point --
 
 ## ネタを使用済みにする
 
-本文出力後、使用したネタを使用済みに更新する：
-```bash
-python3 $(git rev-parse --show-toplevel)/scripts/update_neta_status.py one-point [No番号] 使用済み
+本文出力後、使用したネタを使用済みに更新する。先に sheets_get_values で行番号 R を特定し、その後更新する：
+```
+sheets_update_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!I{R}", values=[["使用済み"]])
 ```
 
 ---

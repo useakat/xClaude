@@ -5,11 +5,13 @@
 
 ## Step 1: 既存の CSV を読み込む
 
-以下の3ファイルを読み込み、既存レコードの内容とIDの採番状況を把握する。
+以下の3シートを取得し、既存レコードの内容とIDの採番状況を把握する。
 
-- `/home/user/xClaude/database/persona.csv`
-- `/home/user/xClaude/database/pain.csv`
-- `/home/user/xClaude/database/what.csv`
+```
+sheets_get_values(spreadsheetId="1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc", range="persona!A:Z")
+sheets_get_values(spreadsheetId="1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc", range="pain!A:Z")
+sheets_get_values(spreadsheetId="1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc", range="what!A:Z")
+```
 
 ### 各ファイルの構造
 
@@ -108,4 +110,4 @@ WXX,...
 - 既存レコードの ID 体系（PE / PR / W + 3桁数字）を必ず踏襲する
 - 関連性の薄い pain や what は追加しない
 - what は 1〜3 件を目安に、具体的なコンテンツ形式（X短文ポスト / X長文ポスト / note 記事 / note シリーズ）を明示する
-- CSV として貼り付けできる形式で出力する（ユーザーが確認後に追記するため、実際のファイル編集は行わない）
+- Google Sheets に貼り付けできる形式で出力する（ユーザーが確認後に追記するため、実際のシート編集は行わない）
