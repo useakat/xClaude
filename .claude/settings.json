@@ -49,13 +49,6 @@
     "xmcp": {
       "type": "http",
       "url": "http://127.0.0.1:8000/mcp"
-    },
-    "mcp-gsheets": {
-      "command": "npx",
-      "args": ["-y", "mcp-gsheets@latest", "--stdio"],
-      "env": {
-        "GOOGLE_SERVICE_ACCOUNT_KEY": "${GOOGLE_SERVICE_ACCOUNT_KEY}"
-      }
     }
   }
 }

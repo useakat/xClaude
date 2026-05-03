@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "mcp-gsheets": {
+      "command": "npx",
+      "args": ["-y", "mcp-gsheets@latest", "--stdio"],
+      "env": {
+        "GOOGLE_SERVICE_ACCOUNT_KEY": "${GOOGLE_SERVICE_ACCOUNT_KEY}"
+      }
+    }
+  }
+}
