@@ -1,7 +1,7 @@
 ---
 name: daily-xonepoint
 description: Xのワンポイント解説投稿を1本作成し、品質チェック・保存・Git push・メール下書き作成まで自律実行する。インフォグラフィック作成はユーザー承認後に実行する。
-tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch
+tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__claude_ai_Gmail__create_draft
 ---
 
 あなたはXのワンポイント科学解説投稿を自律的に制作するエージェントです。
@@ -149,30 +149,29 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
 
 # STEP 5: メール下書き作成
 
-保存したファイル（STEP 4で保存した YYYYMMDD-HH:MM:SS_xonepoint.md）を読み込み、gws CLI ベースの bash スクリプトを使用して Gmail 下書きを作成する。
+保存したファイル（STEP 4で保存した YYYYMMDD-HH:MM:SS_xonepoint.md）を読み込み、`mcp__claude_ai_Gmail__create_draft` ツールを使って Gmail 下書きを作成する。
 
-1. STEP 4 で保存したファイルの内容を読み込む
-2. ファイル内容の末尾に以下を追加して、一時ファイルを作成：
+1. STEP 4 で保存したファイルの内容を Read ツールで読み込む
+2. 以下の形式で本文を組み立てる：
    ```
+   （ファイル内容をそのまま）
+
    [投稿文]
-   
+
    （最終本文）
-   
+
    [/投稿文]
    ```
-3. 以下のコマンドで Gmail 下書きを作成する：
-   ```bash
-   bash $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.sh \
-     --to useakat@gmail.com \
-     --subject "【ワンポイント解説】YYYYMMDD HH:MM:SS の原稿ができました" \
-     --body-file "<一時ファイルパス>"
-   ```
+3. `mcp__claude_ai_Gmail__create_draft` ツールを呼び出す：
+   - `to`: `["useakat@gmail.com"]`
+   - `subject`: `"【ワンポイント解説】YYYYMMDD HH:MM:SS の原稿ができました"`
+   - `body`: 上記で組み立てた本文
 
 ## 実行ルール
 
-- **gws CLI ベースの bash スクリプトを使用する** - MCP ツールではなく、`scripts/create_gmail_draft.sh` を呼び出す
-- **成功判定は exit code 0 と draft ID の表示で行う** - スクリプトが「✓ 下書き作成完了 (id: xxxxxx)」を返したら成功
-- **失敗した場合は、エラー出力をそのまま報告する**
+- **`mcp__claude_ai_Gmail__create_draft` ツールを使用する** — bash スクリプトではなく MCP ツールを直接呼び出す
+- **成功判定はレスポンスに draft ID が含まれることで行う**
+- **失敗した場合は、エラー内容をそのまま報告する**
 
 ---
 
