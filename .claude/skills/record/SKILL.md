@@ -11,14 +11,7 @@ tools: Bash, Read, Write, Edit, Glob, Grep
 
 # STEP 1: 記録済み変更の把握
 
-`docs/changelog.md` を読み込み、既に記録されている変更タイトルを抽出する。
-
-```bash
-REPO_ROOT=$(git -C /root/xClaude rev-parse --show-toplevel)
-cat "${REPO_ROOT}/docs/changelog.md"
-```
-
-変更ログに記載されている **太字タイトル**（`**タイトル**` 形式）を全て記憶する。
+Read ツールで `/root/xClaude/docs/changelog.md` を読み込み、変更ログに記載されている **太字タイトル**（`**タイトル**` 形式）を全て記憶する。
 
 ---
 

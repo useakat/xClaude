@@ -11,11 +11,7 @@ tools: Read, Edit, Bash
 
 # STEP 1: 現在の permissions.allow を把握
 
-```bash
-cat $(git -C /root/xClaude rev-parse --show-toplevel)/.claude/settings.json
-```
-
-`permissions.allow` に登録済みのパターンを全て記憶する。
+Read ツールで `/root/xClaude/.claude/settings.json` を読み込み、`permissions.allow` に登録済みのパターンを全て記憶する。
 
 ---
 
