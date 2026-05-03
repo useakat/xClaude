@@ -15,14 +15,14 @@ tools: Bash, Read, Write, Edit, Glob, Grep
 
 ```bash
 python3 -c "
-from datetime import date, timedelta
+from datetime import datetime, timedelta, timezone
 import sys
+JST = timezone(timedelta(hours=9))
 args = sys.argv[1:]
 if args:
-    from datetime import datetime
     d = datetime.strptime(args[0], '%Y-%m-%d').date()
 else:
-    d = date.today() - timedelta(days=1)
+    d = datetime.now(JST).date() - timedelta(days=1)
 print(d.strftime('%Y-%m-%d'))
 print(d.strftime('%Y/%m/%d'))
 print(d.strftime('%-m月%-d日'))
