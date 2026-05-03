@@ -28,7 +28,11 @@
       "Bash(gws sheets spreadsheets get *)",
       "Bash(gws sheets spreadsheets values get *)",
       "Bash(git -C /root/xClaude diff *)",
-      "Bash(gh run list *)"
+      "Bash(gh run list *)",
+      "Bash(git -C /root/xClaude log *)",
+      "Bash(cat *)",
+      "Bash(ls *)",
+      "Bash(find *)"
     ]
   },
   "mcpServers": {
