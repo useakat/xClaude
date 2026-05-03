@@ -4,8 +4,7 @@
       "command": "npx",
       "args": ["-y", "mcp-gsheets@latest"],
       "env": {
-        "GOOGLE_CLIENT_EMAIL": "${GOOGLE_CLIENT_EMAIL}",
-        "GOOGLE_PRIVATE_KEY": "${GOOGLE_PRIVATE_KEY}"
+        "GOOGLE_SERVICE_ACCOUNT_KEY": "${GOOGLE_SERVICE_ACCOUNT_KEY}"
       }
     }
   }
