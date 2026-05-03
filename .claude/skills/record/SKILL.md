@@ -133,7 +133,7 @@ tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 ## エントリ形式
 
 ```markdown
-- **[変更タイトル]** — [概要1行]。[→報告書](./reports/YYYYMMDD_[ファイル名].md)
+- **[変更タイトル]** — [概要1行]。[→報告書](../reports/YYYYMMDD_[ファイル名]/)
 ```
 
 ## 追記ルール
