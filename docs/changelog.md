@@ -7,6 +7,13 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-04
+
+- **mcp-gsheets 起動設定の修正** — `--stdio` 追加・settings.json 経由の試行と .mcp.json への差し戻し・auth env を `GOOGLE_SERVICE_ACCOUNT_KEY` のみに統一する一連の修正。[→報告書](../reports/20260504_mcp_gsheets_startup_fix.md)
+- **reporter-daily スキル改善** — デフォルトを前日に変更・gws CLI から mcp-gsheets に移行・日次記録シートの読み込みを最新10行に限定。
+- **cron X 投稿からの下書き除外** — `post_from_email.sh` の Gmail 検索クエリに `-is:draft` を追加し、下書きメールが投稿対象になる不具合を修正。
+- **CLAUDE.md ファイル削除ルール変更** — 「ファイルを削除しない」から「削除する場合はよーんに確認する」に緩和。
+
 ## 2026-05-03
 
 - **mcp-gsheets の cloud session 対応** — `.mcp.json` を新設し command 型で定義、supergateway 不使用の構成に統一。認証は `GOOGLE_SERVICE_ACCOUNT_KEY` 環境変数で渡す。[→報告書](../reports/20260503_mcp_gsheets_cloud_session.md)
