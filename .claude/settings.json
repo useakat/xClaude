@@ -49,6 +49,14 @@
     "xmcp": {
       "type": "http",
       "url": "http://127.0.0.1:8000/mcp"
+    },
+    "mcp-gsheets": {
+      "command": "npx",
+      "args": ["-y", "mcp-gsheets@latest"],
+      "env": {
+        "GOOGLE_SERVICE_ACCOUNT_KEY": "${GOOGLE_SERVICE_ACCOUNT_KEY}",
+        "GOOGLE_APPLICATION_CREDENTIALS": "/root/xClaude/gcp/charming-well-464402-u4-2cfb7bddf343.json"
+      }
     }
   }
 }
