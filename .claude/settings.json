@@ -39,7 +39,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import json,sys,os,re; d=json.load(sys.stdin); cmd=d.get('tool_input',{}).get('command',''); sys.exit(2) if os.environ.get('CLAUDE_CODE_REMOTE')=='true' and re.search(r'git\\s+(-C\\s+\\S+\\s+)?(push|commit)\\b|git\\s+(-C\\s+\\S+\\s+)?(checkout\\s+.*-b\\b|switch\\s+-c\\b|branch\\s+[a-zA-Z_])', cmd) else None\""
+            "command": "python3 /root/xClaude/scripts/hooks/git_guard.py"
           }
         ]
       }
