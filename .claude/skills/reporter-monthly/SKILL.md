@@ -337,3 +337,5 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
    Xクリエイター収益: （未記入 — ファイルに直接追記してください）
    保存先: docs/reports/monthly/[month_id].md
 ```
+
+保存したファイルを Read ツールで読み込み、内容をそのまま表示する。
