@@ -13,6 +13,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **reporter-daily スキル改善** — デフォルトを前日に変更・gws CLI から mcp-gsheets に移行・日次記録シートの読み込みを最新10行に限定。
 - **cron X 投稿からの下書き除外** — `post_from_email.sh` の Gmail 検索クエリに `-is:draft` を追加し、下書きメールが投稿対象になる不具合を修正。
 - **CLAUDE.md ファイル削除ルール変更** — 「ファイルを削除しない」から「削除する場合はよーんに確認する」に緩和。
+- **reporter スキル UX 改善（完了後表示・特記事項ルール整備）** — daily/weekly/monthly 全スキルの完了後に生成ファイルを画面表示。reporter-daily の特記事項からフォロワー増減・`[開発]` 表記を廃止し、変更ログの要約を運用視点に変更。[→報告書](../reports/20260504_reporter_ux_improvements.md)
+- **remote session での docs/reports/ push 許可** — `git_guard.py` を新設し、ステージ済みファイルが `docs/reports/` 配下のみなら remote でも commit・push を通す。フックもスクリプト外部化・動的パス解決に変更。[→報告書](../reports/20260504_remote_reports_push.md)
 
 ## 2026-05-03
 
