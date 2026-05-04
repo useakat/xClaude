@@ -29,7 +29,10 @@
       "Bash(cat *)",
       "Bash(ls *)",
       "Bash(find *)",
-      "Bash(bash /root/xClaude/scripts/commit_and_sync.sh *)"
+      "Bash(bash /root/xClaude/scripts/commit_and_sync.sh *)",
+      "mcp__mcp-gsheets__sheets_get_values",
+      "mcp__mcp-gsheets__sheets_append_values",
+      "mcp__mcp-gsheets__sheets_update_values"
     ]
   },
   "hooks": {
