@@ -15,15 +15,15 @@ tools: Bash, Read, Write, Edit, Glob, Grep
 
 ```bash
 python3 -c "
-from datetime import date, timedelta
+from datetime import datetime, timedelta, timezone
 import sys
 
+JST = timezone(timedelta(hours=9))
 args = sys.argv[1:]
 if args:
-    from datetime import datetime
     d = datetime.strptime(args[0], '%Y-%m').date().replace(day=1)
 else:
-    today = date.today()
+    today = datetime.now(JST).date()
     d = (today.replace(day=1) - timedelta(days=1)).replace(day=1)
 
 import calendar
