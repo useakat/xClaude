@@ -183,6 +183,8 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 
 ```
 ✅ 日報作成完了: [DATE_JP]
-   ポスト数: [posts] / 引用: [quotes] / リプライ: [releases]
+   ポスト数: [posts] / 引用: [quotes] / リプライ: [replies]
    保存先: docs/reports/daily/[DATE_ISO].md
 ```
+
+保存したファイルを Read ツールで読み込み、内容をそのまま表示する。
