@@ -1,0 +1,113 @@
+---
+import { getCollection } from 'astro:content';
+
+const allDocs = await getCollection('docs');
+const dailyReports = allDocs
+  .filter(doc => /^reports\/daily\/\d{4}-\d{2}-\d{2}$/.test(doc.id))
+  .map(doc => doc.id.split('/').pop() as string)
+  .sort()
+  .reverse();
+
+const reportSet = new Set(dailyReports);
+const months = [...new Set(dailyReports.map(d => d.slice(0, 7)))];
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+const DOW_LABELS = ['月', '火', '水', '木', '金', '土', '日'];
+
+interface CalMonth {
+  label: string;
+  cells: Array<{ day: number | null; dateStr: string; hasReport: boolean }>;
+}
+
+const calMonths: CalMonth[] = months.map(ym => {
+  const [y, m] = ym.split('-').map(Number);
+  const daysInMonth = new Date(y, m, 0).getDate();
+  const firstDow = (new Date(y, m - 1, 1).getDay() + 6) % 7;
+
+  const cells: CalMonth['cells'] = [];
+  for (let i = 0; i < firstDow; i++) {
+    cells.push({ day: null, dateStr: '', hasReport: false });
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    cells.push({ day: d, dateStr, hasReport: reportSet.has(dateStr) });
+  }
+
+  return { label: `${y}年${m}月`, cells };
+});
+---
+
+<div class="daily-calendar">
+  {calMonths.map(({ label, cells }) => (
+    <div class="cal-month">
+      <h3 class="cal-title">{label}</h3>
+      <div class="cal-grid">
+        {DOW_LABELS.map(d => (
+          <div class="cal-header">{d}</div>
+        ))}
+        {cells.map(({ day, dateStr, hasReport }) => (
+          <div class={hasReport ? 'cal-cell has-report' : 'cal-cell'}>
+            {day === null ? (
+              <span></span>
+            ) : hasReport ? (
+              <a href={`${base}/reports/daily/${dateStr}/`}>{day}</a>
+            ) : (
+              <span>{day}</span>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .daily-calendar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .cal-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    border: none;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 2.4rem);
+    gap: 2px;
+  }
+  .cal-header {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--sl-color-gray-3);
+    padding: 2px 0;
+  }
+  .cal-cell {
+    text-align: center;
+    padding: 5px 2px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    min-height: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cal-cell.has-report {
+    background: var(--sl-color-accent-low);
+  }
+  .cal-cell a {
+    color: var(--sl-color-accent);
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+  }
+  .cal-cell a:hover {
+    text-decoration: underline;
+  }
+  .cal-cell span {
+    color: var(--sl-color-gray-3);
+  }
+</style>
