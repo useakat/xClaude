@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import json, sys, os, re, subprocess
+from pathlib import Path
 
 d = json.load(sys.stdin)
 cmd = d.get('tool_input', {}).get('command', '')
@@ -12,7 +13,8 @@ if os.environ.get('CLAUDE_CODE_REMOTE') != 'true':
 if re.search(r'git\s+(-C\s+\S+\s+)?(checkout\s+.*-b\b|switch\s+-c\b|branch\s+[a-zA-Z_])', cmd):
     sys.exit(2)
 
-REPO = '/root/xClaude'
+# スクリプト自身の場所からリポジトリルートを解決（scripts/hooks/git_guard.py）
+REPO = str(Path(__file__).resolve().parent.parent.parent)
 ALLOWED_PREFIX = 'docs/reports/'
 
 # git commit: ステージ済みファイルが全て docs/reports/ 配下なら許可
