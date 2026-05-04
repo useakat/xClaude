@@ -260,6 +260,10 @@ STEP 3 の日報内容と STEP 4 の「次月への改善」をもとに、以�
 ## ファイルフォーマット
 
 ```markdown
+---
+title: 週報 [week_label]
+---
+
 ## 【週報　[week_label]】
 
 ① フォロワー数
