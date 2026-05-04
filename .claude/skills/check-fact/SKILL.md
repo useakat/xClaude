@@ -1,3 +1,10 @@
+---
+name: check-fact
+description: ファクトチェック付き品質レビュー。テキストまたは Drive ファイル ID を入力として受け付ける。
+tools: Read, Bash, WebFetch, WebSearch
+context: fork
+---
+
 # check-fact — ファクトチェック付き品質レビュー
 
 ## あなたの役割
