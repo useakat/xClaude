@@ -34,9 +34,7 @@ jobs:
         run: cd starlight && npm ci
 
       - name: Copy docs to Starlight content directory
-        run: |
-          mkdir -p starlight/src/content/docs
-          rsync -a --exclude='reports/daily' --exclude='reports/weekly' --exclude='reports/monthly' docs/ starlight/src/content/docs/
+        run: mkdir -p starlight/src/content/docs && cp -r docs/* starlight/src/content/docs/
 
       - name: Build Starlight
         run: cd starlight && npm run build
