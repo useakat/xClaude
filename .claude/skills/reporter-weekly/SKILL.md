@@ -15,16 +15,16 @@ tools: Bash, Read, Write, Edit, Glob, Grep
 
 ```bash
 python3 -c "
-from datetime import date, timedelta
+from datetime import datetime, timedelta, timezone
 import sys
 
+JST = timezone(timedelta(hours=9))
 args = sys.argv[1:]
 if args:
-    from datetime import datetime
     base = datetime.strptime(args[0], '%Y-%m-%d').date()
     monday = base - timedelta(days=base.weekday())
 else:
-    today = date.today()
+    today = datetime.now(JST).date()
     # 直近完了週の月曜（今週月曜の7日前）
     monday = today - timedelta(days=today.weekday() + 7)
 
