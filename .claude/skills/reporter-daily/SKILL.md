@@ -174,11 +174,7 @@ git -C /root/xClaude rev-parse --show-toplevel
 
 # STEP 7: インデックス更新
 
-`docs/reports/daily/index.md` を読み込み、日付の降順になるよう既存リストの先頭に以下を挿入する（既に存在する場合はスキップ）：
-
-```markdown
-- [[DATE_ISO]]([DATE_ISO].md)
-```
+日報インデックスはカレンダーコンポーネントが自動でファイルを検出・表示するため、更新不要。このステップをスキップして STEP 8 へ進む。
 
 ---
 
