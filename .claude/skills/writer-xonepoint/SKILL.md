@@ -40,10 +40,12 @@ sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", 
 選んだネタの「冒頭1行案」「仕組みのポイント」「感情的締め案」を参考にして投稿を作成する。
 ネタ番号と選んだ理由を1行だけ最後に添える（例：「No.3：意外性と身近さの組み合わせが強いため」）。
 
-投稿本文を出力した後、使用したネタのステータスを「使用済み」に更新する。sheets_get_values の結果から No に対応する行番号 R を特定し、以下を呼び出す：
+投稿本文を作成したら、**出力前に**使用したネタのステータスを「使用済み」に更新する。sheets_get_values の結果から No に対応する行番号 R を特定し、以下を呼び出す：
 ```
 sheets_update_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!I{R}", values=[["使用済み"]])
 ```
+
+更新完了後、下記「出力形式」に従って【タイトル案】と【本文】を出力する（これがこのスキルの最終出力になる）。
 
 # 高インプレッションを生む投稿の構造（必ず従う）
 
