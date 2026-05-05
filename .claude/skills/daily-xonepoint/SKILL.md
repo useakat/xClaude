@@ -74,7 +74,10 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
 
 # STEP 4: ファイル保存 & Git コミット
 
-1. 現在の日時（YYYYMMDD-HH:MM:SS 形式）を取得する
+1. 現在の日時を JST（UTC+9）で取得する：
+   ```bash
+   TZ=Asia/Tokyo date '+%Y%m%d-%H:%M:%S'
+   ```
 2. 以下のパスに保存する：
    `$(git rev-parse --show-toplevel)/outputs/drafts/YYYYMMDD-HH:MM:SS_xonepoint.md`
    - 保存内容：【タイトル案】【本文】【品質チェック結果】をすべて含める
