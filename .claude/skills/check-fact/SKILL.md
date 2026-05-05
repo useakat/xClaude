@@ -88,7 +88,7 @@ context: fork
 
 各サイクルの開始時に「【第N回チェック】」と明示すること。
 
-1. **GPT ファクトチェック**：以下のコマンドでテキストを `gpt-5.4-mini` に送り、事実関係を検証する
+1. **GPT ファクトチェック**：以下のコマンドでテキストを `gpt-4.1-mini` に送り、事実関係を検証する
    ```bash
    echo '<チェック対象テキスト>' | python3 $(git rev-parse --show-toplevel)/scripts/chatgpt_factcheck.py
    ```
