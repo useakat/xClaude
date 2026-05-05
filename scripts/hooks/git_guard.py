@@ -5,8 +5,8 @@ from pathlib import Path
 d = json.load(sys.stdin)
 cmd = d.get('tool_input', {}).get('command', '')
 
-# ローカルセッションは通す
-if os.environ.get('CLAUDE_CODE_REMOTE') != 'true':
+# ローカルセッションは通す（~/.bashrc で CLAUDE_CODE_LOCAL=true を設定すること）
+if os.environ.get('CLAUDE_CODE_LOCAL') == 'true':
     sys.exit(0)
 
 # ブランチ作成はブロック
