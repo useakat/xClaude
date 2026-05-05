@@ -301,7 +301,7 @@ title: 週報 [week_label]
 # STEP 8: Git コミット & プッシュ
 
 ```bash
-bash /root/xClaude/scripts/commit_and_sync.sh \
+bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "report(weekly): [week_label]の週報を追加"
 ```
 

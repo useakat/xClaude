@@ -51,7 +51,7 @@ Read ツールで `/root/xClaude/.claude/settings.json` を読み込み、`permi
 # STEP 4: Git コミット & プッシュ
 
 ```bash
-bash /root/xClaude/scripts/commit_and_sync.sh \
+bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "chore(settings): [追記したパターンの概要] を permissions.allow に追加"
 ```
 
