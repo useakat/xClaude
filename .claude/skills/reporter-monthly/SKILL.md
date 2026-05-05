@@ -326,7 +326,7 @@ title: 月報 [month_label]
 # STEP 9: Git コミット & プッシュ
 
 ```bash
-bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
+bash /root/xClaude/scripts/commit_and_sync.sh \
   "report(monthly): [month_label]の月報を追加"
 ```
 

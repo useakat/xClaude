@@ -181,7 +181,7 @@ git -C /root/xClaude rev-parse --show-toplevel
 # STEP 8: Git コミット & プッシュ
 
 ```bash
-bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
+bash /root/xClaude/scripts/commit_and_sync.sh \
   "report(daily): [DATE_JP]の日報を追加"
 ```
 
