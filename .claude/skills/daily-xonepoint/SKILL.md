@@ -79,7 +79,7 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
    - 保存内容：【タイトル案】【本文】【品質チェック結果】をすべて含める
 3. 以下のコマンドでリポジトリに保存・プッシュする：
    ```bash
-   bash /root/xClaude/scripts/commit_and_sync.sh "daily: xonepoint 原稿 YYYYMMDD-HH:MM:SS"
+   bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh "daily: xonepoint 原稿 YYYYMMDD-HH:MM:SS"
    ```
 4. **ファイル保存と git push が完了したら、直ちに STEP 5 へ進む（ユーザー入力を待たない）**
 

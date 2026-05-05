@@ -142,7 +142,7 @@ tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 # STEP 6: Git コミット & プッシュ
 
 ```bash
-bash /root/xClaude/scripts/commit_and_sync.sh \
+bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "docs: [変更タイトル]の報告書・変更ログを追加"
 ```
 
