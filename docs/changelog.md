@@ -7,6 +7,11 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-06
+
+- **CLAUDE.md への振る舞いルール追加** — Plan mode 中は計画提示で止まるルール・ユーザーの判断を待ってから実行するルールを追加。[→報告書](../reports/20260506_claude_md_behavior_rules.md)
+- **settings.local.json への書き込みを全セッションで禁止** — `settings.json` の `permissions.deny` に Write/Edit ルールを追加し、ローカルエージェントによる意図しない上書きを防止。[→報告書](../reports/20260506_settings_local_deny.md)
+
 ## 2026-05-05
 
 - **Wiki 日報カレンダー表示と表示修正** — 日報一覧を月カレンダー形式（`DailyCalendar.astro`）に変更。改行・title frontmatter・CI ビルド・サイドバー順序の不具合を一連で修正。
