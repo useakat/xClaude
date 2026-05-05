@@ -83,9 +83,9 @@ context: fork
 
 1. **GPT ファクトチェック**：以下のコマンドでテキストを `gpt-5.4-mini` に送り、事実関係を検証する
    ```bash
-   echo '<チェック対象テキスト>' | OPENAI_API_KEY="$OPENAI_API_KEY" python3 $(git rev-parse --show-toplevel)/scripts/chatgpt_factcheck.py
+   echo '<チェック対象テキスト>' | python3 $(git rev-parse --show-toplevel)/scripts/chatgpt_factcheck.py
    ```
-   - `OPENAI_API_KEY` が未設定の場合はユーザーに確認して中断する
+   - スクリプトがエラーを返した場合はエラーメッセージをそのまま表示し、Claude 自身がファクトチェックを代行する
    - GPT の出力を「ファクトチェック結果」としてそのまま表示する
 
 2. ファクトチェック結果 + チェック項目（冗長・論理飛躍・断言の例外・リンク切れ・引用相違）を踏まえて問題点を統合し、箇条書きで指摘する。各項目に修正案を添える
