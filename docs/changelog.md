@@ -9,7 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-06
 
-- **git_guard.py のローカルセッション判定と settings.local.json 設定** — `CLAUDE_CODE_LOCAL=true` を settings.local.json に設定。New Session は CLAUDE_CODE_REMOTE=true が未設定のためガードをスルーする問題を記録。[→報告書](../reports/20260506_git_guard_local_session.md)
+- **git_guard.py のガードロジック反転** — `CLAUDE_CODE_REMOTE != true` から `CLAUDE_CODE_LOCAL == true` の場合のみ通す設計に変更。デフォルトブロックで想定外セッションのスルーを防止。[→報告書](../reports/20260506_git_guard_logic_inversion.md)
 - **check-fact への GPT ファクトチェック統合** — GPT-5.4-mini によるファクトチェックを統合し、環境変数・空引数の不具合を修正。[→報告書](../reports/20260506_check_fact_gpt_integration.md)
 - **CLAUDE.md への振る舞いルール追加** — Plan mode 中は計画提示で止まるルール・ユーザーの判断を待ってから実行するルールを追加。[→報告書](../reports/20260506_claude_md_behavior_rules.md)
 - **settings.local.json への書き込みを全セッションで禁止** — `settings.json` の `permissions.deny` に Write/Edit ルールを追加し、ローカルエージェントによる意図しない上書きを防止。[→報告書](../reports/20260506_settings_local_deny.md)
