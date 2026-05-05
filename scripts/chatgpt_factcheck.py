@@ -44,7 +44,7 @@ def main():
         sys.exit(1)
 
     payload = json.dumps({
-        "model": "gpt-4.1-mini",
+        "model": "gpt-5.4-mini",
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": text},
