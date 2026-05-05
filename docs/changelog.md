@@ -7,6 +7,11 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-05
+
+- **Wiki 日報カレンダー表示と表示修正** — 日報一覧を月カレンダー形式（`DailyCalendar.astro`）に変更。改行・title frontmatter・CI ビルド・サイドバー順序の不具合を一連で修正。
+- **daily-xonepoint の子スキル隔離（context:fork 対応）** — `writer-xonepoint`・`check-fact` に `context: fork` を追加して子スキルの完了マーカーが親に漏れる構造バグを修正。STEP 2 を `writer-xonepoint` 委譲に変更して保守性を向上。[→報告書](../reports/20260505_daily_xonepoint_context_fork.md)
+
 ## 2026-05-04
 
 - **mcp-gsheets 起動設定の修正** — `--stdio` 追加・settings.json 経由の試行と .mcp.json への差し戻し・auth env を `GOOGLE_SERVICE_ACCOUNT_KEY` のみに統一する一連の修正。[→報告書](../reports/20260504_mcp_gsheets_startup_fix.md)
