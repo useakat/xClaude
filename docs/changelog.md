@@ -9,6 +9,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-06
 
+- **daily-xonepoint メール下書きにチェックサマリーを追加** — STEP 3 でサマリーを記憶し、メール本文を「ファイル内容 → チェックサマリー → 投稿文」の順に変更。件名の時刻も JST 取得に修正。[→報告書](../reports/20260506_daily_xonepoint_check_summary.md)
+- **check-fact の openai モジュール依存を curl に変更** — `openai` パッケージ依存を排除し `curl` で直接 API を叩く形に書き直し。remote 環境でも動作するよう修正。[→報告書](../reports/20260506_check_fact_curl_migration.md)
 - **git_guard.py のガードロジック反転** — `CLAUDE_CODE_REMOTE != true` から `CLAUDE_CODE_LOCAL == true` の場合のみ通す設計に変更。デフォルトブロックで想定外セッションのスルーを防止。[→報告書](../reports/20260506_git_guard_logic_inversion.md)
 - **check-fact への GPT ファクトチェック統合** — GPT-5.4-mini によるファクトチェックを統合し、環境変数・空引数の不具合を修正。[→報告書](../reports/20260506_check_fact_gpt_integration.md)
 - **CLAUDE.md への振る舞いルール追加** — Plan mode 中は計画提示で止まるルール・ユーザーの判断を待ってから実行するルールを追加。[→報告書](../reports/20260506_claude_md_behavior_rules.md)
