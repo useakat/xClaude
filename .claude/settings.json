@@ -1,5 +1,9 @@
 {
   "permissions": {
+    "deny": [
+      "Write(.claude/settings.local.json)",
+      "Edit(.claude/settings.local.json)"
+    ],
     "allow": [
       "Read",
       "Bash(curl -s http://127.0.0.1:8000*)",
