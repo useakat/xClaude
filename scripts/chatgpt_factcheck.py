@@ -7,7 +7,8 @@ stdin からテキストを受け取り、gpt-5.4-mini でファクトチェッ�
 
 import sys
 import os
-from openai import OpenAI, APIConnectionError, AuthenticationError, APIStatusError
+import json
+import subprocess
 
 SYSTEM_PROMPT = """あなたは科学・宇宙・物理分野の厳格なファクトチェッカーです。
 与えられた文章の事実関係を検証し、以下の形式で日本語で報告してください。
@@ -42,27 +43,39 @@ def main():
         print("エラー: OPENAI_API_KEY が設定されていません", file=sys.stderr)
         sys.exit(1)
 
-    client = OpenAI(api_key=api_key)
+    payload = json.dumps({
+        "model": "gpt-4.1-mini",
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": text},
+        ],
+    })
+
+    result = subprocess.run(
+        [
+            "curl", "-s", "-f",
+            "https://api.openai.com/v1/chat/completions",
+            "-H", "Content-Type: application/json",
+            "-H", f"Authorization: Bearer {api_key}",
+            "-d", payload,
+        ],
+        capture_output=True,
+        text=True,
+    )
+
+    if result.returncode != 0:
+        print(f"エラー: OpenAI API 呼び出しに失敗しました: {result.stderr}", file=sys.stderr)
+        sys.exit(1)
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-5.4-mini",
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": text},
-            ],
-        )
-    except AuthenticationError:
-        print("エラー: OPENAI_API_KEY が無効です", file=sys.stderr)
+        data = json.loads(result.stdout)
+        if "error" in data:
+            print(f"エラー: {data['error'].get('message', data['error'])}", file=sys.stderr)
+            sys.exit(1)
+        print(data["choices"][0]["message"]["content"])
+    except (json.JSONDecodeError, KeyError) as e:
+        print(f"エラー: レスポンスのパースに失敗しました: {e}", file=sys.stderr)
         sys.exit(1)
-    except APIConnectionError as e:
-        print(f"エラー: OpenAI API に接続できません（ネットワークまたはホストブロックの可能性）: {e}", file=sys.stderr)
-        sys.exit(1)
-    except APIStatusError as e:
-        print(f"エラー: OpenAI API エラー (status={e.status_code}): {e.message}", file=sys.stderr)
-        sys.exit(1)
-
-    print(response.choices[0].message.content)
 
 
 if __name__ == "__main__":
