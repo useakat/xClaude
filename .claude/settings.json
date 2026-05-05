@@ -14,7 +14,7 @@
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/drive_get.sh *)",
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/post_from_email.sh *)",
       "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/send_gmail.sh *)",
-      "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh *)",
+      "Bash(*commit_and_sync.sh *)",
       "Bash(gws gmail users threads modify *)",
       "Write",
       "Edit",

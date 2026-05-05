@@ -13,6 +13,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **daily-xonepoint の子スキル隔離（context:fork 対応）** — `writer-xonepoint`・`check-fact` に `context: fork` を追加して子スキルの完了マーカーが親に漏れる構造バグを修正。STEP 2 を `writer-xonepoint` 委譲に変更して保守性を向上。[→報告書](../reports/20260505_daily_xonepoint_context_fork.md)
 - **reporter-monthly のアウトプット品質向上** — 月報生成に「量・粒度のルール」「戦略転換の判定」を追加し、データ部のマネタイズ欄を `0円` ベースで埋まるように修正。書き直しの手間を削減。[→報告書](../reports/20260505_reporter_monthly_quality_improvement.md)
 - **reporter-daily の特記事項生成ルール強化** — 投稿の特記事項を「[投稿種類]投稿（[テーマ]）：[数値]。[一言]」のフォーマットに定型化。数値への自分の感想を禁止し、用語を「投稿」に統一、`RT→引用`・`BM→ブクマ` に変更。[→報告書](../reports/20260505_reporter_daily_quality_improvement.md)
+- **commit_and_sync.sh の permissions パターン修正** — `Bash($(git ...))` 形式のパターン内の `)` がパーサーを早期終了させる問題を `Bash(*commit_and_sync.sh *)` に変更して回避。[→報告書](../reports/20260505_commit_and_sync_permissions_fix.md)
 
 ## 2026-05-04
 
