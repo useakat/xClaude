@@ -7,7 +7,7 @@ stdin からテキストを受け取り、gpt-5.4-mini でファクトチェッ�
 
 import sys
 import os
-from openai import OpenAI
+from openai import OpenAI, APIConnectionError, AuthenticationError, APIStatusError
 
 SYSTEM_PROMPT = """あなたは科学・宇宙・物理分野の厳格なファクトチェッカーです。
 与えられた文章の事実関係を検証し、以下の形式で日本語で報告してください。
@@ -44,13 +44,23 @@ def main():
 
     client = OpenAI(api_key=api_key)
 
-    response = client.chat.completions.create(
-        model="gpt-5.4-mini",
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": text},
-        ],
-    )
+    try:
+        response = client.chat.completions.create(
+            model="gpt-5.4-mini",
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": text},
+            ],
+        )
+    except AuthenticationError:
+        print("エラー: OPENAI_API_KEY が無効です", file=sys.stderr)
+        sys.exit(1)
+    except APIConnectionError as e:
+        print(f"エラー: OpenAI API に接続できません（ネットワークまたはホストブロックの可能性）: {e}", file=sys.stderr)
+        sys.exit(1)
+    except APIStatusError as e:
+        print(f"エラー: OpenAI API エラー (status={e.status_code}): {e.message}", file=sys.stderr)
+        sys.exit(1)
 
     print(response.choices[0].message.content)
 
