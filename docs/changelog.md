@@ -9,6 +9,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-06
 
+- **daily-xonepoint へのトンマナ調整ステップ追加** — STEP 3 にトンマナ調整（3-2）を追加。ファクトチェック後に `style-xonepoint.md` を参照し文体・口調のみ調整して【最終原稿】を確定。[→報告書](../reports/20260506_daily_xonepoint_tone_check.md)
+- **check-fact GPT スコア採点・修正文案生成の追加** — GPT にスコア（0〜100）採点と修正文案生成を担わせ、ループ終了条件を「スコア 95 以上」に変更。[→報告書](../reports/20260506_check_fact_gpt_scoring.md)
 - **daily-xonepoint メール下書きにチェックサマリーを追加** — STEP 3 でサマリーを記憶し、メール本文を「ファイル内容 → チェックサマリー → 投稿文」の順に変更。件名の時刻も JST 取得に修正。[→報告書](../reports/20260506_daily_xonepoint_check_summary.md)
 - **check-fact の openai モジュール依存を curl に変更** — `openai` パッケージ依存を排除し `curl` で直接 API を叩く形に書き直し。remote 環境でも動作するよう修正。[→報告書](../reports/20260506_check_fact_curl_migration.md)
 - **git_guard.py のガードロジック反転** — `CLAUDE_CODE_REMOTE != true` から `CLAUDE_CODE_LOCAL == true` の場合のみ通す設計に変更。デフォルトブロックで想定外セッションのスルーを防止。[→報告書](../reports/20260506_git_guard_logic_inversion.md)
