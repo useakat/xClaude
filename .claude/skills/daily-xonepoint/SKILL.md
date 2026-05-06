@@ -61,14 +61,25 @@ sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", 
 
 ---
 
-# STEP 3: 品質チェック
+# STEP 3: 品質チェック & トンマナ調整
+
+## 3-1: ファクトチェック
 
 STEP 2で出力した【本文】に対して、/check-fact スキルを実行する。
 
 - /check-fact が「チェック完了」を報告するまで、結果を確認する
-- チェック完了後、修正済みの最終本文を確定する
+- チェック完了後、check-fact の「最終修正案」を記憶する
 - check-fact の出力から **【チェックサマリー】**（「チェックサマリー」の見出し以降のテーブル）を抽出して記憶する
-- **チェック完了を確認したら、直ちに STEP 4 へ進む（ユーザー入力を待たない）**
+
+## 3-2: トンマナ調整
+
+1. `$(git rev-parse --show-toplevel)/style/style-xonepoint.md` を Read で読み込む
+2. 3-1 で確定した「最終修正案」をスタイルガイドと照合し、**事実は変えず**文体・口調のみ必要最小限調整する
+3. 調整後のテキストを **【最終原稿】** として記憶する
+4. 【チェックサマリー】の末尾に以下の行を追記して記憶し直す：
+   `| トンマナ | — | （調整内容の要約、変更なしの場合は「スタイル適合」） | 調整あり／変更なし |`
+
+**STEP 3 完了後、直ちに STEP 4 へ進む（ユーザー入力を待たない）**
 
 ---
 
@@ -80,7 +91,7 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
    ```
 2. 以下のパスに保存する：
    `$(git rev-parse --show-toplevel)/outputs/drafts/YYYYMMDD-HH:MM:SS_xonepoint.md`
-   - 保存内容：【タイトル案】【本文】【品質チェック結果】をすべて含める
+   - 保存内容：【タイトル案】【最終原稿】【品質チェック結果】をすべて含める
 3. 以下のコマンドでリポジトリに保存・プッシュする：
    ```bash
    bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh "daily: xonepoint 原稿 YYYYMMDD-HH:MM:SS"
@@ -106,7 +117,7 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
 
    [投稿文]
 
-   （最終本文）
+   （STEP 3 で確定した【最終原稿】）
 
    [/投稿文]
    ```
