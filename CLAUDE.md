@@ -218,7 +218,7 @@ xClaude/
 ---
 
 ## Git ルール
-- 一通りの変更が完了したら、必ず `git commit & push` する
+- 一通りの変更が完了したら、内容をユーザーに提示して確認を得てから `git commit & push` する
 - **【routine / agent の場合】実装時にあらかじめ必要な権限ルールを `.claude/settings.json` の `permissions.allow` に登録してから実行する。** routine/agent はユーザーとの対話ができないため、事前設定が必須
 - `permissions.allow` の更新が必要なときは `/update-permissions` スキルを使う（よーんが任意のタイミングで実行）
 
