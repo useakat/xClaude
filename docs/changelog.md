@@ -11,6 +11,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **style-xonepoint.md 二人称を「僕ら」に変更** — 2人称「あなた」をなるべく使わず「僕ら」で読者を包む表現に統一。関連する例文・締め言葉サンプルも更新。
 - **reporter-daily 特記事項生成の精度向上（報告書読み込み追加）** — STEP 4 を2段階に分割し、changelog リンク先の報告書ファイルも読み込んで特記事項生成に活用するよう改善。[→報告書](../reports/20260507_reporter_daily_report_reading.md)
+- **reporter-daily 文体ルールの style ファイル外部化** — SKILL.md STEP 5 の直書き文体ルールを `style/style-reporter.md` に切り出し、changelog 関連の特記事項を「具体性・明示性・能動性」原則で書くルールを追加。[→報告書](../reports/20260507_reporter_daily_style_externalization.md)
+- **CLAUDE.md commit前ユーザー確認の必須化** — Git ルールに「内容をユーザーに提示して確認を得てから commit & push する」を明記。
 
 ## 2026-05-06
 
