@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-05-09
 
 - **mond-letter-reply スキル新設・ローカル化** — mond.how レター質問を Claude Opus で自動回答し Gmail 下書きを作成。gws CLI でラベル付与・アーカイブ、ローカル cron（6時間ごと）で定期実行。[→報告書](../reports/20260509_mond_letter_reply.md)
+- **brand.md 新設・スタイルガイド差分化** — 全スタイルファイルの共通定義（人格・想定読者・言葉遣い・NG）を `brand.md` に集約し、各 style ファイルをフォーマット固有の差分のみに簡略化。[→報告書](../reports/20260509_brand_md_and_style_diff.md)
 
 ## 2026-05-07
 

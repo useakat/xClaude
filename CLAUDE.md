@@ -11,6 +11,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
+## ブランド定義
+
+**コンテンツ制作・スキル実行・文章生成を行う前に、必ず `brand.md` を Read して内容を確認してから作業を始めること。**
+`brand.md` には、すべての発信に共通するよーんの人格・想定読者・言葉遣い・NG表現が定義されている。
+
+---
+
 ## プロジェクトの目的
 
 宇宙・物理テーマの発信（主に X と note）を制作するためのワークスペース。
