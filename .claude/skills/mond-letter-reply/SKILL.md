@@ -14,7 +14,7 @@ tools: Bash, Read, mcp__claude_ai_Gmail__search_threads, mcp__claude_ai_Gmail__g
 `mcp__claude_ai_Gmail__search_threads` で以下のクエリを実行する：
 
 ```
-from:letter-notify@mond.how -label:mond-処理済み
+from:letter-notify@mond.how -label:mond-処理済み in:inbox
 ```
 
 - 結果が 0 件なら「対象メールなし。処理を終了します。」と出力して終了する
