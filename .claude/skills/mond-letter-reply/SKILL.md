@@ -1,7 +1,7 @@
 ---
 name: mond-letter-reply
 description: letter-notify@mond.how からの未処理レターを読み取り、Claude Opus で回答を生成して Gmail 下書きを作成する
-tools: Bash, Read, mcp__claude_ai_Gmail__search_threads, mcp__claude_ai_Gmail__get_thread, mcp__claude_ai_Gmail__create_draft, mcp__claude_ai_Gmail__create_label, mcp__claude_ai_Gmail__list_labels, mcp__claude_ai_Gmail__label_thread, mcp__claude_ai_Gmail__unlabel_thread
+tools: Bash, Read, mcp__claude_ai_Gmail__search_threads, mcp__claude_ai_Gmail__get_thread, mcp__claude_ai_Gmail__create_draft
 ---
 
 あなたは mond レター自動回答エージェントです。
@@ -38,6 +38,11 @@ from:letter-notify@mond.how -label:mond-処理済み in:inbox
 - 残ったテキストが質問本文
 
 抽出した質問本文を記憶する。
+
+また、「回答する」ボタンのリンク URL（`https://mond.how/topics/{id}/post` 形式）を抽出し、以下のように変換して記憶する：
+- 末尾の `/post` を削除
+- `/topics` の前に `/ja` を追加
+- 例: `https://mond.how/topics/nk0xcwlf3f0zqkg/post` → `https://mond.how/ja/topics/nk0xcwlf3f0zqkg`
 
 ---
 
@@ -104,6 +109,11 @@ Q：（抽出した質問本文）
 
 　　A：（STEP 4-4 で確定した【最終回答】）
 [/投稿文]
+
+[リプ]
+この質問へのリンク (mond質問箱) は👇️
+（STEP 2 で変換した URL）
+[/リプ]
 ```
 
 成功した場合、レスポンスの draft ID を記録する。
@@ -112,10 +122,16 @@ Q：（抽出した質問本文）
 
 # STEP 6: ラベル付与・アーカイブ
 
-1. `mcp__claude_ai_Gmail__list_labels` でラベル一覧を取得し、`mond-処理済み` ラベルの ID を確認する
-   - ラベルが存在しない場合は `mcp__claude_ai_Gmail__create_label` で作成する
-2. `mcp__claude_ai_Gmail__label_thread` で対象スレッドに `mond-処理済み` ラベルを付与する
-3. `mcp__claude_ai_Gmail__unlabel_thread` で対象スレッドから `INBOX` ラベルを削除する（アーカイブ）
+以下のコマンドを実行して `mond-処理済み` ラベルを付与し、INBOX から削除する（アーカイブ）：
+
+```bash
+gws gmail users threads modify \
+  --params "{\"userId\":\"me\",\"id\":\"（対象スレッドID）\"}" \
+  --json "{\"addLabelIds\":[\"Label_104\"],\"removeLabelIds\":[\"INBOX\"]}"
+```
+
+- 成功した場合は次のスレッドへ進む
+- 失敗した場合はエラーを記録して次のスレッドへ進む
 
 ---
 
