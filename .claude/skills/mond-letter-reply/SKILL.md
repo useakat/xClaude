@@ -22,9 +22,15 @@ from:letter-notify@mond.how -label:mond-処理済み
 
 ---
 
+# STEP 2〜6: 各スレッドをループ処理
+
+**STEP 1 で取得したスレッド全件に対して、STEP 2〜6 を1件ずつ繰り返す。全件処理が完了してから STEP 7 へ進む。**
+
+---
+
 # STEP 2: スレッドの全文を取得・質問本文を抽出
 
-各スレッドに対して `mcp__claude_ai_Gmail__get_thread` でスレッド全文を取得する。
+対象スレッドに対して `mcp__claude_ai_Gmail__get_thread` でスレッド全文を取得する。
 
 メール本文から質問テキストを以下のルールで抽出する：
 - ヘッダー行（「usephysさんへのレターのお知らせ」「usephysさんにレターが届きました。」）を除く
