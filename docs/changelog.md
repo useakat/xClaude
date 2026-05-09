@@ -9,6 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-09
 
+- **Wiki スキル一覧の自動更新システム実装** — スキル追加時に Wiki が自動更新されるシステムを構築。metadata.yaml でスキル ↔ カテゴリを管理、post-commit フックで自動生成。[→報告書](../reports/20260509_wiki_skills_auto_update.md)
 - **check-fact スキル改良：完全性チェック機能追加** — テーマの背景知識から説明の不足要素を自動検出し追加文案を生成するステップを追加。ファクトチェック前に説明の完全性を確保。[→報告書](../reports/20260509_check_fact_completeness_check.md)
 - **daily-xonepoint スキル改良：ファイル保存時の git commit & push 削除** — STEP 4 の自動 git コミット処理を削除。下書き作成段階での git 記録は不要と判断。[→報告書](../reports/20260509_daily_xonepoint_remove_git_commit.md)
 - **mond-letter-reply スキル新設・ローカル化** — mond.how レター質問を Claude Opus で自動回答し Gmail 下書きを作成。gws CLI でラベル付与・アーカイブ、ローカル cron（6時間ごと）で定期実行。[→報告書](../reports/20260509_mond_letter_reply.md)
