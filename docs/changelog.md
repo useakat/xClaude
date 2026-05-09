@@ -9,6 +9,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-09
 
+- **check-fact スキル改良：完全性チェック機能追加** — テーマの背景知識から説明の不足要素を自動検出し追加文案を生成するステップを追加。ファクトチェック前に説明の完全性を確保。[→報告書](../reports/20260509_check_fact_completeness_check.md)
+- **daily-xonepoint スキル改良：ファイル保存時の git commit & push 削除** — STEP 4 の自動 git コミット処理を削除。下書き作成段階での git 記録は不要と判断。[→報告書](../reports/20260509_daily_xonepoint_remove_git_commit.md)
 - **mond-letter-reply スキル新設・ローカル化** — mond.how レター質問を Claude Opus で自動回答し Gmail 下書きを作成。gws CLI でラベル付与・アーカイブ、ローカル cron（6時間ごと）で定期実行。[→報告書](../reports/20260509_mond_letter_reply.md)
 - **brand.md 新設・スタイルガイド差分化** — 全スタイルファイルの共通定義（人格・想定読者・言葉遣い・NG）を `brand.md` に集約し、各 style ファイルをフォーマット固有の差分のみに簡略化。[→報告書](../reports/20260509_brand_md_and_style_diff.md)
 
