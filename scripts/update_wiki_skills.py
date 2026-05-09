@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Wiki スキル一覧を自動更新するスクリプト
-.claude/skills/ をスキャンして metadata.yaml を更新し、docs/skills/index.md を生成
+.claude/skills/ をスキャンして metadata.yaml を更新し、docs/skills/index.md と スキル詳細ページを生成
 """
 
 import os
@@ -19,7 +19,7 @@ def get_skill_info(skill_path):
         content = f.read()
 
     skill_name = skill_path.name
-    info = {'name': skill_name, 'description': ''}
+    info = {'name': skill_name, 'description': '', 'content': content}
 
     # frontmatter をパース
     if content.startswith('---'):
@@ -82,8 +82,57 @@ def update_metadata(skills_dir, metadata_path):
     return metadata
 
 
+def generate_skill_detail_page(skill_name, skill_info, metadata, output_dir):
+    """各スキルの詳細ページを生成"""
+
+    category = metadata['skills'].get(skill_name, {}).get('category', 'その他')
+    description = skill_info['description']
+    content = skill_info['content']
+
+    # SKILL.md から本文部分を抽出（frontmatter を除去）
+    if content.startswith('---'):
+        lines = content.split('\n')
+        frontmatter_end = -1
+        for i, line in enumerate(lines[1:], 1):
+            if line.startswith('---'):
+                frontmatter_end = i
+                break
+        if frontmatter_end != -1:
+            body = '\n'.join(lines[frontmatter_end+1:]).strip()
+        else:
+            body = content
+    else:
+        body = content
+
+    # frontmatter を作成
+    frontmatter = f"""---
+title: {skill_name}
+description: {description}
+category: {category}
+---
+"""
+
+    # ページを生成
+    page_content = frontmatter + f"""
+← [スキル一覧へ](/xClaude/skills/)
+
+## スキル説明
+
+{description}
+
+## 詳細内容
+
+{body}
+"""
+
+    # ファイルに保存
+    output_path = output_dir / f'{skill_name}.md'
+    with open(output_path, 'w') as f:
+        f.write(page_content)
+
+
 def generate_wiki_index(skills_dir, metadata, output_path):
-    """docs/skills/index.md を生成"""
+    """docs/skills/index.md を生成（スキル名をリンク化）"""
 
     # スキル情報を取得
     skills_info = {}
@@ -134,7 +183,8 @@ description: Claude Code で使用できるスキルの一覧
         wiki_content += "|---|---|\n"
 
         for skill in sorted(categories[category], key=lambda x: x['name']):
-            wiki_content += f"| `/{skill['name']}` | {skill['description']} |\n"
+            # スキル名をリンク化
+            wiki_content += f"| [{skill['name']}](/xClaude/skills/{skill['name']}/) | {skill['description']} |\n"
 
         wiki_content += "\n"
 
@@ -145,7 +195,7 @@ description: Claude Code で使用できるスキルの一覧
         wiki_content += "|---|---|\n"
 
         for skill in sorted(categories['その他'], key=lambda x: x['name']):
-            wiki_content += f"| `/{skill['name']}` | {skill['description']} |\n"
+            wiki_content += f"| [{skill['name']}](/xClaude/skills/{skill['name']}/) | {skill['description']} |\n"
 
     # ファイルに保存
     with open(output_path, 'w') as f:
@@ -157,6 +207,7 @@ def main():
     skills_dir = repo_root / '.claude' / 'skills'
     metadata_path = skills_dir / 'metadata.yaml'
     wiki_path = repo_root / 'docs' / 'skills' / 'index.md'
+    skills_output_dir = repo_root / 'docs' / 'skills'
 
     # metadata.yaml を更新
     metadata = update_metadata(skills_dir, metadata_path)
@@ -164,8 +215,16 @@ def main():
     # wiki を生成
     generate_wiki_index(skills_dir, metadata, wiki_path)
 
+    # スキル詳細ページを生成
+    for skill_name in metadata['skills'].keys():
+        skill_path = skills_dir / skill_name
+        skill_info = get_skill_info(skill_path)
+        if skill_info:
+            generate_skill_detail_page(skill_name, skill_info, metadata, skills_output_dir)
+
     print(f"✅ metadata.yaml を更新: {metadata_path}")
     print(f"✅ wiki を生成: {wiki_path}")
+    print(f"✅ スキル詳細ページを生成: {len(metadata['skills'])} スキル")
 
 
 if __name__ == '__main__':
