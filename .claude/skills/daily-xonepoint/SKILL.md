@@ -83,32 +83,12 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
 
 ---
 
-# STEP 4: ファイル保存 & Git コミット
+# STEP 4: メール下書き作成
 
-1. 現在の日時を JST（UTC+9）で取得する：
-   ```bash
-   TZ=Asia/Tokyo date '+%Y%m%d-%H:%M:%S'
+STEP 3 で記憶した【タイトル案】【最終原稿】【チェックサマリー】を使用して、`mcp__claude_ai_Gmail__create_draft` ツールで Gmail 下書きを作成する。
+
+1. 以下の形式で本文を組み立てる：
    ```
-2. 以下のパスに保存する：
-   `$(git rev-parse --show-toplevel)/outputs/drafts/YYYYMMDD-HH:MM:SS_xonepoint.md`
-   - 保存内容：【タイトル案】【最終原稿】【品質チェック結果】をすべて含める
-3. 以下のコマンドでリポジトリに保存・プッシュする：
-   ```bash
-   bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh "daily: xonepoint 原稿 YYYYMMDD-HH:MM:SS"
-   ```
-4. **ファイル保存と git push が完了したら、直ちに STEP 5 へ進む（ユーザー入力を待たない）**
-
----
-
-# STEP 5: メール下書き作成
-
-保存したファイル（STEP 4で保存した YYYYMMDD-HH:MM:SS_xonepoint.md）を読み込み、`mcp__claude_ai_Gmail__create_draft` ツールを使って Gmail 下書きを作成する。
-
-1. STEP 4 で保存したファイルの内容を Read ツールで読み込む
-2. 以下の形式で本文を組み立てる：
-   ```
-   （ファイル内容をそのまま）
-
    [チェックサマリー]
 
    （STEP 3 で記憶したチェックサマリーテーブル）
@@ -121,6 +101,12 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
 
    [/投稿文]
    ```
+
+2. 日時を JST（UTC+9）で取得する：
+   ```bash
+   TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S'
+   ```
+
 3. `mcp__claude_ai_Gmail__create_draft` ツールを呼び出す：
    - `to`: `["useakat@gmail.com"]`
    - `subject`: `"【ワンポイント解説】YYYYMMDD HH:MM:SS の原稿ができました"`
@@ -132,15 +118,16 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
 - **成功判定はレスポンスに draft ID が含まれることで行う**
 - **失敗した場合は、エラー内容をそのまま報告する**
 
+**メール下書き作成が完了したら、直ちに STEP 5 へ進む（ユーザー入力を待たない）**
+
 ---
 
 # 完了判定
 
-すべてのSTEP（1～5）が正常に完了したら、以下を報告する：
+すべてのSTEP（1～4）が正常に完了したら、以下を報告する：
 
 - ✅ 原稿作成完了（ネタNo.X）
 - ✅ 品質チェック完了
-- ✅ ファイル保存・git push 完了
 - ✅ メール下書き作成完了（draft ID: xxxxxx）
 - ✅ ネタを「使用済み」に更新完了
 
@@ -148,7 +135,7 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
 
 ---
 
-# STEP 6: ユーザー承認後の図解画像作成
+# STEP 5: ユーザー承認後の図解画像作成
 
 STEP 2のタイトル案とSTEP 3の最終本文をユーザーに提示し、以下を確認する：
 
