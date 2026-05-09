@@ -57,6 +57,17 @@
           }
         ]
       }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash(git -C /root/xClaude commit *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 /root/xClaude/scripts/update_wiki_skills.py || true"
+          }
+        ]
+      }
     ]
   },
   "mcpServers": {

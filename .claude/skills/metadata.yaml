@@ -1,0 +1,53 @@
+skills:
+  writer-xonepoint:
+    category: コンテンツ制作
+  writer-note:
+    category: コンテンツ制作
+  writer-xnews:
+    category: コンテンツ制作
+  writer-xstory:
+    category: コンテンツ制作
+  note-quick:
+    category: コンテンツ制作
+  daily-xonepoint:
+    category: コンテンツ制作
+  reporter-daily:
+    category: レポート生成
+  reporter-weekly:
+    category: レポート生成
+  reporter-monthly:
+    category: レポート生成
+  research:
+    category: リサーチ・分析
+  research-plan:
+    category: リサーチ・分析
+  deep-research:
+    category: リサーチ・分析
+  research-trivia:
+    category: リサーチ・分析
+  research-note-projectx:
+    category: リサーチ・分析
+  analyze-target:
+    category: リサーチ・分析
+  analyze-x-posts:
+    category: リサーチ・分析
+  check:
+    category: 品質チェック
+  check-fact:
+    category: 品質チェック
+  mond-letter-reply:
+    category: メール・通知
+  make-infographic:
+    category: 画像・同期
+  notebooklm:
+    category: 画像・同期
+  sync-to-drive:
+    category: 画像・同期
+  sync-to-sheets:
+    category: 画像・同期
+  hashtag-note:
+    category: 画像・同期
+  record:
+    category: 運用・記録
+  update-permissions:
+    category: 設定・保守
