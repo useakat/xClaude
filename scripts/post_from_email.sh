@@ -166,6 +166,10 @@ print(ts[-1]['id'] if ts else '')
   python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" 2>&1 | tee -a "$LOG_PATH"
 
   rm -f "$TMP_IMAGE"
+
+  # 1件処理したら終了（複数メールが溜まっていても最古の1件のみ投稿）
+  log "1件処理完了。ループ終了"
+  break
 done
 
 if [ $LOOP_COUNT -ge $MAX_LOOPS ]; then
