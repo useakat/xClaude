@@ -180,12 +180,24 @@ git -C /root/xClaude rev-parse --show-toplevel
 
 ---
 
-# STEP 8: Git コミット & プッシュ
+# STEP 8: Git コミット & GitHub MCP プッシュ
+
+**8-1. ローカルコミット**
 
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "report(daily): [DATE_JP]の日報を追加"
 ```
+
+**8-2. GitHub MCP で master にプッシュ**
+
+`git diff HEAD~1 --name-only` で変更ファイル一覧を取得し、各ファイルを Read ツールで読み込む。その後 `mcp__github__push_files` ツールで master に直接プッシュする：
+
+- owner: `useakat`
+- repo: `xClaude`
+- branch: `master`
+- files: 変更ファイルの path と content のリスト
+- message: `report(daily): [DATE_JP]の日報を追加`
 
 ---
 
