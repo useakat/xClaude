@@ -7,6 +7,11 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-13
+
+- **commit_and_sync.sh を GitHub MCP プッシュ方式に移行** — master へのローカルプロキシ経由 push が 403 で失敗するため、スクリプトをローカルコミットのみに変更し、push は `mcp__github__push_files` で直接行う方式に移行。reporter・record・update-permissions の5スキルの Git ステップを更新。[→報告書](../reports/20260513_commit_and_sync_github_mcp.md)
+- **CLAUDE.md git フックブロック回避禁止ルール追加** — `git_guard.py` などのフックによるブロックを勝手に回避しないよう禁止事項に明記。回避が必要な場合は必ずよーんに許可を求めてから行う。
+
 ## 2026-05-11
 
 - **cron メール投稿スクリプト：複数メール溜まり時に1件のみ投稿するよう修正** — 投稿成功後に `break` を追加し、未処理メールが複数あっても最古の1件のみ投稿して終了。質問回答・ワンポイント解説の両 cron に適用。[→報告書](../reports/20260511_post_from_email_single_post.md)
