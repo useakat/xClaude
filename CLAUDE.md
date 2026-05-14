@@ -13,8 +13,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## ブランド定義
 
-**コンテンツ制作・スキル実行・文章生成を行う前に、必ず `brand.md` を Read して内容を確認してから作業を始めること。**
+**コンテンツ制作・スキル実行・文章生成を行う前に、必ず `brand.md` と `plan.md` を Read して内容を確認してから作業を始めること。**
 `brand.md` には、すべての発信に共通するよーんの人格・想定読者・言葉遣い・NG表現が定義されている。
+`plan.md` には、発信の目的・ターゲット・価値提供の方針が定義されている。
 
 ---
 
