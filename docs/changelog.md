@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **reporter-daily STEP 5 に保存前の自己チェック追加** — 特記事項を保存する前に「専門用語チェック」「何を→どう変わるかチェック」「読者想定チェック」の3項目を必ず通過させる手順を SKILL.md に追加し、style ルールの取りこぼしを構造的に防止。[→報告書](../reports/20260514_reporter_daily_self_check.md)
 - **mcp__github__push_files の PreToolUse リマインドフック追加** — `git_guard.py` のブロック回避として `push_files` を使っていないかをツール実行直前に確認するリマインドを `.claude/settings.json` に追加。
+- **git_guard.py 削除・リモートセッションの git 操作制限を全廃** — `git_guard.py` を削除し PreToolUse フックを全削除。リモートセッションでは feature ブランチで作業・merge 段階で精査する方針に切り替え。[→報告書](../reports/20260514_git_guard_removal.md)
 
 ## 2026-05-13
 
