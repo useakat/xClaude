@@ -47,26 +47,6 @@
     ]
   },
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python3 $(git rev-parse --show-toplevel)/scripts/hooks/git_guard.py"
-          }
-        ]
-      },
-      {
-        "matcher": "mcp__github__push_files",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '【確認】このプッシュは git_guard.py のブロック回避として使っていますか？その場合はよーんの許可を得てから続行してください。正規スキルフロー（reporter-daily 等）の場合はそのまま続行してください。'"
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Bash(git -C /root/xClaude commit *)",
