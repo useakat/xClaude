@@ -13,6 +13,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **mcp__github__push_files の PreToolUse リマインドフック追加** — `git_guard.py` のブロック回避として `push_files` を使っていないかをツール実行直前に確認するリマインドを `.claude/settings.json` に追加。
 - **git_guard.py 削除・リモートセッションの git 操作制限を全廃** — `git_guard.py` を削除し PreToolUse フックを全削除。リモートセッションでは feature ブランチで作業・merge 段階で精査する方針に切り替え。[→報告書](../reports/20260514_git_guard_removal.md)
 - **【X長文】メール→X投稿の自動化追加** — `【X長文】` 件名のメールを毎日17時にXへ自動投稿する cron ジョブを追加。既存の `post_from_email.sh` をそのまま流用し、HOW_ID=W001 で記録。[→報告書](../reports/20260514_xlong_post_automation.md)
+- **発信 plan.md の新設・CLAUDE.md への参照ルール追加** — 発信の目的・ターゲット・価値提供・成功条件を `plan.md` に定義し、コンテンツ制作前の参照を CLAUDE.md に義務化。[→報告書](../reports/20260514_plan_md_and_claude_md.md)
 
 ## 2026-05-13
 
