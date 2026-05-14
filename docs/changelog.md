@@ -7,6 +7,11 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-15
+
+- **record_output.py を Google Sheets 書き込みに移行** — X投稿記録先をローカル CSV から Google Sheets の outputs シートに切り替え。gspread + サービスアカウント認証で実装し、既存18行も転記済み。[→報告書](../reports/20260515_record_output_sheets_migration.md)
+- **brand.md の想定読者・締めルール削除・フォント定義追加** — 想定読者セクションと締めのルールを削除し、フォント指定（Noto Sans JP Black）を追加。
+
 ## 2026-05-14
 
 - **reporter-daily STEP 5 に保存前の自己チェック追加** — 特記事項を保存する前に「専門用語チェック」「何を→どう変わるかチェック」「読者想定チェック」の3項目を必ず通過させる手順を SKILL.md に追加し、style ルールの取りこぼしを構造的に防止。[→報告書](../reports/20260514_reporter_daily_self_check.md)
