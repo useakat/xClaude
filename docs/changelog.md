@@ -7,6 +7,11 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-14
+
+- **reporter-daily STEP 5 に保存前の自己チェック追加** — 特記事項を保存する前に「専門用語チェック」「何を→どう変わるかチェック」「読者想定チェック」の3項目を必ず通過させる手順を SKILL.md に追加し、style ルールの取りこぼしを構造的に防止。[→報告書](../reports/20260514_reporter_daily_self_check.md)
+- **mcp__github__push_files の PreToolUse リマインドフック追加** — `git_guard.py` のブロック回避として `push_files` を使っていないかをツール実行直前に確認するリマインドを `.claude/settings.json` に追加。
+
 ## 2026-05-13
 
 - **commit_and_sync.sh を GitHub MCP プッシュ方式に移行** — master へのローカルプロキシ経由 push が 403 で失敗するため、スクリプトをローカルコミットのみに変更し、push は `mcp__github__push_files` で直接行う方式に移行。reporter・record・update-permissions の5スキルの Git ステップを更新。[→報告書](../reports/20260513_commit_and_sync_github_mcp.md)
@@ -83,7 +88,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-05-02
 
 - **Wiki システム構築** — Starlight + GitHub Pages で Wiki 新設。`docs/` がソース、`starlight/` がビルド設定。[→報告書](../reports/20260502_wiki_setup/)
-- **X ワンポイント投稿スタイルガイド作成** — 実投稿10件を分析し13の観点で定義した `style/style-xonepoint.md` を作成。[→報告書](../reports/20260502_style_xonepoint/)
+- **X ワンポイント投稿スタイルガイド作成** — 実投稱0件を分析し13の観点で定義した `style/style-xonepoint.md` を作成。[→報告書](../reports/20260502_style_xonepoint/)
 - **writer-xonepoint・daily-xonepoint スタイルガイド参照化** — 両スキルから `style/style-xonepoint.md` を参照するよう変更。[→報告書](../reports/20260502_skill_style_reference/)
 - **投稿締め言葉ルールの追加** — X ワンポイント投稿の末尾を「読者の日常生活につながる1文」で締めるルールを強制。[→報告書](../reports/20260502_closing_rule/)
 - **Google サービス連携・スクリプト化ルールの追加** — gws CLI 統一とスクリプト化優先の原則を CLAUDE.md に明文化。[→報告書](../reports/20260502_implementation_rules/)
