@@ -71,12 +71,49 @@ $ARGUMENTS のテキストから以下を読み取る。
 - 同じ persona・pain・what が既存にないか確認する
 - 近いものがある場合は「既存の〇〇に近い」と明記し、新規追加が必要かを判断する
 
-## Step 4: 追加レコード案を提案する
+## Step 4: 複数候補を分かりやすく提示する
 
 既存の最大 ID の続番で提案する。
 追加が不要なケース（既存で対応可能）は「追加不要」と理由を示して終了する。
 
-## 出力形式
+複数候補がある場合は、候補ごとに「スコア」を付けて提示し、ユーザーが選択できるようにする。
+
+## Step 5: ユーザーの選択を取得する
+
+複数候補が出た場合、ユーザーから以下をそれぞれ選択してもらう：
+
+```
+persona 候補をNo で指定: [ユーザーが数字を入力]
+pain 候補をNo で指定: [ユーザーが数字を入力]
+what 候補をNo で指定: [ユーザーが数字を入力]
+```
+
+入力をパースして、ユーザーの選択内容を確認する。
+
+## Step 6: Google Sheets に自動追記する
+
+選択内容に基づいて、以下の処理を実行する：
+
+1. **各シートの現在の最大 ID を確認**
+   - persona シート：最大 persona_id を取得
+   - pain シート：最大 id を取得
+   - what シート：最大 id を取得
+
+2. **新規 ID を採番**（max_id + 1）
+
+3. **各シートに 1 レコードずつ追記**
+   ```
+   sheets_append_values(
+     spreadsheetId="1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc",
+     range="persona!A:F",
+     values=[[新規persona_id, label, pain_domain, awareness_level, channel_affinity, description]]
+   )
+   ```
+
+4. **完了報告**
+   - 追記された新規 ID とレコード内容を表示
+
+## 出力形式（STEP 4）
 
 ---
 ### 分析結果
@@ -91,38 +128,53 @@ $ARGUMENTS のテキストから以下を読み取る。
 
 （重複あり／なしを明記）
 
-### 追加レコード案
+### 追加レコード候補
 
-**persona.csv**
-```
-persona_id,label,pain_domain,awareness_level,channel_affinity,description
-PEXX,...
-```
+**persona 候補（複数、スコア付き）：**
+1. [説明1]（スコア: 8.5/10）
+2. [説明2]（スコア: 7.2/10）
 
-**pain.csv**
-```
-id,title,domain,severity,affected_scope,persona_ids
-PRXX,...
-```
+**pain 候補（複数、スコア付き）：**
+1. [説明1]（スコア: 9.0/10）
 
-**what.csv**
-```
-id,pain_id,title,description
-WXX,...
-WXX,...
-```
+**what 候補（複数、スコア付き）：**
+1. [説明1]（スコア: 8.8/10）
+2. [説明2]（スコア: 7.5/10）
 
 ### 選定の根拠
 
 - persona：
 - pain の severity：
 - what：
+
 ---
+
+## STEP 5-6 でのユーザーインタラクション
+
+```
+【追加候補を確認してください】
+
+persona 候補：
+1. ジェネレーションZ / STEM関心層 / 好奇心駆動型（スコア: 8.5/10）
+2. 30代エンジニア / 文系転職志向（スコア: 7.2/10）
+
+pain 候補：
+1. 物理の複雑性 / 時間不足（スコア: 9.0/10）
+
+what 候補：
+1. 科学知識 + 人間ドラマ / エンタメ性（スコア: 8.8/10）
+2. 実践的な問題解決法（スコア: 7.5/10）
+
+→ 追記対象を指定してください：
+   persona No: 1
+   pain No: 1
+   what No: 1
+```
 
 ## 注意事項
 
 - 既存レコードの ID 体系（PE / PR / W + 3桁数字）を必ず踏襲する
 - 関連性の薄い pain や what は追加しない
 - what は 1〜3 件を目安に、具体的なコンテンツ形式（X短文ポスト / X長文ポスト / note 記事 / note シリーズ）を明示する
-- Google Sheets に貼り付けできる形式で出力する（ユーザーが確認後に追記するため、実際のシート編集は行わない）
+- **ユーザーの選択確認後、Google Sheets に自動追記する（STEP 5-6）**
 

@@ -31,6 +31,8 @@ skills:
     category: リサーチ・分析
   analyze-x-posts:
     category: リサーチ・分析
+  analyze-impression:
+    category: リサーチ・分析
   check:
     category: 品質チェック
   check-fact:

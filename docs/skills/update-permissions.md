@@ -56,12 +56,24 @@ Read ツールで `/root/xClaude/.claude/settings.json` を読み込み、`permi
 
 ---
 
-# STEP 4: Git コミット & プッシュ
+# STEP 4: Git コミット & GitHub MCP プッシュ
+
+**4-1. ローカルコミット**
 
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "chore(settings): [追記したパターンの概要] を permissions.allow に追加"
 ```
+
+**4-2. GitHub MCP で master にプッシュ**
+
+`git diff HEAD~1 --name-only` で変更ファイル一覧を取得し、各ファイルを Read ツールで読み込む。その後 `mcp__github__push_files` ツールで master に直接プッシュする：
+
+- owner: `useakat`
+- repo: `xClaude`
+- branch: `master`
+- files: 変更ファイルの path と content のリスト
+- message: `chore(settings): [追記したパターンの概要] を permissions.allow に追加`
 
 ---
 

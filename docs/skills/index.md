@@ -28,6 +28,7 @@ description: Claude Code で使用できるスキルの一覧
 
 | スキル | 用途 |
 |---|---|
+| [analyze-impression](/xClaude/skills/analyze-impression/) | X投稿のインプレッションデータを分析し、関連スキル（writer-xonepoint等）への修正提案を生成・適用する。HOW_ID単位でフィルタし、高IMP/低IMPのパターンを抽出してスキル・style ファイルを改善する。 |
 | [analyze-target](/xClaude/skills/analyze-target/) | analyze-target スキル |
 | [analyze-x-posts](/xClaude/skills/analyze-x-posts/) | analyze-x-posts スキル |
 | [deep-research](/xClaude/skills/deep-research/) | deep-research スキル |
