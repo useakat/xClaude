@@ -205,8 +205,8 @@ xClaude/
 ### Google サービス連携
 - **Gmail・Drive の連携は gws CLI を使って実装する**（bash スクリプト経由）
 - **Sheets の読み書きは mcp-gsheets MCP ツールを使う**（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）
-  - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics / outputs）
-  - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what）
+  - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics）
+  - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what / outputs）
 
 ### スクリプト化の原則
 - **確実な処理実行とトークン節約のため、スクリプト化できる処理はなるべく bash / Python スクリプトを作成して実行する**
