@@ -144,6 +144,14 @@ else:
 - フォロワー数の増減には触れない
 - 投稿がなかった日は「0投稿。〇〇に注力した日。」と記載する
 
+## 自己チェック（保存前に必ず実施）
+
+生成した特記事項を STEP 6 で保存する前に、以下を1項目ずつ声に出して確認する。1つでも引っかかったら書き直す。
+
+1. **専門用語チェック**: `git push` / `MCP` / `プロキシ` / `403` / `hook` / `フック` / `commit` / `master` / `branch` / `API` / `ID` のような、システムを知らない人に伝わらない語が混じっていないか。混じっていたら一般語に言い換える
+2. **「何を」ではなく「どう変わるか」チェック**: 文中に「〜を実装した」「〜を変更した」「〜に移行した」「〜を追加した」のような実装行為の動詞が主役になっていないか。主役は「これまで困っていたこと」と「これから楽になること」になっているか
+3. **読者想定チェック**: この文だけを「システムを知らない友人」に読ませて、何が良くなったか伝わるか。伝わらなければ書き直す
+
 ---
 
 # STEP 6: ファイル保存
@@ -188,12 +196,24 @@ git -C /root/xClaude rev-parse --show-toplevel
 
 ---
 
-# STEP 8: Git コミット & プッシュ
+# STEP 8: Git コミット & GitHub MCP プッシュ
+
+**8-1. ローカルコミット**
 
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "report(daily): [DATE_JP]の日報を追加"
 ```
+
+**8-2. GitHub MCP で master にプッシュ**
+
+`git diff HEAD~1 --name-only` で変更ファイル一覧を取得し、各ファイルを Read ツールで読み込む。その後 `mcp__github__push_files` ツールで master に直接プッシュする：
+
+- owner: `useakat`
+- repo: `xClaude`
+- branch: `master`
+- files: 変更ファイルの path と content のリスト
+- message: `report(daily): [DATE_JP]の日報を追加`
 
 ---
 

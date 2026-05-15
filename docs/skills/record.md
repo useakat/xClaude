@@ -147,7 +147,9 @@ tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 
 ---
 
-# STEP 6: Git コミット & プッシュ
+# STEP 6: Git コミット & GitHub MCP プッシュ
+
+**6-1. ローカルコミット**
 
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
@@ -155,6 +157,16 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 ```
 
 複数件まとめてコミットする場合は、タイトルを列挙する。
+
+**6-2. GitHub MCP で master にプッシュ**
+
+`git diff HEAD~1 --name-only` で変更ファイル一覧を取得し、各ファイルを Read ツールで読み込む。その後 `mcp__github__push_files` ツールで master に直接プッシュする：
+
+- owner: `useakat`
+- repo: `xClaude`
+- branch: `master`
+- files: 変更ファイルの path と content のリスト
+- message: コミットメッセージと同じ内容
 
 ---
 
