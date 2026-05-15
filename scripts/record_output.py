@@ -16,13 +16,15 @@ from google.oauth2.service_account import Credentials
 SPREADSHEET_ID = "1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM"
 SHEET_NAME = "outputs"
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+SA_FILE = os.path.join(os.path.dirname(__file__), "..", "gcp", "charming-well-464402-u4-2cfb7bddf343.json")
 
 
 def get_client():
     key_json = os.environ.get("GOOGLE_SERVICE_ACCOUNT_KEY")
-    if not key_json:
-        raise RuntimeError("GOOGLE_SERVICE_ACCOUNT_KEY が設定されていません")
-    creds = Credentials.from_service_account_info(json.loads(key_json), scopes=SCOPES)
+    if key_json:
+        creds = Credentials.from_service_account_info(json.loads(key_json), scopes=SCOPES)
+    else:
+        creds = Credentials.from_service_account_file(os.path.abspath(SA_FILE), scopes=SCOPES)
     return gspread.authorize(creds)
 
 
