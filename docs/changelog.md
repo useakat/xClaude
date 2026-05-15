@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **record_output.py を Google Sheets 書き込みに移行** — X投稿記録先をローカル CSV から Google Sheets の outputs シートに切り替え。gspread + サービスアカウント認証で実装し、既存18行も転記済み。[→報告書](../reports/20260515_record_output_sheets_migration.md)
 - **brand.md の想定読者・締めルール削除・フォント定義追加** — 想定読者セクションと締めのルールを削除し、フォント指定（Noto Sans JP Black）を追加。
+- **writer-xstory スキル改善：フック・構成・完結性ルール追加** — フック2文構成・ブロック空行区切り・ストーリー完結・教訓は末尾集約の4ルールを追記。SOHOの長文X投稿の初稿→最終原稿の差分を学習として反映。[→報告書](../reports/20260515_writer_xstory_hook_rules.md)
 
 ## 2026-05-14
 
