@@ -224,6 +224,15 @@ xClaude/
 - Sheets 読み書き（mcp-gsheets ツールを直接呼ぶ方が簡潔）
 - 複雑な条件分岐が多い処理（可読性が落ちるため、Claude が判断する方が良い場合もある）
 
+### 新規スキル作成時のルール
+
+新規スキル（`.claude/skills/<name>/SKILL.md`）を作成したら、必ず以下も行う：
+
+1. **`.claude/skills/metadata.yaml` に追記**：`<name>: category: <カテゴリ>` を追加（カテゴリは既存のものから選ぶ：コンテンツ制作 / レポート生成 / リサーチ・分析 / 品質チェック / メール・通知 / 画像・同期 / 運用・記録 / 設定・保守）
+2. **commit する**：PostToolUse hook が `update_wiki_skills.py` を自動実行し、`docs/skills/<name>.md` と `docs/skills/index.md` を生成する
+
+`metadata.yaml` への追記を忘れると、Wiki 自動更新で新スキルが反映されない。
+
 ---
 
 ## Git ルール
