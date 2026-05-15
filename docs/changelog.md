@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-16
+
+- **analyze-impression スキル新設** — X投稿のIMP分析と関連スキル改善提案を行う9STEPのスキルを新設。HOW_ID単位でフィルタしてパターン抽出・スキル/style修正案生成・承認後の自動編集まで実行する。[→報告書](../reports/20260516_analyze_impression_skill.md)
+- **writer-xonepoint/daily-xonepoint：日常入り口・具体的数字フックのルール化** — 実データ分析（5/1〜5/14のW003）で「日常の物を冒頭の入り口にした投稿」が高IMP、「宇宙固有現象が入り口の投稿」が低IMPと判明。フック制約・日常接続位置・ネタ補充条件を強化。[→報告書](../reports/20260515_xonepoint_impression_analysis.md)
+- **record_output.py に cron 用サービスアカウントファイル fallback 追加** — cron は `.bashrc` を読まないため `GOOGLE_SERVICE_ACCOUNT_KEY` が未設定になり Sheets 記録が失敗していた。環境変数がない場合に `gcp/` の JSON ファイルを直接読む fallback を追加。[→報告書](../reports/20260516_record_output_cron_fallback.md)
+
 ## 2026-05-15
 
 - **record_output.py を Google Sheets 書き込みに移行** — X投稿記録先をローカル CSV から Google Sheets の outputs シートに切り替え。gspread + サービスアカウント認証で実装し、既存18行も転記済み。[→報告書](../reports/20260515_record_output_sheets_migration.md)
