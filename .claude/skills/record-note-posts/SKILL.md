@@ -23,15 +23,16 @@ note 投稿の統計データを取得し、Sheets に記録・更新するス�
 
 | 列 | 項目 | 内容 |
 |---|---|---|
-| A | 投稿日時 | `YYYY-MM-DD HH:MM:SS` |
-| B | 記事URL | `https://note.com/takaesu7431/n/{key}` |
-| C | 文字数 | （空欄。APIから取得不可） |
-| D | ハッシュタグ | スペース区切り（`#宇宙 #物理`） |
-| E | サムネURL | eyecatch 画像 URL |
-| F | サムネプレビュー | `=IMAGE(E{行番号})` 数式 |
-| G | ビュー | 累計 read_count |
-| H | スキ | 累計 like_count |
-| I | スキ率 | スキ ÷ ビュー（小数4桁） |
+| A | 記事URL | `https://note.com/takaesu7431/n/{key}` |
+| B | タイトル | 記事タイトル |
+| C | 投稿日時 | `YYYY-MM-DD HH:MM:SS` |
+| D | 文字数 | （空欄。APIから取得不可） |
+| E | ハッシュタグ | スペース区切り（`#宇宙 #物理`） |
+| F | サムネURL | eyecatch 画像 URL |
+| G | サムネプレビュー | `=IMAGE(F{行番号})` 数式 |
+| H | ビュー | 累計 read_count |
+| I | スキ | 累計 like_count |
+| J | スキ率 | スキ ÷ ビュー（小数4桁） |
 
 ---
 
@@ -62,11 +63,11 @@ python3 scripts/fetch_note_stats.py [オプション]
 ```
 sheets_get_values(
   spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="note投稿一覧!A:B"
+  range="note投稿一覧!A:A"
 )
 ```
 
-B列（記事URL）の一覧を取得し、`EXISTING_URLS` として記憶する（行番号付き）。
+A列（記事URL）の一覧を取得し、`EXISTING_URLS` として記憶する（行番号付き）。
 
 ---
 
@@ -86,7 +87,7 @@ B列（記事URL）の一覧を取得し、`EXISTING_URLS` として記憶する
 ```
 sheets_update_values(
   spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="note投稿一覧!G{ROW}:I{ROW}",
+  range="note投稿一覧!H{ROW}:J{ROW}",
   values=[[{view}, {like}, {likeRate}]]
 )
 ```
@@ -104,14 +105,15 @@ sheets_update_values(
 ```
 sheets_append_values(
   spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="note投稿一覧!A:I",
+  range="note投稿一覧!A:J",
   values=[[
-    {publishAt},
     {url},
+    {name},
+    {publishAt},
     "",
     {hashtags},
     {eyecatch},
-    "=IMAGE(E{LAST_ROW+1})",
+    "=IMAGE(F{LAST_ROW+1})",
     {view},
     {like},
     {likeRate}
