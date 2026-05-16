@@ -107,6 +107,7 @@ def main():
         results.append({
             "publishAt": a["publishAt"][:19].replace("T", " "),
             "url": f"https://note.com/{URLNAME}/n/{a['key']}",
+            "name": a.get("name", ""),
             "hashtags": tags,
             "eyecatch": a.get("eyecatch", ""),
             "view": view,
