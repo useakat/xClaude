@@ -131,22 +131,16 @@ def extract_status_id(url):
 
 ### STEP 6: 一括更新
 
-更新対象が存在する場合、`sheets_batch_update_values` で AA:AC 列を一括更新する。
-
-行番号が連続している場合は1回の呼び出しにまとめる。
-連続していない場合は連続する範囲ごとにまとめて呼び出す。
+更新対象が存在する場合、**`sheets_batch_update_values` を1回だけ呼び出す**。
+行番号が連続しているかどうかに関わらず、すべての行を `data` 配列に1エントリずつ含めて単一呼び出しにまとめること（複数回に分けない）。
 
 ```
 sheets_batch_update_values(
   spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
   data=[
-    {
-      "range": "X投稿一覧!AA{START}:AC{END}",
-      "values": [
-        [detail_expands, url_clicks, new_follows],  # 各行
-        ...
-      ]
-    }
+    {"range": "X投稿一覧!AA{ROW}:AC{ROW}", "values": [[detail_expands, url_clicks, new_follows]]},
+    {"range": "X投稿一覧!AA{ROW}:AC{ROW}", "values": [[detail_expands, url_clicks, new_follows]]},
+    ...  # UPDATE_LIST の全件を1つの data 配列に入れる
   ]
 )
 ```
