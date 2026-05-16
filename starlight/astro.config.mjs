@@ -39,11 +39,8 @@ export default defineConfig({
         },
         {
           label: '報告書',
-          items: [
-            { label: '日報', autogenerate: { directory: 'reports/daily' } },
-            { label: '週報', autogenerate: { directory: 'reports/weekly' } },
-            { label: '月報', autogenerate: { directory: 'reports/monthly' } },
-          ],
+          collapsed: true,
+          autogenerate: { directory: 'reports', collapsed: true },
         },
       ],
     }),

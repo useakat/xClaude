@@ -2,6 +2,8 @@
 title: タイトル
 date: YYYY-MM-DD
 tags: [skill, workflow, style, bugfix, wiki, infra]
+sidebar:
+  hidden: true
 ---
 
 ← [変更ログへ](../changelog.md#見出しのアンカー)
