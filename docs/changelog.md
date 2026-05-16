@@ -18,6 +18,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **thoughts シート新設・思想リスト 13 件を登録** — 発信時に引用・接続する思想を SS1 の `thoughts` シートで構造化管理。CLAUDE.md 内の思想群を分析・整理し、X発信に使える 13 件を選別して T001〜T013 として登録。[→報告書](../reports/20260516_thoughts_sheet.md)
 - **get_gmail_body.sh：メール本文 CRLF 正規化** — Gmail 本文の `\r\n`（Windows改行）を `\n` に変換。未変換のまま X 投稿していたため空白行の位置がメール原稿とずれていた問題を修正。
 - **brand.md 説明文の簡略化** — よーんの説明文から「天体の魅力や宇宙探査の」を削除し「面白さを伝える発信者」に簡潔化。
+- **Wiki：変更報告書をサイドバーに表示** — `astro.config.mjs` の「報告書」セクションを `reports/` 全体の `autogenerate` に変更。`template.md` を `sidebar: hidden` で非表示化。
 
 ## 2026-05-15
 
