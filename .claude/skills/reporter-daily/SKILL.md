@@ -82,7 +82,7 @@ sheets_get_values(
 ```
 sheets_get_values(
   spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="自分の投稿一覧!A:P"
+  range="X投稿一覧!A:P"
 )
 ```
 
