@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-17
+
+- **update-x-analytics サブエージェント新設** — X アナリティクス CSV（Drive の analytics_tmp）を読み込み、X投稿一覧シートの詳細表示・リンククリック・フォロー増を status ID で照合して一括更新するサブエージェントを新設。[→報告書](../reports/20260517_update_x_analytics_agent.md)
+
 ## 2026-05-16
 
 - **record-note-posts スキル新設** — note.com 記事統計（ビュー・スキ・文字数）を取得して Google Sheets「note投稿一覧」に記録・更新するスキルを新設。`v3/notes/{key}` から本文 HTML を取得し文字数カウントも実装。[→報告書](../reports/20260516_record_note_posts_skill.md)
