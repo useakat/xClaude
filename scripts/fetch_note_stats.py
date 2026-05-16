@@ -10,7 +10,7 @@ Usage:
 Output (JSON array):
   publishAt, url, hashtags, eyecatch, view, like, likeRate
 """
-import os, sys, json, requests, re
+import os, sys, json, requests, re, html
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from pathlib import Path
@@ -65,6 +65,25 @@ def fetch_stats(headers):
     return stats_map
 
 
+def fetch_body_length(key, headers):
+    """記事詳細 API から本文テキストの文字数を返す。取得失敗時は空文字。"""
+    try:
+        r = requests.get(
+            f"https://note.com/api/v3/notes/{key}",
+            headers=headers,
+            timeout=10,
+        )
+        r.raise_for_status()
+        body = r.json().get("data", {}).get("body", "") or ""
+        # HTML タグ除去 → HTML エンティティ展開 → 空白・改行を除いた文字数
+        text = re.sub(r"<[^>]+>", "", body)
+        text = html.unescape(text)
+        text = re.sub(r"[\s　]", "", text)
+        return len(text)
+    except Exception:
+        return ""
+
+
 def main():
     if not NOTE_SESSION:
         print("ERROR: NOTE_SESSION が .env に設定されていません", file=sys.stderr)
@@ -104,10 +123,12 @@ def main():
         like = s.get("like_count") or a.get("likeCount", 0)
         like_rate = round(like / view, 4) if view > 0 else ""
 
+        char_count = fetch_body_length(a["key"], headers)
         results.append({
             "publishAt": a["publishAt"][:19].replace("T", " "),
             "url": f"https://note.com/{URLNAME}/n/{a['key']}",
             "name": a.get("name", ""),
+            "charCount": char_count,
             "hashtags": tags,
             "eyecatch": a.get("eyecatch", ""),
             "view": view,
