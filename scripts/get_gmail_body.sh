@@ -38,8 +38,10 @@ if not msgs:
     sys.exit(1)
 
 latest = max(msgs, key=lambda m: int(m.get('internalDate', '0')))
+body_text = decode_body(latest.get('payload', {}))
+body_text = body_text.replace('\r\n', '\n')
 print(json.dumps({
     'message_id': latest['id'],
-    'body': decode_body(latest.get('payload', {})),
+    'body': body_text,
 }, ensure_ascii=False))
 "
