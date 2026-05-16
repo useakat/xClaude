@@ -103,5 +103,4 @@ RTが起きる条件は「自分のフォロワーに見せたい」と思わせ
 ---
 
 ## 6. 添付ファイル
-
-- ヒストグラム画像: `outputs/histogram_engagement.png`
+![](histogram_engagement.png)
