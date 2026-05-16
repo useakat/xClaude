@@ -26,7 +26,7 @@ X投稿一覧シートのデータを分析してユーザーの質問に答え�
 | 項目 | 値 |
 |---|---|
 | スプレッドシートID | `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c` |
-| シート名 | `自分の投稿一覧` |
+| シート名 | `X投稿一覧` |
 | Drive レポートフォルダID | `1BkOTTY7wdmdNcFExsjTS75s5sfEzqPmB` |
 | ローカル保存先 | `outputs/reports/YYYYMMDD_<タイトル>.md` |
 
@@ -63,7 +63,7 @@ X投稿一覧シートのデータを分析してユーザーの質問に答え�
 
 ```bash
 gws sheets spreadsheets values get \
-  --params '{"spreadsheetId": "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c", "range": "自分の投稿一覧"}' \
+  --params '{"spreadsheetId": "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c", "range": "X投稿一覧"}' \
   2>/dev/null > /tmp/xpost_data.json
 ```
 
