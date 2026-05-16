@@ -9,6 +9,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-16
 
+- **record-note-posts スキル新設** — note.com 記事統計（ビュー・スキ・文字数）を取得して Google Sheets「note投稿一覧」に記録・更新するスキルを新設。`v3/notes/{key}` から本文 HTML を取得し文字数カウントも実装。[→報告書](../reports/20260516_record_note_posts_skill.md)
+- **シート名「自分の投稿一覧」→「X投稿一覧」に変更** — Google Sheets のシート名改名に合わせ、`analyze-impression`・`analyze-x-posts`・`reporter-daily` の各 SKILL.md と `style-xonepoint.md`・Wiki スキル詳細ページを一括更新。
 - **reporter-daily 特記事項の記載順を定義** — ワンポイント→質問→ストーリー→note→変更ログ→その他の順を SKILL.md に明記。週報・月報参照時に種別ごとに追いやすくなった。[→報告書](../reports/20260516_reporter_daily_note_order.md)
 - **style-reporter.md メトリクス表記をリポスト・リプに修正** — 数値表記の「引用」を「リポスト」に変更し「リプ」を追加。シートの列との対応（リツイート列→リポスト・ブックマーク列→ブクマ・リプライ列→リプ）を明記。v1.1→v1.2。
 - **analyze-impression スキル新設** — X投稿のIMP分析と関連スキル改善提案を行う9STEPのスキルを新設。HOW_ID単位でフィルタしてパターン抽出・スキル/style修正案生成・承認後の自動編集まで実行する。[→報告書](../reports/20260516_analyze_impression_skill.md)
