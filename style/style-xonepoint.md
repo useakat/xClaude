@@ -102,5 +102,5 @@
 
 ## 参考
 
-- 分析対象スプレッドシート: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c`（自分の投稿一覧シート）
+- 分析対象スプレッドシート: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c`（X投稿一覧シート）
 - 関連スキル: `/writer-xonepoint`、`/check-fact`

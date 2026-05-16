@@ -15,11 +15,11 @@ tools: Read, Write, Edit, Bash, mcp__mcp-gsheets__sheets_get_values, mcp__mcp-gs
 | 項目 | 値 |
 |---|---|
 | outputs シート | SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc` / シート名 `outputs` |
-| メトリクスシート | `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c` / シート名 `自分の投稿一覧` |
+| メトリクスシート | `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c` / シート名 `X投稿一覧` |
 | outputs カラム | A: 日時 / B: URL / C: what_id |
 | メトリクス主要カラム | A: 投稿日時 / B: ツイート本文 / D: 文字数 / F: 画像枚数 / I: インプレッション / J: いいね / K: RT / M: ブクマ / N: エンゲ / X: ツイートURL |
 
-> 注：outputs シートの URL は `https://x.com/...`、「自分の投稿一覧」シートの URL は `https://twitter.com/...`。tweet ID 部分でマッチングすること。
+> 注：outputs シートの URL は `https://x.com/...`、「X投稿一覧」シートの URL は `https://twitter.com/...`。tweet ID 部分でマッチングすること。
 
 ---
 
@@ -66,10 +66,10 @@ sheets_get_values(spreadsheetId="1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc", 
 
 # STEP 3: 各投稿のメトリクス取得
 
-「自分の投稿一覧」シートは大量データのため、最新 50 行程度を取得して URL マッチする：
+「X投稿一覧」シートは大量データのため、最新 50 行程度を取得して URL マッチする：
 
 ```
-sheets_get_values(spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c", range="自分の投稿一覧!A1:N50")
+sheets_get_values(spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c", range="X投稿一覧!A1:N50")
 ```
 
 行数を増やしても URL が見つからない投稿は「未反映（同期遅延）」として除外し、見つからなかった件数も報告する。
