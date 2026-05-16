@@ -16,6 +16,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **record_output.py に cron 用サービスアカウントファイル fallback 追加** — cron は `.bashrc` を読まないため `GOOGLE_SERVICE_ACCOUNT_KEY` が未設定になり Sheets 記録が失敗していた。環境変数がない場合に `gcp/` の JSON ファイルを直接読む fallback を追加。[→報告書](../reports/20260516_record_output_cron_fallback.md)
 - **CLAUDE.md：新規スキル作成時の metadata.yaml 追記ルール追加** — Wiki 自動更新を確実に動かすため、スキル新設時に `metadata.yaml` への追記を必須とするルールを実装ルールセクションに追加。[→報告書](../reports/20260516_claude_md_metadata_rule.md)
 - **thoughts シート新設・思想リスト 13 件を登録** — 発信時に引用・接続する思想を SS1 の `thoughts` シートで構造化管理。CLAUDE.md 内の思想群を分析・整理し、X発信に使える 13 件を選別して T001〜T013 として登録。[→報告書](../reports/20260516_thoughts_sheet.md)
+- **get_gmail_body.sh：メール本文 CRLF 正規化** — Gmail 本文の `\r\n`（Windows改行）を `\n` に変換。未変換のまま X 投稿していたため空白行の位置がメール原稿とずれていた問題を修正。
+- **brand.md 説明文の簡略化** — よーんの説明文から「天体の魅力や宇宙探査の」を削除し「面白さを伝える発信者」に簡潔化。
 
 ## 2026-05-15
 

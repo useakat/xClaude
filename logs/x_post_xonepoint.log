@@ -284,3 +284,40 @@ threads 配列が存在しないため、STEP 2 へ。
 ✓ 記録完了: 2026-05-14 06:00:06, https://x.com/i/web/status/2054668025853608140, W003
 [2026-05-14 06:00:06 JST] 1件処理完了。ループ終了
 [2026-05-14 06:00:06 JST] 完了
+[2026-05-15 06:00:01 JST] 開始 (subject:【ワンポイント解説】, howID:W003)
+[2026-05-15 06:00:01 JST] 処理対象 thread_id=19e237dcde3c3b58
+[2026-05-15 06:00:03 JST] 添付画像あり
+[2026-05-15 06:00:03 JST] X 投稿実行...
+📷 画像アップロード中: /tmp/xpost_image.png
+✓ メディアID: 2055030406253273088
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2055030409000595861
+[2026-05-15 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2055030409000595861
+Traceback (most recent call last):
+  File "/root/xClaude/scripts/record_output.py", line 41, in <module>
+    record(sys.argv[1], sys.argv[2])
+  File "/root/xClaude/scripts/record_output.py", line 31, in record
+    client = get_client()
+  File "/root/xClaude/scripts/record_output.py", line 24, in get_client
+    raise RuntimeError("GOOGLE_SERVICE_ACCOUNT_KEY が設定されていません")
+RuntimeError: GOOGLE_SERVICE_ACCOUNT_KEY が設定されていません
+[2026-05-15 06:00:06 JST] 1件処理完了。ループ終了
+[2026-05-15 06:00:06 JST] 完了
+[2026-05-16 06:00:01 JST] 開始 (subject:【ワンポイント解説】, howID:W003)
+[2026-05-16 06:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-05-16 06:00:02 JST] 完了
+[2026-05-16 10:32:55 JST] 開始 (subject:【ワンポイント解説】, howID:W003)
+[2026-05-16 10:32:55 JST] 投稿対象メールなし。ループ終了
+[2026-05-16 10:32:55 JST] 完了
+[2026-05-16 10:44:42 JST] 開始 (subject:【ワンポイント解説】, howID:W003)
+[2026-05-16 10:44:43 JST] 処理対象 thread_id=19e2b8dee47dc0fd
+[2026-05-16 10:44:45 JST] 添付画像あり
+[2026-05-16 10:44:45 JST] X 投稿実行...
+📷 画像アップロード中: /tmp/xpost_image.png
+✓ メディアID: 2055464439722455040
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2055464442171965564
+[2026-05-16 10:44:46 JST] 投稿成功: https://x.com/i/web/status/2055464442171965564
+✓ 記録完了: 2026-05-16 10:44:47, https://x.com/i/web/status/2055464442171965564, W003
+[2026-05-16 10:44:49 JST] 1件処理完了。ループ終了
+[2026-05-16 10:44:49 JST] 完了
