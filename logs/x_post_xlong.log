@@ -20,3 +20,6 @@ Traceback (most recent call last):
 RuntimeError: GOOGLE_SERVICE_ACCOUNT_KEY が設定されていません
 [2026-05-15 17:00:06 JST] 1件処理完了。ループ終了
 [2026-05-15 17:00:06 JST] 完了
+[2026-05-16 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-05-16 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-05-16 17:00:02 JST] 完了
