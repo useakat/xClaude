@@ -10,7 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-05-17
 
 - **Drive MCP download_file_content のコスト検証** — download_file_content が base64（〜28,000トークン）をコンテキストに乗せること、Write ツール併用でトークン2倍・25分の迷走が起きることを実験で確認。スクリプト方式が唯一の実用解と結論。[→報告書](../reports/20260517_drive_mcp_download_cost.md)
-- **update-x-analytics 高速化リファクタリング** — Drive CSV 取得をスクリプト化（Anthropic プロキシ直呼び）、Sheets 操作を mcp-gsheets 分離、フォルダパス変更など一連の改善。実行時間 387秒→46秒・ツール呼び出し 59回→4回に削減。[→報告書](../reports/20260517_update_x_analytics_refactoring.md)
+- **update-x-analytics 高速化リファクタリング** — Drive CSV 取得・Sheets B列取得・マッチングを全スクリプト化。LLM コンテキストを通じるデータ処理をゼロにし、ツール呼び出し 59回→4回・投稿数増加でも劣化しない構成に。[→報告書](../reports/20260517_update_x_analytics_refactoring.md)
 - **update-x-analytics サブエージェント新設** — X アナリティクス CSV（Drive の analytics_tmp）を読み込み、X投稿一覧シートの詳細表示・リンククリック・フォロー増を status ID で照合して一括更新するサブエージェントを新設。[→報告書](../reports/20260517_update_x_analytics_agent.md)
 
 ## 2026-05-16
@@ -93,7 +93,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **reporter-daily スキル改善** — デフォルトを前日に変更・gws CLI から mcp-gsheets に移行・日次記録シートの読み込みを最新10行に限定。
 - **cron X 投稿からの下書き除外** — `post_from_email.sh` の Gmail 検索クエリに `-is:draft` を追加し、下書きメールが投稿対象になる不具合を修正。
 - **CLAUDE.md ファイル削除ルール変更** — 「ファイルを削除しない」から「削除する場合はよーんに確認する」に緩和。
-- **reporter スキル UX 改善（完了後表示・特記事項ルール整備）** — daily/weekly/monthly 全スキルの完了後に生成ファイルを画面表示。reporter-daily の特記事項からフォロワー増減・`[開発]` 表記を廃止し、変更ログの要約を運用視点に変更。[→報告書](../reports/20260504_reporter_ux_improvements.md)
+- **reporter スキル UX 改嚄（完了後表示・特記事項ルール整備）** — daily/weekly/monthly 全スキルの完了後に生成ファイルを画面表示。reporter-daily の特記事項からフォロワー増減・`[開発]` 表記を廃止し、変更ログの要約を運用視点に変更。[→報告書](../reports/20260504_reporter_ux_improvements.md)
 - **remote session での docs/reports/ push 許可** — `git_guard.py` を新設し、ステージ済みファイルが `docs/reports/` 配下のみなら remote でも commit・push を通す。フックもスクリプト外部化・動的パス解決に変更。[→報告書](../reports/20260504_remote_reports_push.md)
 
 ## 2026-05-03
@@ -109,7 +109,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **変更ログ形式の整備** — 変更ログのエントリを日付セクション内の箇条書き形式に統一し、CLAUDE.md のルールも更新。
 - **記録不要条件の明文化** — `permissions.allow` への追記のみのコミットは記録不要という例外ルールを CLAUDE.md に追加。
 - **/update-permissions スキル追加・コミット前フック廃止** — blocking フックと bypass トークンを廃止し、`/update-permissions` スキルで任意のタイミングに手動で permissions.allow を更新する運用に変更。[→報告書](../reports/20260503_update_permissions_skill/)
-- **/record スキル候補表示の改善** — 変更ログ候補に「関連する過去の変更」フィールドを追加し、選択メッセージを肯定形に変更。[→報告書](../reports/20260503_record_skill_improvement/)
+- **/record スキル候補表示の改嚄** — 変更ログ候補に「関連する過去の変更」フィールドを追加し、選択メッセージを肯定形に変更。[→報告書](../reports/20260503_record_skill_improvement/)
 - **daily-xonepoint メール下書き作成の MCP 化** — gws CLI がエージェント環境で使えないため STEP 5 を `mcp__claude_ai_Gmail__create_draft` に切り替え。[→報告書](../reports/20260503_daily_xonepoint_mcp_gmail/)
 - **database CSV → Google Sheets 移行** — 8スキルの CSV 読み書きを mcp-gsheets ツールに書き換え、廃止スクリプトを `unused-scripts/` へ移動、SS1 に outputs シートを新設。[→報告書](../reports/20260503_database_csv_to_sheets_migration.md)
 - **mcp-gsheets ローカル認証設定** — `.mcp.json` に `GOOGLE_APPLICATION_CREDENTIALS` を追加し、ローカルセッションでもサービスアカウントファイルで認証可能に。
@@ -123,5 +123,5 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **投稿締め言葉ルールの追加** — X ワンポイント投稿の末尾を「読者の日常生活につながる1文」で締めるルールを強制。[→報告書](../reports/20260502_closing_rule/)
 - **Google サービス連携・スクリプト化ルールの追加** — gws CLI 統一とスクリプト化優先の原則を CLAUDE.md に明文化。[→報告書](../reports/20260502_implementation_rules/)
 - **報告書・変更ログ運用フローの整備** — 変更ログと報告書の1対1対応構造を設計。テンプレート作成・CLAUDE.md にルール追加。[→報告書](../reports/20260502_reporting_workflow/)
-- **daily-xonepoint 自動化改善** — STEP 3 を `/check-fact` に変更、STEP 5 のメール作成を gws CLI スクリプトに変更。[→報告書](../reports/20260502_daily_xonepoint_improvement/)
+- **daily-xonepoint 自動化改嚄** — STEP 3 を `/check-fact` に変更、STEP 5 のメール作成を gws CLI スクリプトに変更。[→報告書](../reports/20260502_daily_xonepoint_improvement/)
 - **git commit 前の確認フック追加** — `PreToolUse` フックで `git commit` 実行前に settings.json 確認を自動挿入。[→報告書](../reports/20260502_precommit_hook/)
