@@ -45,6 +45,8 @@ python3 /home/user/xClaude/scripts/fetch_x_b_col.py
 
 スクリプトが Sheets API に直接 HTTP リクエストし、LLM を経由せずに `/tmp/x_analytics_b_col.json` を作成する。
 
+> **警告**: `sheets_get_values` を呼び出してはならない。B列（386行）を LLM コンテキストに載せると大量のトークンを消費し、処理が著しく遅くなる。**必ずスクリプト経由を使うこと。** `sheets_get_values` および `cat` コマンドによる heredoc 保存は絶対に禁止。
+
 ### STEP 3: マッチング実行
 
 ```bash
