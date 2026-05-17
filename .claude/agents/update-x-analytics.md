@@ -1,161 +1,98 @@
 ---
 name: update-x-analytics
-description: Google Drive の analytics_tmp フォルダにある X アナリティクス CSV を読み込み、X投稿一覧シートの 詳細表示・リンククリック・フォロー増 列を更新する
+description: Google Drive の Xanalytics/tmp フォルダにある X アナリティクス CSV を読み込み、X投稿一覧シートの 詳細表示・リンククリック・フォロー増 列を更新する
+model: claude-sonnet-4-6
 ---
 
 # update-x-analytics エージェント
 
-Google Drive の `analytics_tmp` フォルダにある X アナリティクス CSV を読み込み、
-X投稿一覧シートの該当行に詳細表示・リンククリック・フォロー増 を書き込む。
+| 役割 | 担当 |
+|---|---|
+| Drive CSV 検索・ダウンロード | エージェント（Drive MCP） |
+| CSV パース | スクリプト（Python） |
+| Sheets B列 読み取り | エージェント（mcp-gsheets） |
+| マッチング | スクリプト（Python） |
+| Sheets AA:AC 書き込み | エージェント（mcp-gsheets） |
 
 ## データソース
 
 | 項目 | 値 |
 |---|---|
-| Drive フォルダID（analytics_tmp） | `1HlkV8woi9LHz9bCKI184_w6KJRHvLR72` |
 | スプレッドシートID | `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c` |
 | シート名 | `X投稿一覧` |
-
-### X投稿一覧 関連列
-
-| 列 | 列番号 | 内容 |
-|---|---|---|
-| B | 2 | ポストURL（`https://twitter.com/i/web/status/{ID}`） |
-| AA | 27 | 詳細表示 |
-| AB | 28 | リンククリック |
-| AC | 29 | フォロー増 |
-
-### CSV 列レイアウト（インデックス）
-
-| インデックス | 列名 |
-|---|---|
-| 3 | Post Link（`https://x.com/usephys/status/{ID}`） |
-| 9 | New follows → フォロー増 |
-| 13 | Detail Expands → 詳細表示 |
-| 14 | URL Clicks → リンククリック |
+| Drive フォルダID | `1J45co5hN74gzxNateNRyeDtswZu0lMr3`（Xanalytics/tmp） |
 
 ---
 
 ## 手順
 
-### STEP 1: CSV ファイルを検索
+### STEP 1: Drive CSV をダウンロードして保存
 
-`mcp__claude_ai_Google_Drive__search_files` で analytics_tmp フォルダ内の CSV を検索する：
-
-```
-search_files(
-  query="'1HlkV8woi9LHz9bCKI184_w6KJRHvLR72' in parents and mimeType='text/csv' and trashed=false"
-)
-```
-
-見つかったファイルのうち最新のものを対象とする（ファイル名に日付が含まれる場合は最大日付）。
-
-複数ある場合はファイル名を一覧表示して、最新1件のみを処理する。
-
-### STEP 2: CSV 内容を取得
-
-`mcp__claude_ai_Google_Drive__read_file_content` で CSV テキストを取得し、`CSV_TEXT` として記憶する。
+ToolSearch で Drive MCP のツール名を取得する（UUID はセッション固有のため毎回検索する）:
 
 ```
-read_file_content(file_id="<STEP1で取得したID>")
+ToolSearch: query="search files drive download"
 ```
 
-### STEP 3: CSV をパースして投稿データマップを作成
+取得したツール名を使って以下を実行する：
 
-以下の Python スクリプトを Bash で実行する。`CSV_TEXT` の内容を stdin に渡すか、
-`/tmp/x_analytics.csv` に書き出してから処理する。
+**1-a. CSV ファイルを検索**
 
-```python
-import re, json, sys
+`search_files` を呼び出す：
+- query: `parentId = '1J45co5hN74gzxNateNRyeDtswZu0lMr3'`
+- excludeContentSnippets: true
 
-csv_text = sys.stdin.read()
+返ってきた files リストを `modifiedTime` の降順でソートし、最新ファイルの `id` と `title`（または `name`）を記憶する。
 
-# Post Link 列以降の数値フィールドを正規表現で一括抽出
-# 列順: Post id, Date, Post text, Post Link, Impressions, Likes, Engagements,
-#        Bookmarks, Shares, New follows(9), Replies, Reposts, Profile visits,
-#        Detail Expands(13), URL Clicks(14), ...
-pattern = re.compile(
-    r'https://x\.com/usephys/status/(\d+)'   # group(1): status ID
-    r',(\d+),(\d+),(\d+),(\d+),(\d+)'        # Impressions,Likes,Eng,Bookmarks,Shares,NewFollows(6)
-    r',(\d+),(\d+),(\d+)'                    # Replies,Reposts,ProfileVisits
-    r',(\d+),(\d+)'                          # DetailExpands(10), URLClicks(11)
-)
+**1-b. CSV をダウンロード**
 
-csv_map = {}
-for m in pattern.finditer(csv_text):
-    sid            = m.group(1)
-    new_follows    = int(m.group(6))   # CSV col 9
-    detail_expands = int(m.group(10))  # CSV col 13
-    url_clicks     = int(m.group(11))  # CSV col 14
-    csv_map[sid] = {
-        "detail_expands": detail_expands,
-        "url_clicks": url_clicks,
-        "new_follows": new_follows
-    }
+`download_file_content` を呼び出す：
+- fileId: 1-a で取得した id
 
-print(json.dumps(csv_map))
+返ってきた `content` フィールドの base64 文字列を **Write ツール** で `/tmp/x_analytics_b64.txt` に保存する（Bash の echo は長い文字列を壊すため必ず Write ツールを使う）。
+
+### STEP 2: CSV をパース
+
+```bash
+python3 /home/user/xClaude/scripts/parse_x_analytics_csv.py
 ```
 
-出力 JSON を `CSV_MAP`（`{status_id: {detail_expands, url_clicks, new_follows}}`）として記憶する。
+成功すると `/tmp/x_analytics_map.json` が作成される。
 
-### STEP 4: X投稿一覧の B列（ポストURL）を取得
+### STEP 3: Sheets B列を取得してファイルに保存
 
-`analyze-x-posts` スキルと同じスプレッドシートを参照する（スプレッドシートID: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c`）。
+`sheets_get_values` で B列を取得し、結果の `values` を `/tmp/x_analytics_b_col.json` に保存する：
 
-```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="X投稿一覧!B:B"
-)
-```
-
-取得結果を `SHEET_URLS`（行番号付きリスト）として記憶する。  
-1行目はヘッダーなので行番号は 2 から始まる。
-
-### STEP 5: status ID でマッチング
-
-`SHEET_URLS` の各行について：
-
-1. URL から status ID を抽出する（`twitter.com/i/web/status/{ID}` または `x.com/.../status/{ID}`）
-2. `CSV_MAP` に同じ ID があれば **更新対象** としてリストに追加する
-
-```python
-import re
-
-def extract_status_id(url):
-    m = re.search(r'/status/(\d+)', str(url))
-    return m.group(1) if m else None
+```bash
+cat > /tmp/x_analytics_b_col.json << 'EOF'
+<sheets_get_values の values をそのまま貼り付ける>
+EOF
 ```
 
-更新対象リスト `UPDATE_LIST` = `[(row_number, detail_expands, url_clicks, new_follows), ...]`
+sheets_get_values のパラメータ：
+- spreadsheetId: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c`
+- range: `X投稿一覧!B:B`
 
-### STEP 6: 一括更新
+### STEP 4: マッチング実行
 
-更新対象が存在する場合、`sheets_batch_update_values` で AA:AC 列を一括更新する。
-
-行番号が連続している場合は1回の呼び出しにまとめる。
-連続していない場合は連続する範囲ごとにまとめて呼び出す。
-
-```
-sheets_batch_update_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  data=[
-    {
-      "range": "X投稿一覧!AA{START}:AC{END}",
-      "values": [
-        [detail_expands, url_clicks, new_follows],  # 各行
-        ...
-      ]
-    }
-  ]
-)
+```bash
+python3 /home/user/xClaude/scripts/match_x_analytics.py
 ```
 
-### STEP 7: 完了報告
+stdout に出力される JSON の `update_data` を記憶する。
+
+### STEP 5: Sheets を一括更新
+
+`sheets_batch_update_values` を **1回だけ** 呼び出す：
+
+- spreadsheetId: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c`
+- data: STEP 4 の `update_data` をそのまま渡す
+
+### STEP 6: 完了報告
 
 ```
 ✅ X投稿一覧 アナリティクス更新完了
-   CSVファイル: <ファイル名>
-   マッチ件数: N件 / CSV総投稿数: M件
+   CSVファイル: <file>
+   マッチ件数: <match_count> 件 / CSV総投稿数: <total_csv> 件
    更新列: 詳細表示（AA）・リンククリック（AB）・フォロー増（AC）
 ```
