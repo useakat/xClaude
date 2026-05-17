@@ -53,14 +53,12 @@ python3 /home/user/xClaude/scripts/match_x_analytics.py
 
 stdout に出力される JSON の `update_data` を記憶する。
 
-
-
 ### STEP 4: Sheets を一括更新
 
 `sheets_batch_update_values` を **1回だけ** 呼び出す：
 
 - spreadsheetId: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c`
-- data: STEP 4 の `update_data` をそのまま渡す
+- data: STEP 3 の `update_data` をそのまま渡す
 
 ### STEP 5: 完了報告
 
