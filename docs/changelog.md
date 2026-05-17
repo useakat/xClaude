@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-18
+
+- **UpdateXAnalytics GAS 実装** — X アナリティクス CSV（Xanalytics/tmp）を読み込み X投稿一覧の詳細表示・リンククリック・フォロー増（AA:AC列）を更新する GAS 関数を新設し clasp でデプロイ。週次トリガー設定ヘルパーも実装。[→報告書](../reports/20260518_update_x_analytics_gas.md)
+
 ## 2026-05-17
 
 - **Drive MCP download_file_content のコスト検証** — download_file_content が base64（〜28,000トークン）をコンテキストに乗せること、Write ツール併用でトークン2倍・25分の迷走が起きることを実験で確認。スクリプト方式が唯一の実用解と結論。[→報告書](../reports/20260517_drive_mcp_download_cost.md)
