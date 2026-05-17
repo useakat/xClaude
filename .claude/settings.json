@@ -37,6 +37,7 @@
       "mcp__mcp-gsheets__sheets_get_values",
       "mcp__mcp-gsheets__sheets_append_values",
       "mcp__mcp-gsheets__sheets_update_values",
+      "mcp__mcp-gsheets__sheets_batch_update_values",
       "mcp__claude_ai_Gmail__search_threads",
       "mcp__claude_ai_Gmail__get_thread",
       "mcp__claude_ai_Gmail__create_draft",
