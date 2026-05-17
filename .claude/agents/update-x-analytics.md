@@ -6,8 +6,12 @@ model: claude-sonnet-4-6
 
 # update-x-analytics エージェント
 
-X アナリティクス CSV の取得・パースはスクリプトが担当。
-エージェントは Sheets の読み書きのみを mcp-gsheets で行う。
+| 役割 | 担当 |
+|---|---|
+| Drive CSV 取得・パース | スクリプト（Python） |
+| Sheets B列 読み取り | エージェント（mcp-gsheets） |
+| マッチング | スクリプト（Python） |
+| Sheets AA:AC 書き込み | エージェント（mcp-gsheets） |
 
 ## データソース
 
@@ -16,62 +20,52 @@ X アナリティクス CSV の取得・パースはスクリプトが担当。
 | スプレッドシートID | `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c` |
 | シート名 | `X投稿一覧` |
 
-### X投稿一覧 関連列
-
-| 列 | 列番号 | 内容 |
-|---|---|---|
-| B | 2 | ポストURL |
-| AA | 27 | 詳細表示 |
-| AB | 28 | リンククリック |
-| AC | 29 | フォロー増 |
-
 ---
 
 ## 手順
 
-### STEP 1: スクリプトを実行して CSV_MAP を取得
+### STEP 1: Drive CSV 取得・パース
 
 ```bash
-python3 /home/user/xClaude/scripts/update_x_analytics.py
+python3 /home/user/xClaude/scripts/fetch_x_analytics_csv.py
 ```
 
-出力 JSON の `csv_map`（`{status_id: {detail_expands, url_clicks, new_follows}}`）と
-`file`（CSVファイル名）を記憶する。
+成功すると `/tmp/x_analytics_map.json` が作成される。
 
-### STEP 2: X投稿一覧の B列（ポストURL）を取得
+### STEP 2: Sheets B列を取得してファイルに保存
 
+`sheets_get_values` で B列を取得し、結果の `values` を `/tmp/x_analytics_b_col.json` に保存する：
+
+```bash
+cat > /tmp/x_analytics_b_col.json << 'EOF'
+<sheets_get_values の values をそのまま貼り付ける>
+EOF
 ```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="X投稿一覧!B:B"
-)
+
+sheets_get_values のパラメータ：
+- spreadsheetId: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c`
+- range: `X投稿一覧!B:B`
+
+### STEP 3: マッチング実行
+
+```bash
+python3 /home/user/xClaude/scripts/match_x_analytics.py
 ```
 
-### STEP 3: status ID でマッチング
+stdout に出力される JSON の `update_data` を記憶する。
 
-各行の URL から `/status/(\d+)` で status ID を抽出し、
-`csv_map` に存在する行を更新対象リストに追加する。
+### STEP 4: Sheets を一括更新
 
-### STEP 4: 一括更新
+`sheets_batch_update_values` を **1回だけ** 呼び出す：
 
-**`sheets_batch_update_values` を1回だけ呼び出す。**
-全件を `data` 配列に含めて単一呼び出しにまとめること。
-
-```
-sheets_batch_update_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  data=[
-    {"range": "X投稿一覧!AA{ROW}:AC{ROW}", "values": [[detail_expands, url_clicks, new_follows]]},
-    ...
-  ]
-)
-```
+- spreadsheetId: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c`
+- data: STEP 3 の `update_data` をそのまま渡す
 
 ### STEP 5: 完了報告
 
 ```
 ✅ X投稿一覧 アナリティクス更新完了
-   CSVファイル: <ファイル名>
-   マッチ件数: N件 / CSV総投稿数: M件
+   CSVファイル: <file>
+   マッチ件数: <match_count> 件 / CSV総投稿数: <total_csv> 件
    更新列: 詳細表示（AA）・リンククリック（AB）・フォロー増（AC）
 ```
