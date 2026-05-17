@@ -1,6 +1,7 @@
 ---
 name: update-x-analytics
 description: Google Drive の Xanalytics/tmp フォルダにある X アナリティクス CSV を読み込み、X投稿一覧シートの 詳細表示・リンククリック・フォロー増 列を更新する
+model: claude-haiku-4-5-20251001
 ---
 
 # update-x-analytics エージェント
