@@ -1,18 +1,18 @@
 ---
 name: update-x-analytics
-description: Google Drive の analytics_tmp フォルダにある X アナリティクス CSV を読み込み、X投稿一覧シートの 詳細表示・リンククリック・フォロー増 列を更新する
+description: Google Drive の Xanalytics/tmp フォルダにある X アナリティクス CSV を読み込み、X投稿一覧シートの 詳細表示・リンククリック・フォロー増 列を更新する
 ---
 
 # update-x-analytics エージェント
 
-Google Drive の `analytics_tmp` フォルダにある X アナリティクス CSV を読み込み、
+Google Drive の `Xanalytics/tmp` フォルダにある X アナリティクス CSV を読み込み、
 X投稿一覧シートの該当行に詳細表示・リンククリック・フォロー増 を書き込む。
 
 ## データソース
 
 | 項目 | 値 |
 |---|---|
-| Drive フォルダID（analytics_tmp） | `1HlkV8woi9LHz9bCKI184_w6KJRHvLR72` |
+| Drive フォルダID（Xanalytics/tmp） | `1J45co5hN74gzxNateNRyeDtswZu0lMr3` |
 | スプレッドシートID | `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c` |
 | シート名 | `X投稿一覧` |
 
@@ -40,11 +40,11 @@ X投稿一覧シートの該当行に詳細表示・リンククリック・フ�
 
 ### STEP 1: CSV ファイルを検索
 
-`mcp__claude_ai_Google_Drive__search_files` で analytics_tmp フォルダ内の CSV を検索する：
+`mcp__claude_ai_Google_Drive__search_files` で Xanalytics/tmp フォルダ内の CSV を検索する：
 
 ```
 search_files(
-  query="'1HlkV8woi9LHz9bCKI184_w6KJRHvLR72' in parents and mimeType='text/csv' and trashed=false"
+  query="'1J45co5hN74gzxNateNRyeDtswZu0lMr3' in parents and mimeType='text/csv' and trashed=false"
 )
 ```
 
