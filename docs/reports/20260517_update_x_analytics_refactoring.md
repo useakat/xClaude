@@ -64,6 +64,10 @@ sidebar:
 - ツール呼び出し：4 回（59 回 → 93% 削減）
 - マッチ件数・更新列（AA:AC）は正常に動作を確認
 
+## セッション履歴
+
+[→ 作業ログ全文](../history/20260517_update_x_analytics_refactoring_session.md)
+
 ## 今後の課題
 
 - Drive MCP の UUID がセッション固有のため、スクリプトは毎回 `mcp-config-{SESSION_ID}.json` を参照する必要がある。セッション外では動作しない設計（想定内）。
