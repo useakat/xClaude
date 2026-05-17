@@ -53,5 +53,7 @@ skills:
     category: 運用・記録
   record-note-posts:
     category: 運用・記録
+  save-session:
+    category: 運用・記録
   update-permissions:
     category: 設定・保守
