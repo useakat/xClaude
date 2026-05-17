@@ -40,60 +40,64 @@ X投稿一覧シートの該当行に詳細表示・リンククリック・フ�
 
 ### STEP 1: CSV ファイルを検索
 
-`mcp__claude_ai_Google_Drive__search_files` で Xanalytics/tmp フォルダ内の CSV を検索する：
+**Drive ツールは ToolSearch で検索してから使うこと。**
+`search_files` や `download_file_content` のような Drive 操作ツールは、セッションごとに異なる名前（UUID形式）で登録されているため、ハードコードせず毎回 ToolSearch で探す。
+
+```
+ToolSearch("drive search files")   # → search_files ツールのスキーマを取得
+ToolSearch("drive download file")  # → download_file_content ツールのスキーマを取得
+```
+
+取得したツールで Xanalytics/tmp フォルダ内のファイルを検索する：
 
 ```
 search_files(
-  query="'1J45co5hN74gzxNateNRyeDtswZu0lMr3' in parents and mimeType='text/csv' and trashed=false"
+  query="'1J45co5hN74gzxNateNRyeDtswZu0lMr3' in parents and trashed=false"
 )
 ```
 
 見つかったファイルのうち最新のものを対象とする（ファイル名に日付が含まれる場合は最大日付）。
-
 複数ある場合はファイル名を一覧表示して、最新1件のみを処理する。
 
-### STEP 2: CSV 内容を取得
+### STEP 2 & 3: CSV 取得・パース
 
-`mcp__claude_ai_Google_Drive__read_file_content` で CSV テキストを取得し、`CSV_TEXT` として記憶する。
+`download_file_content` で CSV を取得する。レスポンスは **base64 エンコード**されているため、
+以下の Python スクリプトを `/tmp/parse_analytics.py` に書き出して実行する。
 
-```
-read_file_content(file_id="<STEP1で取得したID>")
-```
-
-### STEP 3: CSV をパースして投稿データマップを作成
-
-以下の Python スクリプトを Bash で実行する。`CSV_TEXT` の内容を stdin に渡すか、
-`/tmp/x_analytics.csv` に書き出してから処理する。
+base64 文字列を `/tmp/x_analytics_b64.txt` に保存してから実行する：
 
 ```python
-import re, json, sys
+# /tmp/parse_analytics.py
+import base64, csv, io, json, re, sys
 
-csv_text = sys.stdin.read()
+b64 = open('/tmp/x_analytics_b64.txt').read().strip()
+csv_text = base64.b64decode(b64).decode('utf-8')
 
-# Post Link 列以降の数値フィールドを正規表現で一括抽出
-# 列順: Post id, Date, Post text, Post Link, Impressions, Likes, Engagements,
-#        Bookmarks, Shares, New follows(9), Replies, Reposts, Profile visits,
-#        Detail Expands(13), URL Clicks(14), ...
-pattern = re.compile(
-    r'https://x\.com/usephys/status/(\d+)'   # group(1): status ID
-    r',(\d+),(\d+),(\d+),(\d+),(\d+)'        # Impressions,Likes,Eng,Bookmarks,Shares,NewFollows(6)
-    r',(\d+),(\d+),(\d+)'                    # Replies,Reposts,ProfileVisits
-    r',(\d+),(\d+)'                          # DetailExpands(10), URLClicks(11)
-)
+reader = csv.reader(io.StringIO(csv_text))
+next(reader)  # ヘッダースキップ
 
 csv_map = {}
-for m in pattern.finditer(csv_text):
-    sid            = m.group(1)
-    new_follows    = int(m.group(6))   # CSV col 9
-    detail_expands = int(m.group(10))  # CSV col 13
-    url_clicks     = int(m.group(11))  # CSV col 14
-    csv_map[sid] = {
-        "detail_expands": detail_expands,
-        "url_clicks": url_clicks,
-        "new_follows": new_follows
-    }
+for row in reader:
+    if len(row) <= 14:
+        continue
+    url = row[3]
+    m = re.search(r'/status/(\d+)', url)
+    if not m:
+        continue
+    try:
+        csv_map[m.group(1)] = {
+            "detail_expands": int(row[13] or 0),
+            "url_clicks":     int(row[14] or 0),
+            "new_follows":    int(row[9]  or 0),
+        }
+    except (ValueError, IndexError):
+        continue
 
 print(json.dumps(csv_map))
+```
+
+```bash
+python3 /tmp/parse_analytics.py
 ```
 
 出力 JSON を `CSV_MAP`（`{status_id: {detail_expands, url_clicks, new_follows}}`）として記憶する。
