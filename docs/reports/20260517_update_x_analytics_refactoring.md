@@ -10,10 +10,11 @@ sidebar:
 
 ## 背景・動機
 
-`update-x-analytics` エージェントの初期実装では実行に約 387 秒・ツール呼び出し 59 回を要していた。ボトルネックは2つ：
+`update-x-analytics` エージェントの初期実装では実行に約 387 秒・ツール呼び出し 59 回を要していた。ボトルネックは3つ：
 
 1. **ToolSearch による Drive ツール名探索**：claude.ai MCP コネクタは UUID ベースのツール名（`mcp__960819bd-...`）を使うため、エージェントが毎回 ToolSearch でツール名を探す必要があった。
-2. **LLM による大量データ処理**：CSV 全行・B列全行をエージェントのコンテキストに載せてマッチング → トークン消費が膨大。
+2. **LLM による大量データ処理**：CSV 全行・B列全行をエージェントのコンテキストに載せてマッチング → トークン消費が膞大。
+3. **Sheets B列の heredoc 保存**：`sheets_get_values` の結果（386行）を LLM が `cat << EOF` で再生成してファイルに書き出す → データ増加と共にパフォーマンスが劣化（後述）。
 
 また、フォルダパスが `analytics_tmp` のままで `Xanalytics/tmp` への変更も必要だった。
 
@@ -30,8 +31,12 @@ sidebar:
   - status ID（`/status/(\d+)` regex）で突き合わせ
   - `sheets_batch_update_values` 用の `update_data` JSON を stdout に出力
 
-- **Sheets 操作はエージェント（mcp-gsheets）が担当**
-  - B列取得：`sheets_get_values` → `/tmp/x_analytics_b_col.json` に保存
+- **Sheets B列取得をスクリプト化**（`scripts/fetch_x_b_col.py`）
+  - サービスアカウント JWT（openssl で RS256 署名）で Google Sheets API に直接 HTTP リクエスト
+  - LLM を一切経由せず `/tmp/x_analytics_b_col.json` を作成
+  - heredoc 方式（LLM が 386 行を再生成）を廃止。投稿数増加によるパフォーマンス劣化を解消
+
+- **Sheets 書き込みはエージェント（mcp-gsheets）が担当**
   - 一括書き込み：`sheets_batch_update_values` を 1 回のみ呼び出し（AA:AC 列）
 
 - **エージェント定義 `.claude/agents/update-x-analytics.md` を整理**
@@ -46,23 +51,26 @@ sidebar:
 |---|---|
 | `.claude/agents/update-x-analytics.md` | エージェント定義を全面改訂（5ステップフロー、スクリプト分離） |
 | `scripts/fetch_x_analytics_csv.py` | 新規作成：Drive CSV 取得・パース・保存 |
+| `scripts/fetch_x_b_col.py` | 新規作成：Sheets B列取得（JWT + Sheets API 直呼び） |
 | `scripts/match_x_analytics.py` | 新規作成：status ID マッチング・update_data 生成 |
 | `.claude/settings.json` | `mcp__mcp-gsheets__sheets_batch_update_values` を allow に追加 |
 
 ## 設計判断
 
-**Drive 操作をスクリプト化、Sheets 操作を mcp-gsheets に分離した理由**：
+**全データ取得処理をスクリプト化した理由**：
 
 - Drive MCP は UUID ベースのツール名で LLM が毎回 ToolSearch → 遅い。スクリプトが直接 HTTP 呼び出しすれば定数時間。
-- Sheets は mcp-gsheets（stdio）が安定して動いており、LLM が直接呼ぶ方がシンプル。スクリプト化するとサービスアカウント認証の管理が必要になる。
+- Sheets B列（386行）を `sheets_get_values` で取得後、LLM が heredoc で再生成してファイルに保存する方式は、投稿数増加に比例して劣化する。スクリプト化（サービスアカウント JWT + Sheets API 直呼び）で LLM 経由をゼロにした。
 - マッチング（大量データの突き合わせ）は LLM のコンテキストを消費するため、Python で実行する方が高速・確実。
+- Sheets への**書き込み**は `update_data`（小さい JSON）をそのまま渡すだけなので mcp-gsheets のまま。
 
 ## 確認結果
 
-リファクタリング後の実行結果：
-- 実行時間：約 46 秒（387 秒 → 88% 削減）
+最終構成での実行結果（スクリプト3本 + `sheets_batch_update_values` 1回）：
 - ツール呼び出し：4 回（59 回 → 93% 削減）
 - マッチ件数・更新列（AA:AC）は正常に動作を確認
+
+> Sheets B列 heredoc 方式のままでは 10 回・292秒に再劣化した（386行・投稿数増加による）。`fetch_x_b_col.py` 導入後は 4 回に安定。
 
 ## セッション履歴
 
@@ -70,5 +78,5 @@ sidebar:
 
 ## 今後の課題
 
-- Drive MCP の UUID がセッション固有のため、スクリプトは毎回 `mcp-config-{SESSION_ID}.json` を参照する必要がある。セッション外では動作しない設計（想定内）。
+- Drive MCP の UUID がセッション固有のため、`fetch_x_analytics_csv.py` は毎回 `mcp-config-{SESSION_ID}.json` を参照する必要がある。セッション外では動作しない設計（想定内）。
 - `fetch_x_analytics_csv.py` の Drive 認証方式は Anthropic プロキシ依存のため、プロキシ仕様変更時に要メンテ。
