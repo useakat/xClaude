@@ -35,7 +35,7 @@ ToolSearch: query="search files drive download"
 `download_file_content` を呼び出す：
 - fileId: STEP 2 で取得した id
 
-返ってきた `content`（base64 文字列）を Write ツールで `/tmp/test_csv_b64.txt` に保存する。
+返ってきた `content`（base64 文字列）を **Write ツール**で `/tmp/test_csv_b64.txt` に保存する（Bash の echo は長い文字列を壊すため必ず Write ツールを使う）。
 
 ### STEP 4: base64 デコードして1行目を表示
 
@@ -52,7 +52,7 @@ print(next(reader))
 ### STEP 5: 結果を報告
 
 ```
-✅ ダウンロード・デコード完了
+✅ ダウンロード・Write・デコード完了
    ファイル名: <title>
    列数: <N> 列
    1行目: <ヘッダー列名>
