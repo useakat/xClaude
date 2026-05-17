@@ -9,6 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-17
 
+- **Drive MCP download_file_content のコスト検証** — download_file_content が base64（〜28,000トークン）をコンテキストに乗せること、Write ツール併用でトークン2倍・25分の迷走が起きることを実験で確認。スクリプト方式が唯一の実用解と結論。[→報告書](../reports/20260517_drive_mcp_download_cost.md)
 - **update-x-analytics 高速化リファクタリング** — Drive CSV 取得をスクリプト化（Anthropic プロキシ直呼び）、Sheets 操作を mcp-gsheets 分離、フォルダパス変更など一連の改善。実行時間 387秒→46秒・ツール呼び出し 59回→4回に削減。[→報告書](../reports/20260517_update_x_analytics_refactoring.md)
 - **update-x-analytics サブエージェント新設** — X アナリティクス CSV（Drive の analytics_tmp）を読み込み、X投稿一覧シートの詳細表示・リンククリック・フォロー増を status ID で照合して一括更新するサブエージェントを新設。[→報告書](../reports/20260517_update_x_analytics_agent.md)
 
