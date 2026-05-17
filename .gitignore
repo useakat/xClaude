@@ -5,3 +5,4 @@ xmcp
 gcp/
 *~
 \#*\#
+database/*.csv
