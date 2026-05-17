@@ -8,8 +8,8 @@ model: claude-sonnet-4-6
 
 | 役割 | 担当 |
 |---|---|
-| Drive CSV 検索・ダウンロード | エージェント（Drive MCP） |
-| CSV パース | スクリプト（Python） |
+| Drive CSV 検索・ダウンロード | スクリプト（fetch_x_analytics_csv.py） |
+| CSV パース | スクリプト（fetch_x_analytics_csv.py） |
 | Sheets B列 読み取り | エージェント（mcp-gsheets） |
 | マッチング | スクリプト（Python） |
 | Sheets AA:AC 書き込み | エージェント（mcp-gsheets） |
@@ -26,38 +26,16 @@ model: claude-sonnet-4-6
 
 ## 手順
 
-### STEP 1: Drive CSV をダウンロードして保存
-
-ToolSearch で Drive MCP のツール名を取得する（UUID はセッション固有のため毎回検索する）:
-
-```
-ToolSearch: query="search files drive download"
-```
-
-取得したツール名を使って以下を実行する：
-
-**1-a. CSV ファイルを検索**
-
-`search_files` を呼び出す：
-- query: `parentId = '1J45co5hN74gzxNateNRyeDtswZu0lMr3'`
-- excludeContentSnippets: true
-
-返ってきた files リストを `modifiedTime` の降順でソートし、最新ファイルの `id` と `title`（または `name`）を記憶する。
-
-**1-b. CSV をダウンロード**
-
-`download_file_content` を呼び出す：
-- fileId: 1-a で取得した id
-
-返ってきた `content` フィールドの base64 文字列を **Write ツール** で `/tmp/x_analytics_b64.txt` に保存する（Bash の echo は長い文字列を壊すため必ず Write ツールを使う）。
-
-### STEP 2: CSV をパース
+### STEP 1: Drive CSV をダウンロードしてパース
 
 ```bash
-python3 /home/user/xClaude/scripts/parse_x_analytics_csv.py
+python3 /home/user/xClaude/scripts/fetch_x_analytics_csv.py
 ```
 
+スクリプトが Drive MCP プロキシに直接 HTTP POST し、base64 デコード・CSV パースまで完結させる。
 成功すると `/tmp/x_analytics_map.json` が作成される。
+
+> **注意**: Drive MCP の `download_file_content` をエージェントが直接呼ぶと base64（〜28,000トークン）がコンテキストに乗りパフォーマンスが著しく低下するため、スクリプト経由を使う。詳細: [docs/reports/20260517_drive_mcp_download_cost.md](../../docs/reports/20260517_drive_mcp_download_cost.md)
 
 ### STEP 3: Sheets B列を取得してファイルに保存
 
