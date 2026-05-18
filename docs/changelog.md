@@ -10,6 +10,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-05-18
 
 - **UpdateXAnalytics GAS 実装** — X アナリティクス CSV（Xanalytics/tmp）を読み込み X投稿一覧の詳細表示・リンククリック・フォロー増（AA:AC列）を更新する GAS 関数を新設し clasp でデプロイ。週次トリガー設定ヘルパーも実装。[→報告書](../reports/20260518_update_x_analytics_gas.md)
+- **ネタ選定に分野カテゴリ比率制御を追加** — onePointNeta シート K列「分野」を追加し、daily-xonepoint・writer-xonepoint で宇宙・物理 2/3・その他 1/3 の比率選定（日 mod 3 方式）を実装。[→報告書](../reports/20260518_xonepoint_category_ratio.md)
+- **save-session スキル新設** — セッション作業ログ（JSONL）を Markdown に変換して `docs/history/` に保存する `/save-session` スキルと `save_session_history.py` を新設。[→報告書](../reports/20260518_save_session_skill.md)
 
 ## 2026-05-17
 
