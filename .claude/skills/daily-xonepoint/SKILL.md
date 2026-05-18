@@ -28,9 +28,9 @@ sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", 
    sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!A:Z")
    ```
 
-2. WebSearchで以下を検索し、各5件ずつ計10件収集する：
-   - 宇宙・物理・素粒子：「宇宙 驚き 事実」「physics surprising facts」「quantum mechanics trivia」
-   - 科学全般：「生物 驚き 事実」「chemistry surprising facts」「biology trivia」
+2. WebSearchで以下を検索し、**宇宙・物理 7件・その他 3件 計10件**収集する：
+   - 宇宙・物理（7件）：「宇宙 驚き 事実」「physics surprising facts」「quantum mechanics trivia」「素粒子 面白い事実」
+   - その他科学（3件）：「生物 驚き 事実」「chemistry surprising facts」「biology trivia」「医学 驚き 事実」
 
 3. 以下の条件をすべて満たすネタのみ採用する：
    - 常識をひっくり返す意外性がある
@@ -41,11 +41,13 @@ sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", 
 **優先度低（避ける）**：「宇宙空間での出来事」「他の惑星固有の現象」など読者の日常から遠い設定が入り口のネタ。日常接続が末尾1文だけになりやすく、インプレッションが伸びにくい（実データで確認済み）。
 
 4. 採用ネタを以下で保存する（10件分実行）。No は既存の最大 No + 1 から連番で採番する：
+   - 宇宙・物理カテゴリのネタは 分野 = `宇宙` または `物理` を設定する
+   - その他カテゴリのネタは内容に応じて 分野 = `生物` / `医学` / `化学` / `その他` を設定する
    ```
    sheets_append_values(
      spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM",
      range="onePointNeta!A:A",
-     values=[[No, テーマ, 冒頭1行案, 身近さ接続, 仕組みのポイント, 感情的締め案, 難易度, 出典メモ, "未使用", YYYY-MM-DD]]
+     values=[[No, テーマ, 冒頭1行案, 身近さ接続, 仕組みのポイント, 感情的締め案, 難易度, 出典メモ, "未使用", YYYY-MM-DD, 分野]]
    )
    ```
 
