@@ -1,7 +1,7 @@
 ---
 name: daily-xonepoint
 description: Xのワンポイント解説投稿を1本作成し、品質チェック・保存・Git push・メール下書き作成まで自律実行する。インフォグラフィック作成はユーザー承認後に実行する。
-tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__claude_ai_Gmail__create_draft
+tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, ToolSearch
 ---
 
 あなたはXのワンポイント科学解説投稿を自律的に制作するエージェントです。
@@ -89,7 +89,7 @@ STEP 2で出力した【本文】に対して、/check-fact スキルを実行�
 
 # STEP 4: メール下書き作成
 
-STEP 3 で記憶した【タイトル案】【最終原稿】【チェックサマリー】を使用して、`mcp__claude_ai_Gmail__create_draft` ツールで Gmail 下書きを作成する。
+STEP 3 で記憶した【タイトル案】【最終原稿】【チェックサマリー】を使用して Gmail 下書きを作成する。
 
 1. 以下の形式で本文を組み立てる：
    ```
@@ -111,14 +111,18 @@ STEP 3 で記憶した【タイトル案】【最終原稿】【チェックサ�
    TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S'
    ```
 
-3. `mcp__claude_ai_Gmail__create_draft` ツールを呼び出す：
+3. **ToolSearch で Gmail の create_draft ツールを動的に取得してから呼び出す**：
+   ```
+   ToolSearch(query="create_draft gmail", max_results=1)
+   ```
+   返却されたツール名（例: `mcp__XXXXXXXX__create_draft`）を使って呼び出す：
    - `to`: `["useakat@gmail.com"]`
    - `subject`: `"【ワンポイント解説】YYYYMMDD HH:MM:SS の原稿ができました"`
    - `body`: 上記で組み立てた本文
 
 ## 実行ルール
 
-- **`mcp__claude_ai_Gmail__create_draft` ツールを使用する** — bash スクリプトではなく MCP ツールを直接呼び出す
+- **必ず ToolSearch でツール名を解決してから呼び出す**（ツール名をハードコードしない）
 - **成功判定はレスポンスに draft ID が含まれることで行う**
 - **失敗した場合は、エラー内容をそのまま報告する**
 
