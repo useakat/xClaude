@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-20
+
+- **Xペルソナ分析（リプ・新規フォロワーbio・引用RT3軸クロス分析）** — 17人体制のペルソナ群を実データで再構築。リプ47人・フォロワー3000人bio・引用RT2295人を分析し、248件の高反応アカリストを Sheets「高反応アカ」に書き込み。[→報告書](../reports/20260520_x_persona_analysis.md)
+
 ## 2026-05-19
 
 - **X投稿データ分析（4/20-5/17）と関連スキル群の改善** — 39投稿の事業導線分析を踏まえ、writer-xonepoint（文字数200-260字推奨・明示CTA禁止・締め強化）、writer-xstory（具体3点セット・note 誘導定型）、brand.md（反応誘導NG）、analyze-impression（導線メトリクス併行取得・異常パターン抽出）を改善し、writer-xqa（質問回答スキル）を新設。[→報告書](../reports/20260519_xpost_analysis_and_skill_improvements.md)
