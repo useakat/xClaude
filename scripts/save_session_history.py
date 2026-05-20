@@ -15,8 +15,8 @@ import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-REPO_ROOT = Path("/home/user/xClaude")
-JSONL_DIR = Path("/root/.claude/projects/-home-user-xClaude")
+REPO_ROOT = Path(__file__).resolve().parent.parent
+JSONL_DIR = Path.home() / ".claude" / "projects" / ("-" + str(REPO_ROOT).strip("/").replace("/", "-"))
 HISTORY_DIR = REPO_ROOT / "docs" / "history"
 JST = timezone(timedelta(hours=9))
 
