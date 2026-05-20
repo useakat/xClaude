@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-21
+
+- **フォロワー全件ペルソナ LLM 分類・ペルソナ19新設・classify-followers スキル追加** — 4183フォロワーをsubagent 28並列でLLM分類（2-Pass方式）。天体観測・星空実践派（P19）を新設し、差分更新対応の classify-followers スキルを追加。[→報告書](../reports/20260521_follower_persona_llm_classification.md)
+
 ## 2026-05-20
 
 - **Xペルソナ分析（リプ・新規フォロワーbio・引用RT3軸クロス分析）** — 17人体制のペルソナ群を実データで再構築。リプ47人・フォロワー3000人bio・引用RT2295人を分析し、248件の高反応アカリストを Sheets「高反応アカ」に書き込み。[→報告書](../reports/20260520_x_persona_analysis.md)
