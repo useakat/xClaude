@@ -1,3 +1,11 @@
+---
+title: フォロワーペルソナ LLM 分類サマリー
+date: 2026-05-21
+tags: [workflow]
+sidebar:
+  hidden: true
+---
+
 # フォロワーペルソナ LLM 分類サマリー
 
 **分析日**: 2026-05-21  
