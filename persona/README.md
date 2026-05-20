@@ -21,7 +21,7 @@
 | 10 | [`10_founder-science-as-metaphor.md`](./10_founder-science-as-metaphor.md) | 科学を経営の比喩に持ち込みたい起業家 | 44歳・男性・東京・経営判断の比喩源として科学 |
 | 11 | [`11_quantum-wakuwaku-physics.md`](./11_quantum-wakuwaku-physics.md) | 物理計算がワクワクする理論派 | 実在: @Shujjix（19回）／「♡♡」量子・最新観測愛 |
 | 12 | [`12_playful-mystery-seeker.md`](./12_playful-mystery-seeker.md) | 軽妙な突っ込みで未知を楽しむ派 | 実在: @6iOc4pJ9ceITTvo（18回）／顔文字オンパレード |
-| 13 | [`13_light-friendly-follower.md`](./13_light-friendly-follower.md) | ライト反応・親近感重視の常連 | 実在: @koo2628vv（12回）／短いリプ・食・地元繋がり |
+| 13 | [`13_other-uncategorized.md`](./13_other-uncategorized.md) | **その他（分類不能・bio薄層）** | 残余バケット：フォロワー64%が該当、特化訴求はしない |
 | 14 | [`14_engineering-skeptic.md`](./14_engineering-skeptic.md) | 技術検証で議論したいエンジニア派 | 実在: @Ty7ovdO（10回）／独自仮説・専門用語OK |
 | 15 | [`15_ai-era-curious-minds.md`](./15_ai-era-curious-minds.md) | AI時代の情報感度高い知的好奇心層 | 直近フォロワーbio分析6.9%／AI×物理の交差点 |
 | 16 | [`16_creator-seeking-inspiration.md`](./16_creator-seeking-inspiration.md) | 創作にインスピレーションを求めるクリエイター | 直近フォロワーbio分析8.4%／イラスト・小説・動画 |
