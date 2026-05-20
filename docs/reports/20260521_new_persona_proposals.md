@@ -1,3 +1,11 @@
+---
+title: 新ペルソナ候補レポート（Pass 2 分析）
+date: 2026-05-21
+tags: [workflow]
+sidebar:
+  hidden: true
+---
+
 # 新ペルソナ候補レポート（Pass 2 分析）
 
 **分析日**: 2026-05-21  
