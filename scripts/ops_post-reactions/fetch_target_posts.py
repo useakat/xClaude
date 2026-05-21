@@ -177,7 +177,7 @@ def main():
 
         results.append({
             "tweet_id": tweet_id,
-            "date": date_val,
+            "date": dt.strftime("%Y-%m-%d %H:%M:%S") if dt else date_val,
             "text": text,
             "profile_clicks": profile_clicks,
             "follows": follows,
