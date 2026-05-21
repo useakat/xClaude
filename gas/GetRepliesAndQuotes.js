@@ -53,7 +53,7 @@ function updateRepliesAndQuotes() {
 
     // 引用RT取得
     Logger.log('\n--- 引用RT取得 ---');
-    const quotes = fetchQuoteRTs(startTimeStr);
+    const quotes = fetchQuoteRTs(numericUserId, startTimeStr);
     Logger.log(`引用RT: ${quotes.length}件`);
 
     const allItems = replies.concat(quotes);
@@ -151,77 +151,121 @@ function fetchReplies(numericUserId, startTimeStr) {
 }
 
 /**
- * 検索 API から引用RTを取得
+ * 自分の最近の投稿IDを取得（quote_tweets 呼び出し用）
  */
-function fetchQuoteRTs(startTimeStr) {
-  const service = getXOAuth2Service();
+function fetchRecentOwnTweetIds(service, numericUserId, startTimeStr) {
+  const params = {
+    'max_results': 100,
+    'tweet.fields': 'id',
+    'start_time': startTimeStr,
+    'exclude': 'retweets'
+  };
+
+  const queryString = Object.keys(params)
+    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+    .join('&');
+
+  const url = `https://api.x.com/2/users/${numericUserId}/tweets?${queryString}`;
+  const response = UrlFetchApp.fetch(url, {
+    method: 'get',
+    headers: { 'Authorization': `Bearer ${service.getAccessToken()}` },
+    muteHttpExceptions: true
+  });
+
+  const statusCode = response.getResponseCode();
+  const responseText = response.getContentText();
+
+  if (statusCode !== 200) {
+    logAPIError(statusCode, responseText, '自分の投稿ID取得');
+    return [];
+  }
+
+  const data = JSON.parse(responseText);
+  return (data.data || []).map(t => t.id);
+}
+
+/**
+ * 特定ツイートの引用RTを取得
+ */
+function fetchQuoteTweetsForId(service, tweetId, numericUserId, startTime) {
   const username = CONFIG.USER_ID.replace('@', '');
   const quotes = [];
   let nextToken = null;
 
-  // よーんの投稿URLを含む（=引用RT）かつ自分の投稿を除外
-  const query = `(url:"x.com/${username}/status" OR url:"twitter.com/${username}/status") -from:${username}`;
-
   do {
     const params = {
-      'query': query,
       'tweet.fields': 'created_at,text,referenced_tweets,author_id,note_tweet',
-      'expansions': 'referenced_tweets.id',
-      'max_results': 100,
-      'start_time': startTimeStr
+      'max_results': 100
     };
-    if (nextToken) {
-      params['next_token'] = nextToken;
-    }
+    if (nextToken) params['pagination_token'] = nextToken;
 
     const queryString = Object.keys(params)
       .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
       .join('&');
 
-    const url = `https://api.x.com/2/tweets/search/recent?${queryString}`;
-    const options = {
+    const url = `https://api.x.com/2/tweets/${tweetId}/quote_tweets?${queryString}`;
+    const response = UrlFetchApp.fetch(url, {
       method: 'get',
       headers: { 'Authorization': `Bearer ${service.getAccessToken()}` },
       muteHttpExceptions: true
-    };
+    });
 
-    const response = UrlFetchApp.fetch(url, options);
     const statusCode = response.getResponseCode();
     const responseText = response.getContentText();
 
     if (statusCode !== 200) {
-      logAPIError(statusCode, responseText, '引用RT検索');
+      logAPIError(statusCode, responseText, `引用RT取得(${tweetId})`);
       break;
     }
 
     const data = JSON.parse(responseText);
+    if (!data.data || data.data.length === 0) break;
 
-    Logger.log(`  検索結果: ${data.meta ? data.meta.result_count + '件' : 'meta なし'}`);
+    let hitOldTweet = false;
+    data.data.forEach(tweet => {
+      const tweetTime = new Date(tweet.created_at);
+      if (tweetTime < startTime) { hitOldTweet = true; return; }
+      if (tweet.author_id === numericUserId) return; // セルフ引用除外
 
-    if (data.data && data.data.length > 0) {
-      data.data.forEach(tweet => {
-        const refs = tweet.referenced_tweets || [];
-        // referenced_tweets の中から quoted を探す（先頭固定にしない）
-        const quotedRef = refs.find(r => r.type === 'quoted');
-        if (!quotedRef) return;
-
-        const parentId = quotedRef.id;
-        quotes.push({
-          id: tweet.id,
-          created_at: tweet.created_at,
-          text: (tweet.note_tweet && tweet.note_tweet.text) || tweet.text || '',
-          type: '引用RT',
-          parentUrl: `https://x.com/${username}/status/${parentId}`
-        });
+      quotes.push({
+        id: tweet.id,
+        created_at: tweet.created_at,
+        text: (tweet.note_tweet && tweet.note_tweet.text) || tweet.text || '',
+        type: '引用RT',
+        parentUrl: `https://x.com/${username}/status/${tweetId}`
       });
-    } else {
-      break;
-    }
+    });
+
+    if (hitOldTweet) break;
 
     nextToken = data.meta && data.meta.next_token ? data.meta.next_token : null;
-    if (nextToken) Utilities.sleep(1000);
+    if (nextToken) Utilities.sleep(500);
 
   } while (nextToken);
+
+  return quotes;
+}
+
+/**
+ * 自分の投稿ごとに quote_tweets API を呼び出して引用RTを収集
+ * （url: 検索演算子は quote attachment URL に一致しないため使用不可）
+ */
+function fetchQuoteRTs(numericUserId, startTimeStr) {
+  const service = getXOAuth2Service();
+  const startTime = new Date(startTimeStr);
+  const quotes = [];
+
+  const tweetIds = fetchRecentOwnTweetIds(service, numericUserId, startTimeStr);
+  Logger.log(`  自分の投稿: ${tweetIds.length}件`);
+
+  tweetIds.forEach((tweetId, index) => {
+    if (index > 0) Utilities.sleep(300);
+    const tweetQuotes = fetchQuoteTweetsForId(service, tweetId, numericUserId, startTime);
+    if (tweetQuotes.length > 0) {
+      Logger.log(`  ツイート ${tweetId}: 引用RT ${tweetQuotes.length}件`);
+      quotes.push(...tweetQuotes);
+    }
+  });
 
   return quotes;
 }
@@ -347,57 +391,6 @@ function setupDailyTrigger() {
     .create();
 
   Logger.log('✅ 毎日AM4:00（JST）のトリガーを設定しました');
-}
-
-// ========================================
-// デバッグ用
-// ========================================
-
-/**
- * 引用RT検索APIのレスポンスをそのまま Logger に出力して問題を診断する
- * GASエディタから手動実行して Logger を確認する
- */
-function debugQuoteRTSearch() {
-  const service = getXOAuth2Service();
-  if (!service.hasAccess()) {
-    Logger.log('❌ 未認証です。authorizeX() を実行してください');
-    return;
-  }
-
-  const username = CONFIG.USER_ID.replace('@', '');
-  const startTime = new Date();
-  startTime.setDate(startTime.getDate() - 7);  // 過去7日で広めに確認
-  const startTimeStr = startTime.toISOString();
-
-  const query = `(url:"x.com/${username}/status" OR url:"twitter.com/${username}/status") -from:${username}`;
-  Logger.log(`クエリ: ${query}`);
-  Logger.log(`開始日時: ${startTimeStr}`);
-
-  const params = {
-    'query': query,
-    'tweet.fields': 'created_at,text,referenced_tweets,author_id,note_tweet',
-    'expansions': 'referenced_tweets.id',
-    'max_results': 10,
-    'start_time': startTimeStr
-  };
-
-  const queryString = Object.keys(params)
-    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-    .join('&');
-
-  const url = `https://api.x.com/2/tweets/search/recent?${queryString}`;
-  Logger.log(`URL: ${url}`);
-
-  const response = UrlFetchApp.fetch(url, {
-    method: 'get',
-    headers: { 'Authorization': `Bearer ${service.getAccessToken()}` },
-    muteHttpExceptions: true
-  });
-
-  const statusCode = response.getResponseCode();
-  const responseText = response.getContentText();
-  Logger.log(`HTTPステータス: ${statusCode}`);
-  Logger.log('レスポンス:\n' + JSON.stringify(JSON.parse(responseText), null, 2));
 }
 
 /**
