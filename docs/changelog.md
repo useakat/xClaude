@@ -9,6 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-21
 
+- **draft_xstory スキル新設** — X長文ストーリー投稿（what_id W001）のネタ選定・原稿作成・ファクトチェック・トンマナチェック・Gmail下書き作成を自律実行するスキルを新設。[→報告書](../reports/20260521_draft_xstory_skill/)
 - **フォロワー全件ペルソナ LLM 分類・ペルソナ19新設・classify-followers スキル追加** — 4183フォロワーをsubagent 28並列でLLM分類（2-Pass方式）。天体観測・星空実践派（P19）を新設し、差分更新対応の classify-followers スキルを追加。[→報告書](../reports/20260521_follower_persona_llm_classification/)
 - **GetRepliesAndQuotes GAS スクリプト新設** — リプライ・引用RTを毎日収集し「リプ・引用一覧」シートに追記する GAS スクリプトを新設。アカウントID（@username）・アカウント名列も追加。[→報告書](../reports/20260521_get_replies_and_quotes_gas/)
 - **record スキル改善：報告書作成時のセッション履歴自動保存** — `/record` の STEP 4.5 として `save_session_history.py` 変換・不要部分削除・相互リンク付与を追加。報告書と履歴ファイルのセットが自動で完結するように。[→報告書](../reports/20260521_record_skill_session_history/)
