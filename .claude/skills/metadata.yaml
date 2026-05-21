@@ -59,5 +59,7 @@ skills:
     category: 運用・記録
   classify-followers:
     category: リサーチ・分析
+  ops_post-reactions:
+    category: リサーチ・分析
   update-permissions:
     category: 設定・保守
