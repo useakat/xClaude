@@ -338,7 +338,7 @@ title: 月報 [month_label]
 `docs/reports/monthly/index.md` の適切な位置に追記する（既存の場合はスキップ）：
 
 ```markdown
-- [[month_label]]([month_id].md)
+- [[month_label]]([month_id]/)
 ```
 
 ---

@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-21 のセッション作業ログ。「実は」ワンポイント解説投稿への反応分析（2026-05-20）を汎用スキルとして実装した記録。設計の試行錯誤（3ラウンドのフィードバック）と最終実装までを収録。
 
-← [報告書へ戻る](../reports/20260521_ops_post_reactions_skill.md)
+← [報告書へ戻る](../reports/20260521_ops_post_reactions_skill/)
 
 ---
 
@@ -33,7 +33,7 @@ xmcp の HTTP セッション経由で実測。結果: `403 Unsupported Authenti
 
 ## GetRepliesAndQuotes.js の改修（別報告書と並行）
 
-リプライ蓄積基盤として GetRepliesAndQuotes.js に `expansions=author_id` + `user.fields=username,name` を追加し、B列=@username・C列=アカウント名の7列構成に変更。この作業の詳細は [GetRepliesAndQuotes GAS スクリプト新設の報告書](../reports/20260521_get_replies_and_quotes_gas.md) を参照。
+リプライ蓄積基盤として GetRepliesAndQuotes.js に `expansions=author_id` + `user.fields=username,name` を追加し、B列=@username・C列=アカウント名の7列構成に変更。この作業の詳細は [GetRepliesAndQuotes GAS スクリプト新設の報告書](../reports/20260521_get_replies_and_quotes_gas/) を参照。
 
 ---
 

@@ -5,7 +5,7 @@ sidebar:
   hidden: true
 ---
 
-← [報告書へ](../reports/20260517_update_x_analytics_refactoring.md)
+← [報告書へ](../reports/20260517_update_x_analytics_refactoring/)
 
 # セッション履歴
 
@@ -4787,7 +4787,7 @@ date: YYYY-MM-DD
 tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 ---
 
-← [変更ログへ](../changelog.md)
+← [変更ログへ](../changelog/)
 
 ## 背景・動機
 

@@ -96,7 +96,7 @@ date: YYYY-MM-DD
 tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 ---
 
-← [変更ログへ](../changelog.md)
+← [変更ログへ](../changelog/)
 
 ## 背景・動機
 
@@ -142,13 +142,13 @@ python3 /root/xClaude/scripts/save_session_history.py \
 **履歴ファイルの冒頭**（`# セッション履歴` の下の `>` 説明行の直後）に追記：
 
 ```markdown
-← [報告書へ戻る](../reports/YYYYMMDD_<スラグ>.md)
+← [報告書へ戻る](../reports/YYYYMMDD_<スラグ>/)
 ```
 
 **報告書のヘッダーリンク行**を更新：
 
 ```markdown
-← [変更ログへ](../changelog.md) ｜ [セッション履歴→](../history/YYYYMMDD_<スラグ>_session.md)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/YYYYMMDD_<スラグ>_session/)
 ```
 
 ---
@@ -162,6 +162,15 @@ python3 /root/xClaude/scripts/save_session_history.py \
 ```markdown
 - **[変更タイトル]** — [概要1行]。[→報告書](../reports/YYYYMMDD_[ファイル名]/)
 ```
+
+## リンク形式ルール
+
+**Wiki（Starlight）では `.md` 拡張子付きリンクが 404 になる。** 報告書・履歴・変更ログへのリンクはすべて末尾を `/` で終わらせる（`.md` は付けない）。
+
+例:
+- ✅ `[変更ログへ](../changelog/)`
+- ✅ `[報告書](../reports/20260521_foo/)`
+- ❌ `[変更ログへ](../changelog.md)`
 
 ## 追記ルール
 

@@ -99,7 +99,7 @@ WebFetch も独立した URL は並列で叩く。
 # [テーマ名] 調査結果
 
 調査日: YYYY-MM-DD
-元プロンプト: [プロンプトファイル名](./xxx_research_prompt.md)
+元プロンプト: [プロンプトファイル名](./xxx_research_prompt/)
 
 ---
 

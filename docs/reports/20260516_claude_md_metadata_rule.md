@@ -4,7 +4,7 @@ date: 2026-05-16
 tags: [workflow, wiki]
 ---
 
-← [変更ログへ](../changelog.md)
+← [変更ログへ](../changelog/)
 
 ## 背景・動機
 

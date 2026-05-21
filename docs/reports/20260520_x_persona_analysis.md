@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog.md)
+← [変更ログへ](../changelog/)
 
 ## 背景・動機
 
@@ -131,4 +131,4 @@ sidebar:
 
 ## セッション履歴
 
-[→ 作業ログ全文](../history/20260520_x_persona_analysis_session.md)
+[→ 作業ログ全文](../history/20260520_x_persona_analysis_session/)

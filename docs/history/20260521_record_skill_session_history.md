@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-21 のセッション作業ログ。`/record` スキルに STEP 4.5（セッション履歴の保存と相互リンク）を追加した際の会話記録。
 
-← [報告書へ戻る](../reports/20260521_record_skill_session_history.md)
+← [報告書へ戻る](../reports/20260521_record_skill_session_history/)
 
 ---
 
