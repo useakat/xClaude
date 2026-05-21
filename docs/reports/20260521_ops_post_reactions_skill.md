@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog.md)
+← [変更ログへ](../changelog.md) ｜ [セッション履歴→](../history/20260521_ops_post_reactions_session.md)
 
 ## 背景・動機
 
