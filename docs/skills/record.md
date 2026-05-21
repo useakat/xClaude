@@ -104,7 +104,7 @@ date: YYYY-MM-DD
 tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 ---
 
-← [変更ログへ](../changelog.md)
+← [変更ログへ](../changelog/)
 
 ## 背景・動機
 

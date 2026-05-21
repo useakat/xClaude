@@ -4,7 +4,7 @@ date: 2026-05-07
 tags: [skill]
 ---
 
-← [変更ログへ](../changelog.md)
+← [変更ログへ](../changelog/)
 
 ## 背景・動機
 

@@ -301,7 +301,7 @@ title: 週報 [week_label]
 `docs/reports/weekly/index.md` の末尾（または適切な位置）に追記する（既存の場合はスキップ）：
 
 ```markdown
-- [[week_id]]([week_id].md)
+- [[week_id]]([week_id]/)
 ```
 
 ---
