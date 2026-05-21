@@ -6,7 +6,8 @@
   python3 fetch_sheet_replies.py --tweet_ids "id1,id2,..."
 
 出力形式:
-  [{"username": "@...", "display_name": "...", "tweet_id": "...", "parent_tweet_id": "...", "type": "リプライ|引用RT"}, ...]
+  [{"username": "@...", "display_name": "...", "tweet_id": "...", "parent_tweet_id": "...",
+    "type": "リプライ|引用RT", "reaction_text": "..."}, ...]
 
 列構成（リプ・引用一覧）:
   A=投稿日時 / B=アカウントID(@username) / C=アカウント名 / D=ポストURL /
@@ -34,6 +35,7 @@ TOKEN_URL = "https://oauth2.googleapis.com/token"
 COL_USERNAME = 1     # B: アカウントID (@username)
 COL_DISPNAME = 2     # C: アカウント名
 COL_POST_URL = 3     # D: ポストURL
+COL_TEXT = 4         # E: ポスト本文
 COL_TYPE = 5         # F: ポスト種類
 COL_PARENT_URL = 6   # G: 親ポストURL
 
@@ -124,6 +126,7 @@ def main():
         tweet_id = extract_tweet_id(post_url)
         username = str(row[COL_USERNAME]).strip() if len(row) > COL_USERNAME else ""
         display_name = str(row[COL_DISPNAME]).strip() if len(row) > COL_DISPNAME else ""
+        reaction_text = str(row[COL_TEXT]).strip() if len(row) > COL_TEXT else ""
         post_type = str(row[COL_TYPE]).strip() if len(row) > COL_TYPE else ""
 
         # @が付いていない場合は付与
@@ -141,6 +144,7 @@ def main():
             "tweet_id": tweet_id,
             "parent_tweet_id": parent_tweet_id,
             "type": post_type,
+            "reaction_text": reaction_text,
         })
 
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
