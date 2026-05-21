@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-05-21
 
 - **フォロワー全件ペルソナ LLM 分類・ペルソナ19新設・classify-followers スキル追加** — 4183フォロワーをsubagent 28並列でLLM分類（2-Pass方式）。天体観測・星空実践派（P19）を新設し、差分更新対応の classify-followers スキルを追加。[→報告書](../reports/20260521_follower_persona_llm_classification.md)
+- **GetRepliesAndQuotes GAS スクリプト新設** — リプライ・引用RTを毎日収集し「リプ・引用一覧」シートに追記する GAS スクリプトを新設。アカウントID（@username）・アカウント名列も追加。[→報告書](../reports/20260521_get_replies_and_quotes_gas.md)
 
 ## 2026-05-20
 

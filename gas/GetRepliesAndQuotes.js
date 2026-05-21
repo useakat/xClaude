@@ -90,7 +90,8 @@ function fetchReplies(numericUserId, startTimeStr) {
   do {
     const params = {
       'tweet.fields': 'created_at,text,referenced_tweets,author_id,note_tweet',
-      'expansions': 'referenced_tweets.id',
+      'expansions': 'referenced_tweets.id,author_id',
+      'user.fields': 'username,name',
       'max_results': 100,
       'start_time': startTimeStr
     };
@@ -121,6 +122,11 @@ function fetchReplies(numericUserId, startTimeStr) {
     const data = JSON.parse(responseText);
 
     if (data.data && data.data.length > 0) {
+      const userMap = {};
+      if (data.includes && data.includes.users) {
+        data.includes.users.forEach(u => { userMap[u.id] = u; });
+      }
+
       data.data.forEach(tweet => {
         // セルフリプ除外
         if (tweet.author_id === numericUserId) return;
@@ -130,12 +136,16 @@ function fetchReplies(numericUserId, startTimeStr) {
         if (!ref || ref.type !== 'replied_to') return;
 
         const parentId = ref.id;
+        const author = userMap[tweet.author_id] || {};
         replies.push({
           id: tweet.id,
           created_at: tweet.created_at,
           text: (tweet.note_tweet && tweet.note_tweet.text) || tweet.text || '',
           type: 'リプライ',
-          parentUrl: `https://x.com/usephys/status/${parentId}`
+          parentUrl: `https://x.com/usephys/status/${parentId}`,
+          authorId: tweet.author_id || '',
+          authorUsername: author.username || '',
+          authorName: author.name || ''
         });
       });
     } else {
@@ -195,6 +205,8 @@ function fetchQuoteTweetsForId(service, tweetId, numericUserId, startTime) {
   do {
     const params = {
       'tweet.fields': 'created_at,text,referenced_tweets,author_id,note_tweet',
+      'expansions': 'author_id',
+      'user.fields': 'username,name',
       'max_results': 100
     };
     if (nextToken) params['pagination_token'] = nextToken;
@@ -221,18 +233,27 @@ function fetchQuoteTweetsForId(service, tweetId, numericUserId, startTime) {
     const data = JSON.parse(responseText);
     if (!data.data || data.data.length === 0) break;
 
+    const userMap = {};
+    if (data.includes && data.includes.users) {
+      data.includes.users.forEach(u => { userMap[u.id] = u; });
+    }
+
     let hitOldTweet = false;
     data.data.forEach(tweet => {
       const tweetTime = new Date(tweet.created_at);
       if (tweetTime < startTime) { hitOldTweet = true; return; }
       if (tweet.author_id === numericUserId) return; // セルフ引用除外
 
+      const author = userMap[tweet.author_id] || {};
       quotes.push({
         id: tweet.id,
         created_at: tweet.created_at,
         text: (tweet.note_tweet && tweet.note_tweet.text) || tweet.text || '',
         type: '引用RT',
-        parentUrl: `https://x.com/${username}/status/${tweetId}`
+        parentUrl: `https://x.com/${username}/status/${tweetId}`,
+        authorId: tweet.author_id || '',
+        authorUsername: author.username || '',
+        authorName: author.name || ''
       });
     });
 
@@ -278,17 +299,19 @@ function fetchQuoteRTs(numericUserId, startTimeStr) {
  * シートにヘッダーを設定
  */
 function initReplySheet(sheet) {
-  const headers = ['投稿日時', 'ポストURL', 'ポスト本文', 'ポスト種類', '親ポストURL'];
+  const headers = ['投稿日時', 'アカウントID', 'アカウント名', 'ポストURL', 'ポスト本文', 'ポスト種類', '親ポストURL'];
   sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
   sheet.getRange(1, 1, 1, headers.length).setBackground('#34a853');
   sheet.getRange(1, 1, 1, headers.length).setFontColor('#ffffff');
   sheet.setFrozenRows(1);
   sheet.setColumnWidth(1, 160);
-  sheet.setColumnWidth(2, 220);
-  sheet.setColumnWidth(3, 500);
-  sheet.setColumnWidth(4, 80);
-  sheet.setColumnWidth(5, 220);
+  sheet.setColumnWidth(2, 160);
+  sheet.setColumnWidth(3, 160);
+  sheet.setColumnWidth(4, 220);
+  sheet.setColumnWidth(5, 500);
+  sheet.setColumnWidth(6, 80);
+  sheet.setColumnWidth(7, 220);
 }
 
 /**
@@ -299,7 +322,7 @@ function getExistingTweetIds(sheet) {
   const lastRow = sheet.getLastRow();
   if (lastRow <= 1) return existingIds;
 
-  const urls = sheet.getRange(2, 2, lastRow - 1, 1).getValues();
+  const urls = sheet.getRange(2, 4, lastRow - 1, 1).getValues();
   urls.forEach((row, index) => {
     const url = row[0];
     if (url && typeof url === 'string') {
@@ -341,11 +364,13 @@ function writeRepliesAndQuotesToSheet(items) {
     const tweetUrl = `https://x.com/i/web/status/${item.id}`;
 
     newRows.push([
-      createdAt,       // A 投稿日時
-      tweetUrl,        // B ポストURL
-      item.text,       // C ポスト本文
-      item.type,       // D ポスト種類
-      item.parentUrl   // E 親ポストURL
+      createdAt,            // A 投稿日時
+      item.authorUsername ? `@${item.authorUsername}` : '',  // B アカウントID
+      item.authorName || '',  // C アカウント名
+      tweetUrl,             // D ポストURL
+      item.text,            // E ポスト本文
+      item.type,            // F ポスト種類
+      item.parentUrl        // G 親ポストURL
     ]);
   });
 
@@ -359,9 +384,9 @@ function writeRepliesAndQuotesToSheet(items) {
   }
 
   const startRow = sheet.getLastRow() + 1;
-  sheet.getRange(startRow, 1, newRows.length, 5).setValues(newRows);
+  sheet.getRange(startRow, 1, newRows.length, 7).setValues(newRows);
   sheet.getRange(startRow, 1, newRows.length, 1).setNumberFormat('yyyy/mm/dd hh:mm:ss');
-  sheet.getRange(startRow, 3, newRows.length, 1).setWrap(true);
+  sheet.getRange(startRow, 5, newRows.length, 1).setWrap(true);
 
   Logger.log(`✅ ${newRows.length}件を追記しました`);
 }
