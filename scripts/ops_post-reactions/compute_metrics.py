@@ -79,6 +79,10 @@ def load_follower_personas(path: str) -> tuple[dict, dict]:
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
 
+    # {"results": [...]} 形式と直接リスト形式の両方に対応
+    if isinstance(data, dict):
+        data = data.get("results", [])
+
     follower_map: dict[str, int] = {}
     persona_count: dict[int, int] = defaultdict(int)
 

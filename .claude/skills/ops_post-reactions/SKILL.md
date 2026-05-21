@@ -31,7 +31,7 @@ python3 scripts/ops_post-reactions/fetch_target_posts.py \
 ```bash
 python3 scripts/ops_post-reactions/fetch_sheet_replies.py \
   --tweet_ids "<tweet_id1>,<tweet_id2>,..."
-# → /tmp/sheet_replies.json: [{"username", "display_name", "tweet_id", "parent_tweet_id", "type"}, ...]
+# → /tmp/sheet_replies.json: [{"username", "display_name", "tweet_id", "parent_tweet_id", "type", "reaction_text"}, ...]
 ```
 
 tweet_ids は STEP 1 の結果から抽出する。
@@ -44,19 +44,40 @@ tweet_ids は STEP 1 の結果から抽出する。
 
 ```
 getPostsQuotedPosts(id=<tweet_id>, max_results=100,
-  expansions="author_id", user.fields="username,name,description")
+  expansions="author_id",
+  user.fields="username,name,description,location,url,public_metrics",
+  tweet.fields="text")
 ```
 
 取得した引用RTと /tmp/sheet_replies.json をマージし、(username, parent_tweet_id) で重複除去して
 `/tmp/all_reactors.json` に保存する。
 
-形式: `[{"username": "@...", "display_name": "...", "parent_tweet_id": "...", "type": "リプライ|引用RT"}, ...]`
+`original_post_text` は `parent_tweet_id` をキーに `/tmp/target_posts.json` と結合して付与する。
+
+形式:
+```json
+[{
+  "username": "@...",
+  "display_name": "...",
+  "description": "...",
+  "location": "...",
+  "url": "...",
+  "followers_count": 123,
+  "following_count": 456,
+  "parent_tweet_id": "...",
+  "type": "リプライ|引用RT",
+  "reaction_text": "...",
+  "original_post_text": "..."
+}]
+```
 
 **7日以内の投稿がある場合のみ** `searchPostsRecent` でリプライを補完：
 
 ```
 searchPostsRecent(query="in_reply_to_post_id:<tweet_id>",
-  expansions="author_id", user.fields="username,name")
+  expansions="author_id",
+  user.fields="username,name,description,location,url,public_metrics",
+  tweet.fields="text")
 ```
 
 ---
@@ -77,7 +98,17 @@ searchPostsRecent(query="in_reply_to_post_id:<tweet_id>",
 各 Agent へのプロンプト（`persona/follower_persona_llm.json` に含まれる `classify-followers/SKILL.md` のペルソナ定義を参照）：
 
 ```
-以下のユーザーリスト（username / display_name）を 19 ペルソナに分類してください。
+以下のユーザーリストを 19 ペルソナに分類してください。
+以下の情報をすべて判断材料として使用してください:
+- reaction_text      — そのユーザーが実際に書いたリプライ・引用RTの文章
+- original_post_text — そのユーザーが反応したよーんの投稿本文（反応トピックの文脈）
+- description        — プロフィール bio
+- location           — 所在地
+- url                — プロフィールリンク（note/GitHub 等でペルソナを補強）
+- followers_count    — フォロワー数（規模感の参考）
+- following_count    — フォロー数（情報収集型かの参考）
+- display_name       — 表示名
+空欄・0のフィールドは無視してください。
 分類できない場合は 13（その他）を使用。
 出力形式: [{"username": "@...", "persona": N}, ...]
 
