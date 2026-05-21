@@ -9,6 +9,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-21
 
+- **ops_post-reactions スキル改善：非フォロワー分類の精度向上** — リプライ本文・bio・公開指標をペルソナ分類入力に追加し、fetch_target_posts の date を ISO 形式で保存するよう修正。[→報告書](../reports/20260521_ops_post_reactions_improvement/)
+- **style-xonepoint.md に「想定読者」セクション追加** — 反応感度分析（P01：反応感度 5.34・非フォロワー流入最多）に基づき P01（文系会社員）をメインターゲットとして明記。daily-xonepoint・writer-xonepoint の両スキルに反映。[→報告書](../reports/20260521_style_xonepoint_target_reader/)
 - **draft_xstory スキル新設** — X長文ストーリー投稿（what_id W001）のネタ選定・原稿作成・ファクトチェック・トンマナチェック・Gmail下書き作成を自律実行するスキルを新設。[→報告書](../reports/20260521_draft_xstory_skill/)
 - **フォロワー全件ペルソナ LLM 分類・ペルソナ19新設・classify-followers スキル追加** — 4183フォロワーをsubagent 28並列でLLM分類（2-Pass方式）。天体観測・星空実践派（P19）を新設し、差分更新対応の classify-followers スキルを追加。[→報告書](../reports/20260521_follower_persona_llm_classification/)
 - **GetRepliesAndQuotes GAS スクリプト新設** — リプライ・引用RTを毎日収集し「リプ・引用一覧」シートに追記する GAS スクリプトを新設。アカウントID（@username）・アカウント名列も追加。[→報告書](../reports/20260521_get_replies_and_quotes_gas/)
