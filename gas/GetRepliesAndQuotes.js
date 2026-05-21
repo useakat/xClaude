@@ -196,13 +196,16 @@ function fetchQuoteRTs(startTimeStr) {
 
     const data = JSON.parse(responseText);
 
+    Logger.log(`  検索結果: ${data.meta ? data.meta.result_count + '件' : 'meta なし'}`);
+
     if (data.data && data.data.length > 0) {
       data.data.forEach(tweet => {
-        const ref = tweet.referenced_tweets && tweet.referenced_tweets[0];
-        // 引用RTのみ採用
-        if (!ref || ref.type !== 'quoted') return;
+        const refs = tweet.referenced_tweets || [];
+        // referenced_tweets の中から quoted を探す（先頭固定にしない）
+        const quotedRef = refs.find(r => r.type === 'quoted');
+        if (!quotedRef) return;
 
-        const parentId = ref.id;
+        const parentId = quotedRef.id;
         quotes.push({
           id: tweet.id,
           created_at: tweet.created_at,
@@ -344,6 +347,57 @@ function setupDailyTrigger() {
     .create();
 
   Logger.log('✅ 毎日AM4:00（JST）のトリガーを設定しました');
+}
+
+// ========================================
+// デバッグ用
+// ========================================
+
+/**
+ * 引用RT検索APIのレスポンスをそのまま Logger に出力して問題を診断する
+ * GASエディタから手動実行して Logger を確認する
+ */
+function debugQuoteRTSearch() {
+  const service = getXOAuth2Service();
+  if (!service.hasAccess()) {
+    Logger.log('❌ 未認証です。authorizeX() を実行してください');
+    return;
+  }
+
+  const username = CONFIG.USER_ID.replace('@', '');
+  const startTime = new Date();
+  startTime.setDate(startTime.getDate() - 7);  // 過去7日で広めに確認
+  const startTimeStr = startTime.toISOString();
+
+  const query = `(url:"x.com/${username}/status" OR url:"twitter.com/${username}/status") -from:${username}`;
+  Logger.log(`クエリ: ${query}`);
+  Logger.log(`開始日時: ${startTimeStr}`);
+
+  const params = {
+    'query': query,
+    'tweet.fields': 'created_at,text,referenced_tweets,author_id,note_tweet',
+    'expansions': 'referenced_tweets.id',
+    'max_results': 10,
+    'start_time': startTimeStr
+  };
+
+  const queryString = Object.keys(params)
+    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+    .join('&');
+
+  const url = `https://api.x.com/2/tweets/search/recent?${queryString}`;
+  Logger.log(`URL: ${url}`);
+
+  const response = UrlFetchApp.fetch(url, {
+    method: 'get',
+    headers: { 'Authorization': `Bearer ${service.getAccessToken()}` },
+    muteHttpExceptions: true
+  });
+
+  const statusCode = response.getResponseCode();
+  const responseText = response.getContentText();
+  Logger.log(`HTTPステータス: ${statusCode}`);
+  Logger.log('レスポンス:\n' + JSON.stringify(JSON.parse(responseText), null, 2));
 }
 
 /**
