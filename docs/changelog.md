@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-22
+
+- **persona シートへのペルソナ 19 件登録** — `persona/` フォルダの 01〜19 を Google Sheets の persona シート（SS2）に一括追加。P01〜P19 の persona_id を付与し、各ペルソナの primary pain_id を悩みセクションから推論してマッピング。[→報告書](../reports/20260522_persona_sheet_registration/)
+
 ## 2026-05-21
 
 - **ops_post-reactions スキル改善：非フォロワー分類の精度向上** — リプライ本文・bio・公開指標をペルソナ分類入力に追加し、fetch_target_posts の date を ISO 形式で保存するよう修正。[→報告書](../reports/20260521_ops_post_reactions_improvement/)
