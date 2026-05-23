@@ -11,6 +11,9 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **CLAUDE.md：スキル内 git 指示をセッション指示より優先するルール追加** — スキルに push 先ブランチや手順が明記されている場合は、セッション冒頭のシステム指示よりスキルの指示を優先するルールを Git ルールセクションに追加。[→報告書](../reports/20260523_claude_md_git_skill_priority/)
 - **daily-xonepoint P01化チェックリスト追加・スコアリングループ新設** — style-xonepoint.md に冒頭フック5軸評価（直感的比較数字・パワーワードを必須）を含む P01化チェックリスト5項目を追加。daily-xonepoint STEP 3-2 に10段階採点＋5回反復ループ（全項目8点以上で合格）を実装。[→報告書](../reports/20260523_daily_xonepoint_p01_scoring_loop/)
+- **daily-xonepoint メール件名・本文タグ改善** — STEP 4 の件名にトピック要約（10〜15字）を追加し、本文に `[最終原稿]`/`[投稿文]` の二タグ構造を導入。受信トレイでの内容判別と記録用・投稿用の分離が目的。
+- **post_from_email.sh：検索をインボックス限定に変更** — `subject:XXX -label:投稿済み -is:draft` を `subject:XXX in:inbox -label:投稿済み` に変更。gws 認証切れによる「投稿対象なし」の調査過程で、アーカイブ済みメールへの誤投稿リスクも除去。
+- **認証トークン切れ通知スクリプト新設** — `check_auth.sh` で gws・Drive・X API・LINE を毎日 11:00 JST にチェックし、異常時は LINE → Gmail の順で通知。`send_gmail_direct.py`（gws 非依存の Gmail API 送信）も追加。[→報告書](../reports/20260523_check_auth_notification/)
 
 ## 2026-05-22
 
