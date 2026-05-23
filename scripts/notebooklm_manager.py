@@ -68,6 +68,19 @@ async def cmd_infographic(args):
         "standard": InfographicDetail.STANDARD,
         "detailed": InfographicDetail.DETAILED,
     }
+    style_map = {
+        "auto": InfographicStyle.AUTO_SELECT,
+        "sketch-note": InfographicStyle.SKETCH_NOTE,
+        "professional": InfographicStyle.PROFESSIONAL,
+        "bento-grid": InfographicStyle.BENTO_GRID,
+        "editorial": InfographicStyle.EDITORIAL,
+        "instructional": InfographicStyle.INSTRUCTIONAL,
+        "bricks": InfographicStyle.BRICKS,
+        "clay": InfographicStyle.CLAY,
+        "anime": InfographicStyle.ANIME,
+        "kawaii": InfographicStyle.KAWAII,
+        "scientific": InfographicStyle.SCIENTIFIC,
+    }
     async with await NotebookLMClient.from_storage() as client:
         print("インフォグラフィックを生成中...")
         status = await client.artifacts.generate_infographic(
@@ -75,6 +88,8 @@ async def cmd_infographic(args):
             instructions=args.instructions or None,
             orientation=orientation_map[args.orientation],
             detail_level=detail_map[args.detail],
+            language=args.language,
+            style=style_map[args.style],
         )
         task_id = status.task_id if hasattr(status, "task_id") else None
         if task_id:
@@ -202,8 +217,10 @@ def main():
     p_info = sub.add_parser("infographic", help="インフォグラフィックを生成")
     p_info.add_argument("notebook_id", help="ノートブックID")
     p_info.add_argument("--instructions", default="", help="生成の指示（任意）")
+    p_info.add_argument("--language", default="ja", help="言語コード（例: ja, en）デフォルト: ja")
     p_info.add_argument("--orientation", choices=["landscape", "portrait", "square"], default="landscape", help="向き")
     p_info.add_argument("--detail", choices=["concise", "standard", "detailed"], default="standard", help="詳細度")
+    p_info.add_argument("--style", choices=["auto","sketch-note","professional","bento-grid","editorial","instructional","bricks","clay","anime","kawaii","scientific"], default="sketch-note", help="スタイル")
     p_info.add_argument("--output", help="保存先パス（例: output.png）")
 
     # make-infographic

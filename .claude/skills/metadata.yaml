@@ -45,6 +45,8 @@ skills:
     category: メール・通知
   make-infographic:
     category: 画像・同期
+  visual_infographic:
+    category: 画像・同期
   notebooklm:
     category: 画像・同期
   sync-to-drive:
