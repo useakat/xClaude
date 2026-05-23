@@ -14,6 +14,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **daily-xonepoint メール件名・本文タグ改善** — STEP 4 の件名にトピック要約（10〜15字）を追加し、本文に `[最終原稿]`/`[投稿文]` の二タグ構造を導入。受信トレイでの内容判別と記録用・投稿用の分離が目的。
 - **post_from_email.sh：検索をインボックス限定に変更** — `subject:XXX -label:投稿済み -is:draft` を `subject:XXX in:inbox -label:投稿済み` に変更。gws 認証切れによる「投稿対象なし」の調査過程で、アーカイブ済みメールへの誤投稿リスクも除去。
 - **認証トークン切れ通知スクリプト新設** — `check_auth.sh` で gws・Drive・X API・LINE を毎日 11:00 JST にチェックし、異常時は LINE → Gmail の順で通知。`send_gmail_direct.py`（gws 非依存の Gmail API 送信）も追加。[→報告書](../reports/20260523_check_auth_notification/)
+- **settings.json に autoMemoryEnabled: false を追加** — Claude Code の自動メモリ機能を無効化する設定を追加。
 
 ## 2026-05-22
 
