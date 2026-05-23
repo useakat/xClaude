@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-23
+
+- **CLAUDE.md：スキル内 git 指示をセッション指示より優先するルール追加** — スキルに push 先ブランチや手順が明記されている場合は、セッション冒頭のシステム指示よりスキルの指示を優先するルールを Git ルールセクションに追加。[→報告書](../reports/20260523_claude_md_git_skill_priority/)
+
 ## 2026-05-22
 
 - **persona シートへのペルソナ 19 件登録** — `persona/` フォルダの 01〜19 を Google Sheets の persona シート（SS2）に一括追加。P01〜P19 の persona_id を付与し、各ペルソナの primary pain_id を悩みセクションから推論してマッピング。[→報告書](../reports/20260522_persona_sheet_registration/)
