@@ -4,16 +4,33 @@
 import argparse
 import asyncio
 import sys
-
 import os
 import tempfile
+
+# vendored library fallback (for remote environments without pip install)
+_vendor = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'vendor')
+if os.path.isdir(os.path.join(_vendor, 'notebooklm')) and _vendor not in sys.path:
+    sys.path.insert(0, os.path.abspath(_vendor))
 
 from notebooklm import NotebookLMClient
 from notebooklm.types import InfographicOrientation, InfographicDetail, InfographicStyle
 
+# auth storage path: env var > gcp/ fallback > library default (~/.notebooklm/)
+_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_GCP_STORAGE = os.path.join(_ROOT, 'gcp', 'notebooklm_storage_state.json')
+_DEFAULT_STORAGE = os.path.expanduser('~/.notebooklm/storage_state.json')
+
+def _storage_path():
+    custom = os.environ.get('NOTEBOOKLM_STORAGE_PATH')
+    if custom:
+        return custom
+    if os.path.exists(_GCP_STORAGE) and not os.path.exists(_DEFAULT_STORAGE):
+        return _GCP_STORAGE
+    return None  # library default
+
 
 async def cmd_list(args):
-    async with await NotebookLMClient.from_storage() as client:
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
         notebooks = await client.notebooks.list()
         if not notebooks:
             print("ノートブックなし")
@@ -23,7 +40,7 @@ async def cmd_list(args):
 
 
 async def cmd_create(args):
-    async with await NotebookLMClient.from_storage() as client:
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
         nb = await client.notebooks.create(args.title)
         print(f"✓ 作成: {nb.id}\t{nb.title}")
         if args.urls:
@@ -34,20 +51,20 @@ async def cmd_create(args):
 
 
 async def cmd_add_source(args):
-    async with await NotebookLMClient.from_storage() as client:
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
         for url in args.urls:
             await client.sources.add_url(args.notebook_id, url)
             print(f"✓ ソース追加: {url}")
 
 
 async def cmd_ask(args):
-    async with await NotebookLMClient.from_storage() as client:
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
         result = await client.chat.ask(args.notebook_id, args.question)
         print(result)
 
 
 async def cmd_audio(args):
-    async with await NotebookLMClient.from_storage() as client:
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
         print("音声概要を生成中...")
         await client.generate.audio(args.notebook_id)
         if args.output:
@@ -81,7 +98,7 @@ async def cmd_infographic(args):
         "kawaii": InfographicStyle.KAWAII,
         "scientific": InfographicStyle.SCIENTIFIC,
     }
-    async with await NotebookLMClient.from_storage() as client:
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
         print("インフォグラフィックを生成中...")
         status = await client.artifacts.generate_infographic(
             args.notebook_id,
@@ -139,7 +156,7 @@ async def cmd_make_infographic(args):
         print("エラー: --text または --file を指定してください", file=sys.stderr)
         sys.exit(1)
 
-    async with await NotebookLMClient.from_storage() as client:
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
         # ノートブック作成
         nb = await client.notebooks.create(args.title)
         nb_id = nb.id
@@ -181,7 +198,7 @@ async def cmd_make_infographic(args):
 
 
 async def cmd_delete(args):
-    async with await NotebookLMClient.from_storage() as client:
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
         await client.notebooks.delete(args.notebook_id)
         print(f"✓ 削除: {args.notebook_id}")
 
