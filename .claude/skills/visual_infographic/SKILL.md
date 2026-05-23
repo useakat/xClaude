@@ -18,6 +18,24 @@
 
 ## 実行手順
 
+### Step 0. 認証確認（初回のみ）
+
+以下のどちらかが存在するか確認する：
+- `~/.notebooklm/storage_state.json`
+- `/root/xClaude/gcp/notebooklm_storage_state.json`
+
+**どちらも存在しない場合**、Drive MCP ツールで自動取得する：
+
+1. `mcp__claude_ai_Google_Drive__search_files` で `notebooklm_storage_state.json` を検索
+2. ヒットしたファイルの ID を取得
+3. `mcp__claude_ai_Google_Drive__read_file_content` でファイル内容（JSON テキスト）を取得
+4. Write ツールで `/root/xClaude/gcp/notebooklm_storage_state.json` に書き込む
+
+Drive に該当ファイルがない場合はスキル実行を中断し、ユーザーに以下をローカルで実行するよう案内する：
+```
+bash scripts/notebooklm_auth_push.sh
+```
+
 ### Step 1. テキスト取得・count 確認
 
 - `$ARGUMENTS` から count を読み取る（先頭が整数ならその値、なければデフォルト 3）
@@ -115,6 +133,7 @@ python3 "$ROOT/scripts/notebooklm_manager.py" infographic "$NOTEBOOK_ID" \
 
 フォルダ ID: `1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb`（outputs/images）
 
+**ローカル環境**（gws が使える場合）:
 ```bash
 cd "$ROOT/outputs"
 for N in $(seq 1 COUNT); do
@@ -122,6 +141,10 @@ for N in $(seq 1 COUNT); do
   gws drive +upload "infographic_${DATE}_${N}.md"  --parent 1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb
 done
 ```
+
+**リモート環境**（gws がない場合）:
+Drive MCP ツールを使ってアップロードする：
+- `mcp__claude_ai_Google_Drive__create_file` で各ファイルをアップロード（parent: `1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb`）
 
 各ファイルのアップロード結果（Drive URL）を表示する。
 
@@ -148,4 +171,4 @@ done
 
 - notebook は1つ作成される（`--keep` で保持）
 - 画像生成は1枚あたり数分かかる場合がある
-- `gws` コマンドは `outputs/` ディレクトリに移動してから実行する
+- gws がない環境（リモート）では Drive MCP ツールを使用する
