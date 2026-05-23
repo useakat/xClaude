@@ -1,6 +1,7 @@
 #!/bin/bash
 # NotebookLM の認証情報を Google Drive からダウンロードする
-# リモート環境で /visual_infographic スキルを使う前に実行する
+# ⚠️ このスクリプトは gws CLI が必要なため、ローカル環境専用です。
+# リモート環境では /visual_infographic スキルが Drive MCP ツールで自動セットアップします。
 # Usage: notebooklm_auth_pull.sh
 export PATH="/usr/local/bin:$PATH"
 
