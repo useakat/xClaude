@@ -71,7 +71,7 @@ xClaude/
 │
 ├── scripts/                          # 自動化スクリプト群（Gmail/Drive は gws CLI 経由）
 │   ├── sync_to_drive.sh              # outputs/ → Google Drive 同期
-│   ├── drive_put.sh                  # ローカル md → Drive アップロード/更新
+│   ├── drive_put.sh                  # ローカルファイル → Drive アップロード/更新（フォルダ指定可）
 │   ├── drive_get.sh                  # Drive ファイル ID 指定でローカル DL
 │   ├── send_gmail.sh                 # Gmail 送信（writer-note 完了通知）
 │   ├── create_gmail_draft.sh         # Gmail 下書き作成（daily-xonepoint）
