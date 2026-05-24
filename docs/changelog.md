@@ -7,6 +7,11 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-24
+
+- **drive_put.sh 汎用化：任意フォルダ対応・MIME 自動判定** — 第2引数 `[folder-id]` を追加（省略時は drafts-note で後方互換）し、更新時の MIME を `file --mime-type -b` で自動判定。gws CLI 統一方針のため一時追加した `drive_upload.py` を削除。[→報告書](../reports/20260524_drive_put_generalization/)
+- **drivemcp_get_remote.sh 追加：リモートセッション専用 Drive ダウンロード** — リモート環境（gws CLI 非使用）から Drive ファイルを取得する `drivemcp_get_remote.sh` と X アナリティクス CSV パーサー `fetch_x_analytics_csv.py` を新設。[→報告書](../reports/20260524_drivemcp_get_remote/)
+
 ## 2026-05-23
 
 - **daily-xonepoint P01化に字数項目追加・引き締めルール群を整備** — P01化スコアリングを5→6項目化し字数（200〜260字推奨/300字許容）を採点に統合。style-xonepoint.md に「削る対象優先度リスト」「専門単位の分数化」「詩的余韻型の締め」を新設し、writer-xonepoint に問答リズム・分数化＋体接続型の冒頭例・締めルール緩和を追加。[→報告書](../reports/20260523_xonepoint_length_item_and_tightening_rules/)
