@@ -161,11 +161,49 @@ done
 
 エラーが出た場合は削除せずユーザーに報告する。
 
+### Step 8. Gmail で完了通知を送信
+
+Step 6 で収集した Drive URL を使って通知メールを送る。
+
+件名: `【インフォグラフィック完成】{DATE} {メインタイトル冒頭20字}`
+
+本文を `/tmp/infographic_mail.txt` に書き出してから `send_gmail.sh` で送信する：
+
+```bash
+ROOT=$(git rev-parse --show-toplevel)
+
+# メインタイトルの冒頭20字を抜き出す
+TITLE_SHORT=$(echo "[メインタイトル]" | cut -c1-20)
+
+# 本文を組み立て（Step 6 で収集した Drive URL を列挙）
+cat > /tmp/infographic_mail.txt <<EOF
+インフォグラフィック ${COUNT} 枚が生成され、Drive にアップロードされました。
+
+■ 画像ファイル (${COUNT} 枚)
+[各 PNG の Drive URL を番号付きで列挙]
+
+■ プロンプト markdown (${COUNT} 個)
+[各 MD の Drive URL を番号付きで列挙]
+
+■ NotebookLM ノートブック
+  タイトル: 図解_${DATE}
+  ID: ${NOTEBOOK_ID}
+EOF
+
+bash "$ROOT/scripts/send_gmail.sh" \
+  --to useakat@gmail.com \
+  --subject "【インフォグラフィック完成】${DATE} ${TITLE_SHORT}" \
+  --body-file /tmp/infographic_mail.txt
+```
+
+送信に失敗した場合はエラーを報告するのみで、スキル全体は成功扱いとする。
+
 ## 完了後の報告
 
 - 生成した画像の Drive URL（count 枚分）
 - プロンプト markdown の Drive URL（count 個分）
 - 作成された NotebookLM notebook のタイトルと ID
+- Gmail 送信結果（送信成功 or 失敗のメッセージ ID）
 
 ## 注意事項
 
