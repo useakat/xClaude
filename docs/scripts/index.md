@@ -27,7 +27,7 @@ description: scripts/ ディレクトリのスクリプト一覧
 | スクリプト | 用途 |
 |---|---|
 | `sync_to_drive.sh` | outputs/ → Drive 同期 |
-| `drive_put.sh` | ローカル md → Drive アップロード/更新 |
+| `drive_put.sh` | ローカルファイル → Drive アップロード/更新（フォルダ指定可） |
 | `drive_get.sh` | Drive ファイル ID 指定でローカル DL |
 
 ## データ管理（廃止済み → unused-scripts/）
