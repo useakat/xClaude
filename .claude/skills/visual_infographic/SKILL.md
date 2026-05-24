@@ -59,7 +59,7 @@ bash scripts/notebooklm_auth_push.sh
 パターンタイプは固定せず、内容に応じて選ぶ。参考例：
 - ステップ・フロー型（プロセスや変化を時系列で表現）
 - 比較・対比型（Before/After、2つの概念の対比）
-- 中心放射型（コアコンセプトを中央に、関連要素を周囲に）
+- 中心放射型（コアコンセプトを中央に、関連要素を周囲に）。**バブルの配置は、読者の視線が左上→左下→右上→右下と流れるよう設計する（導入→問題→解決の鍵→結論の順）**
 - タイムライン型（歴史的経緯や時代の流れ）
 - ピラミッド型（重要度の階層構造）
 - チェックリスト型（箇条書きで要点を列挙）
@@ -79,7 +79,7 @@ bash scripts/notebooklm_auth_push.sh
 * タイトル：上部に大きく配置し、背面にマーカーで引いたような帯を入れて強調してください。
 * サブタイトル：タイトル下部に、タイトルより小さい文字で書いて配置してください。
 * テキスト: 結論や印象的なフレーズには「吹き出し」を使って強調してください。
-* キャラクター指定：キャラクターとして、スーパーニャンコ（額に赤いハート、卒業帽をかぶり、赤いマントをつけた青いネコのキャラクター）を含めてください。白人間（輪郭だけを描いた白一色の人間の絵）の使用は禁止します。
+* キャラクター指定：キャラクターとして、スーパーニャンコ（額に赤いハート、卒業帽をかぶり、赤いマントをつけた青いネコのキャラクター）を、この図解全体のタッチに合わせた手書き風で描いてください。スーパーニャンコの参照画像をソースに含めているので、その姿・特徴を踏まえて描いてください。白人間（輪郭だけを描いた白一色の人間の絵）の使用は禁止します。
 * 装飾：
 
 # 図解の構成・レイアウト
@@ -99,17 +99,19 @@ bash scripts/notebooklm_auth_push.sh
 
 ### Step 5. count 枚のインフォグラフィックを生成（1 notebook）
 
-**1枚目**: `make-infographic --keep` で notebook を作成しながら生成。notebook_id を出力からパースする。
+**1枚目**: `make-infographic --keep` で notebook を作成しながら生成。スーパーニャンコ参照画像も `--extra-source-url` でソースに追加。notebook_id を出力からパースする。
 
 ```bash
 ROOT=$(git rev-parse --show-toplevel)
 DATE=$(date +%Y-%m-%d)
+NYANKO_URL="https://drive.google.com/file/d/1SHyiHZ8io64nUXculZMqLkh8_TlV_goI/view?usp=drive_link"
 
 OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" make-infographic \
   --file /tmp/infographic_source.txt \
   --title "図解_${DATE}" \
   --infographic-title "[メインタイトル]" \
   --instructions "[パターン1のプロンプト全文]" \
+  --extra-source-url "$NYANKO_URL" \
   --language ja --orientation landscape --detail standard --style sketch-note \
   --output "$ROOT/outputs/infographic_${DATE}_1.png" \
   --keep 2>&1)

@@ -167,6 +167,11 @@ async def cmd_make_infographic(args):
             await client.sources.add_text(nb_id, source_title, text)
             print(f"✓ ソース追加: {source_title}")
 
+            # 追加 URL ソース
+            for url in args.extra_source_url:
+                await client.sources.add_url(nb_id, url)
+                print(f"✓ 追加ソース: {url}")
+
             # インフォグラフィック生成
             print("インフォグラフィックを生成中（数分かかります）...")
             instructions_parts = []
@@ -253,6 +258,7 @@ def main():
     p_make.add_argument("--style", choices=["auto","sketch-note","professional","bento-grid","editorial","instructional","bricks","clay","anime","kawaii","scientific"], default="sketch-note")
     p_make.add_argument("--output", required=True, help="保存先PNGパス（例: output.png）")
     p_make.add_argument("--keep", action="store_true", help="生成後もノートブックを残す")
+    p_make.add_argument("--extra-source-url", action="append", default=[], help="追加で notebook に登録する URL（Drive 画像など、複数可）")
 
     # delete
     p_del = sub.add_parser("delete", help="ノートブック削除")

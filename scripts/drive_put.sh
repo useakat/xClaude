@@ -1,6 +1,6 @@
 #!/bin/bash
 # Usage: drive_put.sh <local-file> [folder-id]
-export PATH="/usr/local/bin:$PATH"
+export PATH="/home/useakat/.npm-global/bin:/usr/local/bin:$PATH"
 # ローカルファイルを Drive のフォルダにアップロード/更新
 # folder-id 省略時は drafts-note フォルダ
 # 同名ファイルが存在すれば更新（Drive のリビジョン履歴に残る）、なければ新規作成
