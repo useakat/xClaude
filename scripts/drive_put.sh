@@ -36,7 +36,7 @@ print(json.dumps({
 " "$FOLDER_ID" "$FILENAME")
 
 EXISTING_ID=$(gws drive files list --params "$PARAMS" 2>/dev/null \
-  | python3 -c "import json,sys; d=json.load(sys.stdin); files=d.get('files',[]); print(files[0]['id'] if files else '')")
+  | python3 -c "import json,sys; s=sys.stdin.read().strip(); d=json.loads(s) if s else {}; files=d.get('files',[]); print(files[0]['id'] if files else '')")
 
 cd "$FILE_DIR"
 
