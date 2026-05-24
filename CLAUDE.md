@@ -209,6 +209,11 @@ xClaude/
   - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics）
   - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what / outputs）
 
+#### Drive ファイルダウンロードのルール（トークン節約）
+- **ローカル環境**: `bash scripts/drive_get.sh <file-id> <output-path>`
+- **リモート環境**（routine / agent）: `bash scripts/drivemcp_get_remote.sh <file-id> <output-path>`
+- Drive MCP ツール（`mcp__claude_ai_Google_Drive__download_file_content`）は base64 をトークンとして消費するため、上記スクリプトで代替できる場合は使わない
+
 ### スクリプト化の原則
 - **確実な処理実行とトークン節約のため、スクリプト化できる処理はなるべく bash / Python スクリプトを作成して実行する**
 - Claude が直接実行するのではなく、スクリプト化することで再現性と信頼性が向上する
