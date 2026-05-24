@@ -3,6 +3,8 @@
 
 import argparse
 import asyncio
+import re
+import subprocess
 import sys
 import os
 import tempfile
@@ -167,10 +169,21 @@ async def cmd_make_infographic(args):
             await client.sources.add_text(nb_id, source_title, text)
             print(f"✓ ソース追加: {source_title}")
 
-            # 追加 URL ソース
+            # 追加ソース：Drive URL は drive_get.sh で DL→add_file、それ以外は add_url
             for url in args.extra_source_url:
-                await client.sources.add_url(nb_id, url)
-                print(f"✓ 追加ソース: {url}")
+                m = re.search(r'drive\.google\.com/file/d/([\w-]+)', url)
+                if m:
+                    file_id = m.group(1)
+                    tmp = tempfile.NamedTemporaryFile(prefix='nblm_src_', delete=False)
+                    tmp.close()
+                    drive_get = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'drive_get.sh')
+                    subprocess.run(['bash', drive_get, file_id, tmp.name], check=True)
+                    await client.sources.add_file(nb_id, tmp.name, wait=True)
+                    os.unlink(tmp.name)
+                    print(f"✓ 追加ソース（Drive）: {url}")
+                else:
+                    await client.sources.add_url(nb_id, url)
+                    print(f"✓ 追加ソース（URL）: {url}")
 
             # インフォグラフィック生成
             print("インフォグラフィックを生成中（数分かかります）...")
