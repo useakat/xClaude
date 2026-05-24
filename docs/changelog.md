@@ -11,6 +11,9 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **drive_put.sh 汎用化：任意フォルダ対応・MIME 自動判定** — 第2引数 `[folder-id]` を追加（省略時は drafts-note で後方互換）し、更新時の MIME を `file --mime-type -b` で自動判定。gws CLI 統一方針のため一時追加した `drive_upload.py` を削除。[→報告書](../reports/20260524_drive_put_generalization/)
 - **drivemcp_get_remote.sh 追加：リモートセッション専用 Drive ダウンロード** — リモート環境（gws CLI 非使用）から Drive ファイルを取得する `drivemcp_get_remote.sh` と X アナリティクス CSV パーサー `fetch_x_analytics_csv.py` を新設。[→報告書](../reports/20260524_drivemcp_get_remote/)
+- **visual_infographic：Drive アップロード完了後の Gmail 通知追加** — Step 7（ローカル削除）の後に `send_gmail.sh` で完了通知メールを送る Step 8 を追加。件名に日付・タイトル冒頭20字、本文に画像・MD の Drive URL と NotebookLM ノートブック ID を含む。
+- **drive_put.sh：gws エラー時の空レスポンス JSON 例外修正** — gws コマンド失敗時に空レスポンスを JSON パースしようとして例外が発生する不具合を修正。
+- **CLAUDE.md：Drive ファイルダウンロードのスクリプト使い分けルール追加** — ローカルは `drive_get.sh`、リモートは `drivemcp_get_remote.sh` を使い、Drive MCP ツール（base64 でトークン大量消費）はスクリプトで代替できる場合は使わないルールを明文化。[→報告書](../reports/20260524_claude_md_drive_download_rule/)
 
 ## 2026-05-23
 
