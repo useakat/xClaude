@@ -97,15 +97,51 @@ bash scripts/notebooklm_auth_push.sh
 [そのパターンのプロンプト全文]
 ```
 
-### Step 5. count 枚のインフォグラフィックを生成（1 notebook）
+### Step 5. count 枚のインフォグラフィックを生成・1 枚ずつ即アップロード
 
-**1枚目**: `make-infographic --keep` で notebook を作成しながら生成。スーパーニャンコ参照画像も `--extra-source-url` でソースに追加。notebook_id を出力からパースする。
+**ポリシー**: 各画像は生成完了後すぐに Drive にアップロード→ローカル削除する（全枚数まとめてではなく1枚ずつ）。アップロードした Drive URL は配列に保存し、Step 6 の Gmail 通知で使う。
 
+アップロード先フォルダ ID: `1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb`（outputs/images）
+
+**共通変数**:
 ```bash
 ROOT=$(git rev-parse --show-toplevel)
 DATE=$(date +%Y-%m-%d)
 NYANKO_URL="https://drive.google.com/file/d/1SHyiHZ8io64nUXculZMqLkh8_TlV_goI/view?usp=drive_link"
+FOLDER_ID="1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb"
 
+PNG_URLS=()  # Drive URL を蓄積
+MD_URLS=()
+```
+
+**ヘルパー**（1枚ぶんのアップロード＋ローカル削除をまとめた処理）:
+
+ローカル環境（gws が使える場合）:
+```bash
+upload_pair() {
+  local i="$1"
+  local png="$ROOT/outputs/infographic_${DATE}_${i}.png"
+  local md="$ROOT/outputs/infographic_${DATE}_${i}.md"
+  local png_id md_id
+
+  png_id=$(gws drive +upload "$png" --parent "$FOLDER_ID" 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('id',''))")
+  md_id=$(gws drive +upload "$md"  --parent "$FOLDER_ID" 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('id',''))")
+
+  [ -n "$png_id" ] && [ -n "$md_id" ] || { echo "❌ アップロード失敗: $i 枚目"; return 1; }
+
+  PNG_URLS+=("https://drive.google.com/file/d/${png_id}/view")
+  MD_URLS+=("https://drive.google.com/file/d/${md_id}/view")
+
+  rm "$png" "$md"
+  echo "✓ $i 枚目アップロード＋ローカル削除完了"
+}
+```
+
+リモート環境（gws がない場合）は `mcp__claude_ai_Google_Drive__create_file` を `parent="$FOLDER_ID"` で各ファイルに呼び、返ってきた `id` から URL を組み立てて配列に追記、その後ローカルを削除する（コードは環境に応じて組み立てる）。
+
+**1枚目**: `make-infographic --keep` で notebook を作成しながら生成 → 即アップロード。スーパーニャンコ参照画像も `--extra-source-url` でソースに追加。notebook_id を出力からパースする。
+
+```bash
 OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" make-infographic \
   --file /tmp/infographic_source.txt \
   --title "図解_${DATE}" \
@@ -117,55 +153,29 @@ OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" make-infographic \
   --keep 2>&1)
 echo "$OUTPUT"
 NOTEBOOK_ID=$(echo "$OUTPUT" | grep "ノートブック作成" | sed 's/.*: //')
+
+upload_pair 1
 ```
 
-**2枚目以降（i = 2 ～ count）**: 同じ notebook_id を使って生成。各パターンのプロンプトを渡す。
+**2枚目以降（i = 2 ～ count）**: 同じ notebook_id を使って生成 → 即アップロード。
 
 ```bash
-# i 枚目（i = 2 ～ count を繰り返す）
+# i = 2, 3, ..., count を繰り返す
 python3 "$ROOT/scripts/notebooklm_manager.py" infographic "$NOTEBOOK_ID" \
   --instructions "[パターンiのプロンプト全文]" \
   --language ja --orientation landscape --detail standard --style sketch-note \
-  --output "$ROOT/outputs/infographic_${DATE}_i.png"
+  --output "$ROOT/outputs/infographic_${DATE}_${i}.png"
+
+upload_pair "$i"
 ```
 
 **`--instructions` が長い場合**: 一時ファイルに書き出して `"$(cat /tmp/prompt_N.txt)"` で渡す。
 
-### Step 6. Google Drive にアップロード
+アップロード失敗時はローカル削除せずユーザーに報告し、その時点で処理を止める。
 
-フォルダ ID: `1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb`（outputs/images）
+### Step 6. Gmail で完了通知を送信
 
-**ローカル環境**（gws が使える場合）:
-```bash
-cd "$ROOT/outputs"
-for N in $(seq 1 COUNT); do
-  gws drive +upload "infographic_${DATE}_${N}.png" --parent 1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb
-  gws drive +upload "infographic_${DATE}_${N}.md"  --parent 1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb
-done
-```
-
-**リモート環境**（gws がない場合）:
-Drive MCP ツールを使ってアップロードする：
-- `mcp__claude_ai_Google_Drive__create_file` で各ファイルをアップロード（parent: `1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb`）
-
-各ファイルのアップロード結果（Drive URL）を表示する。
-
-### Step 7. ローカルファイルを削除
-
-アップロード成功を確認してから全ファイルを削除する。
-
-```bash
-for N in $(seq 1 COUNT); do
-  rm "$ROOT/outputs/infographic_${DATE}_${N}.png"
-  rm "$ROOT/outputs/infographic_${DATE}_${N}.md"
-done
-```
-
-エラーが出た場合は削除せずユーザーに報告する。
-
-### Step 8. Gmail で完了通知を送信
-
-Step 6 で収集した Drive URL を使って通知メールを送る。
+Step 5 で収集した `PNG_URLS` / `MD_URLS` を使って通知メールを送る。
 
 件名: `【インフォグラフィック完成】{DATE} {メインタイトル冒頭20字}`
 
@@ -177,7 +187,7 @@ ROOT=$(git rev-parse --show-toplevel)
 # メインタイトルの冒頭20字を抜き出す
 TITLE_SHORT=$(echo "[メインタイトル]" | cut -c1-20)
 
-# 本文を組み立て（Step 6 で収集した Drive URL を列挙）
+# 本文を組み立て（Step 5 で収集した PNG_URLS / MD_URLS を列挙）
 cat > /tmp/infographic_mail.txt <<EOF
 インフォグラフィック ${COUNT} 枚が生成され、Drive にアップロードされました。
 
