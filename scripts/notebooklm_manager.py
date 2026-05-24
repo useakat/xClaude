@@ -170,17 +170,24 @@ async def cmd_make_infographic(args):
             print(f"✓ ソース追加: {source_title}")
 
             # 追加ソース：Drive URL は drive_get.sh で DL→add_file、それ以外は add_url
+            import mimetypes
+            import shutil
             for url in args.extra_source_url:
                 m = re.search(r'drive\.google\.com/file/d/([\w-]+)', url)
                 if m:
                     file_id = m.group(1)
-                    tmp = tempfile.NamedTemporaryFile(prefix='nblm_src_', delete=False)
-                    tmp.close()
+                    tmp_no_ext = tempfile.NamedTemporaryFile(prefix='nblm_src_', delete=False)
+                    tmp_no_ext.close()
                     drive_get = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'drive_get.sh')
-                    subprocess.run(['bash', drive_get, file_id, tmp.name], check=True)
-                    await client.sources.add_file(nb_id, tmp.name, wait=True)
-                    os.unlink(tmp.name)
-                    print(f"✓ 追加ソース（Drive）: {url}")
+                    subprocess.run(['bash', drive_get, file_id, tmp_no_ext.name], check=True)
+                    # MIME 判定で拡張子を付与（NotebookLM が形式判定に拡張子を使うため）
+                    mime = subprocess.check_output(['file', '--mime-type', '-b', tmp_no_ext.name]).decode().strip()
+                    ext = mimetypes.guess_extension(mime) or ''
+                    tmp_path = tmp_no_ext.name + ext
+                    shutil.move(tmp_no_ext.name, tmp_path)
+                    await client.sources.add_file(nb_id, tmp_path, wait=True)
+                    os.unlink(tmp_path)
+                    print(f"✓ 追加ソース（Drive, {mime}）: {url}")
                 else:
                     await client.sources.add_url(nb_id, url)
                     print(f"✓ 追加ソース（URL）: {url}")
