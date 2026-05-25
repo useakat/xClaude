@@ -98,6 +98,9 @@ print(ts[-1]['id'] if ts else '')
   # [リプ] タグ抽出（任意）
   REPLY_TEXT=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py リプ 2>/dev/null || true)
 
+  # [ネタ番号] タグ抽出（任意・daily-xonepoint の下書きのみ存在）
+  NETA_ID=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py ネタ番号 2>/dev/null || true)
+
   # 添付画像 DL
   HAS_IMAGE=0
   if bash scripts/download_gmail_attachment.sh "$MESSAGE_ID" "$TMP_IMAGE" >/dev/null 2>&1; then
@@ -163,7 +166,7 @@ print(ts[-1]['id'] if ts else '')
     --json "{\"addLabelIds\":[\"$POSTED_LABEL_ID\"],\"removeLabelIds\":[\"INBOX\"]}" 2>/dev/null >/dev/null
 
   # 投稿記録
-  python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" 2>&1 | tee -a "$LOG_PATH"
+  python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" "$NETA_ID" 2>&1 | tee -a "$LOG_PATH"
 
   rm -f "$TMP_IMAGE"
 
