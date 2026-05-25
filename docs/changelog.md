@@ -9,6 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-25
 
+- **daily-xonepoint 下書きにネタ番号・分野タグ追加、outputs に neta_id 記録** — 下書きメールに `[分野]` と `[ネタ番号]`（`onePointNeta[番号]`）タグを追加し、cron 投稿時に `[ネタ番号]` を抽出して outputs シートの neta_id 列へ記録。投稿とネタの紐付けが辿れるようになった。[→報告書](../reports/20260525_xonepoint_neta_tags_and_neta_id_record/)
 - **analyze-impression → ops_analyze-posts リネーム＋stats モード追加** — スキル名を `ops_` プレフィックスに統一し、`stats` モードで集計サマリー（投稿数・平均IMP・中央値・最大/最小・外れ値検出）のみ出力して終了する軽量モードを追加。STEP 3 の50行上限バグ（`A1:R50`→`A:R`）も修正。[→報告書](../reports/20260525_ops_analyze_posts_rename_stats_mode/)
 
 ## 2026-05-24
