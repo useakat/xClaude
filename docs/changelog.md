@@ -9,6 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-25
 
+- **daily-xonepoint 下書きにネタ番号・分野タグ追加、outputs に neta_id 記録** — 下書きメールに `[分野]` と `[ネタ番号]`（`onePointNeta[番号]`）タグを追加し、cron 投稿時に `[ネタ番号]` を抽出して outputs シートの neta_id 列へ記録。投稿とネタの紐付けが辿れるようになった。[→報告書](../reports/20260525_xonepoint_neta_tags_and_neta_id_record/)
 - **analyze-impression → ops_analyze-posts リネーム＋stats モード追加** — スキル名を `ops_` プレフィックスに統一し、`stats` モードで集計サマリー（投稿数・平均IMP・中央値・最大/最小・外れ値検出）のみ出力して終了する軽量モードを追加。STEP 3 の50行上限バグ（`A1:R50`→`A:R`）も修正。[→報告書](../reports/20260525_ops_analyze_posts_rename_stats_mode/)
 
 ## 2026-05-24
@@ -23,7 +24,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **daily-xonepoint P01化に字数項目追加・引き締めルール群を整備** — P01化スコアリングを5→6項目化し字数（200〜260字推奨/300字許容）を採点に統合。style-xonepoint.md に「削る対象優先度リスト」「専門単位の分数化」「詩的余韻型の締め」を新設し、writer-xonepoint に問答リズム・分数化＋体接続型の冒頭例・締めルール緩和を追加。[→報告書](../reports/20260523_xonepoint_length_item_and_tightening_rules/)
 - **CLAUDE.md：スキル内 git 指示をセッション指示より優先するルール追加** — スキルに push 先ブランチや手順が明記されている場合は、セッション冒頭のシステム指示よりスキルの指示を優先するルールを Git ルールセクションに追加。[→報告書](../reports/20260523_claude_md_git_skill_priority/)
-- **daily-xonepoint P01化チェックリスト追加・スコアリングループ新設** — style-xonepoint.md に冒頭フック5軸評価（直感的比較数字・パワーワードを必須）を含む P01化チェックリスト5項目を追加。daily-xonepoint STEP 3-2 に10段階採点＋5回反復ループ（全項目8点以上で合格）を実装。[→報告書](../reports/20260523_daily_xonepoint_p01_scoring_loop/)
+- **daily-xonepoint P01化チェックリスト追加・スコアリングループ新設** — style-xonepoint.md に冒頭フック5軸評価（直感的比較数字・パワーワードを必須）を含む P01化チェックリスト５項目を追加。daily-xonepoint STEP 3-2 に10段階採点＋5回反復ループ（全項目8点以上で合格）を実装。[→報告書](../reports/20260523_daily_xonepoint_p01_scoring_loop/)
 - **daily-xonepoint メール件名・本文タグ改善** — STEP 4 の件名にトピック要約（10〜15字）を追加し、本文に `[最終原稿]`/`[投稿文]` の二タグ構造を導入。受信トレイでの内容判別と記録用・投稿用の分離が目的。
 - **post_from_email.sh：検索をインボックス限定に変更** — `subject:XXX -label:投稿済み -is:draft` を `subject:XXX in:inbox -label:投稿済み` に変更。gws 認証切れによる「投稿対象なし」の調査過程で、アーカイブ済みメールへの誤投稿リスクも除去。
 - **認証トークン切れ通知スクリプト新設** — `check_auth.sh` で gws・Drive・X API・LINE を毎日 11:00 JST にチェックし、異常時は LINE → Gmail の順で通知。`send_gmail_direct.py`（gws 非依存の Gmail API 送信）も追加。[→報告書](../reports/20260523_check_auth_notification/)
@@ -144,7 +145,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **reporter-daily スキル改善** — デフォルトを前日に変更・gws CLI から mcp-gsheets に移行・日次記録シートの読み込みを最新10行に限定。
 - **cron X 投稿からの下書き除外** — `post_from_email.sh` の Gmail 検索クエリに `-is:draft` を追加し、下書きメールが投稿対象になる不具合を修正。
 - **CLAUDE.md ファイル削除ルール変更** — 「ファイルを削除しない」から「削除する場合はよーんに確認する」に緩和。
-- **reporter スキル UX 改嚄（完了後表示・特記事項ルール整備）** — daily/weekly/monthly 全スキルの完了後に生成ファイルを画面表示。reporter-daily の特記事項からフォロワー増減・`[開発]` 表記を廃止し、変更ログの要約を運用視点に変更。[→報告書](../reports/20260504_reporter_ux_improvements/)
+- **reporter スキル UX 改嘅（完了後表示・特記事項ルール整備）** — daily/weekly/monthly 全スキルの完了後に生成ファイルを画面表示。reporter-daily の特記事項からフォロワー増減・`[開発]` 表記を廃止し、変更ログの要約を運用視点に変更。[→報告書](../reports/20260504_reporter_ux_improvements/)
 - **remote session での docs/reports/ push 許可** — `git_guard.py` を新設し、ステージ済みファイルが `docs/reports/` 配下のみなら remote でも commit・push を通す。フックもスクリプト外部化・動的パス解決に変更。[→報告書](../reports/20260504_remote_reports_push/)
 
 ## 2026-05-03
@@ -160,7 +161,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **変更ログ形式の整備** — 変更ログのエントリを日付セクション内の箇条書き形式に統一し、CLAUDE.md のルールも更新。
 - **記録不要条件の明文化** — `permissions.allow` への追記のみのコミットは記録不要という例外ルールを CLAUDE.md に追加。
 - **/update-permissions スキル追加・コミット前フック廃止** — blocking フックと bypass トークンを廃止し、`/update-permissions` スキルで任意のタイミングに手動で permissions.allow を更新する運用に変更。[→報告書](../reports/20260503_update_permissions_skill/)
-- **/record スキル候補表示の改嚄** — 変更ログ候補に「関連する過去の変更」フィールドを追加し、選択メッセージを肯定形に変更。[→報告書](../reports/20260503_record_skill_improvement/)
+- **/record スキル候補表示の改嘅** — 変更ログ候補に「関連する過去の変更」フィールドを追加し、選択メッセージを肯定形に変更。[→報告書](../reports/20260503_record_skill_improvement/)
 - **daily-xonepoint メール下書き作成の MCP 化** — gws CLI がエージェント環境で使えないため STEP 5 を `mcp__claude_ai_Gmail__create_draft` に切り替え。[→報告書](../reports/20260503_daily_xonepoint_mcp_gmail/)
 - **database CSV → Google Sheets 移行** — 8スキルの CSV 読み書きを mcp-gsheets ツールに書き換え、廃止スクリプトを `unused-scripts/` へ移動、SS1 に outputs シートを新設。[→報告書](../reports/20260503_database_csv_to_sheets_migration/)
 - **mcp-gsheets ローカル認証設定** — `.mcp.json` に `GOOGLE_APPLICATION_CREDENTIALS` を追加し、ローカルセッションでもサービスアカウントファイルで認証可能に。
@@ -169,10 +170,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-05-02
 
 - **Wiki システム構築** — Starlight + GitHub Pages で Wiki 新設。`docs/` がソース、`starlight/` がビルド設定。[→報告書](../reports/20260502_wiki_setup/)
-- **X ワンポイント投稿スタイルガイド作成** — 実投稱0件を分析し13の観点で定義した `style/style-xonepoint.md` を作成。[→報告書](../reports/20260502_style_xonepoint/)
+- **X ワンポイント投稿スタイルガイド作成** — 実投稱．0件を分析、13の観点で定義した `style/style-xonepoint.md` を作成。[→報告書](../reports/20260502_style_xonepoint/)
 - **writer-xonepoint・daily-xonepoint スタイルガイド参照化** — 両スキルから `style/style-xonepoint.md` を参照するよう変更。[→報告書](../reports/20260502_skill_style_reference/)
 - **投稿締め言葉ルールの追加** — X ワンポイント投稿の末尾を「読者の日常生活につながる1文」で締めるルールを強制。[→報告書](../reports/20260502_closing_rule/)
 - **Google サービス連携・スクリプト化ルールの追加** — gws CLI 統一とスクリプト化優先の原則を CLAUDE.md に明文化。[→報告書](../reports/20260502_implementation_rules/)
 - **報告書・変更ログ運用フローの整備** — 変更ログと報告書の1対1対応構造を設計。テンプレート作成・CLAUDE.md にルール追加。[→報告書](../reports/20260502_reporting_workflow/)
-- **daily-xonepoint 自動化改嚄** — STEP 3 を `/check-fact` に変更、STEP 5 のメール作成を gws CLI スクリプトに変更。[→報告書](../reports/20260502_daily_xonepoint_improvement/)
+- **daily-xonepoint 自動化改嘅** — STEP 3 を `/check-fact` に変更、STEP 5 のメール作成を gws CLI スクリプトに変更。[→報告書](../reports/20260502_daily_xonepoint_improvement/)
 - **git commit 前の確認フック追加** — `PreToolUse` フックで `git commit` 実行前に settings.json 確認を自動挿入。[→報告書](../reports/20260502_precommit_hook/)
