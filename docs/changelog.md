@@ -7,6 +7,11 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-27
+
+- **research_pain-xpost スキル新設** — 特定 X ポストのリプライ・引用RTを取得し、読者のニーズ・疑問を5観点でクラスタリングして note 記事テーマを提案、承認後に noteNeta シートへ追記するスキルを新設。引用RT・リプ取得は `ops_post-reactions` の仕組み（xmcp＋リプ・引用一覧シート）を再利用。[→報告書](../reports/20260527_research_pain_xpost_skill/)
+- **CLAUDE.md：承認待ち質問後は hook フィードバックで先に進まないルール追加** — 承認を求める質問をした後は、Stop hook 等のフィードバックが入っても、それを承認の代わりとみなして commit・push などに進まないルールを禁止事項に追加。
+
 ## 2026-05-25
 
 - **daily-xonepoint 下書きにネタ番号・分野タグ追加、outputs に neta_id 記録** — 下書きメールに `[分野]` と `[ネタ番号]`（`onePointNeta[番号]`）タグを追加し、cron 投稿時に `[ネタ番号]` を抽出して outputs シートの neta_id 列へ記録。投稿とネタの紐付けが辿れるようになった。[→報告書](../reports/20260525_xonepoint_neta_tags_and_neta_id_record/)
