@@ -1,5 +1,5 @@
 ---
-name: research-note-from-post
+name: research_pain-xpost
 description: 特定のXポストのリプライ・引用RTを取得し、読者のニーズや疑問を分析して note 記事のテーマを提案する。承認後に noteNeta シートへ追記する。
 tools: Bash, Read, WebSearch, mcp__mcp-gsheets__sheets_get_values, mcp__mcp-gsheets__sheets_append_values
 ---
