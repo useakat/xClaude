@@ -65,5 +65,7 @@ skills:
     category: リサーチ・分析
   ops_post-reactions:
     category: リサーチ・分析
+  research-note-from-post:
+    category: リサーチ・分析
   update-permissions:
     category: 設定・保守
