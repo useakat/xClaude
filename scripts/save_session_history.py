@@ -36,9 +36,73 @@ def list_jsonls():
         print(f"  {mtime}  {size_kb:5d}KB  {f.name}")
 
 
+def format_tool_line(names):
+    """ツール名のリストを1行のツール呼び出し表記にまとめる。"""
+    return "*[ツール: " + ", ".join(f"`{n}`" for n in names) + "]*"
+
+
+def render_body(items):
+    """items（("text", str) / ("tool", name) のリスト）を本文 Markdown に整形する。
+
+    連続するツール呼び出しは1行に集約する。
+    """
+    parts = []
+    pending = []
+    for kind, val in items:
+        if kind == "tool":
+            pending.append(val)
+        else:
+            if pending:
+                parts.append(format_tool_line(pending))
+                pending = []
+            text = val.strip()
+            if text:
+                parts.append(text)
+    if pending:
+        parts.append(format_tool_line(pending))
+    return "\n\n".join(parts)
+
+
+def render_blocks(blocks, title, today):
+    """blocks（[role, ts, items] のリスト）から履歴 Markdown 全文を組み立てる。
+
+    区切り線（---）はよーんの発言（ターン境界）の前にのみ入れる。
+    """
+    lines = [
+        "---",
+        f"title: {title} — セッション履歴",
+        f"date: {today}",
+        "sidebar:",
+        "  hidden: true",
+        "---",
+        "",
+        "# セッション履歴",
+        "",
+        f"> {today} のセッション作業ログ。",
+        "",
+        "---",
+        "",
+    ]
+
+    for i, (role, ts, items) in enumerate(blocks):
+        ts_label = f" *({ts} JST)*" if ts else ""
+        if role == "user":
+            if i != 0:
+                lines.append("---")
+                lines.append("")
+            lines.append(f"## よーん{ts_label}")
+        else:
+            lines.append(f"### Claude{ts_label}")
+        lines.append("")
+        lines.append(render_body(items))
+        lines.append("")
+
+    return "\n".join(lines)
+
+
 def jsonl_to_markdown(jsonl_path: Path, title: str) -> str:
     today = datetime.now(JST).strftime("%Y-%m-%d")
-    messages = []
+    raw = []  # (role, ts, items)
 
     with open(jsonl_path) as f:
         for line in f:
@@ -61,7 +125,7 @@ def jsonl_to_markdown(jsonl_path: Path, title: str) -> str:
                 if isinstance(content, str) and content.strip():
                     stripped = content.strip()
                     if not stripped.startswith("<") and not stripped.startswith("Tool:"):
-                        messages.append(("user", ts, stripped))
+                        raw.append(("user", ts, [("text", stripped)]))
                 elif isinstance(content, list):
                     texts = [
                         b.get("text", "").strip()
@@ -70,57 +134,31 @@ def jsonl_to_markdown(jsonl_path: Path, title: str) -> str:
                         and not b.get("text", "").strip().startswith("<")
                     ]
                     if texts:
-                        messages.append(("user", ts, "\n".join(texts)))
+                        raw.append(("user", ts, [("text", "\n".join(texts))]))
 
             elif t == "assistant" and role == "assistant":
                 if isinstance(content, list):
-                    texts = []
-                    tool_uses = []
+                    items = []
                     for block in content:
                         if isinstance(block, dict):
                             if block.get("type") == "text":
                                 txt = block.get("text", "").strip()
                                 if txt:
-                                    texts.append(txt)
+                                    items.append(("text", txt))
                             elif block.get("type") == "tool_use":
-                                tool_uses.append(block.get("name", "unknown"))
-                    combined = "\n\n".join(texts)
-                    if tool_uses:
-                        tool_str = ", ".join(f"`{t}`" for t in tool_uses)
-                        suffix = f"\n\n*[ツール呼び出し: {tool_str}]*"
-                        combined = combined + suffix if combined else suffix.strip()
-                    if combined:
-                        messages.append(("assistant", ts, combined))
+                                items.append(("tool", block.get("name", "unknown")))
+                    if items:
+                        raw.append(("assistant", ts, items))
 
-    lines = [
-        "---",
-        f"title: {title} — セッション履歴",
-        f"date: {today}",
-        "sidebar:",
-        "  hidden: true",
-        "---",
-        "",
-        "# セッション履歴",
-        "",
-        f"> {today} のセッション作業ログ。",
-        "",
-        "---",
-        "",
-    ]
-
-    for role, ts, text in messages:
-        ts_label = f" *({ts} JST)*" if ts else ""
-        if role == "user":
-            lines.append(f"## よーん{ts_label}")
+    # 連続する同一話者のメッセージを1つのブロックに統合
+    blocks = []
+    for role, ts, items in raw:
+        if blocks and blocks[-1][0] == role:
+            blocks[-1][2].extend(items)
         else:
-            lines.append(f"### Claude{ts_label}")
-        lines.append("")
-        lines.append(text)
-        lines.append("")
-        lines.append("---")
-        lines.append("")
+            blocks.append([role, ts, list(items)])
 
-    return "\n".join(lines)
+    return render_blocks(blocks, title, today)
 
 
 def main():

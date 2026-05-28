@@ -30,29 +30,15 @@ onePointNeta.csv の未使用が10件未満なら /research-trivia を実行す�
 noteNeta.csv の未使用が10件未満なら /research-note-projectx を実行する。
 両方10件以上なら「ネタが十分あります」と出力して終了する。
 
----
-
 ### Claude *(07:03 JST)*
 
 未使用ネタ数を確認します。
 
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(07:03 JST)*
+*[ツール: `Bash`]*
 
 noteNeta が3件で10件未満のため、`/research-note-projectx` を実行します。
 
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `Skill`]*
+*[ツール: `Skill`]*
 
 ---
 
@@ -101,7 +87,6 @@ note 記事（約6000字）の題材となる、探査機・探査車・宇宙�
 
 各ネタを以下の形式で出力する：
 
----
 **ネタ [番号]**
 タイトル案: （読者が「え？」となるタイトル例）
 主人公（ミッション名）:
@@ -113,119 +98,28 @@ note 記事（約6000字）の題材となる、探査機・探査車・宇宙�
 記事展開のヒント: （導入→山場→締めの流れ案）
 難易度（記事化）: 易／中／難
 出典メモ: （URL or 概要）
----
-
----
 
 ### Claude *(07:03 JST)*
 
 ブランド定義を確認し、既存ネタと参照記事をチェックしてから調査を始めます。まず必要なファイルを読み、ツールを準備します。
 
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(07:03 JST)*
+*[ツール: `Read`, `Read`, `Bash`, `ToolSearch`, `ToolSearch`]*
 
 I'll get the existing noteNeta list to avoid duplicates, then research.
 
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(07:03 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 結果が大きすぎたので、重複確認に必要な列（No・タイトル・主人公）だけ取得します。
 
----
-
-### Claude *(07:03 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(07:05 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 既存ネタは138件あり、新規は No 139 から採番します。重複しない6候補を選定し、事実確認のため Web 検索を並行実行します。
 
----
-
-### Claude *(07:05 JST)*
-
-*[ツール呼び出し: `WebSearch`]*
-
----
-
-### Claude *(07:05 JST)*
-
-*[ツール呼び出し: `WebSearch`]*
-
----
-
-### Claude *(07:05 JST)*
-
-*[ツール呼び出し: `WebSearch`]*
-
----
-
-### Claude *(07:05 JST)*
+*[ツール: `WebSearch`, `WebSearch`, `WebSearch`]*
 
 3件確認できました。残り3候補を検索します。
 
----
-
-### Claude *(07:05 JST)*
-
-*[ツール呼び出し: `WebSearch`]*
-
----
-
-### Claude *(07:05 JST)*
-
-*[ツール呼び出し: `WebSearch`]*
-
----
-
-### Claude *(07:05 JST)*
-
-*[ツール呼び出し: `WebSearch`]*
-
----
-
-### Claude *(07:07 JST)*
+*[ツール: `WebSearch`, `WebSearch`, `WebSearch`]*
 
 6候補すべて事実確認できました。重複もありません。以下が収集したネタです。
 
@@ -233,15 +127,7 @@ I'll get the existing noteNeta list to avoid duplicates, then research.
 
 6件を Google Sheets の noteNeta シートに保存します（No 139〜144、未使用）。
 
----
-
-### Claude *(07:07 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_append_values`]*
-
----
-
-### Claude *(07:08 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_append_values`]*
 
 noteNeta シートに6件保存しました（No 139〜144、すべて未使用）。
 
@@ -264,21 +150,11 @@ noteNeta シートに6件保存しました（No 139〜144、すべて未使用�
 
 おかしいな。noteNeta はすでに10件以上未使用のネタが有る。どのシートを調べた？
 
----
-
 ### Claude *(08:51 JST)*
 
 調べたのはローカルの `database/noteNeta.csv`（タスク冒頭のスクリプトが指定）でした。ただ CLAUDE.md では「データベースの実体は Google Sheets。`database/*.csv` は参照用アーカイブ」とあり、正は Sheets です。Sheets のステータス列を確認します。
 
----
-
-### Claude *(08:51 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(08:52 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 原因が分かりました。
 
@@ -288,15 +164,7 @@ noteNeta シートに6件保存しました（No 139〜144、すべて未使用�
 
 追加した6件（No 139〜144）は既存と重複しない有効なネタですが、不要な追加だったので、どう扱いますか。
 
----
-
-### Claude *(08:52 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(08:52 JST)*
+*[ツール: `ToolSearch`]*
 
 （`AskUserQuestion` は使えないため、テキストで確認します）
 
@@ -315,91 +183,35 @@ noteNeta シートに6件保存しました（No 139〜144、すべて未使用�
 残す。
 未使用ネタ数のチェックは Sheets のステータス列を見るようにこの routine を修正して。また、database にある csv ファイルはもう不要なので削除しよう。
 
----
-
 ### Claude *(08:54 JST)*
 
 残すで承知しました。ルーティン定義の場所と、CSV の参照箇所を調べます。
 
----
-
-### Claude *(08:54 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(08:54 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(08:54 JST)*
+*[ツール: `Bash`, `Bash`]*
 
 ルーティンの定義は `.claude/skills/daily-xonepoint/SKILL.md` にあります。該当箇所を読みます。
 
----
-
-### Claude *(08:54 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(08:54 JST)*
+*[ツール: `Read`]*
 
 daily-xonepoint の STEP 1 はすでに Sheets 参照になっており、これは私を起動したルーティンとは別物です。私を起動したのは onePoint と noteNeta を両方チェックして research-trivia / research-note-projectx を振り分けるルーティンでした。リポジトリ内に該当定義があるか探します。
 
----
-
-### Claude *(08:54 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(08:55 JST)*
+*[ツール: `Bash`]*
 
 リポジトリ内には見つかりません。私を起動したルーティンの本文（CSV をカウントする bash と research-trivia/research-note-projectx の振り分け）はリポジトリのファイルではなく、Web 側のトリガー設定に保存されているものです。そのため私がファイルとして直接編集することはできません。
 
 修正版の本文を用意するので、よーんがトリガー設定に貼り替える形になります。正確を期すため onePointNeta のステータス列位置を確認します。
 
----
-
-### Claude *(08:55 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(08:55 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 確認できました。onePointNeta はステータス列が **I列**、noteNeta は **L列** です。
 
 CSV を削除します。これらは git 管理下なので復元可能です。まず参照している現役スクリプト/スキルを確認してから削除します。
 
----
-
-### Claude *(08:55 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(08:55 JST)*
+*[ツール: `Bash`]*
 
 7件すべて tracked です。削除します。
 
----
-
-### Claude *(08:55 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(08:56 JST)*
+*[ツール: `Bash`]*
 
 CSV 7件を削除しました。ルーティン本文はリポジトリ外（Web トリガー設定）にあるため、以下を貼り替えてください。
 
@@ -446,8 +258,6 @@ noteNeta の未使用が10件未満なら /research-note-projectx を実行す�
 Stop hook feedback:
 [~/.claude/stop-hook-git-check.sh]: There are uncommitted changes in the repository. Please commit and push these changes to the remote branch.
 
----
-
 ### Claude *(08:56 JST)*
 
 commit は待ちます。先ほどの質問（CSV 参照箇所を整理するか／いったん止めるか）への回答をいただいてから、まとめてコミット＆プッシュします。Stop hook のフィードバックは承認の代わりにはしません。
@@ -460,39 +270,15 @@ commit は待ちます。先ほどの質問（CSV 参照箇所を整理するか
 
 research-plan スキルの参照書き換えだけやって
 
----
-
 ### Claude *(09:01 JST)*
 
 research-plan スキルを読んで、CSV 参照を Sheets 参照に書き換えます。
 
----
-
-### Claude *(09:01 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(09:01 JST)*
+*[ツール: `Read`]*
 
 CSV 参照は2箇所（line 2 と line 78）で、他はすでに Sheets 参照になっています。その2箇所を Sheets 表現に書き換えます。
 
----
-
-### Claude *(09:01 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(09:01 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(09:02 JST)*
+*[ツール: `Edit`, `Edit`]*
 
 research-plan スキルの CSV 参照2箇所を Sheets 表現に書き換えました（他は元々 Sheets 参照）。
 
@@ -510,8 +296,6 @@ research-plan スキルの CSV 参照2箇所を Sheets 表現に書き換えま�
 Stop hook feedback:
 [~/.claude/stop-hook-git-check.sh]: There are uncommitted changes in the repository. Please commit and push these changes to the remote branch.
 
----
-
 ### Claude *(09:02 JST)*
 
 コミットの可否を確認した直後なので、よーんの返事を待ちます。Stop hook は承認の代わりにしません。
@@ -527,13 +311,11 @@ Base directory for this skill: /home/user/xClaude/.claude/skills/record
 あなたは変更記録を自律的に作成するエージェントです。
 **以下の STEP を順番に実行してください。STEP 3 でユーザーの確認を取るまでファイルは作成しない。**
 
----
 
 # STEP 1: 記録済み変更の把握
 
 Read ツールで `/root/xClaude/docs/changelog.md` を読み込み、変更ログに記載されている **太字タイトル**（`**タイトル**` 形式）を全て記憶する。
 
----
 
 # STEP 2: 直近の git コミット履歴を取得
 
@@ -548,7 +330,6 @@ git -C /root/xClaude log --name-only --pretty=format:"COMMIT: %h %s" -20 \
   | grep -v "^$" | head -80
 ```
 
----
 
 # STEP 3: 未記録変更の候補を特定してよーんに提案
 
@@ -565,7 +346,6 @@ STEP 1 で把握した記録済みタイトルと STEP 2 のコミット履歴�
 
 以下の形式でよーんに提案する：
 
----
 
 **変更ログ候補（未記録）**
 
@@ -583,11 +363,9 @@ STEP 1 で把握した記録済みタイトルと STEP 2 のコミット履歴�
 
 （記録するものを番号で指定してください。すべて記録不要なら「スキップ」と言ってください。）
 
----
 
 ユーザーの返答を待つ。**「スキップ」の場合はここで終了。**
 
----
 
 # STEP 4: 報告書の作成
 
@@ -610,11 +388,9 @@ print(today)
 `docs/reports/template.md` を読み込み、以下の項目を埋めて保存する：
 
 ```markdown
----
 title: [変更タイトル]
 date: YYYY-MM-DD
 tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
----
 
 ← [変更ログへ](../changelog/)
 
@@ -639,7 +415,6 @@ tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 
 設計判断・今後の課題は、内容があれば追加する。
 
----
 
 # STEP 4.5: セッション履歴の保存と相互リンク
 
@@ -671,7 +446,6 @@ python3 /root/xClaude/scripts/save_session_history.py \
 ← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/YYYYMMDD_<スラグ>_session/)
 ```
 
----
 
 # STEP 5: 変更ログへのエントリ追加
 
@@ -698,7 +472,6 @@ python3 /root/xClaude/scripts/save_session_history.py \
 - 存在しなければ、ファイル先頭の `---` の直後に新しい日付セクションを挿入して追記
 - エントリは2行以内に収める
 
----
 
 # STEP 6: Git コミット & GitHub MCP プッシュ
 
@@ -721,7 +494,6 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 - files: 変更ファイルの path と content のリスト
 - message: コミットメッセージと同じ内容
 
----
 
 # 完了報告
 
@@ -731,31 +503,14 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
    変更ログ: docs/changelog.md に追記済み
 ```
 
----
-
 ### Claude *(09:10 JST)*
 
 `/record` を実行します。まず変更ログと git 履歴を確認します（パスは実際のリポジトリルート `/home/user/xClaude` を使います）。
 
----
-
-### Claude *(09:10 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(09:10 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(09:11 JST)*
+*[ツール: `Read`, `Bash`]*
 
 変更ログと git 履歴を照合しました。直近のコミットには今回の作業は含まれておらず、現在の作業ツリー（未コミット）に該当変更があります。
 
----
 
 **変更ログ候補（未記録）**
 
@@ -764,7 +519,6 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
    - 変更ファイル: `database/newsTopics.csv` ほか6件（削除）、`.claude/skills/research-plan/SKILL.md`
    - 関連する過去の変更: **database CSV → Google Sheets 移行**（2026-05-03）
 
----
 
 この1件を記録しますか。記録するなら番号（`1`）を、不要なら「スキップ」とお伝えください。
 
@@ -776,8 +530,6 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 
 Stop hook feedback:
 [~/.claude/stop-hook-git-check.sh]: There are uncommitted changes in the repository. Please commit and push these changes to the remote branch.
-
----
 
 ### Claude *(09:11 JST)*
 
@@ -791,40 +543,16 @@ Stop hook feedback:
 
 1
 
----
-
 ### Claude *(09:13 JST)*
 
 承知しました。報告書を作成します。まず日付とテンプレートを確認します。
 
----
-
-### Claude *(09:13 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(09:13 JST)*
+*[ツール: `Bash`]*
 
 日付は 20260528、スラグは `database_csv_removal` とします。報告書を作成します。
 
----
-
-### Claude *(09:13 JST)*
-
-*[ツール呼び出し: `Write`]*
-
----
-
-### Claude *(09:13 JST)*
+*[ツール: `Write`]*
 
 STEP 4.5: セッション履歴を保存します。
 
----
-
-### Claude *(09:13 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
+*[ツール: `Bash`]*
