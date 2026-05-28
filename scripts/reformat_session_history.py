@@ -87,6 +87,9 @@ def reformat(text):
     blocks = []  # [role, ts_suffix, items]
     for role, ts, content in sections:
         items = content_to_items(content)
+        # スキルプロンプト注入（"Base directory for this skill:" で始まるよーん発言）はスキップ
+        if role == "user" and items and items[0][0] == "text" and items[0][1].startswith("Base directory for this skill:"):
+            continue
         if blocks and blocks[-1][0] == role:
             blocks[-1][2].extend(items)
         else:

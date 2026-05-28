@@ -22,19 +22,9 @@ visual_infographic のスキルを修正
 
 しゅうせいけいかくをたてて。まだ修正はしないで
 
----
-
-## よーん *(10:09 JST)*
-
 Notebook への質問テンプレート・Infographic 設定の外部ファイル化を要望。`ask_template.txt` の内容と `infographic_config.env` の仕様を確定。
 
----
-
-## よーん *(10:15 JST)*
-
 Continue from where you left off.
-
----
 
 ### Claude *(10:15 JST)*
 
@@ -44,10 +34,6 @@ Continue from where you left off.
 2. `.claude/skills/visual_infographic/ask_template.txt` を新規作成
 3. `.claude/skills/visual_infographic/infographic_config.env` を新規作成
 4. `.claude/skills/visual_infographic/SKILL.md` を書き換え（Step 2〜5）
-
----
-
-### Claude *(10:17 JST)*
 
 4 ファイルの変更内容です：
 
@@ -64,8 +50,6 @@ Continue from where you left off.
 
 OK
 
----
-
 ### Claude *(10:18 JST)*
 
 ブランチ `claude/eloquent-curie-o4zJt` にコミット・プッシュ完了。
@@ -75,8 +59,6 @@ OK
 ## よーん *(10:23 JST)*
 
 `/visual_infographic` を実行。皮膚の剥がれに関するテキストを渡してテスト。
-
----
 
 ### Claude *(10:23 JST)*
 
@@ -91,8 +73,6 @@ Step 2: `setup-notebook` 実行 → 認証トークン期限切れ（403 Forbidd
 ## よーん *(10:36 JST)*
 
 `/record` で変更を記録。
-
----
 
 ### Claude *(10:37 JST)*
 
