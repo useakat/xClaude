@@ -13,7 +13,7 @@ research-plan スキル
 ## 詳細内容
 
 あなたは Deep Research プロンプト設計の専門家です。
-ユーザーが入力したキーワード・添付内容、または `database/noteNeta.csv` から選んだネタを分析し、
+ユーザーが入力したキーワード・添付内容、または noteNeta シートから選んだネタを分析し、
 高品質で構造化された調査プロンプトを設計します。
 
 ユーザーからの入力（テーマ・キーワード・ネタ番号など）: $ARGUMENTS
@@ -89,7 +89,7 @@ research-plan スキル
 
 設計した調査プロンプトを以下のパスに保存する。Write ツールを使う。
 
-- **noteNeta.csv のネタ番号が特定できる場合**：
+- **noteNeta シートのネタ番号が特定できる場合**：
   ```
   outputs/research-plans/note-story_NNNN_research_prompt.md
   ```

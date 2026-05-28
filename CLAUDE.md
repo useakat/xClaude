@@ -35,25 +35,49 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 xClaude/
 ├── .claude/
 │   ├── skills/                       # AIスキル定義（slash command として呼ぶ）
-│   │   ├── writer-note/              # note 記事執筆（宇宙・物理ナラティブ）
-│   │   ├── writer-xonepoint/         # X 用ワンポイント解説
-│   │   ├── writer-xnews/             # X ニュース投稿
-│   │   ├── writer-xstory/            # X 用ストーリー投稿
-│   │   ├── note-quick/               # スタイルだけ適用してチャットに本文出力（軽量版）
-│   │   ├── check/                    # 一般品質レビュー
-│   │   ├── check-fact/               # ファクトチェック（テキスト/Drive ID 自動分岐）
-│   │   ├── hashtag-note/             # note ハッシュタグ選定
-│   │   ├── research/                 # 一般調査
-│   │   ├── research-plan/            # Deep Research プロンプト設計
-│   │   ├── deep-research/            # 調査プロンプトを基に Web 深掘り調査
-│   │   ├── research-trivia/          # ワンポイントネタ発掘
-│   │   ├── research-note-projectx/   # note 記事ネタ発掘
-│   │   ├── analyze-target/           # persona / pain / what 設計
-│   │   ├── make-infographic/         # NotebookLM でインフォグラフィック生成
-│   │   ├── notebooklm/               # NotebookLM 操作
-│   │   ├── sync-to-drive/            # outputs/ → Drive 同期
-│   │   ├── sync-to-sheets/           # database/CSV → Sheets 同期
-│   │   └── daily-xonepoint/          # 1日1本ワンポイント投稿の全自動
+│   │   ├── [コンテンツ制作]
+│   │   │   ├── writer-note/           # note 記事執筆（宇宙・物理ナラティブ）
+│   │   │   ├── writer-xonepoint/      # X 用ワンポイント解説
+│   │   │   ├── writer-xnews/          # X ニュース投稿
+│   │   │   ├── writer-xstory/         # X ストーリー投稿
+│   │   │   ├── writer-xqa/            # X 上の質問への回答投稿
+│   │   │   ├── note-quick/            # スタイル適用・チャット出力（軽量版）
+│   │   │   ├── daily-xonepoint/       # 1日1本ワンポイント投稿の全自動
+│   │   │   └── draft_xstory/          # X 長文ストーリーネタ選定から全自動制作
+│   │   ├── [レポート生成]
+│   │   │   ├── reporter-daily/        # X・note 運用の日報
+│   │   │   ├── reporter-weekly/       # X・note 運用の週報
+│   │   │   └── reporter-monthly/      # X・note 運用の月報
+│   │   ├── [リサーチ・分析]
+│   │   │   ├── research/              # 一般調査
+│   │   │   ├── research-plan/         # Deep Research プロンプト設計
+│   │   │   ├── deep-research/         # 調査プロンプト基の Web 深掘り
+│   │   │   ├── research-trivia/       # 科学トリビアネタ発掘
+│   │   │   ├── research-note-projectx/# note 記事ネタ発掘
+│   │   │   ├── research_pain-xpost/   # X ポスト分析からテーマ提案
+│   │   │   ├── analyze-target/        # persona / pain / what 設計
+│   │   │   ├── analyze-x-posts/       # X 投稿パフォーマンス分析
+│   │   │   ├── ops_analyze-posts/     # X 投稿分析（stats/full モード）
+│   │   │   ├── ops_post-reactions/    # X 投稿リアクション集計
+│   │   │   └── classify-followers/    # フォロワー全件ペルソナ分類
+│   │   ├── [品質チェック]
+│   │   │   ├── check/                 # 一般品質レビュー
+│   │   │   └── check-fact/            # ファクトチェック（テキスト/Drive ID 自動分岐）
+│   │   ├── [メール・通知]
+│   │   │   └── mond-letter-reply/     # letter-notify メール回答生成
+│   │   ├── [画像・同期]
+│   │   │   ├── make-infographic/      # NotebookLM インフォグラフィック生成
+│   │   │   ├── visual_infographic/    # インフォグラフィック生成（画像作成）
+│   │   │   ├── notebooklm/            # NotebookLM 操作アシスタント
+│   │   │   ├── sync-to-drive/         # outputs/ → Google Drive 同期
+│   │   │   ├── sync-to-sheets/        # database/CSV → Sheets 同期
+│   │   │   └── hashtag-note/          # note ハッシュタグ選定
+│   │   ├── [運用・記録]
+│   │   │   ├── record/                # 変更・実装記録を changelog.md へ保存
+│   │   │   ├── record-note-posts/     # note 投稿情報を Sheets に記録
+│   │   │   └── save-session/          # セッション保存
+│   │   └── [設定・保守]
+│   │       └── update-permissions/    # 権限ルール更新（settings.json）
 │   ├── agents/                       # 自律エージェント定義
 │   │   ├── daily-xonepoint.md
 │   │   └── x-post-from-email.md
