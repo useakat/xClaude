@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog.md) ｜ [セッション履歴→](../history/20260524_20260524_drive_put_generalization/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260524_drive_put_generalization/)
 
 ## 背景・動機
 

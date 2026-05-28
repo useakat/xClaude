@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260526_xonepoint_neta_tags_and_neta_id_record/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260526_xonepoint_neta_tags_and_neta_id_record/)
 
 ## 背景・動機
 

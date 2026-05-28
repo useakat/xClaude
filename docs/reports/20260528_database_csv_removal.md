@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260528_database_csv_removal/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260528_database_csv_removal/)
 
 ## 背景・動機
 

@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260523_claude_md_git_skill_priority_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260523_claude_md_git_skill_priority_session/)
 
 ## 背景・動機
 

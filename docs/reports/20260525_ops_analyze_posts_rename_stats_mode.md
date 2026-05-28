@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260525_ops_analyze_posts_rename_stats_mode_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260525_ops_analyze_posts_rename_stats_mode_session/)
 
 ## 背景・動機
 
