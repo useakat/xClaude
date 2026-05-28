@@ -148,7 +148,7 @@ python3 /root/xClaude/scripts/save_session_history.py \
 **報告書のヘッダーリンク行**を更新：
 
 ```markdown
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/YYYYMMDD_<スラグ>_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/YYYYMMDD_<スラグ>_session/)
 ```
 
 ---

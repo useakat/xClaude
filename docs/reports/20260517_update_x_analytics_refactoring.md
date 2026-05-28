@@ -74,7 +74,7 @@ sidebar:
 
 ## セッション履歴
 
-[→ 作業ログ全文](../history/20260517_update_x_analytics_refactoring_session/)
+[→ 作業ログ全文](../../history/20260517_update_x_analytics_refactoring_session/)
 
 ## 今後の課題
 

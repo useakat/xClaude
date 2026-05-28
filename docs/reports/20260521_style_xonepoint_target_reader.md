@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260521_ops_postreactions_improvement_and_target_reader_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260521_ops_postreactions_improvement_and_target_reader_session/)
 
 ## 背景・動機
 

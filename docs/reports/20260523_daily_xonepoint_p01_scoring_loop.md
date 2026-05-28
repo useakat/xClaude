@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260523_daily_xonepoint_p01_scoring_loop_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260523_daily_xonepoint_p01_scoring_loop_session/)
 
 ## 背景・動機
 

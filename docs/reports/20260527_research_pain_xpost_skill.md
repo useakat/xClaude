@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260527_research_pain_xpost_skill/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260527_research_pain_xpost_skill/)
 
 ## 背景・動機
 
