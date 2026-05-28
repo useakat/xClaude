@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-24 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260524_drive_put_generalization/)
+← [報告書へ戻る](../../reports/20260524_drive_put_generalization/)
 
 ---
 

@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-24 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260524_claude_md_drive_download_rule/)
+← [報告書へ戻る](../../reports/20260524_claude_md_drive_download_rule/)
 
 ---
 

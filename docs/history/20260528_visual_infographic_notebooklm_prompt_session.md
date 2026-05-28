@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-28 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260528_visual_infographic_notebooklm_prompt/)
+← [報告書へ戻る](../../reports/20260528_visual_infographic_notebooklm_prompt/)
 
 ---
 

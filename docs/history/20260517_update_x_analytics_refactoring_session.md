@@ -5,7 +5,7 @@ sidebar:
   hidden: true
 ---
 
-← [報告書へ](../reports/20260517_update_x_analytics_refactoring/)
+← [報告書へ](../../reports/20260517_update_x_analytics_refactoring/)
 
 # セッション履歴
 
@@ -2678,7 +2678,7 @@ tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 ## エントリ形式
 
 ```markdown
-- **[変更タイトル]** — [概要1行]。[→報告書](../reports/YYYYMMDD_[ファイル名]/)
+- **[変更タイトル]** — [概要1行]。[→報告書](../../reports/YYYYMMDD_[ファイル名]/)
 ```
 
 ## 追記ルール

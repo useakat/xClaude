@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-23 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260523_claude_md_git_skill_priority/)
+← [報告書へ戻る](../../reports/20260523_claude_md_git_skill_priority/)
 
 ## よーん *(10:05 JST)*
 
