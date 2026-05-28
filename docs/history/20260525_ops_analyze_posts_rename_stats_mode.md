@@ -18,57 +18,19 @@ sidebar:
 週間ポスト計画（14本/週）だけど、バズ狙いを計画に入れるのはやめよう。
 X長文ポストは、600字程度。
 
----
-
 ### Claude *(00:44 JST)*
 
 `plan.md` と `writer-xstory` を確認してから対応します。
 
----
-
-### Claude *(00:44 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(00:44 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(00:44 JST)*
+*[ツール: `Bash`, `Bash`]*
 
 `writer-xstory` の全文と週次計画に関連するファイルを確認します。
 
----
-
-### Claude *(00:44 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(00:44 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(00:44 JST)*
+*[ツール: `Read`, `Bash`]*
 
 `draft_xstory` も確認します。
 
----
-
-### Claude *(00:45 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(00:45 JST)*
+*[ツール: `Bash`]*
 
 変更点は明確です。2つの変更を行います：
 
@@ -77,57 +39,11 @@ X長文ポストは、600字程度。
 
 まず `writer-xstory` を更新します。
 
----
-
-### Claude *(00:45 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(00:45 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(00:45 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(00:45 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(00:45 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(00:45 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(00:46 JST)*
+*[ツール: `Edit`, `Edit`, `Edit`, `Edit`, `Read`, `Edit`]*
 
 次に `plan.md` にバズ狙い廃止の方針を追記します。
 
----
-
-### Claude *(00:46 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(00:46 JST)*
+*[ツール: `Edit`]*
 
 変更内容です：
 
@@ -143,15 +59,9 @@ commit しますか？
 
 ごめん、バズ狙い廃止は削除して
 
----
-
 ### Claude *(00:47 JST)*
 
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(00:47 JST)*
+*[ツール: `Edit`]*
 
 削除しました。commit しますか？
 
@@ -161,59 +71,15 @@ commit しますか？
 
 それで、バズを期待しない投稿計画にする。ワンポイント解説の５月の平均インプはどのくらい？
 
----
-
 ### Claude *(00:49 JST)*
 
 Sheets から5月のワンポイント解説データを取得します。
 
----
-
-### Claude *(00:49 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(00:49 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(00:49 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(00:49 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(00:49 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_metadata`]*
-
----
-
-### Claude *(00:49 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_metadata`]*
-
----
-
-### Claude *(00:49 JST)*
+*[ツール: `ToolSearch`, `mcp__mcp-gsheets__sheets_get_values`, `ToolSearch`, `ToolSearch`, `mcp__mcp-gsheets__sheets_get_metadata`, `mcp__mcp-gsheets__sheets_get_metadata`]*
 
 X投稿一覧が見当たりません。スキルから正しいSpreadsheet IDを確認します。
 
----
-
-### Claude *(00:49 JST)*
-
-*[ツール呼び出し: `Bash`]*
+*[ツール: `Bash`]*
 
 ---
 
@@ -338,57 +204,17 @@ Summary:
 If you need specific details from before compaction (like exact code snippets, error messages, or content you generated), read the full transcript at: /root/.claude/projects/-root-xClaude/15df3e4a-cef3-47a8-9e37-97211ec32270.jsonl
 Continue the conversation from where it left off without asking the user any further questions. Resume directly — do not acknowledge the summary, do not recap what was happening, do not preface with "I'll continue" or similar. Pick up the last task as if the break never happened.
 
----
-
 ### Claude *(00:51 JST)*
 
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(00:51 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(00:51 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(00:51 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(00:52 JST)*
+*[ツール: `ToolSearch`, `mcp__mcp-gsheets__sheets_get_values`, `mcp__mcp-gsheets__sheets_get_values`, `mcp__mcp-gsheets__sheets_get_values`]*
 
 May のデータが rows 2-31 にあります。ワンポイント解説を識別するために詳細を取得します。
 
----
-
-### Claude *(00:52 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(00:53 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 「実は、」で始まるワンポイント解説を13本確認できました。集計します。
 
----
-
-### Claude *(00:53 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(00:53 JST)*
+*[ツール: `Bash`]*
 
 5月のワンポイント解説（13本）の集計結果です。
 
@@ -410,8 +236,6 @@ May のデータが rows 2-31 にあります。ワンポイント解説を識�
 
 投稿種類ごとの集計をする際に、outputs シートの what_id 列で、その投稿種類の投稿を抽出し、その URL 列と「X投稿一覧」シートの ポストURL とを照合して抽出した投稿のメトリクスを取得して集計して。言ってること分かる？
 
----
-
 ### Claude *(00:59 JST)*
 
 理解しています。整理すると：
@@ -425,27 +249,11 @@ May のデータが rows 2-31 にあります。ワンポイント解説を識�
 
 これを何かのスキルや機能として実装する話ですか？それとも今すぐこのロジックで集計を実行したい（一回きり）ですか？
 
----
-
-### Claude *(00:59 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(01:00 JST)*
+*[ツール: `ToolSearch`]*
 
 まず `outputs` シートの構造を確認します。
 
----
-
-### Claude *(01:00 JST)*
-
-*[ツール呼び出し: `Agent`]*
-
----
-
-### Claude *(01:00 JST)*
+*[ツール: `Agent`]*
 
 構造がわかりました。
 
@@ -455,27 +263,11 @@ May のデータが rows 2-31 にあります。ワンポイント解説を識�
 
 完全に理解できています。これをどう使いたいか確認させてください。
 
----
-
-### Claude *(01:00 JST)*
-
-*[ツール呼び出し: `AskUserQuestion`]*
-
----
-
-### Claude *(01:00 JST)*
+*[ツール: `AskUserQuestion`]*
 
 まず今すぐ正確な集計を、次にスキル実装を計画します。outputs シートから W003 の URL を取得します。
 
----
-
-### Claude *(01:01 JST)*
-
-*[ツール呼び出し: `Agent`]*
-
----
-
-### Claude *(01:02 JST)*
+*[ツール: `Agent`]*
 
 正確な集計が出ました。outputs × X投稿一覧 JOIN の結果：
 
@@ -487,33 +279,16 @@ May のデータが rows 2-31 にあります。ワンポイント解説を識�
 
 ただし5/1と5/4に重複エントリがあります（outputs シートに同じURLが2行入っている可能性）。実質15本なら平均はやや変わります。
 
----
 
 次にスキル実装の計画を立てます。既存の `analyze-impression` スキルを確認します。
 
----
-
-### Claude *(01:03 JST)*
-
-*[ツール呼び出し: `Agent`]*
-
----
-
-### Claude *(01:04 JST)*
+*[ツール: `Agent`]*
 
 `analyze-impression` スキルが既に **outputs × X投稿一覧 の JOIN ロジック**を実装していることがわかりました。STEP 2-3 で `what_id` フィルタ → URL 照合 → メトリクス取得の流れになっています。
 
 ただし制限あり：**最新50行のみ**参照のため、古い期間の分析で漏れが生じます。
 
----
-
-### Claude *(01:04 JST)*
-
-*[ツール呼び出し: `AskUserQuestion`]*
-
----
-
-### Claude *(01:06 JST)*
+*[ツール: `AskUserQuestion`]*
 
 `analyze-impression` は **投稿データの分析 → 書き方の改善提案 → スキルファイルへの自動適用**まで行う高機能スキルです。具体的には：
 
@@ -526,27 +301,11 @@ May のデータが rows 2-31 にあります。ワンポイント解説を識�
 
 計画を書きます。
 
----
-
-### Claude *(01:06 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(01:07 JST)*
+*[ツール: `Read`]*
 
 analyze-impression の実際のSTEP 3 テキストを確認します。
 
----
-
-### Claude *(01:07 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(01:07 JST)*
+*[ツール: `Read`]*
 
 問題箇所が明確になりました。STEP 3 の2つのクエリが `row 50` に固定されています。
 
@@ -557,45 +316,11 @@ range="X投稿一覧!AA1:AF50"
 
 これを全行取得に変えるだけです。計画を更新します。
 
----
-
-### Claude *(01:08 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(01:08 JST)*
-
-*[ツール呼び出し: `Write`]*
-
----
-
-### Claude *(01:08 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(01:08 JST)*
-
-*[ツール呼び出し: `ExitPlanMode`]*
-
----
-
-### Claude *(01:09 JST)*
+*[ツール: `Edit`, `Write`, `ToolSearch`, `ExitPlanMode`]*
 
 3箇所を修正します。
 
----
-
-### Claude *(01:09 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(01:09 JST)*
+*[ツール: `Edit`]*
 
 修正完了です。変更内容：
 
@@ -620,8 +345,6 @@ analyze-impression は
 
 のような集計結果を表示するんでしたっけ？
 
----
-
 ### Claude *(01:10 JST)*
 
 正確には違います。`analyze-impression` の出力は集計統計ではなく、**パターン分析＋スキル改善提案**が主目的です。
@@ -644,19 +367,10 @@ STEP 5 の出力フォーマットはこうなっています：
 
 「5月全体の平均: 9,216 / 中央値: 4,487」のようなシンプルな集計サマリーは出しません。
 
----
 
 何を追加・変更したいかで方向が変わります。
 
----
-
-### Claude *(01:11 JST)*
-
-*[ツール呼び出し: `AskUserQuestion`]*
-
----
-
-### Claude *(01:11 JST)*
+*[ツール: `AskUserQuestion`]*
 
 わかりました。`stats` スキルを新規作成する計画を立てます。
 
@@ -666,87 +380,25 @@ STEP 5 の出力フォーマットはこうなっています：
 
 [Request interrupted by user]
 
----
-
-## よーん *(01:13 JST)*
-
 それか、analyze-impression の引き数で、シンプル stats mode とパターン分析・スキル改善提案 mode を分ける？
-
----
 
 ### Claude *(01:13 JST)*
 
 それのほうがスマートですね。1スキルで両方カバーできます。引数パターンを拡張する計画を書きます。
 
----
-
-### Claude *(01:13 JST)*
-
-*[ツール呼び出し: `Write`]*
-
----
-
-### Claude *(01:13 JST)*
-
-*[ツール呼び出し: `ExitPlanMode`]*
-
----
-
-### Claude *(01:17 JST)*
-
-*[ツール呼び出し: `Write`]*
-
----
-
-### Claude *(01:17 JST)*
-
-*[ツール呼び出し: `ExitPlanMode`]*
-
----
-
-### Claude *(01:18 JST)*
+*[ツール: `Write`, `ExitPlanMode`, `Write`, `ExitPlanMode`]*
 
 まず metadata.yaml を確認して、新スキルの SKILL.md を作成します。
 
----
-
-### Claude *(01:18 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(01:18 JST)*
+*[ツール: `Read`]*
 
 `ops_analyze-posts` の SKILL.md を作成します。analyze-impression をベースに stats モードを追加します。
 
----
-
-### Claude *(01:18 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(01:20 JST)*
-
-*[ツール呼び出し: `Write`]*
-
----
-
-### Claude *(01:20 JST)*
+*[ツール: `Bash`, `Write`]*
 
 次に metadata.yaml を更新します。
 
----
-
-### Claude *(01:20 JST)*
-
-*[ツール呼び出し: `Edit`]*
-
----
-
-### Claude *(01:20 JST)*
+*[ツール: `Edit`]*
 
 `ops_analyze-posts/SKILL.md` の作成と `metadata.yaml` の更新が完了しました。
 
@@ -758,15 +410,9 @@ STEP 5 の出力フォーマットはこうなっています：
 
 はい
 
----
-
 ### Claude *(01:21 JST)*
 
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(01:21 JST)*
+*[ツール: `Bash`]*
 
 削除の確認をさせてください。`/root/xClaude/.claude/skills/analyze-impression/` ディレクトリを削除します。中には `SKILL.md` 1ファイルのみです。削除してよいですか？
 
@@ -776,21 +422,9 @@ STEP 5 の出力フォーマットはこうなっています：
 
 はい
 
----
-
 ### Claude *(01:22 JST)*
 
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(01:22 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(01:22 JST)*
+*[ツール: `Bash`, `Bash`]*
 
 完了です。
 
@@ -809,7 +443,6 @@ Base directory for this skill: /root/xClaude/.claude/skills/ops_analyze-posts
 
 ユーザーからの依頼: ``stats 2026-05-01~2026-05-25 W003``
 
----
 
 ## データソース
 
@@ -824,7 +457,6 @@ Base directory for this skill: /root/xClaude/.claude/skills/ops_analyze-posts
 > 注：outputs シートの URL は `https://x.com/...`、「X投稿一覧」シートの URL は `https://twitter.com/...`。tweet ID 部分でマッチングすること。
 > 事業導線分析のため、**インプレッション系メトリクスに加えて Q/AA-AF 列の導線メトリクスを必ず併せて取得・出力する**。
 
----
 
 ## HOW_ID → スキル対応マップ
 
@@ -835,7 +467,6 @@ Base directory for this skill: /root/xClaude/.claude/skills/ops_analyze-posts
 | W003 | writer-xonepoint, daily-xonepoint | style-xonepoint |
 | W006 | writer-xonepoint（質問回答も同一スキル経由） | style-xonepoint |
 
----
 
 # STEP 1: 分析対象とモードの決定
 
@@ -860,7 +491,6 @@ Base directory for this skill: /root/xClaude/.claude/skills/ops_analyze-posts
 期間とタイプを確定したら、ユーザーに 1 行で報告：
 `> 分析対象: 2026-05-11 〜 2026-05-15 / HOW_ID = W003 / モード = stats`
 
----
 
 # STEP 2: 対象投稿の URL リスト取得
 
@@ -872,7 +502,6 @@ sheets_get_values(spreadsheetId="1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc", 
 
 抽出件数が 0 件なら「対象投稿なし」と報告して終了。
 
----
 
 # STEP 3: 各投稿のメトリクス取得
 
@@ -895,7 +524,6 @@ URL が見つからない投稿は「未反映（同期遅延）」として除�
 - パーセント値（エンゲ率・プロフフォロー率・詳細クリック率・リンククリック率）：`%` を除去して float に変換
 - URL マッチング：tweet ID（`status/` 以降の数字）で照合
 
----
 
 # STEP 3.5: stats モード出力（stats モードの場合のみ実行して終了）
 
@@ -935,7 +563,6 @@ URL が見つからない投稿は「未反映（同期遅延）」として除�
 
 出力後、スキルを終了する。
 
----
 
 # STEP 4: 比較対象（過去投稿）の取得
 
@@ -943,7 +570,6 @@ URL が見つからない投稿は「未反映（同期遅延）」として除�
 
 過去データは「比較用ベンチマーク」として高IMP/低IMP の閾値判定に使う。
 
----
 
 # STEP 5: パターン分析
 
@@ -1008,7 +634,6 @@ D 列（ポスト種類）でグルーピングし、種類別に件数・平均
 - 高リンククリック × ゼロフォロー：投稿例（クリック数・フォロー増・推定原因）
 ```
 
----
 
 # STEP 6: 改善提案の生成
 
@@ -1029,7 +654,6 @@ STEP 1 のタイプから対応スキル・style ファイルを特定し、Read
 
 提案ごとに番号を振る。最大 5 件程度に絞る。
 
----
 
 # STEP 7: ユーザー承認待ち
 
@@ -1045,7 +669,6 @@ STEP 1 のタイプから対応スキル・style ファイルを特定し、Read
 
 **ユーザーの回答を待つ。承認なしには次に進まない。**
 
----
 
 # STEP 8: 承認された修正の適用
 
@@ -1059,7 +682,6 @@ STEP 1 のタイプから対応スキル・style ファイルを特定し、Read
   - .claude/skills/daily-xonepoint/SKILL.md（ネタ補充条件追加）
 ```
 
----
 
 # STEP 9: レポート保存（任意）
 
@@ -1071,14 +693,11 @@ STEP 1 のタイプから対応スキル・style ファイルを特定し、Read
 
 frontmatter:
 ```yaml
----
 title: <HOW_ID>投稿のインプレッション分析とスキル改善
 date: YYYY-MM-DD
 tags: [skill, workflow]
----
 ```
 
----
 
 # 完了報告
 
@@ -1092,91 +711,34 @@ tags: [skill, workflow]
 
 その後の commit & push は通常通り、ユーザーに確認してから行う。
 
----
-
 ### Claude *(01:25 JST)*
 
 > 分析対象: 2026-05-01 〜 2026-05-25 / HOW_ID = W003 / モード = stats
 
----
-
-### Claude *(01:25 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(01:25 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(01:26 JST)*
+*[ツール: `ToolSearch`, `mcp__mcp-gsheets__sheets_get_values`]*
 
 W003 が17件抽出されました。次にX投稿一覧から全行取得してメトリクスを照合します。
 
----
-
-### Claude *(01:26 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(01:26 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 データが大きすぎるため、対象 tweet ID を直接検索します。
 
----
-
-### Claude *(01:26 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(01:26 JST)*
+*[ツール: `Bash`]*
 
 14件がマッチしました（3件は X投稿一覧に未登録）。Python でメトリクスを抽出します。
 
----
-
-### Claude *(01:26 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(01:27 JST)*
+*[ツール: `Bash`]*
 
 フォロー増（AC列）も取得します。
 
----
-
-### Claude *(01:27 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(01:27 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 行番号がわかりました。フォロー増（AC列）を対象行だけ取得します。
 
----
-
-### Claude *(01:27 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(01:28 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 全データが揃いました。集計サマリーを出力します。
 
----
 
 ## 集計サマリー（2026-05-01〜2026-05-25 / W003）
 
@@ -1212,7 +774,6 @@ W003 が17件抽出されました。次にX投稿一覧から全行取得して
 
 > 未登録3件（05/01 6:29、05/01 8:10、05/04 2本目）はX投稿一覧に存在せずメトリクス取得不可。
 
----
 
 stats モード完了です。外れ値（雨の匂い）を除いた実態値は平均 **5,218 IMP** が参考になります。
 
@@ -1221,8 +782,6 @@ stats モード完了です。外れ値（雨の匂い）を除いた実態値�
 ## よーん *(21:25 JST)*
 
 ops_analyze-posts という skill はある？
-
----
 
 ### Claude *(21:25 JST)*
 
@@ -1240,15 +799,9 @@ ops_analyze-posts という skill はある？
 
 master に push した？
 
----
-
 ### Claude *(21:26 JST)*
 
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:26 JST)*
+*[ツール: `Bash`]*
 
 まだ push していません。未コミットの変更がまとまっています：
 
@@ -1269,13 +822,11 @@ Base directory for this skill: /root/xClaude/.claude/skills/record
 あなたは変更記録を自律的に作成するエージェントです。
 **以下の STEP を順番に実行してください。STEP 3 でユーザーの確認を取るまでファイルは作成しない。**
 
----
 
 # STEP 1: 記録済み変更の把握
 
 Read ツールで `/root/xClaude/docs/changelog.md` を読み込み、変更ログに記載されている **太字タイトル**（`**タイトル**` 形式）を全て記憶する。
 
----
 
 # STEP 2: 直近の git コミット履歴を取得
 
@@ -1290,7 +841,6 @@ git -C /root/xClaude log --name-only --pretty=format:"COMMIT: %h %s" -20 \
   | grep -v "^$" | head -80
 ```
 
----
 
 # STEP 3: 未記録変更の候補を特定してよーんに提案
 
@@ -1307,7 +857,6 @@ STEP 1 で把握した記録済みタイトルと STEP 2 のコミット履歴�
 
 以下の形式でよーんに提案する：
 
----
 
 **変更ログ候補（未記録）**
 
@@ -1325,11 +874,9 @@ STEP 1 で把握した記録済みタイトルと STEP 2 のコミット履歴�
 
 （記録するものを番号で指定してください。すべて記録不要なら「スキップ」と言ってください。）
 
----
 
 ユーザーの返答を待つ。**「スキップ」の場合はここで終了。**
 
----
 
 # STEP 4: 報告書の作成
 
@@ -1352,11 +899,9 @@ print(today)
 `docs/reports/template.md` を読み込み、以下の項目を埋めて保存する：
 
 ```markdown
----
 title: [変更タイトル]
 date: YYYY-MM-DD
 tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
----
 
 ← [変更ログへ](../changelog/)
 
@@ -1381,7 +926,6 @@ tags: [該当するタグ: skill / workflow / style / bugfix / wiki / infra]
 
 設計判断・今後の課題は、内容があれば追加する。
 
----
 
 # STEP 4.5: セッション履歴の保存と相互リンク
 
@@ -1413,7 +957,6 @@ python3 /root/xClaude/scripts/save_session_history.py \
 ← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/YYYYMMDD_<スラグ>_session/)
 ```
 
----
 
 # STEP 5: 変更ログへのエントリ追加
 
@@ -1440,7 +983,6 @@ python3 /root/xClaude/scripts/save_session_history.py \
 - 存在しなければ、ファイル先頭の `---` の直後に新しい日付セクションを挿入して追記
 - エントリは2行以内に収める
 
----
 
 # STEP 6: Git コミット & GitHub MCP プッシュ
 
@@ -1463,7 +1005,6 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 - files: 変更ファイルの path と content のリスト
 - message: コミットメッセージと同じ内容
 
----
 
 # 完了報告
 
@@ -1473,11 +1014,9 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
    変更ログ: docs/changelog.md に追記済み
 ```
 
----
-
 ### Claude *(21:27 JST)*
 
-*[ツール呼び出し: `Read`]*
+*[ツール: `Read`]*
 
 ---
 
@@ -1616,37 +1155,12 @@ Summary:
 If you need specific details from before compaction (like exact code snippets, error messages, or content you generated), read the full transcript at: /root/.claude/projects/-root-xClaude/15df3e4a-cef3-47a8-9e37-97211ec32270.jsonl
 Continue the conversation from where it left off without asking the user any further questions. Resume directly — do not acknowledge the summary, do not recap what was happening, do not preface with "I'll continue" or similar. Pick up the last task as if the break never happened.
 
----
-
 ### Claude *(21:28 JST)*
 
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:28 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:28 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:28 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(21:29 JST)*
+*[ツール: `Bash`, `Bash`, `Bash`, `Read`]*
 
 STEP 3 の結果です。以下の変更が記録されていません：
 
----
 
 **変更ログ候補（未記録）**
 
@@ -1670,22 +1184,6 @@ STEP 3 の結果です。以下の変更が記録されていません：
 
 1。2はスキップ
 
----
-
 ### Claude *(22:03 JST)*
 
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(22:03 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(22:03 JST)*
-
-*[ツール呼び出し: `Write`]*
-
----
+*[ツール: `Bash`, `Read`, `Write`]*
