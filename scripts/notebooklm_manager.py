@@ -222,6 +222,50 @@ async def cmd_make_infographic(args):
                 print(f"✓ ノートブック削除: {nb_id}")
 
 
+async def cmd_setup_notebook(args):
+    """ノートブックを作成してテキスト＋追加ソースを登録する（インフォグラフィック生成は行わない）。"""
+    if args.file:
+        with open(args.file, encoding="utf-8") as f:
+            text = f.read()
+        source_title = os.path.basename(args.file)
+    elif args.text:
+        text = args.text
+        source_title = args.title
+    else:
+        print("エラー: --text または --file を指定してください", file=sys.stderr)
+        sys.exit(1)
+
+    import mimetypes
+    import shutil
+
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
+        nb = await client.notebooks.create(args.title)
+        nb_id = nb.id
+        print(f"✓ ノートブック作成: {nb_id}")
+
+        await client.sources.add_text(nb_id, source_title, text)
+        print(f"✓ ソース追加: {source_title}")
+
+        for url in args.extra_source_url:
+            m = re.search(r'drive\.google\.com/file/d/([\w-]+)', url)
+            if m:
+                file_id = m.group(1)
+                tmp_no_ext = tempfile.NamedTemporaryFile(prefix='nblm_src_', delete=False)
+                tmp_no_ext.close()
+                drive_get = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'drive_get.sh')
+                subprocess.run(['bash', drive_get, file_id, tmp_no_ext.name], check=True)
+                mime = subprocess.check_output(['file', '--mime-type', '-b', tmp_no_ext.name]).decode().strip()
+                ext = mimetypes.guess_extension(mime) or ''
+                tmp_path = tmp_no_ext.name + ext
+                shutil.move(tmp_no_ext.name, tmp_path)
+                await client.sources.add_file(nb_id, tmp_path, wait=True)
+                os.unlink(tmp_path)
+                print(f"✓ 追加ソース（Drive, {mime}）: {url}")
+            else:
+                await client.sources.add_url(nb_id, url)
+                print(f"✓ 追加ソース（URL）: {url}")
+
+
 async def cmd_delete(args):
     async with await NotebookLMClient.from_storage(_storage_path()) as client:
         await client.notebooks.delete(args.notebook_id)
@@ -280,6 +324,13 @@ def main():
     p_make.add_argument("--keep", action="store_true", help="生成後もノートブックを残す")
     p_make.add_argument("--extra-source-url", action="append", default=[], help="追加で notebook に登録する URL（Drive 画像など、複数可）")
 
+    # setup-notebook
+    p_setup = sub.add_parser("setup-notebook", help="ノートブック作成＋ソース登録（インフォグラフィック生成なし）")
+    p_setup.add_argument("--text", default="", help="インライン入力テキスト")
+    p_setup.add_argument("--file", default="", help="テキストファイルのパス")
+    p_setup.add_argument("--title", default="Notebook", help="ノートブックタイトル")
+    p_setup.add_argument("--extra-source-url", action="append", default=[], help="追加で notebook に登録する URL（Drive 画像など、複数可）")
+
     # delete
     p_del = sub.add_parser("delete", help="ノートブック削除")
     p_del.add_argument("notebook_id", help="ノートブックID")
@@ -294,6 +345,7 @@ def main():
         "audio": cmd_audio,
         "infographic": cmd_infographic,
         "make-infographic": cmd_make_infographic,
+        "setup-notebook": cmd_setup_notebook,
         "delete": cmd_delete,
     }
 
