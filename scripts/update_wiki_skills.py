@@ -203,7 +203,19 @@ description: Claude Code で使用できるスキルの一覧
 
 
 def main():
-    repo_root = Path(os.environ.get('GIT_WORK_TREE', '/root/xClaude'))
+    # GIT_WORK_TREE がなければ git rev-parse で自動検出
+    git_work_tree = os.environ.get('GIT_WORK_TREE')
+    if not git_work_tree:
+        try:
+            import subprocess
+            git_work_tree = subprocess.check_output(
+                ['git', 'rev-parse', '--show-toplevel'],
+                text=True
+            ).strip()
+        except Exception:
+            git_work_tree = '/root/xClaude'  # fallback
+
+    repo_root = Path(git_work_tree)
     skills_dir = repo_root / '.claude' / 'skills'
     metadata_path = skills_dir / 'metadata.yaml'
     wiki_path = repo_root / 'docs' / 'skills' / 'index.md'
