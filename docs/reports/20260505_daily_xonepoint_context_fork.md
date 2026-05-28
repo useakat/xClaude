@@ -1,5 +1,5 @@
 ---
-title: daily-xonepoint の子スキル隔離（context:fork 対応）
+title: "daily-xonepoint の子スキル隔離（context:fork 対応）"
 date: 2026-05-05
 tags: [skill, bugfix]
 ---
