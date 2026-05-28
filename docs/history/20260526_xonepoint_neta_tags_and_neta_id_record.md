@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-26 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260525_xonepoint_neta_tags_and_neta_id_record/)
+← [報告書へ戻る](../../reports/20260525_xonepoint_neta_tags_and_neta_id_record/)
 
 ---
 

@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-22 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260522_persona_sheet_registration/)
+← [報告書へ戻る](../../reports/20260522_persona_sheet_registration/)
 
 ---
 

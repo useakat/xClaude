@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-21 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260521_draft_xstory_skill/)
+← [報告書へ戻る](../../reports/20260521_draft_xstory_skill/)
 
 ---
 

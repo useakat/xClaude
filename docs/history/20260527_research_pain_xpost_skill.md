@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-27 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260527_research_pain_xpost_skill/)
+← [報告書へ戻る](../../reports/20260527_research_pain_xpost_skill/)
 
 ---
 

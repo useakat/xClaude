@@ -11,7 +11,7 @@ sidebar:
 
 ---
 
-← [報告書へ戻る](../reports/20260523_daily_xonepoint_p01_scoring_loop/)
+← [報告書へ戻る](../../reports/20260523_daily_xonepoint_p01_scoring_loop/)
 
 daily-xonepoint skill が最初から [投稿文] のような文章を出力するためには、どのように skill を修正すればいいと思いますか？提案してください。まだ実装はしないでね。
 
@@ -821,7 +821,7 @@ python3 /root/xClaude/scripts/save_session_history.py \
 **履歴ファイルの冒頭**（`# セッション履歴` の下の `>` 説明行の直後）に追記：
 
 ```markdown
-← [報告書へ戻る](../reports/YYYYMMDD_<スラグ>/)
+← [報告書へ戻る](../../reports/YYYYMMDD_<スラグ>/)
 ```
 
 **報告書のヘッダーリンク行**を更新：
@@ -838,7 +838,7 @@ python3 /root/xClaude/scripts/save_session_history.py \
 ## エントリ形式
 
 ```markdown
-- **[変更タイトル]** — [概要1行]。[→報告書](../reports/YYYYMMDD_[ファイル名]/)
+- **[変更タイトル]** — [概要1行]。[→報告書](../../reports/YYYYMMDD_[ファイル名]/)
 ```
 
 ## リンク形式ルール
@@ -847,7 +847,7 @@ python3 /root/xClaude/scripts/save_session_history.py \
 
 例:
 - ✅ `[変更ログへ](../changelog/)`
-- ✅ `[報告書](../reports/20260521_foo/)`
+- ✅ `[報告書](../../reports/20260521_foo/)`
 - ❌ `[変更ログへ](../changelog.md)`
 
 ## 追記ルール

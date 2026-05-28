@@ -142,7 +142,7 @@ python3 /root/xClaude/scripts/save_session_history.py \
 **履歴ファイルの冒頭**（`# セッション履歴` の下の `>` 説明行の直後）に追記：
 
 ```markdown
-← [報告書へ戻る](../reports/YYYYMMDD_<スラグ>/)
+← [報告書へ戻る](../../reports/YYYYMMDD_<スラグ>/)
 ```
 
 **報告書のヘッダーリンク行**を更新：

@@ -9,7 +9,7 @@ sidebar:
 
 > 2026-05-21 のセッション作業ログ。
 
-← [報告書へ戻る](../reports/20260521_ops_post_reactions_improvement/) ｜ [想定読者追加報告書](../reports/20260521_style_xonepoint_target_reader/)
+← [報告書へ戻る](../../reports/20260521_ops_post_reactions_improvement/) ｜ [想定読者追加報告書](../../reports/20260521_style_xonepoint_target_reader/)
 
 ---
 
@@ -662,7 +662,7 @@ python3 /root/xClaude/scripts/save_session_history.py \
 **履歴ファイルの冒頭**（`# セッション履歴` の下の `>` 説明行の直後）に追記：
 
 ```markdown
-← [報告書へ戻る](../reports/YYYYMMDD_<スラグ>/)
+← [報告書へ戻る](../../reports/YYYYMMDD_<スラグ>/)
 ```
 
 **報告書のヘッダーリンク行**を更新：
@@ -679,7 +679,7 @@ python3 /root/xClaude/scripts/save_session_history.py \
 ## エントリ形式
 
 ```markdown
-- **[変更タイトル]** — [概要1行]。[→報告書](../reports/YYYYMMDD_[ファイル名]/)
+- **[変更タイトル]** — [概要1行]。[→報告書](../../reports/YYYYMMDD_[ファイル名]/)
 ```
 
 ## リンク形式ルール
@@ -688,7 +688,7 @@ python3 /root/xClaude/scripts/save_session_history.py \
 
 例:
 - ✅ `[変更ログへ](../changelog/)`
-- ✅ `[報告書](../reports/20260521_foo/)`
+- ✅ `[報告書](../../reports/20260521_foo/)`
 - ❌ `[変更ログへ](../changelog.md)`
 
 ## 追記ルール
