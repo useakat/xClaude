@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-28
+
+- **database CSV アーカイブ削除・残存参照の Sheets 化** — 参照用アーカイブだった `database/*.csv` 7件を削除し、`research-plan` スキルの CSV 参照を noteNeta シート参照に修正。ネタ補充ルーティンの未使用判定も Sheets ステータス列ベースに変更（CSV 乖離による誤判定の解消）。[→報告書](../reports/20260528_database_csv_removal/)
+
 ## 2026-05-27
 
 - **research_pain-xpost スキル新設** — 特定 X ポストのリプライ・引用RTを取得し、読者のニーズ・疑問を5観点でクラスタリングして note 記事テーマを提案、承認後に noteNeta シートへ追記するスキルを新設。引用RT・リプ取得は `ops_post-reactions` の仕組み（xmcp＋リプ・引用一覧シート）を再利用。[→報告書](../reports/20260527_research_pain_xpost_skill/)
