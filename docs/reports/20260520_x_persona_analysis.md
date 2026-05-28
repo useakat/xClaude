@@ -131,4 +131,4 @@ sidebar:
 
 ## セッション履歴
 
-[→ 作業ログ全文](../history/20260520_x_persona_analysis_session/)
+[→ 作業ログ全文](../../history/20260520_x_persona_analysis_session/)

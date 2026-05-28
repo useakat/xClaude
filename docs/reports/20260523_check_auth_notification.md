@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260523_check_auth_notification_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260523_check_auth_notification_session/)
 
 ## 背景・動機
 
