@@ -1,5 +1,5 @@
 ---
-title: visual_infographic 改善: 即アップロード方式・スーパーニャンコ参照・notebooklm_manager 修正 — セッション履歴
+title: "visual_infographic 改善: 即アップロード方式・スーパーニャンコ参照・notebooklm_manager 修正 — セッション履歴"
 date: 2026-05-28
 sidebar:
   hidden: true
