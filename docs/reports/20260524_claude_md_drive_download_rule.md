@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260524_claude_md_drive_download_rule_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260524_claude_md_drive_download_rule_session/)
 
 ## 背景・動機
 

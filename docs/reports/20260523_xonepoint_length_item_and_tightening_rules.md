@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../history/20260523_xonepoint_length_item_and_tightening_rules_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260523_xonepoint_length_item_and_tightening_rules_session/)
 
 ## 背景・動機
 
