@@ -9,6 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-28
 
+- **visual_infographic：NotebookLM によるプロンプト生成への委譲** — Claude 自身によるプロンプト生成を廃止し、ソーステキスト＋スーパーニャンコ画像を持つ notebook に `ask` でプロンプト 3 パターンを生成させる方式に変更。`setup-notebook` サブコマンド追加・`ask_template.txt`/`infographic_config.env` の外部ファイル化も実施。[→報告書](../reports/20260528_visual_infographic_notebooklm_prompt/)
 - **database CSV アーカイブ削除・残存参照の Sheets 化** — 参照用アーカイブだった `database/*.csv` 7件を削除し、`research-plan` スキルの CSV 参照を noteNeta シート参照に修正。ネタ補充ルーティンの未使用判定も Sheets ステータス列ベースに変更（CSV 乖離による誤判定の解消）。[→報告書](../reports/20260528_database_csv_removal/)
 
 ## 2026-05-27
