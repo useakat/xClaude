@@ -7,3 +7,10 @@ gcp/
 \#*\#
 **/__pycache__/
 *.pyc
+
+# 認証・個人スクリプト（コミット対象外）
+/get-gws-tokens.py
+/tunnel.sh
+/To
+/*.pdf
+.claude/plans/
