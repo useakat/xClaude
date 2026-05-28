@@ -15,8 +15,6 @@ sidebar:
 
 これって master にも pushされてるの？
 
----
-
 ### Claude *(10:05 JST)*
 
 masterには入っていません。`claude/reporter-daily-XH8mU` ブランチのみにプッシュされています。
@@ -28,8 +26,6 @@ masterには入っていません。`claude/reporter-daily-XH8mU` ブランチ�
 ## よーん *(10:06 JST)*
 
 なんで手順を無視したの？
-
----
 
 ### Claude *(10:06 JST)*
 
@@ -46,8 +42,6 @@ masterには入っていません。`claude/reporter-daily-XH8mU` ブランチ�
 ## よーん *(10:07 JST)*
 
 セッション冒頭のシステム指示より、スキル内の指示を優先するようにしたら、このようなことは今後防げる？
-
----
 
 ### Claude *(10:07 JST)*
 
@@ -70,8 +64,6 @@ masterには入っていません。`claude/reporter-daily-XH8mU` ブランチ�
 
 1で
 
----
-
 ### Claude *(10:10 JST)*
 
 追記しました。次回から、スキルに push 先が明記されていれば `master` に直接 push します。
@@ -85,8 +77,6 @@ masterには入っていません。`claude/reporter-daily-XH8mU` ブランチ�
 Stop hook feedback:
 [~/.claude/stop-hook-git-check.sh]: There are uncommitted changes in the repository. Please commit and push these changes to the remote branch.
 
----
-
 ### Claude *(10:21 JST)*
 
 master へのプッシュ完了です。
@@ -99,6 +89,8 @@ master へのプッシュ完了です。
 ---
 
 ## よーん *(10:34 JST)*
+
+
 
 ### Claude *(10:34 JST)*
 
@@ -115,8 +107,6 @@ master へのプッシュ完了です。
 ## よーん *(10:36 JST)*
 
 1
-
----
 
 ### Claude *(10:36 JST)*
 
