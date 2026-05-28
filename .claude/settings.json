@@ -44,7 +44,19 @@
       "mcp__claude_ai_Gmail__create_label",
       "mcp__claude_ai_Gmail__list_labels",
       "mcp__claude_ai_Gmail__label_thread",
-      "mcp__claude_ai_Gmail__unlabel_thread"
+      "mcp__claude_ai_Gmail__unlabel_thread",
+      "Bash(gws drive +upload *)",
+      "Bash(python3 /home/useakat/xClaude/scripts/notebooklm_manager.py make-infographic *)",
+      "Bash(python3 /home/useakat/xClaude/scripts/notebooklm_manager.py infographic *)",
+      "Bash(bash /home/useakat/xClaude/scripts/send_gmail.sh *)",
+      "Bash(python3 -c *)",
+      "Bash(rm /home/useakat/xClaude/outputs/infographic_*)",
+      "Bash(git rev-parse *)",
+      "Bash(sed *)",
+      "Bash(date *)",
+      "Bash(wc *)",
+      "mcp__claude_ai_Google_Drive__search_files",
+      "mcp__claude_ai_Google_Drive__read_file_content"
     ]
   },
   "hooks": {
