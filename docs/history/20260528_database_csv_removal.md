@@ -26,6 +26,7 @@ op = count('onePointNeta.csv')
 nn = count('noteNeta.csv')
 print(f'onePoint未使用:{op}件 / noteNeta未使用:{nn}件')
 "
+```
 onePointNeta.csv の未使用が10件未満なら /research-trivia を実行する。
 noteNeta.csv の未使用が10件未満なら /research-note-projectx を実行する。
 両方10件以上なら「ネタが十分あります」と出力して終了する。
