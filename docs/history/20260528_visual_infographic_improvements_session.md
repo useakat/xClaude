@@ -17,19 +17,12 @@ sidebar:
 
 /record
 
----
-
 ### Claude *(11:14 JST)*
 
 STEP 1・2 を並行して実行します。
 
----
-
-### Claude *(11:15 JST)*
-
 STEP 3：未記録変更の候補を特定しました。
 
----
 
 **変更ログ候補（未記録）**
 
@@ -55,7 +48,6 @@ STEP 3：未記録変更の候補を特定しました。
    - 変更ファイル: `.claude/skills/visual_infographic/SKILL.md`, `scripts/notebooklm_auth_pull.sh`
    - 関連する過去の変更: drivemcp_get_remote.sh 追加：リモートセッション専用 Drive ダウンロード
 
----
 
 記録するものを番号で指定してください。すべて記録不要なら「スキップ」とどうぞ。
 
@@ -65,17 +57,9 @@ STEP 3：未記録変更の候補を特定しました。
 
 4は不要。1,2,3 をまとめて変更ログと報告書
 
----
-
 ### Claude *(11:26 JST)*
 
 1・2・3をまとめて報告書を作成します。テンプレートを確認します。
 
----
-
-### Claude *(11:27 JST)*
-
 報告書 `docs/reports/20260528_visual_infographic_improvements.md` を作成しました。
 セッション履歴の保存・変更ログへの追記・コミット&プッシュへ続きます。
-
----

@@ -124,7 +124,9 @@ def jsonl_to_markdown(jsonl_path: Path, title: str) -> str:
             if t == "user" and role == "user":
                 if isinstance(content, str) and content.strip():
                     stripped = content.strip()
-                    if not stripped.startswith("<") and not stripped.startswith("Tool:"):
+                    if stripped.startswith("Base directory for this skill:"):
+                        pass  # スキルプロンプト注入はスキップ
+                    elif not stripped.startswith("<") and not stripped.startswith("Tool:"):
                         raw.append(("user", ts, [("text", stripped)]))
                 elif isinstance(content, list):
                     texts = [
@@ -133,7 +135,7 @@ def jsonl_to_markdown(jsonl_path: Path, title: str) -> str:
                         if isinstance(b, dict) and b.get("type") == "text"
                         and not b.get("text", "").strip().startswith("<")
                     ]
-                    if texts:
+                    if texts and not texts[0].startswith("Base directory for this skill:"):
                         raw.append(("user", ts, [("text", "\n".join(texts))]))
 
             elif t == "assistant" and role == "assistant":
