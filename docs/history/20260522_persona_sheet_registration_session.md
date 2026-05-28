@@ -17,153 +17,43 @@ sidebar:
 
 persona フォルダに有るペルソナを、persona シートに追加してください
 
----
-
 ### Claude *(21:51 JST)*
 
 まず `persona` フォルダの内容と、Sheets の現状を確認します。
 
----
-
-### Claude *(21:51 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:51 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(21:51 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:51 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(21:51 JST)*
+*[ツール: `Bash`, `ToolSearch`, `Bash`, `Read`]*
 
 ペルソナファイルの内容と Sheets の現状を確認します。
 
----
-
-### Claude *(21:51 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:51 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(21:52 JST)*
+*[ツール: `Bash`, `ToolSearch`]*
 
 Sheets の persona シートの現状を確認します。
 
----
-
-### Claude *(21:52 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(21:52 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:52 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`, `Bash`]*
 
 pain シートの確認と README の確認をします。
 
----
-
-### Claude *(21:52 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(21:52 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(21:52 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`, `Read`]*
 
 残りのペルソナファイルを読んで pain_id の対応を確認します。
 
----
-
-### Claude *(21:52 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:53 JST)*
+*[ツール: `Bash`]*
 
 悩みセクションの詳細を確認します。
 
----
-
-### Claude *(21:53 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(21:53 JST)*
+*[ツール: `Bash`]*
 
 全ペルソナの対応関係が把握できました。sheets_append_values を読み込んでデータを追加します。
 
----
-
-### Claude *(21:53 JST)*
-
-*[ツール呼び出し: `ToolSearch`]*
-
----
-
-### Claude *(21:54 JST)*
+*[ツール: `ToolSearch`]*
 
 19件のペルソナを persona シートに追加します。
 
----
-
-### Claude *(21:54 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_append_values`]*
-
----
-
-### Claude *(21:54 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_append_values`]*
 
 19件追加できました。結果を確認します。
 
----
-
-### Claude *(21:54 JST)*
-
-*[ツール呼び出し: `mcp__mcp-gsheets__sheets_get_values`]*
-
----
-
-### Claude *(21:54 JST)*
+*[ツール: `mcp__mcp-gsheets__sheets_get_values`]*
 
 persona シートへの追加が完了しました。
 
@@ -186,7 +76,7 @@ persona シートへの追加が完了しました。
 | P18 | 物理に目覚めかけている学生 | PR011 |
 | P19 | 天体観測・星空実践派 | PR003 |
 
-**pain_id の割り当て根拠**：各ファイルの「抱えている悩み・葛藤」セクションを読んで最も近いものを選びました。PR003（科学をサクッと知りたい）が多数ですが、挫折・諦め系は PR011、後ろめたさ系は PR006、授業準備コスト系は PR017 を割り当てています。
+**pain_id の割り当て根拠**：各ファイルの「抱えている悩み・葩藤」セクションを読んで最も近いものを選びました。PR003（科学をサクッと知りたい）が多数ですが、挫折・誦め系は PR011、後ろめたさ系は PR006、授業準備コスト系は PR017 を割り当てています。
 
 この変更を記録しますか？`/record` で記録できます。
 
@@ -196,41 +86,15 @@ persona シートへの追加が完了しました。
 
 `/record`
 
----
-
 ### Claude *(07:42 JST)*
 
 STEP 1・2 を並行して実行します。
 
----
-
-### Claude *(07:42 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(07:42 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(07:42 JST)*
+*[ツール: `Read`, `Bash`]*
 
 未コミットの変更を確認します。
 
----
-
-### Claude *(07:42 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
-
-### Claude *(07:42 JST)*
-
----
+*[ツール: `Bash`]*
 
 **変更ログ候補（未記録）**
 
@@ -249,34 +113,12 @@ STEP 1・2 を並行して実行します。
 
 1
 
----
-
 ### Claude *(17:39 JST)*
 
 STEP 4 を実行します。報告書テンプレートを読み込んで作成します。
 
----
-
-### Claude *(17:39 JST)*
-
-*[ツール呼び出し: `Read`]*
-
----
-
-### Claude *(17:39 JST)*
-
-*[ツール呼び出し: `Write`]*
-
----
-
-### Claude *(17:39 JST)*
+*[ツール: `Read`, `Write`]*
 
 STEP 4.5：セッション履歴を保存します。
 
----
-
-### Claude *(17:39 JST)*
-
-*[ツール呼び出し: `Bash`]*
-
----
+*[ツール: `Bash`]*
