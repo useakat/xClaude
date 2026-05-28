@@ -38,6 +38,10 @@ export default defineConfig({
           autogenerate: { directory: 'style' },
         },
         {
+          label: '計画',
+          autogenerate: { directory: 'plans' },
+        },
+        {
           label: '報告書',
           collapsed: true,
           autogenerate: { directory: 'reports', collapsed: true },
