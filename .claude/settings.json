@@ -74,10 +74,8 @@
   },
   "mcpServers": {
     "xmcp": {
-      "type": "stdio",
-      "command": "/root/xClaude/xmcp/.venv/bin/python",
-      "args": ["/root/xClaude/xmcp/server.py"],
-      "cwd": "/root/xClaude/xmcp"
+      "type": "sse",
+      "url": "http://127.0.0.1:8000/mcp"
     }
   }
 }
