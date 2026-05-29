@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-05-29
+
+- **Wiki：docs/plans を Wiki サイドバーに追加** — `starlight/astro.config.mjs` のサイドバーに「計画」セクション（`autogenerate: plans/`）を追加し、`202606_monetization.md` の `sidebar: hidden: true` を削除。今後 `docs/plans/` にファイルを追加するだけで自動反映される。[→報告書](../reports/20260529_wiki_plans_sidebar/)
+
 ## 2026-05-28
 
 - **daily-xonepoint：Gmail下書き冒頭にネタID追記** — STEP 2でネタNoを記憶対象に追加し、Gmail下書き本文冒頭に `[ネタID]onePointNeta[{No}][/ネタID]` タグを挿入するよう変更。
