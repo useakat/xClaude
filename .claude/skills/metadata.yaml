@@ -71,5 +71,7 @@ skills:
     category: リサーチ・分析
   research_xhook:
     category: リサーチ・分析
+  research_trivia-source:
+    category: リサーチ・分析
   update-permissions:
     category: 設定・保守
