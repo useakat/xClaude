@@ -36,7 +36,7 @@ xClaude/
 ├── .claude/
 │   ├── skills/                       # AIスキル定義（slash command として呼ぶ）
 │   │   ├── [コンテンツ制作]
-│   │   │   ├── writer-note/           # note 記事執筆（宇宙・物理ナラティブ）
+│   │   │   ├── writer_note-story/     # note 記事執筆（宇宙・物理ナラティブ）
 │   │   │   ├── writer-xonepoint/      # X 用ワンポイント解説
 │   │   │   ├── writer-xnews/          # X ニュース投稿
 │   │   │   ├── writer-xstory/         # X ストーリー投稿
@@ -97,7 +97,7 @@ xClaude/
 │   ├── sync_to_drive.sh              # outputs/ → Google Drive 同期
 │   ├── drive_put.sh                  # ローカルファイル → Drive アップロード/更新（フォルダ指定可）
 │   ├── drive_get.sh                  # Drive ファイル ID 指定でローカル DL
-│   ├── send_gmail.sh                 # Gmail 送信（writer-note 完了通知）
+│   ├── send_gmail.sh                 # Gmail 送信（writer_note-story 完了通知）
 │   ├── create_gmail_draft.sh         # Gmail 下書き作成（daily-xonepoint）
 │   ├── get_gmail_body.sh             # Gmail スレッド本文抽出
 │   ├── download_gmail_attachment.sh  # Gmail 添付画像ダウンロード

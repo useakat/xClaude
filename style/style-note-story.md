@@ -1,7 +1,7 @@
 # style-note-story
 
 宇宙・物理を題材にした「執念の物語」型 note 記事の文体・口調スタイル。
-`.claude/skills/writer-note/examples/` の4記事（カッシーニ／ニューホライズンズ／ボイジャー／海王星発見）から抽出した一貫パターン。
+`.claude/skills/writer_note-story/examples/` の4記事（カッシーニ／ニューホライズンズ／ボイジャー／海王星発見）から抽出した一貫パターン。
 
 > 共通の人格・想定読者・言葉遣い・NG 表現は [`brand.md`](../brand.md) を参照。
 > 本ファイルには note 執念の物語型に固有のルールのみ記載する。
@@ -184,4 +184,4 @@
 - 「天王星は目的地ではなかった――ボイジャー計画を変えた、技術者たちの静かな反逆」
 - 「理論が現実を暴いた — 天文学史上、最も美しく、最も謙虚な『海王星』発見の物語」
 
-実物は `.claude/skills/writer-note/examples/` にある。新しい例が増えたらこの style ファイルも更新する。
+実物は `.claude/skills/writer_note-story/examples/` にある。新しい例が増えたらこの style ファイルも更新する。
