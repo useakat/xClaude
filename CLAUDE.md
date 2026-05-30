@@ -25,7 +25,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 - `buzzPostData.txt` — 過去の投稿データ・参考文例
 - `参照note記事/` — note記事（mhtml）の参照素材
-- `DESIGN.md` — UI用デザイントークン（カラー・タイポグラフィ・余白）
 
 ---
 
@@ -124,7 +123,6 @@ xClaude/
 ├── xmcp/                             # 自前 X MCP サーバー
 │
 ├── CLAUDE.md                         # 本ファイル（Claude Code 向けガイド）
-├── DESIGN.md                         # UI デザイントークン
 └── note_xmcp_setup.md                # X MCP セットアップ手順
 ```
 
