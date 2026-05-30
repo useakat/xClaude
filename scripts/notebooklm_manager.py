@@ -65,6 +65,33 @@ async def cmd_ask(args):
         print(result)
 
 
+async def cmd_deep_research(args):
+    async with await NotebookLMClient.from_storage(_storage_path(), timeout=120.0) as client:
+        result = await client.research.start(
+            args.notebook_id, args.query, source="web", mode="deep"
+        )
+        task_id = result["task_id"]
+        print(f"Deep Research 開始: task_id={task_id}")
+
+        for _ in range(60):
+            status = await client.research.poll(args.notebook_id)
+            if status["status"] == "completed":
+                break
+            print("  調査中...", flush=True)
+            await asyncio.sleep(10)
+        else:
+            print("タイムアウト: 10分以内に完了しませんでした", file=sys.stderr)
+            sys.exit(1)
+
+        sources = status.get("sources", [])
+        imported = await client.research.import_sources(
+            args.notebook_id, task_id, sources
+        )
+        print(f"✓ ソース {len(imported)} 件を追加しました")
+        for s in imported:
+            print(f"  - {s.get('title', '(タイトルなし)')}")
+
+
 async def cmd_audio(args):
     async with await NotebookLMClient.from_storage(_storage_path()) as client:
         print("音声概要を生成中...")
@@ -280,6 +307,11 @@ def main():
     p_make.add_argument("--keep", action="store_true", help="生成後もノートブックを残す")
     p_make.add_argument("--extra-source-url", action="append", default=[], help="追加で notebook に登録する URL（Drive 画像など、複数可）")
 
+    # deep-research
+    p_dr = sub.add_parser("deep-research", help="Deep Research を実行しソースを追加")
+    p_dr.add_argument("notebook_id", help="ノートブックID")
+    p_dr.add_argument("query", help="検索クエリ")
+
     # delete
     p_del = sub.add_parser("delete", help="ノートブック削除")
     p_del.add_argument("notebook_id", help="ノートブックID")
@@ -291,6 +323,7 @@ def main():
         "create": cmd_create,
         "add-source": cmd_add_source,
         "ask": cmd_ask,
+        "deep-research": cmd_deep_research,
         "audio": cmd_audio,
         "infographic": cmd_infographic,
         "make-infographic": cmd_make_infographic,
