@@ -21,6 +21,10 @@ description: scripts/ ディレクトリのスクリプト一覧
 | `post_from_email.sh` | メール起点 X 投稿（cron 実行） |
 | `post_to_x.py` | X 投稿（直接実行） |
 | `run_xonepoint_post.sh` | ワンポイント投稿の cron ラッパー |
+| `run_question_post.sh` | 質問回答投稿の cron ラッパー |
+| `run_xlong_post.sh` | 長文ストーリー投稿の cron ラッパー |
+| `run_mond_letter_reply.sh` | mond レター回答の cron ラッパー |
+| `check_auth.sh` | Google / X API 認証チェック |
 
 ## Google Drive 関連
 
@@ -29,19 +33,6 @@ description: scripts/ ディレクトリのスクリプト一覧
 | `sync_to_drive.sh` | outputs/ → Drive 同期 |
 | `drive_put.sh` | ローカルファイル → Drive アップロード/更新（フォルダ指定可） |
 | `drive_get.sh` | Drive ファイル ID 指定でローカル DL |
-
-## データ管理（廃止済み → unused-scripts/）
-
-Sheets の読み書きは mcp-gsheets ツールを直接使用する。以下は参照用アーカイブ。
-
-| スクリプト | 用途（旧） |
-|---|---|
-| `csv_reader.py` | ネタ一覧取得 |
-| `update_neta_status.py` | ネタのステータス更新 |
-| `sheets_manager.py` | ローカル CSV 管理（add/list/mark-used） |
-| `sync_to_sheets.sh` | database/ → Sheets 同期 |
-| `record_output.py` | 投稿記録を outputs.csv に追記 |
-| `push_database.sh` | database/ の変更を push |
 
 ## その他
 
