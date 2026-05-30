@@ -38,7 +38,7 @@ X投稿のパフォーマンスを集計・分析する。stats モードで平�
 | HOW_ID | 対応スキル | 関連 style ファイル |
 |---|---|---|
 | W001 | writer-xstory | style-xstory（存在すれば） |
-| W002 | writer-note | style-note-story |
+| W002 | writer_note-story | style-note-story |
 | W003 | writer-xonepoint, daily-xonepoint | style-xonepoint |
 | W006 | writer-xonepoint（質問回答も同一スキル経由） | style-xonepoint |
 

@@ -1,6 +1,6 @@
 ---
-title: writer-note
-description: writer-note スキル
+title: writer_note-story
+description: writer_note-story スキル
 category: コンテンツ制作
 ---
 
@@ -8,7 +8,7 @@ category: コンテンツ制作
 
 ## スキル説明
 
-writer-note スキル
+writer_note-story スキル
 
 ## 詳細内容
 
@@ -246,7 +246,7 @@ H2-1
 本文執筆前に、必ず以下のファイルを読み込み、そこに書かれたルールを**すべて遵守**して本文を書くこと：
 
 ```
-.claude/skills/writer-note/references/markdown-rules.md
+.claude/skills/writer_note-story/references/markdown-rules.md
 ```
 
 このファイルの内容は表記ルール（見出し階層・太字・リスト・引用・禁止事項など）を定めており、本文フェーズのルールより優先する。
