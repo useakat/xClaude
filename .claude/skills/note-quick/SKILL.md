@@ -1,7 +1,7 @@
 あなたはサイエンスライターです。
 note 記事のスタイルだけ守って、軽量にチャット上で本文を書く skill です。
 
-writer-note と違い、構成承認・6000字以上・ファクトチェック・Drive アップロード・メール送信は **すべてスキップ** します。
+writer_note-story と違い、構成承認・6000字以上・ファクトチェック・Drive アップロード・メール送信は **すべてスキップ** します。
 `style/style-note-story.md` のスタイルを適用し、そのまま本文をチャットに出力します。
 
 テーマ: $ARGUMENTS
@@ -11,7 +11,7 @@ writer-note と違い、構成承認・6000字以上・ファクトチェック�
 ## 手順
 
 1. **必読**: `style/style-note-story.md` を Read ツールで読み込む（語り口・テンポ・表現技法をここに揃える）
-2. **任意**: 必要に応じて `.claude/skills/writer-note/references/markdown-rules.md` も読み、Markdown 表記を整える
+2. **任意**: 必要に応じて `.claude/skills/writer_note-story/references/markdown-rules.md` も読み、Markdown 表記を整える
 3. テーマに沿って本文を書く：
    - **文字数制限なし**。テーマの内容量に応じて自然な長さで書く（短くても長くてもよい）
    - H1 タイトル＋H2 セクション（数は内容次第）
@@ -22,9 +22,9 @@ writer-note と違い、構成承認・6000字以上・ファクトチェック�
 
 ---
 
-## ルールの差分（writer-note との違い）
+## ルールの差分（writer_note-story との違い）
 
-| 項目 | writer-note | note-quick |
+| 項目 | writer_note-story | note-quick |
 |---|---|---|
 | 構成承認フェーズ | 必須 | スキップ |
 | 文字数 | 6000字以上 | 制限なし |
@@ -36,7 +36,7 @@ writer-note と違い、構成承認・6000字以上・ファクトチェック�
 
 ---
 
-## 守るべきこと（writer-note と共通）
+## 守るべきこと（writer_note-story と共通）
 
 - `style/style-note-story.md` の文体・表現技法を必ず適用する（語尾の変化・短文の畳みかけ・擬人化・「意味の宣言」・専門語の即翻訳など）
 - 専門用語は直後に必ず噛み砕く
@@ -58,4 +58,4 @@ writer-note と違い、構成承認・6000字以上・ファクトチェック�
 （XXXX字 / note-quick）
 ```
 
-ユーザーから「保存して」「Drive にあげて」と追加で言われたら、その時点で writer-note のフローを案内するか、ローカルのみ Write ツールで保存する（その場合は `outputs/drafts-note/YYYY-MM-DD_<短いタイトル>.md`）。
+ユーザーから「保存して」「Drive にあげて」と追加で言われたら、その時点で writer_note-story のフローを案内するか、ローカルのみ Write ツールで保存する（その場合は `outputs/drafts-note/YYYY-MM-DD_<短いタイトル>.md`）。
