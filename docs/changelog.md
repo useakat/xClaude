@@ -9,6 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-05-30
 
+- **冒頭フック表現テンプレート集の新設・X系 writer からの参照** — @russianblue2009 の814投稿分析で得た高IMP4型（逆説・知識提示・場面描写・問いかけ）を `style/hook-patterns.md` に構文テンプレート化。X系 writer 4スキル（xstory/xonepoint/xnews/xqa）から「各スキル固有のフック制約が優先・本ファイルは引き出し」として参照させた。[→報告書](../reports/20260530_hook_patterns_style/)
 - **6月マネタイズ計画の更新（目標/KPI整理・全¥980・90万IMP）** — 目標とKPIを分離し、X目標を月間IMP90万・note全¥980に設定。W001/W003/W002のKPI（本数・平均IMP・CTR・CVR）を明記し、KPI達成が目標の十分条件になるよう検算で整合させた。誘導モデル（クロス週）・期待売上の推計式も追記。[→報告書](../reports/20260530_june_monetization_plan_update/)
 - **research_xhook スキル新設** — 指定 X アカウントの投稿フック（冒頭1文）を LLM で帰納的に分類し、IMP平均でランキング提示するスキルを新設（regex ハードコード廃止）。[→報告書](../reports/20260530_research_xhook_skill/)
 
