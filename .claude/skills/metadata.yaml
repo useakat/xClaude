@@ -69,5 +69,7 @@ skills:
     category: リサーチ・分析
   research_pain-xpost:
     category: リサーチ・分析
+  research_xhook:
+    category: リサーチ・分析
   update-permissions:
     category: 設定・保守
