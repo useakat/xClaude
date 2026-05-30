@@ -18,7 +18,7 @@ Claude Code をエージェントとして使い、ネタ選定・原稿作成�
 ## 主な機能
 
 - **X ワンポイント解説** — ネタ選定 → 原稿作成 → ファクトチェック → Gmail 通知を全自動（`/daily-xonepoint`）
-- **note 記事** — 宇宙・物理テーマの執念の物語形式で記事を執筆（`/writer-note`）
+- **note 記事** — 宇宙・物理テーマの執念の物語形式で記事を執筆（`/writer_note-story`）
 - **インフォグラフィック** — NotebookLM を使って投稿に合わせた図解を生成（`/make-infographic`）
 - **データ管理** — ネタ・投稿記録を CSV で管理し Google Sheets に同期
 

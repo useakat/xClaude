@@ -12,11 +12,11 @@ description: Claude Code で使用できるスキルの一覧
 | [daily-xonepoint](/xClaude/skills/daily-xonepoint/) | Xのワンポイント解説投稿を1本作成し、品質チェック・保存・Git push・メール下書き作成まで自律実行する。インフォグラフィック作成はユーザー承認後に実行する。 |
 | [draft_xstory](/xClaude/skills/draft_xstory/) | X長文ストーリー投稿（what_id W001）のネタ選定から下書き作成、ファクトチェック、トンマナチェック、Gmail下書き作成まで自律実行する |
 | [note-quick](/xClaude/skills/note-quick/) | note-quick スキル |
-| [writer-note](/xClaude/skills/writer-note/) | writer-note スキル |
 | [writer-xnews](/xClaude/skills/writer-xnews/) | writer-xnews スキル |
 | [writer-xonepoint](/xClaude/skills/writer-xonepoint/) | X用ワンポイント解説投稿を1本作成する。ネタ選定・本文生成・ネタ使用済み更新を行う。 |
 | [writer-xqa](/xClaude/skills/writer-xqa/) | X 上の質問への回答投稿を 1 本作成する。長文化を避け、3 段以内・400 字以内に圧縮し、超える内容は note 誘導で切り上げる。 |
 | [writer-xstory](/xClaude/skills/writer-xstory/) | writer-xstory スキル |
+| [writer_note-story](/xClaude/skills/writer_note-story/) | writer_note-story スキル |
 
 ## レポート生成
 
@@ -41,6 +41,7 @@ description: Claude Code で使用できるスキルの一覧
 | [research-plan](/xClaude/skills/research-plan/) | research-plan スキル |
 | [research-trivia](/xClaude/skills/research-trivia/) | research-trivia スキル |
 | [research_pain-xpost](/xClaude/skills/research_pain-xpost/) | 特定のXポストのリプライ・引用RTを取得し、読者のニーズや疑問を分析して note 記事のテーマを提案する。承認後に noteNeta シートへ追記する。 |
+| [research_xhook](/xClaude/skills/research_xhook/) | research_xhook スキル |
 
 ## 品質チェック
 
@@ -73,6 +74,7 @@ description: Claude Code で使用できるスキルの一覧
 | [record](/xClaude/skills/record/) | 変更・実装の記録を残す。docs/changelog.md と直近の git ログを照合し、未記録の変更候補をよーんに提案する。承認後に報告書と変更ログエントリを作成して git push する。 |
 | [record-note-posts](/xClaude/skills/record-note-posts/) | note.com の投稿情報（ビュー・スキ・スキ率・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新する。 |
 | [save-session](/xClaude/skills/save-session/) | save-session スキル |
+| [sync-x-note-analytics](/xClaude/skills/sync-x-note-analytics/) | outputs/X投稿一覧/note投稿一覧/note購入記録 を集約して「Xnote導線記録」シートを再生成する。W001 ごとの IMP・リンクCTR・購入CVR・売上を 1 行 1 投稿の集計シートにまとめる。 |
 
 ## 設定・保守
 
