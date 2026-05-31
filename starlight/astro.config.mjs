@@ -23,7 +23,12 @@ export default defineConfig({
         },
         {
           label: 'スキル',
-          autogenerate: { directory: 'skills' },
+          items: [
+            { label: 'スキル一覧', link: '/skills' },
+            { label: '日報 (reporter-daily)', link: '/skills/reporter-daily' },
+            { label: '週報 (reporter-weekly)', link: '/skills/reporter-weekly' },
+            { label: '月報 (reporter-monthly)', link: '/skills/reporter-monthly' },
+          ],
         },
         {
           label: 'ワークフロー',
@@ -43,8 +48,9 @@ export default defineConfig({
         },
         {
           label: '報告書',
-          collapsed: true,
-          autogenerate: { directory: 'reports', collapsed: true },
+          items: [
+            { label: '報告書一覧', link: '/reports' },
+          ],
         },
       ],
     }),
