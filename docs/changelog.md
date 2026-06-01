@@ -7,6 +7,15 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-01
+
+- **analyze-x-posts：Drive アップロードをローカル保存のみに変更** — レポート依頼時の動作をローカル保存＋Drive アップロードからローカル保存のみに簡略化。SKILL.md の STEP 5（Drive アップロード）を削除し、出力ルールの説明も更新。
+- **ネタ選定を writer-xonepoint から daily-xonepoint に移動** — `writer-xonepoint` を原稿生成専用に限定し、Sheets 読み込み・分野グループ選定・ステータス更新の責務を `daily-xonepoint` の STEP 2 に移植。テーマ直接指定での単体呼び出しが可能になった。[→報告書](../reports/20260601_neta_selection_move_to_daily_xonepoint/)
+- **x-onepoint プロジェクト設計ドキュメント新設** — `projects/x-onepoint/` に `brand.md`（口調・表現ルール）・`spec.md`（制作フロー・命名規則）を新設し、`plan.md` を W003/PE01/PR003 計画に基づき具体化。スキルから役割別に参照できる構成にした。[→報告書](../reports/20260601_x_onepoint_project_docs/)
+- **Wiki サイドバー再設計（動的生成・月別グループ）** — `astro.config.mjs` のサイドバーを autogenerate ベースの動的生成に変更し、報告書を月別にグループ化して表示する構成に再設計。
+- **cron 定期実行ジョブ一覧を Wiki に追加** — `docs/wiki/cron-jobs.md` を新設し、サーバー上で稼働中の cron ジョブ一覧（スクリプト名・実行時刻・目的）を Wiki に追加。
+- **収益目標を月15万円に更新** — `docs/plans/` 配下の収益計画ドキュメントの月間収益目標を15万円に更新し、KPI・施策の優先順位を再整理。
+
 ## 2026-05-30
 
 - **research_trivia-source スキル新設** — テーマを渡すと NotebookLM Deep Research でソース収集→トリビアネタ 3〜5 件を選定するスキルを新設。企業ページ除外はクエリ文字列に指示を埋め込む方式を採用。`notebooklm_manager.py` に `deep-research` サブコマンド（timeout=120s）も追加。[→報告書](../reports/20260530_research_trivia_source_skill/)
