@@ -74,21 +74,37 @@ else
   ERRORS+=("LINE トークン無効（.env の LINE_CHANNEL_ACCESS_TOKEN を確認）")
 fi
 
-# --- 通知（エラーがある場合のみ）---
-if [ ${#ERRORS[@]} -gt 0 ]; then
-  MSG="[xClaude] 認証トークン切れ $(date '+%Y-%m-%d %H:%M JST')"$'\n'
-  for e in "${ERRORS[@]}"; do MSG+="・$e"$'\n'; done
-
-  if [ "$LINE_OK" = "ok" ]; then
-    python3 "$REPO/scripts/send_line.py" "$MSG" 2>/dev/null \
-      || python3 "$REPO/scripts/send_gmail_direct.py" \
-           --subject "⚠️ [xClaude] 認証トークン切れ" --body "$MSG" 2>/dev/null \
-      || log "全通知チャネル失敗（ログのみ）"
-  else
-    python3 "$REPO/scripts/send_gmail_direct.py" \
-      --subject "⚠️ [xClaude] 認証トークン切れ" --body "$MSG" 2>/dev/null \
-      || log "全通知チャネル失敗（ログのみ）"
-  fi
+# --- LINE 通知（エラーがある場合のみ）---
+if [ ${#ERRORS[@]} -gt 0 ] && [ "$LINE_OK" = "ok" ]; then
+  LINE_MSG="[xClaude] 認証トークン切れ $(date '+%Y-%m-%d %H:%M JST')"$'\n'
+  for e in "${ERRORS[@]}"; do LINE_MSG+="・$e"$'\n'; done
+  python3 "$REPO/scripts/send_line.py" "$LINE_MSG" 2>/dev/null \
+    || log "LINE 通知失敗"
 fi
+
+# --- Gmail 通知（常に送信）---
+if [ ${#ERRORS[@]} -gt 0 ]; then
+  MAIL_SUBJECT="⚠️ [xClaude] 認証チェック — エラーあり $(date '+%Y-%m-%d %H:%M JST')"
+else
+  MAIL_SUBJECT="✅ [xClaude] 認証チェック完了 $(date '+%Y-%m-%d %H:%M JST')"
+fi
+
+MAIL_BODY="認証チェック結果 $(date '+%Y-%m-%d %H:%M JST')
+
+gws        : $([ "$GWS_VALID" = "True" ] && echo "✅ OK" || echo "❌ トークン切れ")
+Drive token: $([ "$DRIVE_OK" = "ok" ] && echo "✅ OK" || echo "❌ $DRIVE_OK")
+X API      : $([ "$X_OK" = "ok" ] && echo "✅ OK" || echo "❌ $X_OK")
+LINE       : $([ "$LINE_OK" = "ok" ] && echo "✅ OK" || echo "❌ トークン無効")
+"
+
+if [ ${#ERRORS[@]} -gt 0 ]; then
+  MAIL_BODY+=$'\n'"--- エラー詳細 ---"$'\n'
+  for e in "${ERRORS[@]}"; do MAIL_BODY+="・$e"$'\n'; done
+fi
+
+python3 "$REPO/scripts/send_gmail_direct.py" \
+  --subject "$MAIL_SUBJECT" --body "$MAIL_BODY" 2>/dev/null \
+  && log "✅ Gmail 送信完了" \
+  || log "❌ Gmail 送信失敗"
 
 log "チェック完了 (エラー数: ${#ERRORS[@]})"
