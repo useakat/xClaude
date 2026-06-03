@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-03
+
+- **CLAUDE.md：master push 時の通知ルール追加** — master に push した際に「master にプッシュしました」と明示的に報告するルールを禁止事項セクションに追加。
+- **x-onepoint プロジェクト CLAUDE.md 追加・ドキュメント整備** — `projects/x-onepoint/CLAUDE.md` 新設（起動時に spec.md を Read するルール定義）し、brand.md・plan.md・spec.md を実運用に合わせて整備。[→報告書](../reports/20260603_x_onepoint_project_claude_md_and_docs_update/)
+- **x-onepoint/outputs/ 投稿別フォルダ構造の導入** — `projects/x-onepoint/outputs/YYYYMMDD_[topic]/` 形式で投稿ごとにフォルダを作成するルールを導入。spec.md の Output・Naming・Rules を更新し、既存3画像を新フォルダへ移行。[→報告書](../reports/20260603_x_onepoint_outputs_folder_structure/)
+
 ## 2026-06-02
 
 - **reporter-monthly スキル改修（ポスト数集計・W001/W003推移・計画ファイル読込・具体数字明記）** — STEP 2 にポスト数集計追加・STEP 4.5（W001/W003 月別推移）新設・STEP 5（翌月マネタイズ計画ファイル読込）新設・STEP 6 の次月改善に計画ファイル具体数字を明記するルールを追加。[→報告書](../reports/20260602_reporter_monthly_skill_improvement/)
