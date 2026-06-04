@@ -7,34 +7,40 @@
     ],
     "allow": [
       "Read",
-      "Bash(curl -s http://127.0.0.1:8000*)",
-      "Bash(python3 /root/xClaude/scripts/notebooklm_manager.py make-infographic)",
-      "Bash(git -C /root/xClaude push)",
-      "Bash(git -C /root/xClaude add *)",
-      "Bash(git -C /root/xClaude commit *)",
-      "Bash(git -C /root/xClaude status)",
-      "Bash(python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/notebooklm_manager.py make-infographic *)",
-      "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/sync_to_drive.sh)",
-      "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/drive_put.sh *)",
-      "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/drive_get.sh *)",
-      "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/post_from_email.sh *)",
-      "Bash(bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/send_gmail.sh *)",
-      "Bash(*commit_and_sync.sh *)",
-      "Bash(gws gmail users threads modify *)",
       "Write",
       "Edit",
+      "Bash(curl -s http://127.0.0.1:8000*)",
+      "Bash(python3 *notebooklm_manager.py make-infographic*)",
+      "Bash(python3 *notebooklm_manager.py infographic *)",
+      "Bash(git -C *xClaude push)",
+      "Bash(git -C *xClaude add *)",
+      "Bash(git -C *xClaude commit *)",
+      "Bash(git -C *xClaude status)",
+      "Bash(git -C *xClaude diff *)",
+      "Bash(git -C *xClaude log *)",
+      "Bash(git rev-parse *)",
+      "Bash(bash *scripts/sync_to_drive.sh)",
+      "Bash(bash *scripts/drive_put.sh *)",
+      "Bash(bash *scripts/drive_get.sh *)",
+      "Bash(bash *scripts/post_from_email.sh *)",
+      "Bash(bash *scripts/send_gmail.sh *)",
+      "Bash(*commit_and_sync.sh *)",
+      "Bash(rm *xClaude/outputs/infographic_*)",
+      "Bash(gws gmail users threads modify *)",
+      "Bash(gws sheets spreadsheets values get *)",
+      "Bash(gws drive +upload *)",
       "Bash(mkdir -p *)",
       "Bash(cp -r *)",
       "Bash(npm *)",
       "Bash(grep *)",
-      "Bash(gws sheets spreadsheets values get *)",
-      "Bash(git -C /root/xClaude diff *)",
-      "Bash(gh run list *)",
-      "Bash(git -C /root/xClaude log *)",
       "Bash(cat *)",
       "Bash(ls *)",
       "Bash(find *)",
-      "Bash(bash /root/xClaude/scripts/commit_and_sync.sh *)",
+      "Bash(sed *)",
+      "Bash(date *)",
+      "Bash(wc *)",
+      "Bash(python3 -c *)",
+      "Bash(gh run list *)",
       "mcp__mcp-gsheets__sheets_get_values",
       "mcp__mcp-gsheets__sheets_append_values",
       "mcp__mcp-gsheets__sheets_update_values",
@@ -45,28 +51,29 @@
       "mcp__claude_ai_Gmail__list_labels",
       "mcp__claude_ai_Gmail__label_thread",
       "mcp__claude_ai_Gmail__unlabel_thread",
-      "Bash(gws drive +upload *)",
-      "Bash(python3 /home/useakat/xClaude/scripts/notebooklm_manager.py make-infographic *)",
-      "Bash(python3 /home/useakat/xClaude/scripts/notebooklm_manager.py infographic *)",
-      "Bash(bash /home/useakat/xClaude/scripts/send_gmail.sh *)",
-      "Bash(python3 -c *)",
-      "Bash(rm /home/useakat/xClaude/outputs/infographic_*)",
-      "Bash(git rev-parse *)",
-      "Bash(sed *)",
-      "Bash(date *)",
-      "Bash(wc *)",
       "mcp__claude_ai_Google_Drive__search_files",
       "mcp__claude_ai_Google_Drive__read_file_content"
     ]
   },
   "hooks": {
-    "PostToolUse": [
+    "SessionStart": [
       {
-        "matcher": "Bash(git -C /root/xClaude commit *)",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 /root/xClaude/scripts/update_wiki_skills.py || true"
+            "command": "pkill -f '.venv/bin/python -u server.py' 2>/dev/null; [ -d \"$CLAUDE_PROJECT_DIR/xmcp\" ] && cd \"$CLAUDE_PROJECT_DIR/xmcp\" && nohup .venv/bin/python -u server.py > /tmp/xmcp.log 2>&1 &",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash(git -C *xClaude commit *)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/update_wiki_skills.py\" || true"
           }
         ]
       }
@@ -74,7 +81,7 @@
   },
   "mcpServers": {
     "xmcp": {
-      "type": "sse",
+      "type": "http",
       "url": "http://127.0.0.1:8000/mcp"
     }
   }
