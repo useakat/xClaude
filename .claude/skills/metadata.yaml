@@ -45,6 +45,8 @@ skills:
     category: 品質チェック
   check-tonmana:
     category: 品質チェック
+  check-p01:
+    category: 品質チェック
   mond-letter-reply:
     category: メール・通知
   make-infographic:
