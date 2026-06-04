@@ -13,6 +13,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **xmcp 自動起動 hook 追加・パスの環境非依存化** — SessionStart hook で xmcp サーバーを自動起動し、`.claude/settings.json` のパスハードコードを `$CLAUDE_PROJECT_DIR`＋`*xClaude` ワイルドカードに統合。mcpServers.type を http に修正。[→報告書](../reports/20260604_xmcp_autostart_hook/)
 - **x-onepoint：セッション開始時に spec.md を自動読み込みする hook を追加** — `projects/x-onepoint` での作業開始時に spec.md を自動 Read する SessionStart hook を追加。
 - **cron：認証チェック結果を毎回 Gmail に送信** — cron の認証チェックジョブが、結果を毎回 Gmail に通知するよう変更。
+- **check-fact-lim スキル新設（NotebookLM ソース限定ファクトチェック）** — `check-fact` をベースに、GPT(gpt-5.4-mini)呼び出し2箇所（STEP1完全性・STEP2ファクト）を `notebooklm_manager.py ask` に差し替え。第1引数 notebook_id で参照ソースを限定し、その notebook のソースのみを根拠に判定する。[→報告書](../reports/20260604_check_fact_lim_skill/)
 
 ## 2026-06-03
 
