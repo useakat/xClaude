@@ -13,7 +13,7 @@ description: Claude Code で使用できるスキルの一覧
 | [draft_xstory](/xClaude/skills/draft_xstory/) | X長文ストーリー投稿（what_id W001）のネタ選定から下書き作成、ファクトチェック、トンマナチェック、Gmail下書き作成まで自律実行する |
 | [note-quick](/xClaude/skills/note-quick/) | note-quick スキル |
 | [writer-xnews](/xClaude/skills/writer-xnews/) | writer-xnews スキル |
-| [writer-xonepoint](/xClaude/skills/writer-xonepoint/) | X用ワンポイント解説投稿を1本作成する。ネタ選定・本文生成・ネタ使用済み更新を行う。 |
+| [writer-xonepoint](/xClaude/skills/writer-xonepoint/) | X用ワンポイント解説投稿を1本作成する。受け取ったネタ情報をもとに投稿原稿を生成する。 |
 | [writer-xqa](/xClaude/skills/writer-xqa/) | X 上の質問への回答投稿を 1 本作成する。長文化を避け、3 段以内・400 字以内に圧縮し、超える内容は note 誘導で切り上げる。 |
 | [writer-xstory](/xClaude/skills/writer-xstory/) | writer-xstory スキル |
 | [writer_note-story](/xClaude/skills/writer_note-story/) | writer_note-story スキル |
@@ -41,6 +41,7 @@ description: Claude Code で使用できるスキルの一覧
 | [research-plan](/xClaude/skills/research-plan/) | research-plan スキル |
 | [research-trivia](/xClaude/skills/research-trivia/) | research-trivia スキル |
 | [research_pain-xpost](/xClaude/skills/research_pain-xpost/) | 特定のXポストのリプライ・引用RTを取得し、読者のニーズや疑問を分析して note 記事のテーマを提案する。承認後に noteNeta シートへ追記する。 |
+| [research_trivia-source](/xClaude/skills/research_trivia-source/) | research_trivia-source スキル |
 | [research_xhook](/xClaude/skills/research_xhook/) | research_xhook スキル |
 
 ## 品質チェック
@@ -49,6 +50,7 @@ description: Claude Code で使用できるスキルの一覧
 |---|---|
 | [check](/xClaude/skills/check/) | check スキル |
 | [check-fact](/xClaude/skills/check-fact/) | ファクトチェック付き品質レビュー。テキストまたは Drive ファイル ID を入力として受け付ける。 |
+| [check-fact-lim](/xClaude/skills/check-fact-lim/) | ファクトチェック付き品質レビュー（NotebookLM の特定ノートブックのソースのみを根拠にする）。第1引数に notebook_id、第2引数以降にテキストまたは Drive ファイル ID を受け取る。 |
 
 ## メール・通知
 
