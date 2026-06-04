@@ -3,6 +3,7 @@ server.py
 xmcp
 .claude/settings.local.json
 gcp/
+${GOOGLE_APPLICATION_CREDENTIALS}
 *~
 \#*\#
 **/__pycache__/
