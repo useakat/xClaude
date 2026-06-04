@@ -17,6 +17,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **cron：認証チェック結果を毎回 Gmail に送信** — cron の認証チェックジョブが、結果を毎回 Gmail に通知するよう変更。
 - **check-fact-lim スキル新設（NotebookLM ソース限定ファクトチェック）** — `check-fact` をベースに、GPT(gpt-5.4-mini)呼び出し2箇所（STEP1完全性・STEP2ファクト）を `notebooklm_manager.py ask` に差し替え。第1引数 notebook_id で参照ソースを限定し、その notebook のソースのみを根拠に判定する。[→報告書](../reports/20260604_check_fact_lim_skill/)
 - **check-tonmana スキル新設（トンマナ調整＋P01化スコアリングの切り出し）** — `daily-xonepoint` の STEP 4-2/4-3 を独立スキルに抽出し再利用可能化。daily-xonepoint 側は `/check-tonmana` 呼び出しに置換。[→報告書](../reports/20260604_check_tonmana_skill/)
+- **check-tonmana 縮小・check-p01 分離（brand.md 基準化）** — check-tonmana を作業フォルダ brand.md 基準のトンマナ調整専用に縮小し、P01化スコアリングを check-p01 へ分離。brand.md に5軸語彙・各種例・削る対象優先度リストを展開し check-p01 を brand.md 単体で非劣化に動作させた。daily-xonepoint は 4-2→4-3 の2段呼び出しに変更。[→報告書](../reports/20260604_check_p01_split_brand_based/)
 
 ## 2026-06-03
 
