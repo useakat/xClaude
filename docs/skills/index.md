@@ -51,6 +51,7 @@ description: Claude Code で使用できるスキルの一覧
 | [check](/xClaude/skills/check/) | check スキル |
 | [check-fact](/xClaude/skills/check-fact/) | ファクトチェック付き品質レビュー。テキストまたは Drive ファイル ID を入力として受け付ける。 |
 | [check-fact-lim](/xClaude/skills/check-fact-lim/) | ファクトチェック付き品質レビュー（NotebookLM の特定ノートブックのソースのみを根拠にする）。第1引数に notebook_id、第2引数以降にテキストまたは Drive ファイル ID を受け取る。 |
+| [check-tonmana](/xClaude/skills/check-tonmana/) | X ワンポイント解説の本文を style-xonepoint.md に照らしてトンマナ調整し、P01化チェックリスト6項目を10段階で採点して合格するまで書き直す。本文テキストを受け取り、最終原稿とスコアサマリーを返す。 |
 
 ## メール・通知
 
