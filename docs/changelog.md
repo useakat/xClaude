@@ -9,6 +9,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-06-04
 
+- **スキル作成用汎用テンプレート追加** — `templates/SKILL_temp.md` を新設。SKILL.md 作成時のひな形（目的・手順・出力形式・禁止事項）。
+
 - **mcp-gsheets 認証を `GOOGLE_APPLICATION_CREDENTIALS` に統一** — `.mcp.json`・`.claude/settings.json`・`~/.bashrc` の認証情報参照を Google 標準の `GOOGLE_APPLICATION_CREDENTIALS` に一本化し、認証情報の二重化を解消。[→報告書](../reports/20260604_mcp_gsheets_auth_unification/)
 - **xmcp 自動起動 hook 追加・パスの環境非依存化** — SessionStart hook で xmcp サーバーを自動起動し、`.claude/settings.json` のパスハードコードを `$CLAUDE_PROJECT_DIR`＋`*xClaude` ワイルドカードに統合。mcpServers.type を http に修正。[→報告書](../reports/20260604_xmcp_autostart_hook/)
 - **x-onepoint：セッション開始時に spec.md を自動読み込みする hook を追加** — `projects/x-onepoint` での作業開始時に spec.md を自動 Read する SessionStart hook を追加。
