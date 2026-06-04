@@ -15,7 +15,7 @@ analyze-x-posts スキル
 # analyze-x-posts
 
 X投稿一覧シートのデータを分析してユーザーの質問に答えるスキル。
-レポート作成を指示された場合は、ローカル保存＋Google Drive アップロードまで一括実行する。
+レポート作成を指示された場合は、ローカル保存のみ行う。
 
 ユーザーの依頼: $ARGUMENTS
 
@@ -74,7 +74,7 @@ gws sheets spreadsheets values get \
 | 依頼の種類 | 対応 |
 |---|---|
 | 単発の質問・分析（「〜を教えて」「〜はどう？」「〜を出して」） | STEP 3 → チャット回答のみ |
-| レポート作成（「レポートにして」「まとめて」「保存して」） | STEP 3 → STEP 4 → STEP 5 |
+| レポート作成（「レポートにして」「まとめて」「保存して」） | STEP 3 → STEP 4 |
 
 ### STEP 3: 分析実行
 
@@ -220,41 +220,12 @@ print(f"相関係数: {corr:.3f}")
 （What → So What → Now What の流れで）
 ```
 
-### STEP 5: Google Drive アップロード（レポート依頼時のみ）
-
-```bash
-REPORT_FILE="outputs/reports/YYYYMMDD_<タイトル>.md"
-FOLDER_ID="1BkOTTY7wdmdNcFExsjTS75s5sfEzqPmB"
-FILENAME=$(basename "$REPORT_FILE")
-REPO_ROOT=$(git rev-parse --show-toplevel)
-
-# 既存ファイル検索
-EXISTING_ID=$(gws drive files list \
-  --params "{\"q\": \"'${FOLDER_ID}' in parents and name='${FILENAME}' and trashed=false\", \"fields\": \"files(id,name)\"}" \
-  2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); files=d.get('files',[]); print(files[0]['id'] if files else '')")
-
-cd "$REPO_ROOT"
-
-if [ -n "$EXISTING_ID" ]; then
-  # 更新
-  gws drive files update \
-    --params "{\"fileId\": \"$EXISTING_ID\"}" \
-    --upload "$REPORT_FILE" \
-    --upload-content-type "text/markdown" 2>/dev/null
-  echo "Drive 更新完了: $FILENAME"
-else
-  # 新規
-  gws drive +upload "$REPORT_FILE" --parent "$FOLDER_ID" 2>/dev/null
-  echo "Drive アップロード完了: $FILENAME"
-fi
-```
-
 ---
 
 ## 出力ルール
 
 - **単発分析**: チャット上で結果を表・箇条書きで簡潔に示す。前置きは最小限
-- **レポート**: ローカル保存パスと Drive の URL をチャットで報告して終了
+- **レポート**: ローカル保存パスをチャットで報告して終了
 - グラフを生成した場合はチャット上で Read ツールで表示し、内容を解説する
 - 率系の値は必ず % 表記で統一する（0.05 → 5% と表示）
 - n 数（有効データ件数）を必ず明示する
@@ -266,5 +237,4 @@ fi
 - インプレッションはカンマ区切り文字列（例: `"6,901"`）なので `replace(',','')` して数値変換すること
 - 率系カラム（エンゲ率など）は値が `<= 1.0` なら小数表記とみなし 100 倍して % に統一
 - matplotlib は `matplotlib.use('Agg')` をインポート直後に呼ぶこと（ヘッドレス環境）
-- Drive アップロード前に必ずローカル保存が完了していることを確認する
 
