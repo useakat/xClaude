@@ -41,6 +41,8 @@ skills:
     category: 品質チェック
   check-fact:
     category: 品質チェック
+  check-fact-lim:
+    category: 品質チェック
   mond-letter-reply:
     category: メール・通知
   make-infographic:
