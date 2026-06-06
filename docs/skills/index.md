@@ -41,6 +41,7 @@ description: Claude Code で使用できるスキルの一覧
 | [research-plan](/xClaude/skills/research-plan/) | research-plan スキル |
 | [research-trivia](/xClaude/skills/research-trivia/) | research-trivia スキル |
 | [research_pain-xpost](/xClaude/skills/research_pain-xpost/) | 特定のXポストのリプライ・引用RTを取得し、読者のニーズや疑問を分析して note 記事のテーマを提案する。承認後に noteNeta シートへ追記する。 |
+| [research_setup-sources](/xClaude/skills/research_setup-sources/) | テーマを受け取り NotebookLM ノートブックを作成して Deep Research でソースを収集・追加し、notebook_id を返す。 |
 | [research_trivia-source](/xClaude/skills/research_trivia-source/) | research_trivia-source スキル |
 | [research_xhook](/xClaude/skills/research_xhook/) | research_xhook スキル |
 
@@ -70,6 +71,7 @@ description: Claude Code で使用できるスキルの一覧
 | [sync-to-drive](/xClaude/skills/sync-to-drive/) | sync-to-drive スキル |
 | [sync-to-sheets](/xClaude/skills/sync-to-sheets/) | sync-to-sheets スキル |
 | [visual_infographic](/xClaude/skills/visual_infographic/) | visual_infographic スキル |
+| [visual_section-planner](/xClaude/skills/visual_section-planner/) | 記事の本文を入力に、H2セクションごとに画像案を3つ考え、各画像（図解／イメージ／写真Web取得）の説明を、セクション分けしたmarkdown形式で出力する。生成プロンプトは書かず画像の説明のみ。 |
 
 ## 運用・記録
 
