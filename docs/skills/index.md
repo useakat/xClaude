@@ -71,6 +71,7 @@ description: Claude Code で使用できるスキルの一覧
 | [sync-to-drive](/xClaude/skills/sync-to-drive/) | sync-to-drive スキル |
 | [sync-to-sheets](/xClaude/skills/sync-to-sheets/) | sync-to-sheets スキル |
 | [visual_infographic](/xClaude/skills/visual_infographic/) | visual_infographic スキル |
+| [visual_section-imager](/xClaude/skills/visual_section-imager/) | draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各画像の説明を notebook-id.md の NotebookLM notebook に渡して、図解画像はinfographic指示・イメージ画像は情景画像指示で各3枚生成し、draft/images に <H2タイトル>_<画像種類>_<連番>.png と使用プロンプト .md を保存する。写真画像案はスキップ。 |
 | [visual_section-planner](/xClaude/skills/visual_section-planner/) | 記事の本文を入力に、H2セクションごとに画像案を3つ考え、各画像（図解／イメージ／写真Web取得）の説明を、セクション分けしたmarkdown形式で出力し、draft/image-plan.md に保存する。生成プロンプトは書かず画像の説明のみ。 |
 
 ## 運用・記録

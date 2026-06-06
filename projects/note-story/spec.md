@@ -31,12 +31,18 @@
 ### 本文下書き
 `YYYY-MM-DD_<短いタイトル>/draft/draft.md
 
+### 画像・生成プロンプト案
+- `YYYY-MM-DD_<短いタイトル>/draft/images/<H2セクションタイトル>_<画像種類>_<連番>.md`
+- `YYYY-MM-DD_<短いタイトル>/draft/images/<H2セクションタイトル>_<画像種類>_<連番>.png`
+
+* 画像種類：図解画像 / イメージ画像 / 写真画像
+
 ### 公開原稿
 `YYYY-MM-DD_<短いタイトル>/output/index.md`
 
-### 画像生成プロンプト
-- `YYYY-MM-DD_<短いタイトル>/output/prompts/image-01.md`
-- `YYYY-MM-DD_<短いタイトル>/output/prompts/image-02.md`
+### 画像・生成プロンプト
+- `YYYY-MM-DD_<短いタイトル>/output/images/<H2セクションタイトル>_<画像種類>.md`
+- `YYYY-MM-DD_<短いタイトル>/output/images/<H2セクションタイトル>_<画像種類>.png`
 
 
 ## Rules
@@ -51,7 +57,8 @@
 7. **6000字チェック** — 6000字未満なら不足セクションを加筆し再カウント
 8. **演出セルフチェック** — 導入H2なし／各H2末尾`---`／H3なし／専門語の噛み砕き／各H2に演出装置／`[^N]`形式 を確認
 9. **ファクトチェック** — `/check-fact`（テキスト入力モード、最大5回ループ）。指摘を反映した版を最終本文とする
-10. **画像プランニング** ー `/visual_section-planner {本文ファイルパス}` で、各H2セクションごとに画像案を3つ（図解／イメージ／写真Web取得）出力する。出力された画像説明をもとに画像を準備する。
+10. **画像プランニング** ー `/visual_section-planner {本文ファイルパス}` で、各H2セクションごとに画像案を3つ（図解／イメージ／写真Web取得）出力し `draft/image-plan.md` に保存する。ユーザーが各H2を1案に絞り込む。
+11. **画像生成** ー `/visual_section-imager {draft/image-plan.md のパス}` で、絞り込み済みの各画像説明を notebook-id.md の NotebookLM notebook に渡し、図解・イメージ画像を各3枚生成して `draft/images/` に保存する（写真画像案はスキップ）。
 12. **ハッシュタグ** — `/hashtag-note {本文}`で、note記事につける hashtag を選定し、本文下書きの末尾に追加する。
 14. **ネタを使用済みに更新** — `noteNeta` シートの該当行 L列を「使用済み」に更新
 15. **完了メール送信** — `scripts/send_gmail.sh` で useakat@gmail.com へ通知
