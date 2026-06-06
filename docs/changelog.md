@@ -7,6 +7,15 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-06
+
+- **research_setup-sources スキル新設** — `research_trivia-source` のノートブック作成＋Deep Research（Steps 0〜3）を汎用スキルとして切り出し。notebook_id を返すビルディングブロックとして他スキルから再利用可能。[→報告書](../reports/20260606_research_setup_sources_skill/)
+- **リモートセッション用 Drive アップロードスクリプト追加** — gws 認証情報をクラウドに置くセキュリティリスクを避け、Drive MCP 経由でアップロードする `drivemcp_put_remote.sh` を新設。CLAUDE.md にアップロードルールを追記。[→報告書](../reports/20260606_drivemcp_put_remote/)
+- **cron：認証チェック結果を毎回 Gmail に送信** — `check_auth.sh` を改修し、エラーの有無に関わらず毎日 `useakat@gmail.com` に認証チェック結果メールを送信するよう変更。
+- **CLAUDE.md：master push 完了報告にブランチ名明示ルール追加** — git push 完了を報告する際にブランチ名（例：「master に push しました」）を明示するルールを振る舞いルールに追加。
+
+---
+
 ## 2026-06-04
 
 - **スキル作成用汎用テンプレート追加** — `templates/SKILL_temp.md` を新設。SKILL.md 作成時のひな形（目的・手順・出力形式・禁止事項）。

@@ -1124,3 +1124,93 @@ No unprocessed mond letters found in the inbox.
 
 `from:letter-notify@mond.how -label:mond-処理済み in:inbox` の検索結果が 0 件でした。未処理の mond レターはありません。
 [2026-06-04 06:00:14 JST] mond-letter-reply 完了
+[2026-06-04 12:00:01 JST] mond-letter-reply 開始
+検索結果は 0 件でした。
+
+```
+[mond-letter-reply 完了]
+対象メールなし。処理を終了します。
+```
+
+`letter-notify@mond.how` からの未処理レター（`mond-処理済み` ラベルなし・受信トレイ内）はありませんでした。
+[2026-06-04 12:00:13 JST] mond-letter-reply 完了
+[2026-06-04 18:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+```
+対象メールなし。処理を終了します。
+```
+
+[mond-letter-reply 完了] — 未処理の mond レターはありませんでした。
+[2026-06-04 18:00:13 JST] mond-letter-reply 完了
+[2026-06-05 00:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+
+未処理の mond レター（`letter-notify@mond.how`／未処理ラベル）はありませんでした。
+[2026-06-05 00:00:14 JST] mond-letter-reply 完了
+[2026-06-05 06:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+
+```
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: []
+```
+
+未処理の mond レター（`letter-notify@mond.how`）はありませんでした。
+[2026-06-05 06:00:14 JST] mond-letter-reply 完了
+[2026-06-05 12:00:01 JST] mond-letter-reply 開始
+検索結果は 0 件でした。
+
+**対象メールなし。処理を終了します。**
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` に該当する未処理レターはありませんでした。
+[2026-06-05 12:00:13 JST] mond-letter-reply 完了
+[2026-06-05 18:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+[2026-06-05 18:00:17 JST] mond-letter-reply 完了
+[2026-06-06 00:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: なし
+
+`letter-notify@mond.how` からの未処理レター（`mond-処理済み` 未付与・受信トレイ内）は見つかりませんでした。
+[2026-06-06 00:00:16 JST] mond-letter-reply 完了
+[2026-06-06 06:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+
+[mond-letter-reply 完了]
+- 処理スレッド数: 0 件
+- うち下書き作成: 0 件
+- うちお礼スキップ: 0 件
+- うちエラー: 0 件
+- 作成した下書き ID: なし
+
+`letter-notify@mond.how` からの未処理レター（`mond-処理済み` ラベルなし・受信トレイ内）はありませんでした。
+[2026-06-06 06:00:16 JST] mond-letter-reply 完了
+[2026-06-06 12:00:01 JST] mond-letter-reply 開始
+STEP 1 の検索結果が 0 件でした。
+
+**対象メールなし。処理を終了します。**
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` に該当する未処理レターはありませんでした。
+[2026-06-06 12:00:13 JST] mond-letter-reply 完了
