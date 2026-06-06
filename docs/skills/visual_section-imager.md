@@ -1,6 +1,6 @@
 ---
 title: visual_section-imager
-description: draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各画像の説明を notebook-id.md の NotebookLM notebook に渡して、図解画像はinfographic指示・イメージ画像は情景画像指示で各3枚生成し、draft/images に <H2タイトル>_<画像種類>_<連番>.png と使用プロンプト .md を保存する。写真画像案はスキップ。
+description: draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各画像の説明を notebook-id.md の NotebookLM notebook に渡して、図解画像はinfographic指示・イメージ画像は情景画像指示（文字なし）で各3枚生成し、draft/images に <H2タイトル>_<画像種類>_<連番>.png と使用プロンプト .md を保存する。生成失敗時は自動リトライ。写真画像案はスキップ。
 category: 画像・同期
 ---
 
@@ -8,7 +8,7 @@ category: 画像・同期
 
 ## スキル説明
 
-draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各画像の説明を notebook-id.md の NotebookLM notebook に渡して、図解画像はinfographic指示・イメージ画像は情景画像指示で各3枚生成し、draft/images に <H2タイトル>_<画像種類>_<連番>.png と使用プロンプト .md を保存する。写真画像案はスキップ。
+draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各画像の説明を notebook-id.md の NotebookLM notebook に渡して、図解画像はinfographic指示・イメージ画像は情景画像指示（文字なし）で各3枚生成し、draft/images に <H2タイトル>_<画像種類>_<連番>.png と使用プロンプト .md を保存する。生成失敗時は自動リトライ。写真画像案はスキップ。
 
 ## 詳細内容
 
@@ -51,21 +51,26 @@ draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各�
 
 7. **図解／イメージのセクションごとに instructions を組み立てる。** 画像説明の本文に、画像種類に応じた明示指示を加える：
    - **図解画像**: 末尾に「これは図解（インフォグラフィック）として作成してください。」を付ける
-   - **イメージ画像**: 末尾に「図解ではなく、情景を描いたイメージ画像として作成してください。」を付ける
+   - **イメージ画像**: 末尾に「図解ではなく、情景を描いたイメージ画像として作成してください。画像内には説明文・キャプション・ラベル・タイトルなどの文字を一切入れないでください。」を付ける
 
    この instructions を `draft/images/<safe>_<画像種類>_<連番>.md` に Write で保存する（連番 01〜03、3 枚とも同一内容）。
 
 8. **ファイル名を安全化する。** `<safe>` は H2 セクションタイトルから `「」『』（）()`・空白・`/`・記号を `_` に置換／除去したもの。`<画像種類>` は `図解画像` / `イメージ画像`。
 
-9. **画像を 3 枚生成する。** 同じ instructions で次を **3 回**（連番 01〜03）実行し、1 枚ずつ保存する：
+9. **画像を 3 枚生成する（失敗時リトライ付き）。** 同じ instructions で連番 01〜03 を 1 枚ずつ生成する。各連番は、`--output` の PNG が生成されなければ**最大 2 回まで再実行**（合計 3 回試行、各リトライ前に `sleep 5`）する。3 回とも生成できなければ「失敗: <ファイル名>」と記録して次の連番へ進む（全体は止めない）。
    ```bash
-   python3 "$ROOT/scripts/notebooklm_manager.py" infographic "$NOTEBOOK_ID" \
-     --instructions "$(cat "$PROJ/draft/images/<safe>_<画像種類>_<連番>.md")" \
-     --language ja \
-     --orientation landscape \
-     --detail standard \
-     --style auto \
-     --output "$PROJ/draft/images/<safe>_<画像種類>_<連番>.png"
+   gen_one() {  # 引数: 出力PNGパス, instructionsファイルパス
+     local out="$1" instr="$2" try
+     for try in 1 2 3; do
+       python3 "$ROOT/scripts/notebooklm_manager.py" infographic "$NOTEBOOK_ID" \
+         --instructions "$(cat "$instr")" \
+         --language ja --orientation landscape --detail standard --style auto \
+         --output "$out" && [ -f "$out" ] && return 0
+       echo "retry $try failed: $(basename "$out")"; sleep 5
+     done
+     echo "FAILED: $(basename "$out")"; return 1
+   }
+   # 各連番で gen_one "<...>_<連番>.png" "<...>_<連番>.md" を呼ぶ
    ```
    - notebook は新規作成しない（`make-infographic` ではなく `infographic`）。`NOTEBOOK_ID` を再利用する
    - キャラクター参照 URL（`--extra-source-url`）は付けない
@@ -97,6 +102,7 @@ draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各�
 
 - 写真画像（Web取得）案を生成しない。スキップのみ
 - スキルが独自に複数の切り口プロンプトを作らない。画像説明をそのまま渡す（種類ごとの明示指示のみ付加する）
+- イメージ画像には説明文・キャプション・ラベル・タイトルの文字を入れさせない（図解画像はラベル文字あり可）
 - notebook を新規作成・削除しない。`notebook-id.md` の既存 ID を使う
 - キャラクター参照・スーパーニャンコ URL を付けない
 - Drive アップロード・Gmail 送信をしない。ローカル保存のみ
