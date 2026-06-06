@@ -4,7 +4,7 @@
       "command": "npx",
       "args": ["-y", "mcp-gsheets@latest"],
       "env": {
-        "GOOGLE_APPLICATION_CREDENTIALS": "${GOOGLE_APPLICATION_CREDENTIALS}",
+        "GOOGLE_SERVICE_ACCOUNT_KEY": "${GOOGLE_SERVICE_ACCOUNT_KEY}",
         "GOOGLE_PROJECT_ID": "${GOOGLE_PROJECT_ID}"
       }
     }
