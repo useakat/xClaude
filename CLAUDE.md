@@ -238,6 +238,11 @@ xClaude/
 - **リモート環境**（routine / agent）: `bash scripts/drivemcp_get_remote.sh <file-id> <output-path>`
 - Drive MCP ツール（`mcp__claude_ai_Google_Drive__download_file_content`）は base64 をトークンとして消費するため、上記スクリプトで代替できる場合は使わない
 
+#### Drive ファイルアップロードのルール
+- **ローカル環境**: `bash scripts/drive_put.sh <local-file> [folder-id]`
+- **リモート環境**（routine / agent）: `bash scripts/drivemcp_put_remote.sh <local-file> [folder-id]`
+- リモートでは常に新規ファイルとして作成される（既存ファイルの上書き更新は非対応）
+
 ### スクリプト化の原則
 - **確実な処理実行とトークン節約のため、スクリプト化できる処理はなるべく bash / Python スクリプトを作成して実行する**
 - Claude が直接実行するのではなく、スクリプト化することで再現性と信頼性が向上する
