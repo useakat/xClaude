@@ -297,3 +297,6 @@ NASAの管制官にとって、これ以上ない、最大級の賛辞だった�
 [^6]: Why was Apollo 12 allowed to go up in such bad weather?（解説記事）.
 [^7]: "SCE to Aux": Remembering Apollo 12's Hair-Raising Ride to the Moon, AmericaSpace.
 [^8]: Apollo 12 was struck by lightning twice less than a minute after launch, Space Daily.
+
+<!-- ハッシュタグ -->
+#この経験に学べ #最近の学び #ノンフィクション #物語 #エッセイ #コラム #人生 #宇宙 #宇宙開発 #科学 #NASA #ロケット #アポロ計画 #天文 #宇宙探査 #サイエンス
