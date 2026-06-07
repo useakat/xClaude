@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-07
+
+- **mcp-gsheets リモート認証修正** — `settings.json` の `GOOGLE_APPLICATION_CREDENTIALS` を削除し、リモートセッションでも mcp-gsheets が `GOOGLE_SERVICE_ACCOUNT_KEY` で正常動作するよう修正。`mcp__github__push_files` の PostToolUse フックも追加。[→報告書](../reports/20260607_mcp_gsheets_remote_auth_fix/)
+
+---
+
 ## 2026-06-06
 
 - **research_setup-sources スキル新設** — `research_trivia-source` のノートブック作成＋Deep Research（Steps 0〜3）を汎用スキルとして切り出し。notebook_id を返すビルディングブロックとして他スキルから再利用可能。[→報告書](../reports/20260606_research_setup_sources_skill/)
