@@ -289,10 +289,11 @@ NASAの管制官にとって、これ以上ない、最大級の賛辞だった�
 
 ## 参考情報
 
-1. [Apollo 12 - Wikipedia](https://en.wikipedia.org/wiki/Apollo_12) — 打ち上げの経過と被雷による異常（テレメトリの文字化け、3基の燃料電池の自動切り離し、姿勢計の異常）、アーロンの担当「EECOM」、船長コンラッドの反応、スイッチ操作後の計器回復など、ミッション全体の基本事実。
+1. [Apollo 12 - Wikipedia](https://en.wikipedia.org/wiki/Apollo_12) — 打ち上げの経過と被雷による異常（テレメトリの文字化け、3基の燃料電池の自動切り離し、姿勢計の異常）、アーロンの担当「EECOM」、船長コンラッドの反応、上昇中の強風（151.7ノット＝約280km/h、アポロ史上最強）、スイッチ操作後の計器回復など、ミッション全体の基本事実。
 2. [John Aaron - Wikipedia](https://en.wikipedia.org/wiki/John_Aaron) — アーロンの人物背景。1年前のリハーサルで SCE の誤作動と異常表示を自分から突き止め、Aux へ切り替えれば低電圧でも動くという知識を得ていた経緯。
 3. [How Curiosity, Luck, and the Flip of a Switch Saved the Moon Program - VICE](https://www.vice.com/en/article/john-aaron-apollo-12-curiosity-luck-and-sce-to-aux/) — 物語の中核。24歳の EECOM アーロンが「SCEをAUXに」と判断し、CAPCOM 経由で機体へ伝わって復旧するまでの一連の経緯、復旧後の燃料電池つなぎ直しと姿勢計の測り直し、称号「鋼の目を持つロケット男（steely-eyed missile man）」。
 4. [Lightning Strikes Twice - NASA Science](https://science.nasa.gov/resource/lightning-strikes-twice/) — 2度目の落雷が打ち上げ52秒（1度目36.5秒の約16秒後）に起きたこと、ロケットと高温でイオン化した排気が「電気の通り道」になって雷を誘発した仕組み（誘発雷）。
-5. [How lightning striking Apollo 12 forever changed NASA's launch weather policies - FOX Weather](https://www.foxweather.com/earth-space/apollo-12-struck-lightning-new-weather-launch-policies-nasa) — 打ち上げ時の気象条件（雲底150m・地上風は規定内）と、当時のアポロ計画が雨天の打ち上げ自体は禁じていなかったこと、被雷を機に天候規則が改定された経緯。
-6. ['SCE to Aux': Remembering Apollo 12's Hair-Raising Ride to the Moon, 50 Years Ago (Part 1) - AmericaSpace](https://www.americaspace.com/2019/11/17/sce-to-aux-remembering-apollo-12s-hair-raising-ride-to-the-moon-50-years-ago-part-1/) — 打ち上げの詳細（雷の兆候なしの報告、上昇中の強風）、SCE の役割（信号の「翻訳係」・センサーへの給電）と Aux 設定の意味、燃料電池の復旧、サーベイヤー3号近くへのピンポイント着陸。
+5. [How lightning striking Apollo 12 forever changed NASA's launch weather policies - FOX Weather](https://www.foxweather.com/earth-space/apollo-12-struck-lightning-new-weather-launch-policies-nasa) — 当時のアポロ計画が雨天の打ち上げ自体は禁じていなかったこと、被雷を機に天候規則が改定された経緯。
+6. ['SCE to Aux': Remembering Apollo 12's Hair-Raising Ride to the Moon, 50 Years Ago (Part 1) - AmericaSpace](https://www.americaspace.com/2019/11/17/sce-to-aux-remembering-apollo-12s-hair-raising-ride-to-the-moon-50-years-ago-part-1/) — 打ち上げの詳細（発射台周辺に雷の兆候なしの報告）、SCE の役割（信号の「翻訳係」・センサーへの給電）と Aux 設定の意味、燃料電池の復旧、サーベイヤー3号近くへのピンポイント着陸。
 7. [Apollo 12 was struck by lightning twice less than a minute after launch - Space Daily](https://spacedaily.com/t-apollo-12-was-struck-by-lightning-twice-less-than-a-minute-after-launch-and-the-mission-kept-going-only-because-a-flight-controller-recognised-an-obscure-telemetry-failure-pattern-and-told-the-crew/) — 被雷直後、フライトディレクターが打ち上げ中止を口にする覚悟を固めつつあったこと。
+8. [Moonport: A History of Apollo Launch Facilities and Operations, Ch.22「A Slower Pace: Apollo 12–14」(NASA SP-4204)](https://www.american-spacecraft.org/documents/sp-4204/chapter-22.html) — 打ち上げ判断の根拠。雲底が最低要件の150メートルを超え、地上風も規定内だったこと（"the ceiling exceeded the minimum requirement of 150 meters, and the ground winds were within limits"）。
