@@ -35,7 +35,7 @@
 
 そもそも、なぜこんな天気で飛ばしたのかとも思ってしまうが、その判断にはちゃんと根拠があった。
 
-雲の底の高さは、打ち上げに必要な最低ライン（150メートル）を超えており、地上の風も、規定の範囲内におさまっていた [5]。
+雲の底の高さは、打ち上げに必要な最低ライン（150メートル）を超えており、地上の風も、規定の範囲内におさまっていた [8]。
 空軍の観測機が空を飛び、発射台から半径32キロのなかに雷の兆候はない、と報告していた [6]。
 
 そもそも当時のアポロ計画では、雨のなかの打ち上げそのものを禁じてはいなかった [5]。
@@ -44,7 +44,7 @@
 
 
 サターンVロケットは予定どおり、雨雲に向かって突き進んでいく。
-上昇するにつれ、機体は時速にして280キロほどの風を受けながら、雲のなかへ分け入っていった [6]。
+上昇するにつれ、機体は時速にして280キロほどの風を受けながら、雲のなかへ分け入っていった [1]。
 
 
 異変が起きたのは、リフトオフから36秒後だった。
@@ -296,3 +296,4 @@ NASAの管制官にとって、これ以上ない、最大級の賛辞だった�
 5. [How lightning striking Apollo 12 forever changed NASA's launch weather policies - FOX Weather](https://www.foxweather.com/earth-space/apollo-12-struck-lightning-new-weather-launch-policies-nasa)
 6. ['SCE to Aux': Remembering Apollo 12's Hair-Raising Ride to the Moon, 50 Years Ago (Part 1) - AmericaSpace](https://www.americaspace.com/2019/11/17/sce-to-aux-remembering-apollo-12s-hair-raising-ride-to-the-moon-50-years-ago-part-1/)
 7. [Apollo 12 was struck by lightning twice less than a minute after launch - Space Daily](https://spacedaily.com/t-apollo-12-was-struck-by-lightning-twice-less-than-a-minute-after-launch-and-the-mission-kept-going-only-because-a-flight-controller-recognised-an-obscure-telemetry-failure-pattern-and-told-the-crew/)
+8. [Moonport: A History of Apollo Launch Facilities and Operations, Ch.22「A Slower Pace: Apollo 12–14」(NASA SP-4204)](https://www.american-spacecraft.org/documents/sp-4204/chapter-22.html)
