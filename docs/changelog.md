@@ -10,6 +10,9 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-06-07
 
 - **mcp-gsheets リモート認証修正** — `settings.json` の `GOOGLE_APPLICATION_CREDENTIALS` を削除し、リモートセッションでも mcp-gsheets が `GOOGLE_SERVICE_ACCOUNT_KEY` で正常動作するよう修正。`mcp__github__push_files` の PostToolUse フックも追加。[→報告書](../reports/20260607_mcp_gsheets_remote_auth_fix/)
+- **W002 執念の物語 note 記事プロジェクト立ち上げ＋プロジェクト雛形** — `projects/note-story/` に plan/brand/spec を新設（style-note-story の文体・演出ルールを brand.md へ取り込み）。`projects/template/` 一式と `templates/SKILL_example.md` も追加。[→報告書](../reports/20260607_note_story_project_setup/)
+- **visual_section-planner スキル新設** — 記事本文を入力に、各 H2 へ画像案を3つ（図解／イメージ／写真Web取得）セクション分け markdown で出力し `draft/image-plan.md` に保存。[→報告書](../reports/20260607_visual_section_planner_skill/)
+- **visual_section-imager スキル新設（NotebookLM 画像生成）** — 絞り込み済み image-plan を入力に notebook-id.md の notebook で図解=infographic指示／イメージ=情景画像（文字なし）を各3枚生成し draft/images へ保存。失敗時自動リトライ・写真案スキップ。[→報告書](../reports/20260607_visual_section_imager_skill/)
 
 ---
 
