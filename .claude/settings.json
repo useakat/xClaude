@@ -87,6 +87,15 @@
             "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/update_wiki_skills.py\" || true"
           }
         ]
+      },
+      {
+        "matcher": "mcp__github__push_files",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '⚠ master に push しました と必ず伝えること'"
+          }
+        ]
       }
     ]
   },
