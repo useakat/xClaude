@@ -14,3 +14,6 @@ gcp/
 /To
 /*.pdf
 .claude/plans/
+
+# リポジトリ直下の参照素材（一旦コミット対象外）
+/references/
