@@ -310,12 +310,12 @@ NASAの管制官にとって、これ以上ない、最大級の賛辞だった�
 
 ## 参考情報
 
-1. [Apollo 12 - Wikipedia](https://en.wikipedia.org/wiki/Apollo_12)
-2. [John Aaron - Wikipedia](https://en.wikipedia.org/wiki/John_Aaron)
-3. [How Curiosity, Luck, and the Flip of a Switch Saved the Moon Program - VICE](https://www.vice.com/en/article/john-aaron-apollo-12-curiosity-luck-and-sce-to-aux/)
-4. [Lightning Strikes Twice - NASA Science](https://science.nasa.gov/resource/lightning-strikes-twice/)
-5. [How lightning striking Apollo 12 forever changed NASA's launch weather policies - FOX Weather](https://www.foxweather.com/earth-space/apollo-12-struck-lightning-new-weather-launch-policies-nasa)
-6. ['SCE to Aux': Remembering Apollo 12's Hair-Raising Ride to the Moon, 50 Years Ago (Part 1) - AmericaSpace](https://www.americaspace.com/2019/11/17/sce-to-aux-remembering-apollo-12s-hair-raising-ride-to-the-moon-50-years-ago-part-1/)
-7. [Apollo 12 was struck by lightning twice less than a minute after launch - Space Daily](https://spacedaily.com/t-apollo-12-was-struck-by-lightning-twice-less-than-a-minute-after-launch-and-the-mission-kept-going-only-because-a-flight-controller-recognised-an-obscure-telemetry-failure-pattern-and-told-the-crew/)
-8. [Moonport: A History of Apollo Launch Facilities and Operations, Ch.22「A Slower Pace: Apollo 12–14」(NASA SP-4204)](https://www.american-spacecraft.org/documents/sp-4204/chapter-22.html)
-9. [Ken Shirriff「Talking with the Moon: Inside Apollo's premodulation processor」(righto.com, 2022)](http://www.righto.com/2022/05/talking-with-moon-inside-apollos.html)
+1. [Apollo 12 - Wikipedia](https://en.wikipedia.org/wiki/Apollo_12) — 本文での参照内容：被雷でテレメトリが文字化けし、3基の燃料電池が切り離され、姿勢計が狂ったこと、アーロンの担当が「EECOM」だったこと、船長コンラッドの戸惑い、エンジニア役のビーンがスイッチの位置を知っていたこと、上昇中の約280km/hの強風、スイッチ操作後の計器回復。ミッション全体の事実関係の土台。
+2. [John Aaron - Wikipedia](https://en.wikipedia.org/wiki/John_Aaron) — 本文での参照内容：アーロンの人物背景。1年前の打ち上げシミュレーションで SCE の誤作動を自ら突き止め、Aux へ切り替えれば低電圧でも SCE が動くと学んでいた経緯。
+3. [How Curiosity, Luck, and the Flip of a Switch Saved the Moon Program - VICE](https://www.vice.com/en/article/john-aaron-apollo-12-curiosity-luck-and-sce-to-aux/) — 本文での参照内容：24歳の EECOM アーロンが「SCEをAUXに」と判断するまでの流れ、同じ1年前のシミュレーションを月着陸船パイロットのビーンも覚えていてスイッチを倒したこと（"remembered it from the sim the previous year"）、復旧後の燃料電池つなぎ直し、称号「鋼の目を持つロケット男（steely-eyed missile man）」。
+4. [Lightning Strikes Twice - NASA Science](https://science.nasa.gov/resource/lightning-strikes-twice/) — 本文での参照内容：2度目の落雷が打ち上げ52秒（1度目の36.5秒から約16秒後）に起きたこと、高温でイオン化したロケットの排気が「電気の通り道」となって雷を呼んだ仕組み（誘発雷）。
+5. [How lightning striking Apollo 12 forever changed NASA's launch weather policies - FOX Weather](https://www.foxweather.com/earth-space/apollo-12-struck-lightning-new-weather-launch-policies-nasa) — 本文での参照内容：当時のアポロ計画が雨天の打ち上げそのものは禁じていなかったこと。
+6. ['SCE to Aux': Remembering Apollo 12's Hair-Raising Ride to the Moon, 50 Years Ago (Part 1) - AmericaSpace](https://www.americaspace.com/2019/11/17/sce-to-aux-remembering-apollo-12s-hair-raising-ride-to-the-moon-50-years-ago-part-1/) — 本文での参照内容：SCE が生の計器信号を機械の読めるデータへ変換する「翻訳係」であること、Aux 設定の意味、燃料電池の復旧、サーベイヤー3号のすぐ近くへ降りたピンポイント着陸。
+7. [Apollo 12 was struck by lightning twice less than a minute after launch - Space Daily](https://spacedaily.com/t-apollo-12-was-struck-by-lightning-twice-less-than-a-minute-after-launch-and-the-mission-kept-going-only-because-a-flight-controller-recognised-an-obscure-telemetry-failure-pattern-and-told-the-crew/) — 本文での参照内容：被雷の直後、フライトディレクターが打ち上げ中止を口にする覚悟を固めつつあったこと。
+8. [Moonport: A History of Apollo Launch Facilities and Operations, Ch.22「A Slower Pace: Apollo 12–14」(NASA SP-4204)](https://www.american-spacecraft.org/documents/sp-4204/chapter-22.html) — 本文での参照内容：雨天の打ち上げを GO と判断した根拠。雲底が最低要件の150メートルを超え、地上風も規定内で、空軍機が発射台から半径32キロ以内に雷の兆候なし・軽い乱気流のみと報告していたこと（"An Air Force plane reported only mild turbulence and no indication of lightning within 32 kilometers of LC-39"）。
+9. [Ken Shirriff「Talking with the Moon: Inside Apollo's premodulation processor」(righto.com, 2022)](http://www.righto.com/2022/05/talking-with-moon-inside-apollos.html) — 本文での参照内容：SCE の内部に電源が2系統あり、電圧が下がりすぎると自動で止まる保護回路（安全装置）が備わっていること、AUX モードがその低電圧遮断（undervoltage signal）を無効にして低電圧でも動かし続ける仕組み。アポロ12号では電圧が28V→約18〜24Vまで低下。
