@@ -319,3 +319,8 @@ NASAの管制官にとって、これ以上ない、最大級の賛辞だった�
 7. [Apollo 12 was struck by lightning twice less than a minute after launch - Space Daily](https://spacedaily.com/t-apollo-12-was-struck-by-lightning-twice-less-than-a-minute-after-launch-and-the-mission-kept-going-only-because-a-flight-controller-recognised-an-obscure-telemetry-failure-pattern-and-told-the-crew/) — 被雷から復旧までの経緯を伝える宇宙ニュース記事。
 8. [Moonport: A History of Apollo Launch Facilities and Operations, Ch.22「A Slower Pace: Apollo 12–14」(NASA SP-4204)](https://www.american-spacecraft.org/documents/sp-4204/chapter-22.html) — アポロの発射施設と打ち上げ運用の歴史を記したNASA公式史。第22章がアポロ12〜14号を扱う。
 9. [Ken Shirriff「Talking with the Moon: Inside Apollo's premodulation processor」(righto.com, 2022)](http://www.righto.com/2022/05/talking-with-moon-inside-apollos.html) — アポロの通信機器（プリモジュレーション・プロセッサ）の内部を回路レベルで読み解いた技術ブログ記事。
+
+---
+
+<!-- お題タグ（2個・note公開設定画面から選択）: #最近の学び #この経験に学べ -->
+#最近の学び #この経験に学べ #宇宙 #宇宙開発 #宇宙探査 #アポロ計画 #アポロ12号 #月面着陸 #NASA #ロケット #宇宙飛行士 #宇宙好きと繋がりたい #科学 #物理学 #歴史 #エッセイ #コラム #意思決定 #好奇心 #挑戦 #自己啓発 #成長 #モチベーション #人生 #思考
