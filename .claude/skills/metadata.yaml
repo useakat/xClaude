@@ -43,9 +43,7 @@ skills:
     category: 品質チェック
   check-fact-lim:
     category: 品質チェック
-  check-tonmana:
-    category: 品質チェック
-  check-p01:
+  check-brand:
     category: 品質チェック
   mond-letter-reply:
     category: メール・通知
