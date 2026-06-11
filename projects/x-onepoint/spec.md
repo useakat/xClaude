@@ -44,7 +44,7 @@
 2. **ネタ選定** — `日 mod 3` で分野グループ（0・1 → 宇宙・物理 / 2 → その他）を決定。最優先基準: 読者が今日体験した日常の物・感覚を入り口にできること
 3. **原稿作成** — `/writer-xonepoint`
 4. **ファクトチェック** — `/check-fact`
-5. **トンマナ調整・P01化スコアリング** — 全 6 項目 8 点以上で合格（最大 5 回ループ）
+5. **ブランド適合チェック** — `/check-brand projects/x-onepoint/brand.md {本文}`（採点ループ＋トンマナ調整。brand.md の採点基準で全項目 8 点以上、最大 5 回ループ）
 6. **Gmail 下書き作成** — `mcp__claude_ai_Gmail__create_draft` を直接呼び出す
 7. **（承認後）画像生成** — `/visual_infographic` 5 パターン生成 → `projects/x-onepoint/outputs/YYYYMMDD_[topic]/[style].png` に保存（Drive にもアップロード）
 
@@ -54,7 +54,7 @@
 
 ## Verification
 - テキスト字数が 140〜300 字の範囲に収まっている
-- P01化スコアリング全 6 項目が 8 点以上（不合格時は警告を明記）
+- ブランド適合スコアリング（`/check-brand`）の全項目が 8 点以上（不合格時は警告を明記）
 - ファクトが出典確認済み（`/check-fact` 通過）
 - brand.mdと矛盾しない
 - plan.mdの目的に沿う
