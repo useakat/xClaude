@@ -55,6 +55,16 @@
 - `YYYY-MM-DD_<短いタイトル>/output/images/<H2セクションタイトル>_<画像種類>.md`
 - `YYYY-MM-DD_<短いタイトル>/output/images/<H2セクションタイトル>_<画像種類>.png`
 
+### サムネイル
+作業フォルダ: `YYYY-MM-DD_<短いタイトル>/thumbnail/`
+- `plan.md` … 目的・ターゲット・要件・KPI・納品物・失格条件
+- `brand.md` … サムネのトーン・ビジュアル指針（記事 brand を継承）
+- `design-brief_template.md`（指示書テンプレ）／`design-brief.md`（記事ごとの指示書）
+- `nanobanana-prompt.md` … 画像生成プロンプト
+完成画像: `YYYY-MM-DD_<短いタイトル>/output/images/thumbnail.png`（**1280×672px**）
+
+* `plan.md`／`brand.md`／`design-brief_template.md` は雛形を流用する（無ければ既存記事の `thumbnail/` からコピー）。
+
 
 ## Rules
 
@@ -74,7 +84,12 @@
     3. 誤った出典は差し替え・不足出典は追加して draft.md を更新する
     4. 変更内容を output/index.md の `## 参考情報` にも反映する
 11. **画像生成**: `/visual_section-planner` スキルを使い、各H2セクションに配置する図解・イメージ・写真画像の案を立て、`draft/image-plan.md` に保存する。ユーザーが1案に絞り込んだのち `/visual_section-imager` で実画像を生成する。
-12. **サムネイル生成**: thumbnail 
+12. **サムネイル生成**: `thumbnail/` フォルダで以下を行う。
+    1. **インプット確認**: `thumbnail/plan.md`（目的・KPI・失格条件）、`thumbnail/brand.md`（サムネのトーン）、`draft/draft.md`（記事内容）、`thumbnail/design-brief_template.md`（テンプレ）を読む。雛形が無ければ既存記事の `thumbnail/` からコピーして用意する。
+    2. **デザイン指示書**: テンプレに沿って `thumbnail/design-brief.md` を作成する（媒体分類・目的・KPI・文字階層・構図・配色・禁止事項・レビュー基準）。記事タイトルをメイン／サブコピーに割り付け、強調キーワードを1箇所だけ黄色に決める。
+    3. **生成プロンプト**: design-brief をもとに `thumbnail/nanobanana-prompt.md` を作成する。被写体、**画面内に入れる日本語文字（崩さず正確に）**、レイアウト・視線誘導、配色、Negative prompt を含める。
+    4. **画像生成（手動・外部）**: Claude は `nanobanana-prompt.md` を提示するところまで担当する。**ユーザーが nano banana（Gemini 2.5 Flash Image）で画像を生成し、`output/images/thumbnail.png`（1280×672px）として保存する**。リポジトリに生成ツールが無いため Claude は画像生成自体を実行しない。日本語が崩れる場合はサブコピーを短縮するか、生成後にテキストを重ねる。
+    5. **レビュー＆リトライ**: design-brief の「レビュー基準」と plan の「失格条件」で点検する（3秒でタイトルが読める／日本語が崩れていない／メインが最大／状況が情景で伝わる／CTA・絵文字・過剰煽りが無い）。満たさなければプロンプトを調整して再生成する。
 13. **ハッシュタグ**: `/hashtag-note {本文}`で、note記事につける hashtag を選定し、本文下書きの末尾に追加する。
 14. **ネタを使用済みに更新**: `noteNeta` シートの該当行 L列を「使用済み」に更新
 15. **完了メール送信**: `scripts/send_gmail.sh` で useakat@gmail.com へ通知
@@ -91,6 +106,7 @@
 - 参考文献が `[N]` 形式で、末尾に `## 参考情報` がある
 - 参考文献のリンク先が存在し、開くことができる。
 - ファクトが出典確認済み（`/check-fact` 通過）
+- サムネイルが plan の失格条件を満たす（タイトル可読・日本語崩れなし・文字が小さすぎない・CTAなし）
 - brand.md と矛盾しない（煽り・上から目線・出典なき捏造がない）
 - plan.md の目的に沿う（読後に「諦めなくていい」読後感に着地している）
 - 出力ファイル名が命名規則に揃っている
