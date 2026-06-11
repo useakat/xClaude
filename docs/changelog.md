@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-11
+
+- **writer_note-story を本文フェーズ専用に絞り込み** — スキルを本文・6000字チェック・演出セルフチェックの3工程専用に縮小し、構成フェーズ/ファクトチェック/保存・通知を削除。文体・演出は brand.md を権威にし notebook ソース限定執筆を追加、旧版を writer_note-story_old にバックアップ、spec.md step6-8 を委譲明記。[→報告書](../reports/20260611_writer_note_story_body_phase_only/)
+
+---
+
 ## 2026-06-07
 
 - **mcp-gsheets リモート認証修正** — `settings.json` の `GOOGLE_APPLICATION_CREDENTIALS` を削除し、リモートセッションでも mcp-gsheets が `GOOGLE_SERVICE_ACCOUNT_KEY` で正常動作するよう修正。`mcp__github__push_files` の PostToolUse フックも追加。[→報告書](../reports/20260607_mcp_gsheets_remote_auth_fix/)
