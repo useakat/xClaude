@@ -10,6 +10,9 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-06-11
 
 - **writer_note-story を本文フェーズ専用に絞り込み** — スキルを本文・6000字チェック・演出セルフチェックの3工程専用に縮小し、構成フェーズ/ファクトチェック/保存・通知を削除。文体・演出は brand.md を権威にし notebook ソース限定執筆を追加、旧版を writer_note-story_old にバックアップ、spec.md step6-8 を委譲明記。[→報告書](../reports/20260611_writer_note_story_body_phase_only/)
+- **note-story 出典運用の整備（参考情報チェック・2段階運用・リサーチ運用ルール）** — 制作フローに「参考情報チェック」step を追加、出典を2段階運用（draft=本文での参照内容／index=文献の概要）に整理、「notebook 優先→WebSearch→notebook 還元」のリサーチ運用ルールを CLAUDE.md に追加。[→報告書](../reports/20260611_note_story_citation_workflow/)
+- **note-story brand/spec の役割整理＋読者視点レビュー工程の新設** — ファクトチェック後のユーザー修正を分析し、依存順序・過剰断定・呼称統一の3ルールと読者視点セルフチェックを追加。タイトル規則を spec→brand、出典書式を brand→spec へ整理し `[^N]`→`[N]` も修正。[→報告書](../reports/20260611_note_story_brand_spec_roles_reader_review/)
+- **note-story spec.md サムネイル生成ステップの詳細化** — プレースホルダだった step 12 を5手順化（design-brief→生成プロンプト→画像生成は手動・外部→レビュー）。Naming に thumbnail 成果物（1280×672px）を定義。[→報告書](../reports/20260611_note_story_thumbnail_spec_step/)
 
 ---
 
