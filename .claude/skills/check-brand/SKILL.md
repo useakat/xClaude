@@ -20,7 +20,7 @@ description: 本文テキストを、指定した brand.md に適合させる。
 - 先頭が `.md` パスでなければ、`$ARGUMENTS` 全体を本文とし、brand.md は **`./brand.md`（カレントディレクトリ）** にフォールバックする。
 
 例：
-- `projects/x-onepoint/brand.md 実は、ミューオンは…` → brand.md=`projects/x-onepoint/brand.md`、本文=`実は、ミューオンは…`
+- `projects/w003/brand.md 実は、ミューオンは…` → brand.md=`projects/w003/brand.md`、本文=`実は、ミューオンは…`
 - `実は、ミューオンは…`（パスなし）→ brand.md=`./brand.md`、本文=`実は、ミューオンは…`
 
 ## 手順
