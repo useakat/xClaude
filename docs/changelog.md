@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-06-14
 
 - **writer-xstory を「フォーカス→冒頭フック→本文」の3段階対話制作に再設計** — X長文制作を、フォーカス決定・冒頭フック決定（hook-patterns 5型×3=15案）・本文作成の3段階でユーザーと相談する方式へ。note記事あり（状況A）/テーマ先行（状況B）の両対応。draft_xstory を対話前提に修正し W001 spec.md を /writer-xstory 参照にスリム化。[→報告書](../reports/20260614_writer_xstory_three_stage_interactive/)
+- **save_session_history.py をサブディレクトリ起動セッション対応に修正** — JSONL 探索を git ルート基準の単一ディレクトリ固定から、git ルートのパスを接頭辞に持つ全 projects ディレクトリの最新を探す方式へ変更。サブディレクトリで開いたセッションの履歴が空になる不具合を解消。[→報告書](../reports/20260614_save_session_history_subdir_fix/)
 
 ---
 
