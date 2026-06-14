@@ -17,3 +17,7 @@ gcp/
 
 # リポジトリ直下の参照素材（一旦コミット対象外）
 /references/
+
+# tmux ログ・direnv 設定（コミット対象外）
+/.envrc
+tmux-*.log
