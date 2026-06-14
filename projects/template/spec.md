@@ -19,7 +19,7 @@
 
 ### 投稿フォルダ
 
-`projects/x-onepoint/outputs/YYYYMMDD_[topic]/`（例: `20260602_陸のタイド/`）
+`projects/w003/outputs/YYYYMMDD_[topic]/`（例: `20260602_陸のタイド/`）
 
 ### テキスト原稿
 

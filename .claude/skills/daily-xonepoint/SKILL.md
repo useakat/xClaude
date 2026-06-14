@@ -136,10 +136,10 @@ STEP 3で出力した【本文】に対して、/check-fact スキルを実行�
 
 ## 4-2: ブランド適合チェック（採点＋トンマナ調整）
 
-4-1 で確定した「最終修正案」を本文として、引数の**先頭に `projects/x-onepoint/brand.md` を付けて** `/check-brand` スキルを呼び出す。
+4-1 で確定した「最終修正案」を本文として、引数の**先頭に `projects/w003/brand.md` を付けて** `/check-brand` スキルを呼び出す。
 
 ```
-引数: projects/x-onepoint/brand.md {最終修正案の本文}
+引数: projects/w003/brand.md {最終修正案の本文}
 ```
 
 check-brand は brand.md の「採点基準」で全項目8点以上になるまで書き直し（採点ループ）、合格本文をトンマナ調整する（事実は変更しない）。
