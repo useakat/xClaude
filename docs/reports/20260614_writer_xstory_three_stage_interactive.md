@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260614_writer_xstory_three_stage_interactive_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260614_writer_xstory_three_stage_interactive/)
 
 ## 背景・動機
 
