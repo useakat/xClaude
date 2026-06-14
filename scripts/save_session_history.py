@@ -16,20 +16,38 @@ from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-JSONL_DIR = Path.home() / ".claude" / "projects" / ("-" + str(REPO_ROOT).strip("/").replace("/", "-"))
+PROJECTS_DIR = Path.home() / ".claude" / "projects"
+# git ルート直下だけでなく、その配下のサブディレクトリ（projects/... 等）で
+# 開いたセッションも対象にするため、git ルートのパスを接頭辞に持つ全ディレクトリを探す。
+REPO_DIR_PREFIX = "-" + str(REPO_ROOT).strip("/").replace("/", "-")
 HISTORY_DIR = REPO_ROOT / "docs" / "history"
 JST = timezone(timedelta(hours=9))
 
 
+def _candidate_jsonls():
+    """git ルート配下のセッション JSONL を新しい順で返す。
+
+    セッション JSONL は「開いた作業ディレクトリ」を基にした projects/<dir> 配下に
+    保存されるため、git ルートのパスを接頭辞に持つディレクトリすべてを対象にする。
+    """
+    files = []
+    for d in PROJECTS_DIR.glob(REPO_DIR_PREFIX + "*"):
+        if d.is_dir():
+            files.extend(d.glob("*.jsonl"))
+    return sorted(files, key=lambda f: f.stat().st_mtime, reverse=True)
+
+
 def find_latest_jsonl():
-    files = sorted(JSONL_DIR.glob("*.jsonl"), key=lambda f: f.stat().st_mtime, reverse=True)
+    files = _candidate_jsonls()
     if not files:
-        raise FileNotFoundError(f"JSONL ファイルが見つかりません: {JSONL_DIR}")
+        raise FileNotFoundError(
+            f"JSONL ファイルが見つかりません: {PROJECTS_DIR}/{REPO_DIR_PREFIX}*"
+        )
     return files[0]
 
 
 def list_jsonls():
-    files = sorted(JSONL_DIR.glob("*.jsonl"), key=lambda f: f.stat().st_mtime, reverse=True)
+    files = _candidate_jsonls()
     for f in files[:10]:
         mtime = datetime.fromtimestamp(f.stat().st_mtime, JST).strftime("%Y-%m-%d %H:%M JST")
         size_kb = f.stat().st_size // 1024
