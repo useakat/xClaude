@@ -19,7 +19,9 @@
 
 
 ## Output (保存先)
-- 作業用下書き: `draft/draft.md`
+- フォーカス候補＋決定: `draft/focus-candidates.md`
+- 冒頭フック候補（5型×3=15案）＋決定: `draft/hook-candidates.md`
+- 作業用下書き（本文）: `draft/draft.md`
 - 公開原稿: `output/index.md`
 - 添付画像: `output/images/thumbnail.png`
 
@@ -42,12 +44,12 @@ note を読みたくなる導入1文と [note URL]
 
 ## 制作フロー
 1. **題材の事実確認**: `../output/index.md`（題材の正本）を読み、物語の核（雷被弾→計器全ダウン→ジョン・アーロンの「SCEをAUXに」→復旧）と、人物名・日付・装置の帰属・呼称を確定する。**ここに無い事実を新たに作らない。**
-3. **本文作成＋字数・完結チェック**: `/writer-xstory` を使い、本文を作成する。**出力は `draft/draft.md` に保存する。**
-4. **ファクトチェック**: `/check-fact`（テキスト入力モード、最大5回ループ）。**特に note 記事 `../output/index.md` の事実と矛盾しないこと**を確認する。指摘を反映した版を最終本文とする。
-5. **ブランド適合チェック**: `/check-brand brand.md {本文}` を実行する。`brand.md` の `## 採点基準` で全項目8点以上になるまで該当箇所を書き直し（採点ループ・最大5回）、合格本文をトンマナ調整する。事実は変えない。
-6. **添付画像**: 必要なら `thumbnail/` の `plan.md`／`brand.md`／`design-brief.md`／`nanobanana-prompt.md` に沿って添付画像を用意する。画像生成自体は外部（nano banana）で行い、`output/images/thumbnail.png` として保存する。
-7. **セルフリプ作成**: note 導線を本編から分離し、別投稿として作る。セルフリプには、note を読みたくなる導入1文と note記事への URL を書く。
-8. **保存**: 本編・セルフリプ・ハッシュタグを `output/index.md` に保存する。
+2. **本文作成（フォーカス→冒頭フック→本文の3段階対話制作）**: `/writer-xstory` に従う。本プロジェクトは**入力状況A（note記事あり）**で、正本＝`../output/index.md`。フォーカスは記事の「最も引きの強い一場面」から3候補→相談で決定、冒頭フックは5型×3=15案→相談で決定、決定フックに続けて本文を作成する。中間生成物は `draft/focus-candidates.md`・`draft/hook-candidates.md`・`draft/draft.md` に残る。**本文の保存先は `draft/draft.md`。**
+3. **ファクトチェック**: `/check-fact`（テキスト入力モード、最大5回ループ）。**特に note 記事 `../output/index.md` の事実と矛盾しないこと**を確認する。指摘を反映した版を最終本文とする。
+4. **ブランド適合チェック**: `/check-brand brand.md {本文}` を実行する。`brand.md` の `## 採点基準` で全項目8点以上になるまで該当箇所を書き直し（採点ループ・最大5回）、合格本文をトンマナ調整する。事実は変えない。
+5. **添付画像**: 必要なら `thumbnail/` の `plan.md`／`brand.md`／`design-brief.md`／`nanobanana-prompt.md` に沿って添付画像を用意する。画像生成自体は外部（nano banana）で行い、`output/images/thumbnail.png` として保存する。
+6. **セルフリプ作成**: note 導線を本編から分離し、別投稿として作る。セルフリプには、note を読みたくなる導入1文と note記事への URL を書く。
+7. **保存**: 本編・セルフリプ・ハッシュタグを `output/index.md` に保存する。
 
 
 ## その他
@@ -55,6 +57,9 @@ note を読みたくなる導入1文と [note URL]
 
 
 ## Verification
+- フォーカスが note 記事の一場面に絞られ、ユーザー承認を経て決定されている（`draft/focus-candidates.md` に「## 決定」あり）
+- 冒頭フックが5型×3=15案から選定され、決定が残っている（`draft/hook-candidates.md` に「## 決定」あり）
+- 本文が決定した冒頭フックで始まり、その直後に具体3点セット（日付・地名・状況）がある
 - 本編が **約600字**で、X 内で物語が完結している（中断型でない）
 - 冒頭2文だけで「何の話か」が伝わり、続きを読みたくなる
 - 本編冒頭に日付・場所・状況の具体3点セットがある

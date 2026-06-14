@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-14
+
+- **writer-xstory を「フォーカス→冒頭フック→本文」の3段階対話制作に再設計** — X長文制作を、フォーカス決定・冒頭フック決定（hook-patterns 5型×3=15案）・本文作成の3段階でユーザーと相談する方式へ。note記事あり（状況A）/テーマ先行（状況B）の両対応。draft_xstory を対話前提に修正し W001 spec.md を /writer-xstory 参照にスリム化。[→報告書](../reports/20260614_writer_xstory_three_stage_interactive/)
+
+---
+
 ## 2026-06-11
 
 - **writer_note-story を本文フェーズ専用に絞り込み** — スキルを本文・6000字チェック・演出セルフチェックの3工程専用に縮小し、構成フェーズ/ファクトチェック/保存・通知を削除。文体・演出は brand.md を権威にし notebook ソース限定執筆を追加、旧版を writer_note-story_old にバックアップ、spec.md step6-8 を委譲明記。[→報告書](../reports/20260611_writer_note_story_body_phase_only/)
