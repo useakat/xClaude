@@ -12,8 +12,8 @@
 - Google Sheets `onePointNeta`（spreadSheet ID: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`）— ネタ在庫
 
 ## Output (保存先)
-- **投稿テキスト**: Gmail (useakat@gmail.com) 下書き + `projects/w003/outputs/YYYYMMDD_[topic]/draft.md`
-- **画像**: `projects/w003/outputs/YYYYMMDD_[topic]/[style].png`
+`projects/w003/YYYYMMDD_[topic]/draft`　（下書き)
+`projects/w003/YYYYMMDD_[topic]/output` (完成原稿)
 
 ## Format
 - **テキスト**: 常体（だ／のだ調）、4 段構成（brand.md 参照）、改行・空白行で段落を分ける、200〜260 字推奨（最大 300 字 / 下限 140 字）
@@ -21,17 +21,15 @@
 
 ## Naming
 
-### 投稿フォルダ
+### 下書き原稿
 
-`projects/w003/outputs/YYYYMMDD_[topic]/`（例: `20260602_陸のタイド/`）
+`projects/w003/YYYYMMDD_[topic]/draft/draft.md`
 
-### テキスト原稿
+### 生成図解
 
-`draft.md`（フォルダ内固定名）
+`projects/w003/YYYYMMDD_[topic]/draft/infographic_[連番].png`
 
-### 画像
-
-`[style].png`（例: `bento-grid.png`, `sketch-note.png`, `scientific.png`）
+* `[連番]` は、01 から始まり、すでに使われている番号の次の番号をつける
 
 ### Gmail 下書き
 
@@ -39,14 +37,15 @@
 
 ## Rules
 
-### 制作フロー（`/daily-xonepoint` が自動実行）
+### 制作フロー（`/daily-xonepoint` が実行。ネタ選択・画像生成でユーザー確認を挟む）
 1. **ネタ在庫確認** — 未使用 10 件未満なら補充（宇宙・物理 7 件 + その他 3 件）
-2. **ネタ選定** — `日 mod 3` で分野グループ（0・1 → 宇宙・物理 / 2 → その他）を決定。最優先基準: 読者が今日体験した日常の物・感覚を入り口にできること
-3. **原稿作成** — `/writer-xonepoint`
-4. **ファクトチェック** — `/check-fact`
-5. **ブランド適合チェック** — `/check-brand projects/w003/brand.md {本文}`（採点ループ＋トンマナ調整。brand.md の採点基準で全項目 8 点以上、最大 5 回ループ）
-6. **Gmail 下書き作成** — `mcp__claude_ai_Gmail__create_draft` を直接呼び出す
-7. **（承認後）画像生成** — `/visual_infographic` 5 パターン生成 → `projects/w003/outputs/YYYYMMDD_[topic]/[style].png` に保存（Drive にもアップロード）
+2. **ネタ選定** — `日 mod 3` で分野グループ（0・1 → 宇宙・物理 / 2 → その他）を決定。最優先基準: 読者が今日体験した日常の物・感覚を入り口にできること。選んだネタをテーマとして `/research_trivia-source {ネタ}` を実行し、出力されたトリビアネタ候補をユーザーに提示して、使うネタを決めてもらう
+3. **テーマフォルダ作成** — `projects/w003/YYYYMMDD_[topic]/`（配下に `draft/` と `output/`）を作成。以降の生成物はこのフォルダに保存する
+4. **原稿作成** — `/writer-xonepoint`（引数は `テーマ: {選んだネタ}` のみ渡す。出力は【タイトル案】10件＋【本文】。タイトル案は内部利用で、Gmail 件名のトピック要約は別途生成する）
+5. **ファクトチェック** — `/check-fact`
+6. **ブランド適合チェック** — `/check-brand projects/w003/brand.md {本文}`（採点ループ＋トンマナ調整。brand.md の採点基準で全項目 8 点以上、最大 5 回ループ）
+7. **Gmail 下書き作成** — `mcp__claude_ai_Gmail__create_draft` を直接呼び出す
+8. **（承認後）画像生成** — `/visual_infographic` 5 パターン生成 → 保存
 
 ### その他
 - ネタ使用後、即座に Sheets の I 列を「使用済み」に更新する
