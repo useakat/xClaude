@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-15
+
+- **W003 制作フローを spec.md 基準で対話化（trivia研究→ネタ選択→フォルダ作成→画像承認）** — spec.md に `research_trivia-source` 実行＋ユーザー選択・テーマフォルダ作成ステップを追加し、daily-xonepoint を対話フロー（STEP2 ネタ選択・STEP7 画像承認で停止）へ全面改修。writer-xonepoint をテーマのみ入力で成立するよう修正。cron 無人実行は廃止。[→報告書](../reports/20260615_w003_interactive_flow_alignment/)
+
+---
+
 ## 2026-06-14
 
 - **writer-xstory を「フォーカス→冒頭フック→本文」の3段階対話制作に再設計** — X長文制作を、フォーカス決定・冒頭フック決定（hook-patterns 5型×3=15案）・本文作成の3段階でユーザーと相談する方式へ。note記事あり（状況A）/テーマ先行（状況B）の両対応。draft_xstory を対話前提に修正し W001 spec.md を /writer-xstory 参照にスリム化。[→報告書](../reports/20260614_writer_xstory_three_stage_interactive/)
