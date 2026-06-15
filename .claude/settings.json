@@ -1,7 +1,6 @@
 {
   "autoMemoryEnabled": false,
   "env": {
-    "GOOGLE_APPLICATION_CREDENTIALS": "/root/xClaude/gcp/charming-well-464402-u4-2cfb7bddf343.json",
     "GOOGLE_PROJECT_ID": "charming-well-464402-u4"
   },
   "permissions": {

@@ -1,5 +1,6 @@
 #!/bin/bash
 export PATH="/usr/local/bin:$PATH"
+export GOOGLE_SERVICE_ACCOUNT_KEY="$(cat /root/xClaude/gcp/charming-well-464402-u4-2cfb7bddf343.json 2>/dev/null)"
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG_PATH="$REPO_ROOT/logs/record_note_posts.log"
