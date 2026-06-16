@@ -36,12 +36,27 @@ Drive に該当ファイルがない場合はスキル実行を中断し、ユ�
 bash scripts/notebooklm_auth_push.sh
 ```
 
-### Step 1. テキスト取得・count 確認
+### Step 1. テキスト取得・count 確認・プロジェクトフォルダ解決
 
 - `$ARGUMENTS` から count を読み取る（先頭が整数ならその値、なければデフォルト 3）
 - テキストを `/tmp/infographic_source.txt` に書き出す
   - 直接渡しの場合: そのまま書き出す
   - ファイルパス指定の場合: `Read` ツールで内容を確認してから書き出す
+
+**プロジェクトフォルダ（`PROJECT_DIR`）の解決**（既存 notebook 再利用の判定に使う）:
+
+- `--project-dir <dir>` が指定されていれば、それを `PROJECT_DIR` とする。
+- 指定がなく `--file <path>` がある場合は、パスの先祖から `projects/w003/<名前>/` の階層を抜き出して `PROJECT_DIR` とする。
+  ```bash
+  # 例: --file が projects/w003/20260615_金の起源/output/index.md なら
+  #     PROJECT_DIR=.../projects/w003/20260615_金の起源
+  PROJECT_DIR=$(python3 -c "import os,sys,re;
+p=os.path.abspath(sys.argv[1]);
+m=re.search(r'(.*/projects/w003/[^/]+)/', p);
+print(m.group(1) if m else '')" "<--file のパス>")
+  ```
+- どちらも無い（テキスト直接渡し等）場合は `PROJECT_DIR` を空のままにする（＝ notebook 再利用はせず新規作成）。
+- `PROJECT_DIR` が決まったら `NBID_FILE="$PROJECT_DIR/notebook-id.md"` を控える。
 
 ### Step 2. メインタイトル・サブタイトルを決める
 
@@ -139,6 +154,54 @@ upload_pair() {
 
 リモート環境（gws がない場合）は `mcp__claude_ai_Google_Drive__create_file` を `parent="$FOLDER_ID"` で各ファイルに呼び、返ってきた `id` から URL を組み立てて配列に追記、その後ローカルを削除する（コードは環境に応じて組み立てる）。
 
+**ブランチ判定**: `PROJECT_DIR`（Step 1）に `notebook-id.md` があり中身が非空なら **再利用ブランチ**、無ければ **新規作成ブランチ**。
+
+```bash
+REUSE=false
+if [ -n "$PROJECT_DIR" ] && [ -s "$NBID_FILE" ]; then
+  NOTEBOOK_ID=$(head -1 "$NBID_FILE" | tr -d '[:space:]')
+  [ -n "$NOTEBOOK_ID" ] && REUSE=true
+fi
+```
+
+---
+
+#### 【再利用ブランチ】`REUSE=true`（既存 notebook を使う・新規作成も削除もしない）
+
+**1枚目を生成する前に、ソースを担保する**（無いものだけ追加）:
+
+```bash
+SRC=$(python3 "$ROOT/scripts/notebooklm_manager.py" list-sources "$NOTEBOOK_ID")
+
+# 原稿テキスト
+if ! echo "$SRC" | grep -q "infographic_source.txt"; then
+  python3 "$ROOT/scripts/notebooklm_manager.py" add-text "$NOTEBOOK_ID" \
+    --file /tmp/infographic_source.txt
+fi
+
+# スーパーニャンコ参照画像
+if ! echo "$SRC" | grep -q "super-nyanko-ref"; then
+  python3 "$ROOT/scripts/notebooklm_manager.py" add-source-file "$NOTEBOOK_ID" \
+    --url "$NYANKO_URL" --title super-nyanko-ref
+fi
+```
+
+**全 N 枚（i = 1 ～ count）を `infographic` で生成 → 即アップロード**:
+
+```bash
+# i = 1, 2, ..., count を繰り返す
+python3 "$ROOT/scripts/notebooklm_manager.py" infographic "$NOTEBOOK_ID" \
+  --instructions "[パターンiのプロンプト全文]" \
+  --language ja --orientation landscape --detail standard --style sketch-note \
+  --output "$ROOT/outputs/infographic_${DATE}_${i}.png"
+
+upload_pair "$i"
+```
+
+---
+
+#### 【新規作成ブランチ】`REUSE=false`（従来動作）
+
 **1枚目**: `make-infographic --keep` で notebook を作成しながら生成 → 即アップロード。スーパーニャンコ参照画像も `--extra-source-url` でソースに追加。notebook_id を出力からパースする。
 
 ```bash
@@ -214,11 +277,16 @@ bash "$ROOT/scripts/send_gmail.sh" \
 
 - 生成した画像の Drive URL（count 枚分）
 - プロンプト markdown の Drive URL（count 個分）
-- 作成された NotebookLM notebook のタイトルと ID
+- NotebookLM notebook の ID
+  - 新規作成ブランチ: 作成した notebook のタイトルと ID
+  - 再利用ブランチ: **再利用した** notebook ID（新規作成・削除はしていない旨を明記）と、追加したソース（原稿テキスト／スーパーニャンコ）の有無
 - Gmail 送信結果（送信成功 or 失敗のメッセージ ID）
 
 ## 注意事項
 
-- notebook は1つ作成される（`--keep` で保持）
+- **既存 notebook の再利用**: プロジェクトフォルダ（`projects/w003/<YYYYMMDD_topic>/`）に `notebook-id.md`（ハイフン区切り・1行目に notebook ID）があれば、その notebook を使って生成する（新規作成・削除しない）。`--file` のパスから自動判定するほか、`--project-dir` で明示指定もできる。
+  - 再利用時は 1枚目の前に `list-sources` でソースを確認し、`infographic_source.txt`（原稿）と `super-nyanko-ref`（ニャンコ参照画像）が無ければ自動で追加する。
+  - 既存 notebook に原稿以外のソース（Deep Research の文献等）があると、図解の内容にそれらが混ざる場合がある（再利用は「その notebook の内容で図解してよい」前提）。
+- notebook は新規作成ブランチでは1つ作成される（`--keep` で保持）
 - 画像生成は1枚あたり数分かかる場合がある
 - gws がない環境（リモート）では Drive MCP ツールを使用する

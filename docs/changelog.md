@@ -7,6 +7,13 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-16
+
+- **visual_infographic に既存 notebook 再利用分岐を追加** — プロジェクトフォルダに `notebook-id.md`（ハイフン）があればその notebook で図解生成（新規作成・削除しない）。1枚目の前に原稿テキスト・スーパーニャンコ参照ソースを確認し不足分のみ追加。`notebooklm_manager.py` に `list-sources` / `add-text` / `add-source-file` を追加。[→報告書](../reports/20260616_visual_infographic_notebook_reuse/)
+- **W003 図解プロンプトの6パターンテンプレート追加** — `projects/w003/infographic_template/` に step_flow / compare_contrast / radial / timeline / pyramid / checklist の6テンプレートを新設。[→報告書](../reports/20260616_visual_infographic_notebook_reuse/)
+
+---
+
 ## 2026-06-15
 
 - **W003 制作フローを spec.md 基準で対話化（trivia研究→ネタ選択→フォルダ作成→画像承認）** — spec.md に `research_trivia-source` 実行＋ユーザー選択・テーマフォルダ作成ステップを追加し、daily-xonepoint を対話フロー（STEP2 ネタ選択・STEP7 画像承認で停止）へ全面改修。writer-xonepoint をテーマのみ入力で成立するよう修正。cron 無人実行は廃止。[→報告書](../reports/20260615_w003_interactive_flow_alignment/)

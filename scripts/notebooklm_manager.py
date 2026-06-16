@@ -249,6 +249,53 @@ async def cmd_make_infographic(args):
                 print(f"✓ ノートブック削除: {nb_id}")
 
 
+async def cmd_list_sources(args):
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
+        sources = await client.sources.list(args.notebook_id)
+        for s in sources:
+            print(s.title or "")
+
+
+async def cmd_add_text(args):
+    if not args.file:
+        print("エラー: --file を指定してください", file=sys.stderr)
+        sys.exit(1)
+    with open(args.file, encoding="utf-8") as f:
+        text = f.read()
+    title = args.title or os.path.basename(args.file)
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
+        await client.sources.add_text(args.notebook_id, title, text)
+        print(f"✓ テキストソース追加: {title}")
+
+
+async def cmd_add_source_file(args):
+    """Drive URL の画像などを既存 notebook にファイルソースとして追加する。
+    安定したソースタイトルを付けるため、ダウンロード先を `<title><ext>` という
+    ファイル名にして add_file する（ソースタイトル＝ファイル名になる）。"""
+    import mimetypes
+    import shutil
+    m = re.search(r'drive\.google\.com/file/d/([\w-]+)', args.url)
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
+        if m:
+            file_id = m.group(1)
+            tmp_no_ext = tempfile.NamedTemporaryFile(prefix='nblm_src_', delete=False)
+            tmp_no_ext.close()
+            drive_get = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'drive_get.sh')
+            subprocess.run(['bash', drive_get, file_id, tmp_no_ext.name], check=True)
+            mime = subprocess.check_output(['file', '--mime-type', '-b', tmp_no_ext.name]).decode().strip()
+            ext = mimetypes.guess_extension(mime) or ''
+            stable_dir = tempfile.mkdtemp(prefix='nblm_stable_')
+            stable_path = os.path.join(stable_dir, f"{args.title}{ext}")
+            shutil.move(tmp_no_ext.name, stable_path)
+            await client.sources.add_file(args.notebook_id, stable_path, wait=True)
+            os.unlink(stable_path)
+            os.rmdir(stable_dir)
+            print(f"✓ ファイルソース追加（Drive, {mime}）: {args.title}{ext}")
+        else:
+            await client.sources.add_url(args.notebook_id, args.url)
+            print(f"✓ ソース追加（URL）: {args.url}")
+
+
 async def cmd_delete(args):
     async with await NotebookLMClient.from_storage(_storage_path()) as client:
         await client.notebooks.delete(args.notebook_id)
@@ -271,6 +318,22 @@ def main():
     p_add = sub.add_parser("add-source", help="ソースURL追加")
     p_add.add_argument("notebook_id", help="ノートブックID")
     p_add.add_argument("urls", nargs="+", help="追加するURL")
+
+    # list-sources
+    p_ls = sub.add_parser("list-sources", help="ノートブックのソースタイトル一覧")
+    p_ls.add_argument("notebook_id", help="ノートブックID")
+
+    # add-text
+    p_at = sub.add_parser("add-text", help="既存ノートブックにテキストファイルをソース追加")
+    p_at.add_argument("notebook_id", help="ノートブックID")
+    p_at.add_argument("--file", default="", help="テキストファイルのパス")
+    p_at.add_argument("--title", default="", help="ソースタイトル（既定: ファイル名）")
+
+    # add-source-file
+    p_asf = sub.add_parser("add-source-file", help="既存ノートブックにDrive画像等をファイルソース追加")
+    p_asf.add_argument("notebook_id", help="ノートブックID")
+    p_asf.add_argument("--url", required=True, help="Drive URL（または通常URL）")
+    p_asf.add_argument("--title", default="super-nyanko-ref", help="安定ソースタイトル（既定: super-nyanko-ref）")
 
     # ask
     p_ask = sub.add_parser("ask", help="ノートブックに質問")
@@ -322,6 +385,9 @@ def main():
         "list": cmd_list,
         "create": cmd_create,
         "add-source": cmd_add_source,
+        "list-sources": cmd_list_sources,
+        "add-text": cmd_add_text,
+        "add-source-file": cmd_add_source_file,
         "ask": cmd_ask,
         "deep-research": cmd_deep_research,
         "audio": cmd_audio,
