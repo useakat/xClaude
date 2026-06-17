@@ -1,4 +1,4 @@
-# Project Plan — 困難を乗り越え成功した執念の物語の note 記事（W002）
+# Project Plan — 困難を乗り越え成功した執念の物語の X長文ストーリー（W001）
 
 ## Purpose
 
