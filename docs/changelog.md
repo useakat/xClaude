@@ -7,6 +7,13 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-17
+
+- **visual_infographic のタイトル＆プロンプトをテンプレート基準に変更** — メインタイトルを入力テキストの冒頭1文に固定。プロンプトを `projects/w003/infographic_template/` の型テンプレートを Read して埋める方式へ（内容に合う count 個を自動選択、不在時は従来生成にフォールバック）。spec.md step7・Naming にも明記。[→報告書](../reports/20260617_visual_infographic_template_based_prompts/)
+- **Drive ツール修正（drive_get.sh 現行 gws 対応・add-source-file のローカルファイル対応）** — `drive_get.sh` の `-o` がカレント外パスを弾く不具合を cd＋basename で解消。`notebooklm_manager.py` の `add-source-file` に `--file`（ローカル画像直接追加）を追加し、Drive 認証に依存せずソース追加できるようにした。[→報告書](../reports/20260617_drive_tool_gws_fix_local_source/)
+
+---
+
 ## 2026-06-16
 
 - **visual_infographic に既存 notebook 再利用分岐を追加** — プロジェクトフォルダに `notebook-id.md`（ハイフン）があればその notebook で図解生成（新規作成・削除しない）。1枚目の前に原稿テキスト・スーパーニャンコ参照ソースを確認し不足分のみ追加。`notebooklm_manager.py` に `list-sources` / `add-text` / `add-source-file` を追加。[→報告書](../reports/20260616_visual_infographic_notebook_reuse/)

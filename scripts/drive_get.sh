@@ -16,9 +16,13 @@ fi
 # 出力先ディレクトリを作成
 mkdir -p "$(dirname "$OUTPUT")"
 
-gws drive files get \
+# 現行 gws は -o の出力先をカレントディレクトリ内に限定するため、
+# 出力先ディレクトリに cd して basename で渡す（絶対パスは "outside the current directory" で弾かれる）
+OUTDIR=$(cd "$(dirname "$OUTPUT")" && pwd)
+OUTBASE=$(basename "$OUTPUT")
+( cd "$OUTDIR" && gws drive files get \
   --params "{\"fileId\": \"$FILE_ID\", \"alt\": \"media\"}" \
-  -o "$OUTPUT" 2>/dev/null > /dev/null
+  -o "$OUTBASE" 2>/dev/null > /dev/null )
 
 if [ ! -f "$OUTPUT" ]; then
   echo "エラー: ダウンロード失敗" >&2
