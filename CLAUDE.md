@@ -240,6 +240,16 @@ xClaude/
 - 再認証後は `rm ~/.config/gws/token_cache.json` でキャッシュをクリアする
 - 再認証を実施したら必ずコミット: `git commit -m "infra: gws OAuth 再認証 (YYYY-MM-DD)"` → `/record` で変更ログに収集される
 
+#### ブラウザ認証の実施手順（Claude Code 向け）
+ブラウザ認証が必要な場面では、以下のスクリプトを使うこと：
+
+```bash
+bash scripts/gws_auth.sh [--scopes "追加スコープ"]
+```
+
+スクリプトが SSH トンネルコマンドと認証 URL を整形して出力するので、
+その内容をそのままよーんに伝えること。よーんが手順を説明する必要はない。
+
 - **Sheets の読み書きは mcp-gsheets MCP ツールを使う**（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）
   - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics）
   - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what / outputs）
