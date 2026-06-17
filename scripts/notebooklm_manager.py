@@ -269,13 +269,27 @@ async def cmd_add_text(args):
 
 
 async def cmd_add_source_file(args):
-    """Drive URL の画像などを既存 notebook にファイルソースとして追加する。
-    安定したソースタイトルを付けるため、ダウンロード先を `<title><ext>` という
-    ファイル名にして add_file する（ソースタイトル＝ファイル名になる）。"""
+    """画像などを既存 notebook にファイルソースとして追加する。
+    `--file` のローカルファイル、または `--url` の Drive URL を受け付ける。
+    安定したソースタイトルを付けるため、`<title><ext>` というファイル名で add_file する
+    （ソースタイトル＝ファイル名になり、次回 list-sources で検出できる）。"""
     import mimetypes
     import shutil
-    m = re.search(r'drive\.google\.com/file/d/([\w-]+)', args.url)
+    if not args.file and not args.url:
+        print("エラー: --file または --url を指定してください", file=sys.stderr)
+        sys.exit(1)
     async with await NotebookLMClient.from_storage(_storage_path()) as client:
+        if args.file:
+            ext = os.path.splitext(args.file)[1]
+            stable_dir = tempfile.mkdtemp(prefix='nblm_stable_')
+            stable_path = os.path.join(stable_dir, f"{args.title}{ext}")
+            shutil.copy(args.file, stable_path)
+            await client.sources.add_file(args.notebook_id, stable_path, wait=True)
+            os.unlink(stable_path)
+            os.rmdir(stable_dir)
+            print(f"✓ ファイルソース追加（local）: {args.title}{ext}")
+            return
+        m = re.search(r'drive\.google\.com/file/d/([\w-]+)', args.url)
         if m:
             file_id = m.group(1)
             tmp_no_ext = tempfile.NamedTemporaryFile(prefix='nblm_src_', delete=False)
@@ -330,9 +344,10 @@ def main():
     p_at.add_argument("--title", default="", help="ソースタイトル（既定: ファイル名）")
 
     # add-source-file
-    p_asf = sub.add_parser("add-source-file", help="既存ノートブックにDrive画像等をファイルソース追加")
+    p_asf = sub.add_parser("add-source-file", help="既存ノートブックにローカル/Drive画像をファイルソース追加")
     p_asf.add_argument("notebook_id", help="ノートブックID")
-    p_asf.add_argument("--url", required=True, help="Drive URL（または通常URL）")
+    p_asf.add_argument("--file", default="", help="ローカルファイルのパス")
+    p_asf.add_argument("--url", default="", help="Drive URL（または通常URL）")
     p_asf.add_argument("--title", default="super-nyanko-ref", help="安定ソースタイトル（既定: super-nyanko-ref）")
 
     # ask
