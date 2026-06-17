@@ -230,6 +230,16 @@ xClaude/
 
 ### Google サービス連携
 - **Gmail・Drive の連携は gws CLI を使って実装する**（bash スクリプト経由）
+
+#### gws 再認証
+- **再認証コマンド（Gmail + 基本スコープ）**:
+  ```
+  gws auth login --scopes "email,profile,openid,https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/userinfo.profile,https://www.googleapis.com/auth/gmail.modify"
+  ```
+- Drive スコープも必要な場合は末尾に `,https://www.googleapis.com/auth/drive` を追加
+- 再認証後は `rm ~/.config/gws/token_cache.json` でキャッシュをクリアする
+- 再認証を実施したら必ずコミット: `git commit -m "infra: gws OAuth 再認証 (YYYY-MM-DD)"` → `/record` で変更ログに収集される
+
 - **Sheets の読み書きは mcp-gsheets MCP ツールを使う**（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）
   - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics）
   - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what / outputs）
