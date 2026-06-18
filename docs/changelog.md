@@ -7,6 +7,13 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-18
+
+- **mcp-gsheets 認証修正・record-note-posts cron 追加** — `settings.json` から `GOOGLE_APPLICATION_CREDENTIALS` を削除しローカル/リモート両対応に。`run_record_note_posts.sh` 新設・毎朝3時の cron を追加。`run_mond_letter_reply.sh` にも `GOOGLE_SERVICE_ACCOUNT_KEY` 明示 export を追加。[→報告書](../reports/20260618_mcp_gsheets_auth_fix_and_cron/)
+- **gws 認証フロー標準化・check_auth.sh 強化** — `scripts/gws_auth.sh` 新設（VPS IP 自動取得・SSH トンネルコマンドと認証 URL を整形出力）。`check_auth.sh` の gws チェックをトークン有効性確認から Gmail API 実呼び出しに強化（スコープ不足も検知可能に）。CLAUDE.md にブラウザ認証手順と gws 再認証コマンドを追記。[→報告書](../reports/20260618_gws_auth_flow_standardization/)
+
+---
+
 ## 2026-06-17
 
 - **visual_infographic のタイトル＆プロンプトをテンプレート基準に変更** — メインタイトルを入力テキストの冒頭1文に固定。プロンプトを `projects/w003/infographic_template/` の型テンプレートを Read して埋める方式へ（内容に合う count 個を自動選択、不在時は従来生成にフォールバック）。spec.md step7・Naming にも明記。[→報告書](../reports/20260617_visual_infographic_template_based_prompts/)
