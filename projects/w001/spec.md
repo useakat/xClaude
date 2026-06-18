@@ -48,7 +48,7 @@
 - 冒頭フック候補（5型×3=15案）＋決定: `draft/hook-candidates.md`
 - 作業用下書き（本文）: `draft/draft.md`
 - 公開原稿: `output/index.md`
-- 添付画像: `output/images/thumbnail.png`
+- 添付画像: `output/thumbnail.png`
 
 
 ## Format
@@ -84,18 +84,42 @@ note を読みたくなる導入1文と [note URL]
 3. **投稿フォルダ作成（両モード共通）**: `projects/w001/YYYYMMDD_[topic]/` を作成し、`draft/`・`output/` を用意する。`[topic]` はモードAなら【選定ネタ】、モードBなら note 記事のタイトルから短く付ける。
 4. **notebook の準備（モードで分岐）**: 本文作成・ファクトチェックは、ここで用意する notebook のソースだけを根拠にする。
    - **モードA**: `/research_setup-sources` を【選定ネタ】のテーマ（タイトル案／主人公(ミッション名)）で実行し、NotebookLM の notebook を作成、Deep Research で信頼できるソースを収集・追加する。返ってきた notebook_id を控える。
-   - **モードB**: `../../w002/<指定フォルダ>/notebook-id.md` を読み、その notebook_id を再利用する（note 記事執筆時に作成済みの notebook）。同ファイルが無い古い記事の場合のみ notebook 無しとし、ステップ6 のファクトチェックを `/check-fact`（テキスト）にフォールバックする。
+   - **モードB**: `../../w002/<指定フォルダ>/notebook-id.md` を読み、その notebook_id を再利用する（note 記事執筆時に作成済みの notebook）。同ファイルが無い古い記事の場合のみ notebook 無しとし、ステップ6・8 のファクトチェックを `/check-fact`（テキスト）にフォールバックする。
    - 両モードとも、使う notebook_id を `{投稿フォルダ}/notebook-id.md` に1行で保存する。
 5. **本文作成（フォーカス→冒頭フック→本文の3段階対話制作）**: `/writer-xstory` に従う。**notebook のソースに無い事実は創作しない**（縛りはステップ6 の `/check-fact-lim` で担保）。
    - **モードA → 状況A（テーマ先行）**: 引数として【選定ネタ】の情報を渡す。フォーカスは「どの切り口を主役にするか」から3候補→相談で決定。
    - **モードB → 状況B（note記事あり）**: 正本＝確定した `../../w002/<指定フォルダ>/output/index.md`。フォーカスは記事の「最も引きの強い一場面」から3候補→相談で決定。
    - 共通: 冒頭フックは5型×3=15案→相談で決定、決定フックに続けて本文を作成する。中間生成物は `draft/focus-candidates.md`・`draft/hook-candidates.md`・`draft/draft.md` に残る。**本文の保存先は `draft/draft.md`。**
-6. **ファクトチェック**: 原則 `/check-fact-lim <notebook_id> {本文}`（`{投稿フォルダ}/notebook-id.md` の ID を使用、notebook ソース限定、最大5回ループ）。指摘を反映した版を最終本文とする。例外（モードBで w002 側に notebook-id.md が無い場合のみ）は `/check-fact`（テキスト入力モード、最大5回ループ）にフォールバックする。
-7. **ブランド適合チェック**: `/check-brand brand.md {本文}` を実行する。`brand.md` の `## 採点基準` で全項目8点以上になるまで該当箇所を書き直し（採点ループ・最大5回）、合格本文をトンマナ調整する。事実は変えない。
-8. **添付画像**:  `thumbnail/` の `plan.md`／`brand.md`／`design-brief.md`／`nanobanana-prompt.md` に沿って添付画像を用意する。画像生成自体は外部（nano banana）で行い、`output/images/thumbnail.png` として保存する。
-9. **セルフリプ作成**: note 導線を本編から分離し、別投稿として作る。セルフリプには、note を読みたくなる導入1文と note記事への URL を書く。
-10. **保存**: 本編・セルフリプ・ハッシュタグを `output/index.md` に保存する。
-11. **ネタのステータス更新（モードAのみ）**: 使用した【選定ネタ】の L列を「使用済み」に更新する（`sheets_update_values`、対象は【行番号】の L列）。
+6. **ファクトチェック（初回・ユーザー提示前）**: 本文ドラフトができたら、**ユーザーに見せる前に** `/check-fact-lim <notebook_id> {本文}`（`{投稿フォルダ}/notebook-id.md` の ID を使用、notebook ソース限定、最大5回ループ）を**1回**実行し、**明確な事実誤りを反映**する。例外（モードBで w002 側に notebook-id.md が無い場合のみ）は `/check-fact`（テキスト入力モード）にフォールバックする。
+   - **注記**: 修正案を書くのは `check-fact-lim`（Claude）であり、NotebookLM は事実の照合先にすぎない。`check-fact-lim` の**「完全性チェック」由来の技術ディテール追加は、W001 の叙情トーンと約600字を壊さない範囲で取捨選択する**。**事実誤りの訂正は必ず反映**。字数超過時は本筋に不要な技術描写から削る。
+7. **ユーザー確認・承認**: 事実チェックを反映した本文をユーザーに提示し、修正・承認を得る。**回答を待ってから次へ進む。**
+8. **再ファクトチェック（必要時）**: ユーザーの修正で**事実に関わる変更**が入った場合のみ、`/check-fact-lim` を再実行して反映する。
+9. **ブランド適合チェック**: `/check-brand brand.md {本文}` を実行する。`brand.md` の `## 採点基準` で全項目8点以上になるまで該当箇所を書き直し（採点ループ・最大5回）、合格本文をトンマナ調整する。事実は変えない。
+10. **添付画像**:  `thumbnail/` の `plan.md`／`brand.md`／`design-brief.md`／`nanobanana-prompt.md` に沿って添付画像を用意する。画像生成自体は外部（nano banana）で行い、`output/thumbnail.png` として保存する。
+11. **セルフリプ作成**: note 導線を本編から分離し、別投稿として作る。セルフリプには、note を読みたくなる導入1文と note記事への URL を書く。
+12. **保存**: 本編・セルフリプ・ハッシュタグを `output/index.md` に保存する。
+13. **ネタのステータス更新（モードAのみ）**: 使用した【選定ネタ】の L列を「使用済み」に更新する（`sheets_update_values`、対象は【行番号】の L列）。
+14. **X投稿用メール下書き作成**: 確定した本編と添付画像を、**X長文投稿の cron が拾える体裁**で Gmail 下書きにする。cron は `scripts/post_from_email.sh` ＋ `x-post-from-email` エージェントが、件名キーワード `【Xストーリー】` で未処理メールを検索し、本文の `[投稿文]…[/投稿文]` を投稿文として、添付画像（PNG）を画像として X に投稿する仕組み（体裁は `/draft_xstory` STEP 6 に準拠）。
+    - まず本文を一時ファイルに書き出す（`[投稿文]` には **本編＝`output/index.md` の「## 本編」（末尾ハッシュタグ込み）** を入れる。cron が投稿するのはこの1ポストのみ）：
+      ```
+      [note_url]
+      （該当 note 記事の URL。モードAで未作成なら空欄）
+      [/note_url]
+
+      [投稿文]
+      （本編。末尾ハッシュタグ込み）
+      [/投稿文]
+      ```
+    - `scripts/create_gmail_draft.sh`（gws CLI・添付対応）で下書きを作成する。サムネは `--attach` で必ず添付される。**gws の `--attach` はカレントディレクトリ内のファイルしか受け付けない**ため、**投稿フォルダに `cd` してから相対パスで渡す**：
+      ```bash
+      cd {投稿フォルダ}
+      bash $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.sh \
+        --to useakat@gmail.com \
+        --subject "【Xストーリー】$(TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S') の原稿ができました" \
+        --body-file /tmp/w001_xstory_body.txt \
+        --attach output/thumbnail.png
+      ```
+    - 成功判定は `✓ 下書き作成完了 (id: …)` が返ること。**gws Gmail が認証エラー（Precondition）の場合は gws を再認証してから実行する**（`scripts/gws_auth.sh` / ブラウザ認証）。**セルフリプ（2投稿目）は cron の対象外**。note URL 確定後に別途手動で投稿する。
 
 ### その他
 
@@ -110,6 +134,7 @@ note を読みたくなる導入1文と [note URL]
 - 本文の事実が notebook のソースと整合している（`/check-fact-lim` 通過）。例外としてモードBで w002 側に notebook-id.md が無い場合のみ `/check-fact` 通過（この場合の正本は note 記事 `../../w002/<指定フォルダ>/output/index.md`）
 - 使う notebook の ID が `{投稿フォルダ}/notebook-id.md` に1行で保存されている（モードA＝新規作成、モードB＝w002 から再利用）
 - （モードA）使用したネタの `noteNeta` シート L列が「使用済み」に更新されている
+- X投稿用 Gmail 下書きが作成されている（件名 `【Xストーリー】…`、本文に `[投稿文]…[/投稿文]`＝本編、`scripts/create_gmail_draft.sh --attach` で `output/thumbnail.png` を添付済み）
 - note 誘導が本編に入っておらず、セルフリプ定型で分離されている
 - 末尾に関連ハッシュタグがある
 - `brand.md` と矛盾しない（煽り・上から目線・出典なき捏造・明示的 CTA がない）
