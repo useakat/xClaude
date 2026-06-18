@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **mcp-gsheets 認証修正・record-note-posts cron 追加** — `settings.json` から `GOOGLE_APPLICATION_CREDENTIALS` を削除しローカル/リモート両対応に。`run_record_note_posts.sh` 新設・毎朝3時の cron を追加。`run_mond_letter_reply.sh` にも `GOOGLE_SERVICE_ACCOUNT_KEY` 明示 export を追加。[→報告書](../reports/20260618_mcp_gsheets_auth_fix_and_cron/)
 - **gws 認証フロー標準化・check_auth.sh 強化** — `scripts/gws_auth.sh` 新設（VPS IP 自動取得・SSH トンネルコマンドと認証 URL を整形出力）。`check_auth.sh` の gws チェックをトークン有効性確認から Gmail API 実呼び出しに強化（スコープ不足も検知可能に）。CLAUDE.md にブラウザ認証手順と gws 再認証コマンドを追記。[→報告書](../reports/20260618_gws_auth_flow_standardization/)
+- **W001 X長文制作を2モード対応化＋両モードを NotebookLM ソースで担保** — 起動時にモード確認（モードA＝`noteNeta` 先行／モードB＝既存 note 記事）し題材確定まで分岐、以降は共通化。両モードとも notebook を用意（A＝`research_setup-sources` で新規作成／B＝w002 の notebook-id.md 再利用）して `/check-fact-lim` で本文の事実をソース限定検証。モード名を writer-xstory の状況A/B と統一。[→報告書](../reports/20260618_w001_two_mode_notebook_factcheck/)
 
 ---
 
