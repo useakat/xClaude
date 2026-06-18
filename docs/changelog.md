@@ -12,6 +12,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **mcp-gsheets 認証修正・record-note-posts cron 追加** — `settings.json` から `GOOGLE_APPLICATION_CREDENTIALS` を削除しローカル/リモート両対応に。`run_record_note_posts.sh` 新設・毎朝3時の cron を追加。`run_mond_letter_reply.sh` にも `GOOGLE_SERVICE_ACCOUNT_KEY` 明示 export を追加。[→報告書](../reports/20260618_mcp_gsheets_auth_fix_and_cron/)
 - **gws 認証フロー標準化・check_auth.sh 強化** — `scripts/gws_auth.sh` 新設（VPS IP 自動取得・SSH トンネルコマンドと認証 URL を整形出力）。`check_auth.sh` の gws チェックをトークン有効性確認から Gmail API 実呼び出しに強化（スコープ不足も検知可能に）。CLAUDE.md にブラウザ認証手順と gws 再認証コマンドを追記。[→報告書](../reports/20260618_gws_auth_flow_standardization/)
 - **W001 X長文制作を2モード対応化＋両モードを NotebookLM ソースで担保** — 起動時にモード確認（モードA＝`noteNeta` 先行／モードB＝既存 note 記事）し題材確定まで分岐、以降は共通化。両モードとも notebook を用意（A＝`research_setup-sources` で新規作成／B＝w002 の notebook-id.md 再利用）して `/check-fact-lim` で本文の事実をソース限定検証。モード名を writer-xstory の状況A/B と統一。[→報告書](../reports/20260618_w001_two_mode_notebook_factcheck/)
+- **W001 制作フロー改善（ファクトチェック順序）＋brand.md 執筆ルール追加** — 本文作成直後に `/check-fact-lim` を1回→ユーザー承認→必要なら再チェックの順へ再構成。完全性追加はトーン・字数を壊さない範囲で取捨選択する運用を明記。brand.md に「熱量（山場は淡々を避ける）」「明確さ（曖昧表現を避ける）」を追加。[→報告書](../reports/20260618_w001_factcheck_order_and_writing_rules/)
+- **X長文投稿用 Gmail 下書きの自動化（サムネ添付対応）** — spec に「⑭ X投稿用メール下書き作成」を追加（`【Xストーリー】`／`[投稿文]`／添付PNG の cron 体裁）。`create_gmail_draft.sh` に `--attach`（複数可）を追加し本文＋サムネ添付を gws CLI で自動化。サムネ保存先を `output/thumbnail.png` に変更。[→報告書](../reports/20260618_w001_xstory_gmail_draft_attachment/)
 
 ---
 
