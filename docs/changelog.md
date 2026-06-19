@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-19
+
+- **W002 note 記事制作を2モード対応化（X長文深掘り→note）** — ネタ起点（モードA）に加え、既存 X長文ポスト（w001）を深掘りして6000〜8000字・980円有料 note にするモードBを追加。notebook を w001 から再利用し、構成5案→タイトル5案→文字配分の3段階対話で承認、本文以降は共通フロー（`/check-fact-lim` 化）。[→報告書](../reports/20260619_w002_two_mode_xdeepdive_note/)
+
+---
+
 ## 2026-06-18
 
 - **mcp-gsheets 認証修正・record-note-posts cron 追加** — `settings.json` から `GOOGLE_APPLICATION_CREDENTIALS` を削除しローカル/リモート両対応に。`run_record_note_posts.sh` 新設・毎朝3時の cron を追加。`run_mond_letter_reply.sh` にも `GOOGLE_SERVICE_ACCOUNT_KEY` 明示 export を追加。[→報告書](../reports/20260618_mcp_gsheets_auth_fix_and_cron/)
