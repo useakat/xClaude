@@ -45,7 +45,7 @@
 4. **原稿作成** — `/writer-xonepoint`
 5. **ファクトチェック** — `/check-fact`
 6. **ブランド適合チェック** — `/check-brand projects/w003/brand.md {本文}`（採点ループ＋トンマナ調整。brand.md の採点基準で全項目 8 点以上、最大 5 回ループ）
-7. **画像生成** — `/visual_infographic` 5 パターン生成 → 保存。**タイトルは `output/index.md` の冒頭1文**を使用。各プロンプトは **`projects/w003/infographic_template/` の型テンプレートを基に作成**（内容に合う 5 型を選択）
+7. **画像生成** — `/visual_infographic` 5 パターン生成 → **ローカルの `draft/` フォルダに保存**（Drive へのアップロードは行わない）。**タイトルは `output/index.md` の冒頭1文**を使用。各プロンプトは **`projects/w003/infographic_template/` の型テンプレートを基に作成**（内容に合う 5 型を選択）
 8. **Gmail 下書き作成** — `mcp__claude_ai_Gmail__create_draft` を直接呼び出す
 
 ### その他
