@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-20
+
+- **notebooklm_manager.py の ask 出力を answer だけに絞る** — `cmd_ask` の `print(result)` を `print(getattr(result, "answer", result))` に変更。`AskResult` 全体（全 `cited_text`）の数百KB〜MB ダンプをやめ回答本文のみ出力に。`/check-fact-lim` フォーク実行の stream idle timeout 対策。フォークで完走を確認。[→報告書](../reports/20260620_notebooklm_ask_answer_only/)
+
+---
+
 ## 2026-06-19
 
 - **W002 note 記事制作を2モード対応化（X長文深掘り→note）** — ネタ起点（モードA）に加え、既存 X長文ポスト（w001）を深掘りして6000〜8000字・980円有料 note にするモードBを追加。notebook を w001 から再利用し、構成5案→タイトル5案→文字配分の3段階対話で承認、本文以降は共通フロー（`/check-fact-lim` 化）。[→報告書](../reports/20260619_w002_two_mode_xdeepdive_note/)

@@ -62,7 +62,10 @@ async def cmd_add_source(args):
 async def cmd_ask(args):
     async with await NotebookLMClient.from_storage(_storage_path()) as client:
         result = await client.chat.ask(args.notebook_id, args.question)
-        print(result)
+        # 回答本文（インラインの [N] マーカー含む）だけを出力する。
+        # AskResult 全体（references の cited_text 等）を print すると数百KB〜MB になり、
+        # フォーク実行の subagent が読み込みきれず stream idle timeout の一因になるため。
+        print(getattr(result, "answer", result))
 
 
 async def cmd_deep_research(args):
