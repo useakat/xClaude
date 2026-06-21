@@ -1690,3 +1690,8 @@ Failed to authenticate. API Error: 401 Invalid authentication credentials
 [2026-06-21 06:00:01 JST] mond-letter-reply 開始
 Failed to authenticate. API Error: 401 Invalid authentication credentials
 [2026-06-21 06:00:04 JST] mond-letter-reply 完了
+[2026-06-21 12:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` の検索結果は 0 件でした。未処理の mond レターはありません。
+[2026-06-21 12:00:21 JST] mond-letter-reply 完了

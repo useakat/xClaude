@@ -51,8 +51,37 @@ NOTEBOOKLM_SOCKS_PROXY=socks5://127.0.0.1:1080 python3 scripts/notebooklm_manage
 
 → NotebookLM のノートブック一覧を正常取得できることを確認。
 
+## 追記（2026-06-21）：鍵認証化＋トンネル管理ヘルパー
+
+初期は SSH をパスワード認証で運用していたため、トンネルが落ちるたびに手動で張り直す必要があった（Claude 側では自動復旧できない）。これを解消するため鍵認証へ移行し、トンネル管理をスクリプト化した。
+
+### 実施内容（追記分）
+
+- この環境の公開鍵（`~/.ssh/id_ed25519.pub`）を Windows server に登録。`Administrator` は管理者アカウントのため、Windows OpenSSH の仕様で鍵は `~/.ssh/authorized_keys` ではなく **`C:\ProgramData\ssh\administrators_authorized_keys`** に置き、ACL を `Administrators:F` / `SYSTEM:F` のみに絞る必要がある（`icacls /inheritance:r`）。
+- `scripts/notebooklm_tunnel.sh` を新設。トンネルの状態確認・自動起動（keepalive 付き）・張り直し・疎通確認（出口 IP = 133.18.136.38 検証）を冪等に実行する。
+
+### 登録コマンド（参考）
+
+```bash
+# よーんが ! で1回だけ実行（最後のパスワード入力）
+ssh Administrator@133.18.136.38 "echo <公開鍵>>>%ProgramData%\ssh\administrators_authorized_keys & icacls %ProgramData%\ssh\administrators_authorized_keys /inheritance:r /grant Administrators:F /grant SYSTEM:F"
+```
+
+### 追記分の変更ファイル
+
+| ファイル | 変更内容 |
+|---|---|
+| `scripts/notebooklm_tunnel.sh` | 新規。トンネル確認／自動起動（`ServerAliveInterval=30`）／`--restart`／`--check`（出口 IP 検証） |
+| （Windows 側） | `administrators_authorized_keys` に公開鍵登録・ACL 設定 |
+
+### 確認結果（追記分）
+
+- `ssh -o BatchMode=yes Administrator@133.18.136.38 echo KEY_AUTH_OK` → パスワードなしで `KEY_AUTH_OK` を確認。
+- `bash scripts/notebooklm_tunnel.sh --restart` → パスワードなしで張り直し成功。`--check` で出口 IP = 133.18.136.38 を確認。
+- 通しで `notebooklm_manager.py list` がトンネル経由で成功。
+
 ## 今後の課題
 
 - 依存 `httpx-socks` / `python-socks` は別環境（リモート routine 等）では別途インストールが必要。
-- SSH トンネルは常駐だが永続ではない（環境再起動・回線断・SSH 切断で要張り直し）。毎回のパスワード入力をなくすには Windows 側への公開鍵登録（鍵認証）への移行が有効。
+- SSH トンネルは常駐だが永続ではない（環境再起動・回線断で要張り直し）。落ちた場合は `scripts/notebooklm_tunnel.sh` で復旧（鍵認証のため Claude 側で自動実行可能）。
 - `make-infographic` 等 NotebookLM 依存スキルから本 env を渡す運用の標準化は未実施。
