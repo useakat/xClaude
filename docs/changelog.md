@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-21
+
+- **infographic_template 6型をスーパーニャンコ詳細定義に更新** — `radial / checklist / compare_contrast / pyramid / step_flow / timeline` のキャラクター指定を簡略版から詳細版（体色・耳内側・額のハート・W字口・チーク・卒業角帽＋タッセル・マント・ベルト＋バックル・ぬいぐるみ質感）へ統一。あわせて gws を Drive スコープ付きで再認証（従来6スコープ保持＋drive 追加）、`file` コマンドを導入（Drive画像ソース追加の MIME 判定用）。[→報告書](../reports/20260621_infographic_template_nyanko_detail/)
+
+---
+
 ## 2026-06-20
 
 - **notebooklm_manager.py の ask 出力を answer だけに絞る** — `cmd_ask` の `print(result)` を `print(getattr(result, "answer", result))` に変更。`AskResult` 全体（全 `cited_text`）の数百KB〜MB ダンプをやめ回答本文のみ出力に。`/check-fact-lim` フォーク実行の stream idle timeout 対策。フォークで完走を確認。[→報告書](../reports/20260620_notebooklm_ask_answer_only/)
