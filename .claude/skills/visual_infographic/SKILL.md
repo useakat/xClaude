@@ -136,7 +136,7 @@ print(m.group(1) if m else '')" "<--file のパス>")
 ```bash
 ROOT=$(git rev-parse --show-toplevel)
 DATE=$(date +%Y-%m-%d)
-NYANKO_URL="https://drive.google.com/file/d/1SHyiHZ8io64nUXculZMqLkh8_TlV_goI/view?usp=drive_link"
+NYANKO_REF="$ROOT/references/スーパーニャンコアイコン.png"  # ローカル参照画像（Drive DL 不要）
 FOLDER_ID="1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb"
 
 PNG_URLS=()  # Drive URL を蓄積
@@ -193,10 +193,10 @@ if ! echo "$SRC" | grep -q "infographic_source.txt"; then
     --file /tmp/infographic_source.txt
 fi
 
-# スーパーニャンコ参照画像
+# スーパーニャンコ参照画像（references/ のローカル画像を --file で追加）
 if ! echo "$SRC" | grep -q "super-nyanko-ref"; then
   python3 "$ROOT/scripts/notebooklm_manager.py" add-source-file "$NOTEBOOK_ID" \
-    --url "$NYANKO_URL" --title super-nyanko-ref
+    --file "$NYANKO_REF" --title super-nyanko-ref
 fi
 ```
 
@@ -214,30 +214,27 @@ upload_pair "$i"
 
 ---
 
-#### 【新規作成ブランチ】`REUSE=false`（従来動作）
+#### 【新規作成ブランチ】`REUSE=false`
 
-**1枚目**: `make-infographic --keep` で notebook を作成しながら生成 → 即アップロード。スーパーニャンコ参照画像も `--extra-source-url` でソースに追加。notebook_id を出力からパースする。
+**1枚目を生成する前に、notebook を作成してソースを揃える**（原稿テキスト＋ローカルのスーパーニャンコ参照画像）。Drive からの DL は不要。
 
 ```bash
-OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" make-infographic \
-  --file /tmp/infographic_source.txt \
-  --title "図解_${DATE}" \
-  --infographic-title "[メインタイトル]" \
-  --instructions "[パターン1のプロンプト全文]" \
-  --extra-source-url "$NYANKO_URL" \
-  --language ja --orientation landscape --detail standard --style sketch-note \
-  --output "$ROOT/outputs/infographic_${DATE}_1.png" \
-  --keep 2>&1)
+OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" create "図解_${DATE}" 2>&1)
 echo "$OUTPUT"
-NOTEBOOK_ID=$(echo "$OUTPUT" | grep "ノートブック作成" | sed 's/.*: //')
+NOTEBOOK_ID=$(echo "$OUTPUT" | grep "✓ 作成:" | awk '{print $3}')
 
-upload_pair 1
+# 原稿テキスト
+python3 "$ROOT/scripts/notebooklm_manager.py" add-text "$NOTEBOOK_ID" \
+  --file /tmp/infographic_source.txt
+# スーパーニャンコ参照画像（references/ のローカル画像を --file で追加）
+python3 "$ROOT/scripts/notebooklm_manager.py" add-source-file "$NOTEBOOK_ID" \
+  --file "$NYANKO_REF" --title super-nyanko-ref
 ```
 
-**2枚目以降（i = 2 ～ count）**: 同じ notebook_id を使って生成 → 即アップロード。
+**全 N 枚（i = 1 ～ count）を `infographic` で生成 → 即アップロード**:
 
 ```bash
-# i = 2, 3, ..., count を繰り返す
+# i = 1, 2, ..., count を繰り返す
 python3 "$ROOT/scripts/notebooklm_manager.py" infographic "$NOTEBOOK_ID" \
   --instructions "[パターンiのプロンプト全文]" \
   --language ja --orientation landscape --detail standard --style sketch-note \
@@ -301,6 +298,7 @@ bash "$ROOT/scripts/send_gmail.sh" \
 - **既存 notebook の再利用**: プロジェクトフォルダ（`projects/w003/<YYYYMMDD_topic>/`）に `notebook-id.md`（ハイフン区切り・1行目に notebook ID）があれば、その notebook を使って生成する（新規作成・削除しない）。`--file` のパスから自動判定するほか、`--project-dir` で明示指定もできる。
   - 再利用時は 1枚目の前に `list-sources` でソースを確認し、`infographic_source.txt`（原稿）と `super-nyanko-ref`（ニャンコ参照画像）が無ければ自動で追加する。
   - 既存 notebook に原稿以外のソース（Deep Research の文献等）があると、図解の内容にそれらが混ざる場合がある（再利用は「その notebook の内容で図解してよい」前提）。
-- notebook は新規作成ブランチでは1つ作成される（`--keep` で保持）
+- notebook は新規作成ブランチでは `create` で1つ作成され、そのまま保持される（自動削除しない）
+- **スーパーニャンコ参照画像はローカルの `references/スーパーニャンコアイコン.png` を `--file` で追加する**（Drive からの DL は不要。`--file` 経路は拡張子から MIME を判定するため `file` コマンドにも依存しない）
 - 画像生成は1枚あたり数分かかる場合がある
 - gws がない環境（リモート）では Drive MCP ツールを使用する
