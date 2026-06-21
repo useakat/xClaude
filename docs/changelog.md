@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-22
+
+- **W003 Gmail 下書きの本文フォーマットを明文化（`[投稿文]` 閉じタグ必須化）** — `[/投稿文]` 欠落で `extract_tag.py` が本文を抽出できず cron 投稿フローで投稿されない不具合を修正。原因は spec.md step 8 の本文フォーマット未定義。spec.md に `[投稿文]…[/投稿文]` 付きフォーマット（daily-xonepoint STEP 6 準拠）を明記し、`create_gmail_draft.sh --attach` 指定・Verification を開き/閉じ両タグ必須に変更。
+
+---
+
 ## 2026-06-21
 
 - **infographic_template 6型をスーパーニャンコ詳細定義に更新** — `radial / checklist / compare_contrast / pyramid / step_flow / timeline` のキャラクター指定を簡略版から詳細版（体色・耳内側・額のハート・W字口・チーク・卒業角帽＋タッセル・マント・ベルト＋バックル・ぬいぐるみ質感）へ統一。あわせて gws を Drive スコープ付きで再認証（従来6スコープ保持＋drive 追加）、`file` コマンドを導入（Drive画像ソース追加の MIME 判定用）。[→報告書](../reports/20260621_infographic_template_nyanko_detail/)
