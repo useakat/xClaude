@@ -17,6 +17,25 @@ if os.path.isdir(os.path.join(_vendor, 'notebooklm')) and _vendor not in sys.pat
 from notebooklm import NotebookLMClient
 from notebooklm.types import InfographicOrientation, InfographicDetail, InfographicStyle
 
+# SOCKS プロキシ経由オプション（IP ブロック回避用）
+# NOTEBOOKLM_SOCKS_PROXY=socks5://127.0.0.1:1080 を設定すると、
+# httpx のリクエストをローカル DNS（rdns=False）で SOCKS 経由にする。
+# Windows OpenSSH の SOCKS はリモート DNS が動かないため rdns=False が必須。
+_SOCKS_PROXY = os.environ.get('NOTEBOOKLM_SOCKS_PROXY')
+if _SOCKS_PROXY:
+    import httpx
+    from httpx_socks import AsyncProxyTransport
+    _orig_async_client = httpx.AsyncClient
+
+    def _patched_async_client(*args, **kwargs):
+        kwargs.setdefault(
+            'transport',
+            AsyncProxyTransport.from_url(_SOCKS_PROXY, rdns=False),
+        )
+        return _orig_async_client(*args, **kwargs)
+
+    httpx.AsyncClient = _patched_async_client
+
 # auth storage path: env var > gcp/ fallback > library default (~/.notebooklm/)
 _ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _GCP_STORAGE = os.path.join(_ROOT, 'gcp', 'notebooklm_storage_state.json')
