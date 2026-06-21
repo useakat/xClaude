@@ -15,8 +15,7 @@ description: Claude Code で使用できるスキルの一覧
 | [writer-xnews](/xClaude/skills/writer-xnews/) | writer-xnews スキル |
 | [writer-xonepoint](/xClaude/skills/writer-xonepoint/) | X用ワンポイント解説投稿を1本作成する。受け取ったネタ情報をもとに投稿原稿を生成する。 |
 | [writer-xqa](/xClaude/skills/writer-xqa/) | X 上の質問への回答投稿を 1 本作成する。長文化を避け、3 段以内・400 字以内に圧縮し、超える内容は note 誘導で切り上げる。 |
-| [writer-xstory](/xClaude/skills/writer-xstory/) | writer-xstory スキル |
-| [writer_note-story](/xClaude/skills/writer_note-story/) | writer_note-story スキル |
+| [writer-xstory](/xClaude/skills/writer-xstory/) | 宇宙探査や科学発見の執念の物語をテーマにした、X長文投稿を日本語で作成する。テーマを受け取り、Xの投稿文を出す。 |
 
 ## レポート生成
 
@@ -50,10 +49,9 @@ description: Claude Code で使用できるスキルの一覧
 | スキル | 用途 |
 |---|---|
 | [check](/xClaude/skills/check/) | check スキル |
+| [check-brand](/xClaude/skills/check-brand/) | 本文テキストを、指定した brand.md に適合させる。brand.md の「採点基準」で全項目8点以上になるまで書き直し、最後にトンマナ調整する。第1引数に brand.md パス（省略可）、残りを本文として受け取り、最終原稿とスコアサマリー・トンマナサマリーを返す。 |
 | [check-fact](/xClaude/skills/check-fact/) | ファクトチェック付き品質レビュー。テキストまたは Drive ファイル ID を入力として受け付ける。 |
 | [check-fact-lim](/xClaude/skills/check-fact-lim/) | ファクトチェック付き品質レビュー（NotebookLM の特定ノートブックのソースのみを根拠にする）。第1引数に notebook_id、第2引数以降にテキストまたは Drive ファイル ID を受け取る。 |
-| [check-p01](/xClaude/skills/check-p01/) | X ワンポイント解説の本文を、作業フォルダの brand.md に基づく P01化チェックリスト6項目で10段階採点し、全項目8点以上になるまで該当箇所を書き直す。本文テキストを受け取り、最終原稿とスコアサマリーを返す。 |
-| [check-tonmana](/xClaude/skills/check-tonmana/) | X ワンポイント解説の本文を projects/x-onepoint/brand.md に照らしてトンマナ調整する。本文テキストを受け取り、事実は変えず文体・口調・構成のみ整えた調整後本文を返す。 |
 
 ## メール・通知
 
@@ -69,7 +67,6 @@ description: Claude Code で使用できるスキルの一覧
 | [make-infographic](/xClaude/skills/make-infographic/) | make-infographic スキル |
 | [notebooklm](/xClaude/skills/notebooklm/) | notebooklm スキル |
 | [sync-to-drive](/xClaude/skills/sync-to-drive/) | sync-to-drive スキル |
-| [sync-to-sheets](/xClaude/skills/sync-to-sheets/) | sync-to-sheets スキル |
 | [visual_infographic](/xClaude/skills/visual_infographic/) | visual_infographic スキル |
 | [visual_section-imager](/xClaude/skills/visual_section-imager/) | draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各画像の説明を notebook-id.md の NotebookLM notebook に渡して、図解画像はinfographic指示・イメージ画像は情景画像指示（文字なし）で各3枚生成し、draft/images に <H2タイトル>_<画像種類>_<連番>.png と使用プロンプト .md を保存する。生成失敗時は自動リトライ。写真画像案はスキップ。 |
 | [visual_section-planner](/xClaude/skills/visual_section-planner/) | 記事の本文を入力に、H2セクションごとに画像案を3つ考え、各画像（図解／イメージ／写真Web取得）の説明を、セクション分けしたmarkdown形式で出力し、draft/image-plan.md に保存する。生成プロンプトは書かず画像の説明のみ。 |
@@ -88,4 +85,11 @@ description: Claude Code で使用できるスキルの一覧
 | スキル | 用途 |
 |---|---|
 | [update-permissions](/xClaude/skills/update-permissions/) | このセッションでよーんが許可を求められた操作を一覧表示し、settings.json の permissions.allow への追記を提案する。 |
+
+## 廃止・非推奨
+
+| スキル | 用途 |
+|---|---|
+| [sync-to-sheets](/xClaude/skills/sync-to-sheets/) | sync-to-sheets スキル |
+| [writer_note-story](/xClaude/skills/writer_note-story/) | writer_note-story スキル |
 
