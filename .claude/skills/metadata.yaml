@@ -2,7 +2,7 @@ skills:
   writer-xonepoint:
     category: コンテンツ制作
   writer_note-story:
-    category: コンテンツ制作
+    category: 廃止・非推奨
   writer-xnews:
     category: コンテンツ制作
   writer-xstory:
@@ -56,7 +56,7 @@ skills:
   sync-to-drive:
     category: 画像・同期
   sync-to-sheets:
-    category: 画像・同期
+    category: 廃止・非推奨
   hashtag-note:
     category: 画像・同期
   record:

@@ -172,6 +172,7 @@ description: Claude Code で使用できるスキルの一覧
         '画像・同期',
         '運用・記録',
         '設定・保守',
+        '廃止・非推奨',
     ]
 
     for category in category_order:

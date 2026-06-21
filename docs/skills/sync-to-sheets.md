@@ -1,7 +1,7 @@
 ---
 title: sync-to-sheets
 description: sync-to-sheets スキル
-category: 画像・同期
+category: 廃止・非推奨
 ---
 
 ← [スキル一覧へ](/xClaude/skills/)
