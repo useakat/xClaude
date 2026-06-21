@@ -254,9 +254,20 @@ STEP 4・STEP 5 で記憶した【タイトル案】【最終原稿】【チェ�
 
 ---
 
-# STEP 8: 投稿フォルダを Drive へアップロード
+# STEP 8: チャット履歴を保存
 
-画像生成・確定まで終わった STEP 3 のテーマフォルダを、丸ごと Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像含む・フォルダ構造を再現）。
+このセッションのやり取りを Markdown 化し、STEP 3 のテーマフォルダ直下に `chat_history.md` として保存する（次の STEP 9 で Drive にも一緒に保存される）。
+
+```bash
+OUT=$(python3 scripts/save_session_history.py --title "{topic}" --slug "{slug}" 2>&1 | tail -1)
+cp "$OUT" "projects/w003/YYYYMMDD_[topic]/chat_history.md"
+```
+
+---
+
+# STEP 9: 投稿フォルダを Drive へアップロード
+
+画像生成・チャット履歴保存まで終わった STEP 3 のテーマフォルダを、丸ごと Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像・chat_history.md 含む・フォルダ構造を再現）。
 
 ```bash
 bash scripts/drive_put_folder.sh "projects/w003/YYYYMMDD_[topic]" 1DTPEzOmWd-kWQElyBByuVHjSantTl7-g
@@ -266,7 +277,7 @@ bash scripts/drive_put_folder.sh "projects/w003/YYYYMMDD_[topic]" 1DTPEzOmWd-kWQ
 
 # 完了判定
 
-すべてのSTEP（1〜8）が完了したら、以下を報告する：
+すべてのSTEP（1〜9）が完了したら、以下を報告する：
 
 - ✅ ネタ選定完了（シードネタNo.X / 採用テーマ: 〜）
 - ✅ ネタを「使用済み」に更新完了
@@ -275,6 +286,7 @@ bash scripts/drive_put_folder.sh "projects/w003/YYYYMMDD_[topic]" 1DTPEzOmWd-kWQ
 - ✅ 品質チェック完了
 - ✅ メール下書き作成完了（draft ID: xxxxxx）
 - ✅ 画像生成完了（5パターン / draft/infographic_*.png）
+- ✅ チャット履歴保存完了（chat_history.md）
 - ✅ Drive アップロード完了（xClaude/projects/w003/YYYYMMDD_topic/）
 
 **STEP 2（ネタ選択）と STEP 7（画像承認）では必ずユーザーの応答を待つ。それ以外は自動で進める。**
