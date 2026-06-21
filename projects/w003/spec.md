@@ -36,6 +36,32 @@
 
 件名: `【ワンポイント解説】{トピック要約 10〜15 字} YYYYMMDD HH:MM:SS`
 
+本文フォーマット（`daily-xonepoint` SKILL STEP 6 と同一。**`[投稿文]` は必ず `[/投稿文]` の閉じタグまで含める**。`scripts/extract_tag.py` が開き・閉じの間を抽出するため、閉じタグが無いと cron 投稿フローで本文が空とみなされ投稿されない）:
+
+```
+[ネタID]onePointNeta[{ネタNo}][/ネタID]
+
+[チェックサマリー]
+
+（チェックサマリーテーブル）
+
+[/チェックサマリー]
+
+[最終原稿]
+
+（最終原稿）
+
+[/最終原稿]
+
+[投稿文]
+
+（投稿テキスト）
+
+[/投稿文]
+```
+
+作成手段: 画像を添付する場合は `mcp__claude_ai_Gmail__create_draft`（添付非対応）ではなく `bash scripts/create_gmail_draft.sh --attach <png>` を使う。
+
 ## Rules
 
 ### 制作フロー（`/daily-xonepoint` が自動実行）
@@ -46,7 +72,7 @@
 5. **ファクトチェック** — `/check-fact`
 6. **ブランド適合チェック** — `/check-brand projects/w003/brand.md {本文}`（採点ループ＋トンマナ調整。brand.md の採点基準で全項目 8 点以上、最大 5 回ループ）
 7. **画像生成** — `/visual_infographic` 5 パターン生成 → **ローカルの `draft/` フォルダに保存**（Drive へのアップロードは行わない）。**タイトルは `output/index.md` の冒頭1文**を使用。各プロンプトは **`projects/w003/infographic_template/` の型テンプレートを基に作成**（内容に合う 5 型を選択）
-8. **Gmail 下書き作成** — `mcp__claude_ai_Gmail__create_draft` を直接呼び出す
+8. **Gmail 下書き作成** — 上記「Gmail 下書き」の本文フォーマットで作成する（**`[投稿文]`〜`[/投稿文]` の閉じタグまで必須**）。画像添付があるため `bash scripts/create_gmail_draft.sh --attach output/infographic.png` を使う
 9. **チャット履歴を保存** — このセッションのやり取りを `bash scripts/save_session_history.py --title "{topic}" --slug "{slug}"` で Markdown 化し、生成物をテーマフォルダ直下に `chat_history.md` としてコピー保存する（投稿フォルダに同梱し、次の Drive アップロードで一緒に保存する）
 10. **投稿フォルダを Drive へアップロード** — テーマフォルダ `projects/w003/YYYYMMDD_[topic]/` を丸ごと `bash scripts/drive_put_folder.sh projects/w003/YYYYMMDD_[topic] 1DTPEzOmWd-kWQElyBByuVHjSantTl7-g` で Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像含む・フォルダ構造を再現）
 
@@ -61,6 +87,6 @@
 - brand.mdと矛盾しない
 - plan.mdの目的に沿う
 - 出力ファイル名が揃っている
-- Gmail 下書きに `[投稿文]` セクションが含まれている
+- Gmail 下書きの本文が `[投稿文]`〜`[/投稿文]` の**開き・閉じ両タグ**で囲まれている（`python3 scripts/extract_tag.py 投稿文` で非空抽出できる）
 - チャット履歴 `chat_history.md` が投稿フォルダに保存されている
 - 投稿フォルダが Drive (xClaude/projects/w003) にアップロード済み
