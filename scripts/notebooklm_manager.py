@@ -278,6 +278,21 @@ async def cmd_list_sources(args):
             print(s.title or "")
 
 
+async def cmd_get_source(args):
+    """ソースの中身（fulltext）を表示する。--title でタイトル指定、--source-id で ID 指定。"""
+    async with await NotebookLMClient.from_storage(_storage_path()) as client:
+        source_id = args.source_id
+        if not source_id:
+            sources = await client.sources.list(args.notebook_id)
+            target = next((s for s in sources if (s.title or "") == args.title), None)
+            if target is None:
+                print(f"エラー: タイトル '{args.title}' のソースが見つかりません", file=sys.stderr)
+                sys.exit(1)
+            source_id = target.id
+        ft = await client.sources.get_fulltext(args.notebook_id, source_id)
+        print(getattr(ft, "content", ft))
+
+
 async def cmd_add_text(args):
     if not args.file:
         print("エラー: --file を指定してください", file=sys.stderr)
@@ -359,6 +374,12 @@ def main():
     p_ls = sub.add_parser("list-sources", help="ノートブックのソースタイトル一覧")
     p_ls.add_argument("notebook_id", help="ノートブックID")
 
+    # get-source
+    p_gs = sub.add_parser("get-source", help="ソースの中身（fulltext）を表示")
+    p_gs.add_argument("notebook_id", help="ノートブックID")
+    p_gs.add_argument("--title", default="", help="ソースタイトル（例: infographic_source.txt）")
+    p_gs.add_argument("--source-id", default="", dest="source_id", help="ソースID（--title より優先）")
+
     # add-text
     p_at = sub.add_parser("add-text", help="既存ノートブックにテキストファイルをソース追加")
     p_at.add_argument("notebook_id", help="ノートブックID")
@@ -423,6 +444,7 @@ def main():
         "create": cmd_create,
         "add-source": cmd_add_source,
         "list-sources": cmd_list_sources,
+        "get-source": cmd_get_source,
         "add-text": cmd_add_text,
         "add-source-file": cmd_add_source_file,
         "ask": cmd_ask,

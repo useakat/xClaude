@@ -80,6 +80,24 @@ ssh Administrator@133.18.136.38 "echo <公開鍵>>>%ProgramData%\ssh\administrat
 - `bash scripts/notebooklm_tunnel.sh --restart` → パスワードなしで張り直し成功。`--check` で出口 IP = 133.18.136.38 を確認。
 - 通しで `notebooklm_manager.py list` がトンネル経由で成功。
 
+## 追記（2026-06-21）：get-source サブコマンド追加
+
+ソースの中身（fulltext）を取り出す手段が CLI になく、毎回インライン Python を書く必要があった。ライブラリには `client.sources.get_fulltext(notebook_id, source_id)` があるため、これを `get-source` サブコマンドとして公開した。
+
+### 実施内容（追記分）
+
+- `notebooklm_manager.py` に `cmd_get_source` と `get-source` サブパーサーを追加。`--title`（タイトル完全一致でソース ID を解決）または `--source-id`（直接指定・優先）でソースを特定し、`get_fulltext().content` を標準出力に表示する。
+
+### 追記分の変更ファイル
+
+| ファイル | 変更内容 |
+|---|---|
+| `scripts/notebooklm_manager.py` | `get-source` サブコマンド追加（`get_fulltext` を公開。`--title` / `--source-id` 対応） |
+
+### 確認結果（追記分）
+
+- `get-source 48a952d3-... --title infographic_source.txt` で当該ソースの本文が表示されることを確認。
+
 ## 今後の課題
 
 - 依存 `httpx-socks` / `python-socks` は別環境（リモート routine 等）では別途インストールが必要。
