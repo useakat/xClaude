@@ -21,3 +21,6 @@ gcp/
 # tmux ログ・direnv 設定（コミット対象外）
 /.envrc
 tmux-*.log
+
+# W003 図解の draft バリエーション画像はコミットしない（output の完成版のみ残す）
+/projects/w003/*/draft/*.png
