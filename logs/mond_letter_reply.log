@@ -1593,3 +1593,100 @@ The search returned no results.
 
 対象メールなし。処理を終了します。
 [2026-06-18 06:00:15 JST] mond-letter-reply 完了
+[2026-06-18 12:00:01 JST] mond-letter-reply 開始
+検索結果は 0 件でした。
+
+対象メールなし。処理を終了します。
+
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+
+未処理の mond レターはありませんでした。
+[2026-06-18 12:00:17 JST] mond-letter-reply 完了
+[2026-06-18 18:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+
+(`from:letter-notify@mond.how -label:mond-処理済み in:inbox` の検索結果は0件でした。未処理の mond レターはありません。)
+[2026-06-18 18:00:17 JST] mond-letter-reply 完了
+[2026-06-19 00:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件です。
+
+対象メールなし。処理を終了します。
+
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: なし
+
+未処理の mond レター（`from:letter-notify@mond.how` かつ `mond-処理済み` ラベルなし）は受信トレイにありませんでした。
+[2026-06-19 00:00:20 JST] mond-letter-reply 完了
+[2026-06-19 06:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+[2026-06-19 06:00:12 JST] mond-letter-reply 完了
+[2026-06-19 12:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+
+```
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: []
+```
+
+未処理の mond レターはありませんでした。
+[2026-06-19 12:00:14 JST] mond-letter-reply 完了
+[2026-06-19 18:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+
+```
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: []
+```
+
+未処理の mond レターはありませんでした。
+[2026-06-19 18:00:15 JST] mond-letter-reply 完了
+[2026-06-20 00:00:01 JST] mond-letter-reply 開始
+STEP 1 の検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+[2026-06-20 00:00:17 JST] mond-letter-reply 完了
+[2026-06-20 06:00:01 JST] mond-letter-reply 開始
+STEP 1 の検索結果は 0 件でした。
+
+対象メールなし。処理を終了します。
+
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: なし
+
+未処理の mond レターはありませんでした。
+[2026-06-20 06:00:15 JST] mond-letter-reply 完了
+[2026-06-20 12:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+**対象メールなし。処理を終了します。**
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` に該当する未処理レターはありませんでした。
+[2026-06-20 12:00:17 JST] mond-letter-reply 完了
+[2026-06-20 18:00:01 JST] mond-letter-reply 開始
+Failed to authenticate. API Error: 401 Invalid authentication credentials
+[2026-06-20 18:00:06 JST] mond-letter-reply 完了
+[2026-06-21 00:00:01 JST] mond-letter-reply 開始
+Failed to authenticate. API Error: 401 Invalid authentication credentials
+[2026-06-21 00:00:06 JST] mond-letter-reply 完了
+[2026-06-21 06:00:01 JST] mond-letter-reply 開始
+Failed to authenticate. API Error: 401 Invalid authentication credentials
+[2026-06-21 06:00:04 JST] mond-letter-reply 完了
