@@ -47,6 +47,7 @@
 6. **ブランド適合チェック** — `/check-brand projects/w003/brand.md {本文}`（採点ループ＋トンマナ調整。brand.md の採点基準で全項目 8 点以上、最大 5 回ループ）
 7. **画像生成** — `/visual_infographic` 5 パターン生成 → **ローカルの `draft/` フォルダに保存**（Drive へのアップロードは行わない）。**タイトルは `output/index.md` の冒頭1文**を使用。各プロンプトは **`projects/w003/infographic_template/` の型テンプレートを基に作成**（内容に合う 5 型を選択）
 8. **Gmail 下書き作成** — `mcp__claude_ai_Gmail__create_draft` を直接呼び出す
+9. **投稿フォルダを Drive へアップロード** — テーマフォルダ `projects/w003/YYYYMMDD_[topic]/` を丸ごと `bash scripts/drive_put_folder.sh projects/w003/YYYYMMDD_[topic] 1DTPEzOmWd-kWQElyBByuVHjSantTl7-g` で Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像含む・フォルダ構造を再現）
 
 ### その他
 - ネタ使用後、即座に Sheets の I 列を「使用済み」に更新する
@@ -60,3 +61,4 @@
 - plan.mdの目的に沿う
 - 出力ファイル名が揃っている
 - Gmail 下書きに `[投稿文]` セクションが含まれている
+- 投稿フォルダが Drive (xClaude/projects/w003) にアップロード済み

@@ -12,6 +12,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **infographic_template 6型をスーパーニャンコ詳細定義に更新** — `radial / checklist / compare_contrast / pyramid / step_flow / timeline` のキャラクター指定を簡略版から詳細版（体色・耳内側・額のハート・W字口・チーク・卒業角帽＋タッセル・マント・ベルト＋バックル・ぬいぐるみ質感）へ統一。あわせて gws を Drive スコープ付きで再認証（従来6スコープ保持＋drive 追加）、`file` コマンドを導入（Drive画像ソース追加の MIME 判定用）。[→報告書](../reports/20260621_infographic_template_nyanko_detail/)
 - **notebooklm_manager.py に SOCKS プロキシ経由オプションを追加（IP ブロック回避）** — 環境の IP が NotebookLM にブロックされる問題を、別 Windows server 経由の SSH SOCKS プロキシで回避。`NOTEBOOKLM_SOCKS_PROXY` 設定時に httpx をローカル DNS（`rdns=False`）の SOCKS トランスポートへ差し替え（Windows OpenSSH はリモート DNS 非対応のため必須）。鍵認証化（`administrators_authorized_keys`）＋トンネル管理ヘルパー `scripts/notebooklm_tunnel.sh`、ソース本文表示 `get-source` サブコマンドも追加。[→報告書](../reports/20260621_notebooklm_socks_proxy/)
 - **visual_infographic のスーパーニャンコ参照画像をローカル references/ 画像に変更** — 参照画像を Drive URL DL から `references/スーパーニャンコアイコン.png` の `--file` 追加へ切替。新規作成ブランチを `make-infographic`（Drive DL）から `create`→`add-text`→`add-source-file --file`→`infographic` ループへ統一し、Drive 認証・`file` コマンド依存を解消。[→報告書](../reports/20260621_visual_infographic_local_nyanko_ref/)
+- **W003 制作フローに投稿フォルダの Drive アップロードを追加（drive_put_folder.sh 新設）** — Gmail 下書き後にテーマフォルダ丸ごと（draft 画像含む）を Drive `xClaude/projects/w003` 配下へフォルダ構造ごと再帰アップロードする工程を標準化。新スクリプト `scripts/drive_put_folder.sh`（gws でフォルダ get-or-create＋`drive_put.sh` 委譲）を新設し spec.md に Step 9・daily-xonepoint に STEP 8 を追加。`gws drive files create` のメタデータは `--json`（ボディ）で渡す。[→報告書](../reports/20260621_w003_post_folder_drive_upload/)
 
 ---
 
