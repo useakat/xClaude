@@ -12,6 +12,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **daily-xonepoint の Gmail 下書き作成を最終確定の承認後に移動** — Gmail 下書きを画像生成前の自動実行から「最終確定ゲート（STEP 7）でユーザー承認後に1回だけ作成」へ変更。`create_draft` が更新・削除不可で修正のたびに下書きが溜まる問題を解消。ステップ順を 6 画像→7 最終確定→8 Gmail→9 チャット履歴→10 Drive に再構成し spec.md も整合。[→報告書](../reports/20260625_daily_xonepoint_gmail_after_final_approval/)
 - **W003 投稿フォルダ画像を Drive 保存・git 除外に移行** — 投稿フォルダの画像（draft・output の `*.png`）を git にコミットせず Drive＋ローカル保存に統一。`.gitignore` を `/projects/w003/**/*.png` に拡張、誤コミット済み画像を untrack、spec.md / daily-xonepoint に運用を明文化。リポジトリ肥大を防止。[→報告書](../reports/20260625_w003_post_images_drive_only/)
 - **新規作業の開始前に git pull で最新化するルールを追加** — 複数環境から同じ master に push する運用で古い状態での作業・重複実装を防ぐため、CLAUDE.md の Git ルールに「作業開始前にまず git pull（未コミット変更は commit/stash 先行）」を明記。[→報告書](../reports/20260625_git_pull_before_new_work/)
+- **daily-xonepoint のメール下書きを画像添付対応に修正** — SKILL STEP 8 が添付非対応の `mcp__claude_ai_Gmail__create_draft` を指定していたため下書きに画像が付かない不具合を、`create_gmail_draft.sh --attach` 方式へ変更して修正（spec.md の指定と整合）。[→報告書](../reports/20260625_daily_xonepoint_gmail_attach_fix/)
+- **daily-xonepoint スキル・agent を非推奨化** — 制作フローの正本を `projects/w003/spec.md` に一本化。SKILL.md・agent 定義に非推奨バナーを追加し、metadata.yaml で「廃止・非推奨」カテゴリへ移動・Wiki 再生成。二重管理による不整合を解消。[→報告書](../reports/20260625_daily_xonepoint_deprecated/)
 
 ---
 
