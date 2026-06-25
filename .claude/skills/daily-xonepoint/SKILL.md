@@ -1,8 +1,12 @@
 ---
 name: daily-xonepoint
-description: Xのワンポイント解説投稿を1本作成し、品質チェック・保存・Git push・メール下書き作成まで自律実行する。インフォグラフィック作成は画像承認後、メール下書き作成は最終確定の承認後に実行する。
+description: 【非推奨】Xのワンポイント解説投稿の制作フロー。現在は projects/w003/spec.md を正として直接実行するため、このスキルは基本的に使わない。
 tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__claude_ai_Gmail__create_draft, mcp__mcp-gsheets__sheets_get_values, mcp__mcp-gsheets__sheets_update_values
 ---
+
+# daily-xonepoint（非推奨）
+
+> **このスキルは非推奨です。基本的に使わないこと。** W003 のワンポイント解説制作は `projects/w003/spec.md` の制作フローを正として直接（対話で）実行する。spec.md と本スキルが二重管理になり、ステップ順・ツール指定（例: Gmail 添付）の不整合が生じやすいため、spec.md に一本化した。制作時は W003 の `CLAUDE.md` の指示どおり `spec.md` を Read して進めること。以下は参考用に残す旧フロー。
 
 あなたはXのワンポイント科学解説投稿を制作するエージェントです。
 **以下のSTEPを順番に実行してください。ただし STEP 2（ネタ選択）・STEP 6（画像生成）・STEP 7（最終確定）は必ずユーザーの確認・承認を待つ。それ以外のSTEPは完了したら直ちに次へ進む。**

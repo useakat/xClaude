@@ -9,7 +9,6 @@ description: Claude Code で使用できるスキルの一覧
 
 | スキル | 用途 |
 |---|---|
-| [daily-xonepoint](/xClaude/skills/daily-xonepoint/) | Xのワンポイント解説投稿を1本作成し、品質チェック・保存・Git push・メール下書き作成まで自律実行する。インフォグラフィック作成はユーザー承認後に実行する。 |
 | [draft_xstory](/xClaude/skills/draft_xstory/) | X長文ストーリー投稿（what_id W001）のネタ選定から下書き作成、ファクトチェック、トンマナチェック、Gmail下書き作成まで自律実行する |
 | [note-quick](/xClaude/skills/note-quick/) | note-quick スキル |
 | [writer-xnews](/xClaude/skills/writer-xnews/) | writer-xnews スキル |
@@ -90,6 +89,7 @@ description: Claude Code で使用できるスキルの一覧
 
 | スキル | 用途 |
 |---|---|
+| [daily-xonepoint](/xClaude/skills/daily-xonepoint/) | 【非推奨】Xのワンポイント解説投稿の制作フロー。現在は projects/w003/spec.md を正として直接実行するため、このスキルは基本的に使わない。 |
 | [sync-to-sheets](/xClaude/skills/sync-to-sheets/) | sync-to-sheets スキル |
 | [writer_note-story](/xClaude/skills/writer_note-story/) | writer_note-story スキル |
 
