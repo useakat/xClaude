@@ -218,9 +218,11 @@ check-brand が **不合格（警告）** を返した場合は、メール本�
 
 > Gmail 下書きは、STEP 7 で完成確定の承認を得た **【確定版】** に対して **1回だけ** 作成する。`create_draft` は更新・削除ができないため、確定前に作ると修正のたびに下書きが増える。**STEP 7 の承認前は絶対に作成しない。**
 
-STEP 4・STEP 5 で記憶した【タイトル案】【チェックサマリー】と、STEP 7 で確定した【確定版】本文を使用して、`mcp__claude_ai_Gmail__create_draft` ツールで Gmail 下書きを作成する。
+STEP 4・STEP 5 で記憶した【タイトル案】【チェックサマリー】と、STEP 7 で確定した【確定版】本文を使用して、**画像を添付した** Gmail 下書きを作成する。
 
-1. 以下の形式で本文を組み立てる：
+> **画像添付があるため `mcp__claude_ai_Gmail__create_draft` は使わない**（添付非対応）。`bash scripts/create_gmail_draft.sh --attach <png>` を使う（gws CLI 経由・複数 `--attach` 可）。
+
+1. 以下の形式で本文を組み立て、一時ファイル（例 `/tmp/xonepoint_mail.txt`）に Write で書き出す：
    ```
    [ネタID]onePointNeta[{STEP 2 で記憶した【ネタNo】の値}][/ネタID]
 
@@ -253,16 +255,20 @@ STEP 4・STEP 5 で記憶した【タイトル案】【チェックサマリー�
    TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S'
    ```
 
-4. `mcp__claude_ai_Gmail__create_draft` ツールを呼び出す（**STEP 7 承認後に1回だけ**）：
-   - `to`: `["useakat@gmail.com"]`
-   - `subject`: `"【ワンポイント解説】{短いトピック要約} YYYYMMDD HH:MM:SS"`
-   - `body`: 上記で組み立てた本文
+4. `create_gmail_draft.sh` を呼び出す（**STEP 7 承認後に1回だけ**）。添付は完成画像（採用した型の `output/infographic_[連番].png`）：
+   ```bash
+   bash scripts/create_gmail_draft.sh \
+     --to useakat@gmail.com \
+     --subject "【ワンポイント解説】{短いトピック要約} YYYYMMDD HH:MM:SS" \
+     --body-file /tmp/xonepoint_mail.txt \
+     --attach projects/w003/YYYYMMDD_[topic]/output/infographic_[連番].png
+   ```
 
 ## 実行ルール
 
-- **`mcp__claude_ai_Gmail__create_draft` ツールを使用する** — bash スクリプトではなく MCP ツールを直接呼び出す
+- **`bash scripts/create_gmail_draft.sh --attach <png>` を使用する**（MCP の `create_draft` は添付非対応のため使わない）
 - **STEP 7 の承認前は絶対に作成しない。承認後に作成するのは1回だけ。**
-- **成功判定はレスポンスに draft ID が含まれることで行う**
+- **成功判定は `✓ 下書き作成完了` の出力で行う**（gws の戻り JSON 構造により id が空表示になる場合があるため、必要なら `mcp__claude_ai_Gmail__list_drafts`（`query: "subject:… has:attachment"`）で添付付き下書きの存在を確認する）
 - **失敗した場合は、エラー内容をそのまま報告する**
 
 ---
