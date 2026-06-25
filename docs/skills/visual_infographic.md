@@ -14,8 +14,8 @@ visual_infographic スキル
 
 # visual_infographic
 
-文章を渡すと、N パターンの図解プロンプトを自動生成し、NotebookLM Infographics で図解画像を N 枚作成して Google Drive の outputs/images フォルダに保存する。
-画像 N 枚 + 対応するプロンプト markdown N つ（計 2N ファイル）をアップロードする。
+文章を渡すと、N パターンの図解プロンプトを自動生成し、NotebookLM Infographics で図解画像を N 枚作成して、プロジェクトの `draft/` フォルダに保存する。
+画像 N 枚 + 対応するプロンプト markdown N つ（計 2N ファイル）を `draft/` にローカル保存する（Drive へのアップロードは行わない）。
 
 ## 引数
 
@@ -50,36 +50,70 @@ Drive に該当ファイルがない場合はスキル実行を中断し、ユ�
 bash scripts/notebooklm_auth_push.sh
 ```
 
-### Step 1. テキスト取得・count 確認
+### Step 1. テキスト取得・count 確認・プロジェクトフォルダ解決
 
 - `$ARGUMENTS` から count を読み取る（先頭が整数ならその値、なければデフォルト 3）
 - テキストを `/tmp/infographic_source.txt` に書き出す
   - 直接渡しの場合: そのまま書き出す
   - ファイルパス指定の場合: `Read` ツールで内容を確認してから書き出す
 
+**プロジェクトフォルダ（`PROJECT_DIR`）の解決**（既存 notebook 再利用の判定に使う）:
+
+- `--project-dir <dir>` が指定されていれば、それを `PROJECT_DIR` とする。
+- 指定がなく `--file <path>` がある場合は、パスの先祖から `projects/w003/<名前>/` の階層を抜き出して `PROJECT_DIR` とする。
+  ```bash
+  # 例: --file が projects/w003/20260615_金の起源/output/index.md なら
+  #     PROJECT_DIR=.../projects/w003/20260615_金の起源
+  PROJECT_DIR=$(python3 -c "import os,sys,re;
+p=os.path.abspath(sys.argv[1]);
+m=re.search(r'(.*/projects/w003/[^/]+)/', p);
+print(m.group(1) if m else '')" "<--file のパス>")
+  ```
+- どちらも無い（テキスト直接渡し等）場合は `PROJECT_DIR` を空のままにする（＝ notebook 再利用はせず新規作成）。
+- `PROJECT_DIR` が決まったら `NBID_FILE="$PROJECT_DIR/notebook-id.md"` を控える。
+
+**保存先（`SAVE_DIR`）の決定**: 生成物（png・プロンプト md）は **プロジェクトの `draft/` に保存する**。
+- `PROJECT_DIR` が非空なら `SAVE_DIR="$PROJECT_DIR/draft"`。
+- `PROJECT_DIR` が空なら（テキスト直接渡し等）`SAVE_DIR="$ROOT/outputs"` にフォールバック。
+- 実行前に `mkdir -p "$SAVE_DIR"` する。**Drive へのアップロードは行わない。**
+
 ### Step 2. メインタイトル・サブタイトルを決める
 
 **メインタイトルの決定ルール**:
-- テキストが「実は、」で始まる場合 → 冒頭の1文（句点「。」は除く）をそのままメインタイトルにする
-- それ以外 → テキストのテーマを表す短いキャッチーなタイトル（15字以内）を生成する
+- 入力テキストの**冒頭1文**（先頭から最初の句点「。」まで。句点は除く）を、そのままメインタイトルにする。
+- 例: 入力が「金って、実は超新星爆発でもほとんど作れない元素だった。…」→ メインタイトル＝「金って、実は超新星爆発でもほとんど作れない元素だった」
 
 **サブタイトルの決定ルール**:
 - 内容の概要を説明する一文
 - 「〜を解説します」という形は禁止。内容を端的に述べる形にする
 
-### Step 3. count 個のプロンプトを生成
+### Step 3. count 個のプロンプトを「型テンプレート」から作成する
 
-テキストの内容・構造に最適な図解レイアウトを判断し、count 個の異なるパターンを考える。
-パターンタイプは固定せず、内容に応じて選ぶ。参考例：
-- ステップ・フロー型（プロセスや変化を時系列で表現）
-- 比較・対比型（Before/After、2つの概念の対比）
-- 中心放射型（コアコンセプトを中央に、関連要素を周囲に）。**バブルの配置は、読者の視線が左上→左下→右上→右下と流れるよう設計する（導入→問題→解決の鍵→結論の順）**
-- タイムライン型（歴史的経緯や時代の流れ）
-- ピラミッド型（重要度の階層構造）
-- チェックリスト型（箇条書きで要点を列挙）
-など
+プロンプトはその場で自走生成せず、**`projects/w003/infographic_template/` の型テンプレート md を基に作成する**（パスはリポジトリルート基準で固定）。
 
-各パターンで以下のテンプレートを完成させる：
+テンプレート一覧（各ファイルが1つの型）:
+- `step_flow.md`（ステップ・フロー型: プロセス・変化を時系列で）
+- `compare_contrast.md`（比較・対比型: Before/After・2概念の対比）
+- `radial.md`（中心放射型: コアを中央に、視線が左上→左下→右上→右下）
+- `timeline.md`（タイムライン型: 歴史的経緯）
+- `pyramid.md`（ピラミッド型: 重要度の階層）
+- `checklist.md`（チェックリスト型: 要点列挙）
+
+**手順**:
+
+1. テンプレートディレクトリ `<repo>/projects/w003/infographic_template/` の存在を確認する。
+   - **存在しない場合のみ**フォールバック: 下記「フォールバック（テンプレート不在時）」に従い従来方式で自走生成し、その旨を警告表示する。
+2. 入力テキストの内容・構造に**最も合う `count` 個の型を選ぶ**（内容に合わない型は除外する。例: 明確な階層構造が無い内容なら `pyramid` を外す）。
+3. 選んだ各テンプレートを **Read** し、**本文（`# ビジュアル・レイアウトの指示`・`# 図解の構成・レイアウト` の共通指示、スーパーニャンコ指定、テキスト厳守ルール）はそのまま使う**。改変するのは以下の差し込み箇所だけ:
+   - `[メインタイトル]` → Step 2 で決めた冒頭1文
+   - `[サブタイトル]` → Step 2 で決めたサブタイトル
+   - `[各ステップの見出し]` `[一言説明]` `[コアコンセプト]` `[結論の一文]` 等のプレースホルダ → 入力テキストの内容で具体化
+   - 構成中の `[3〜5]` `[4]` などの個数指定 → 内容に合わせて確定
+4. 共通のビジュアル指示・キャラクター指定・「テキストを一言一句変えない」ルールは**書き換えない**。
+5. 完成したプロンプトを Step 4 の規則で保存する（先頭行の `パターン: …` 行も残す）。
+
+**フォールバック（テンプレート不在時のみ）**: 次の参考例から count 個の型を選び、下記テンプレートを完成させる。
+- ステップ・フロー型／比較・対比型／中心放射型（視線 左上→左下→右上→右下）／タイムライン型／ピラミッド型／チェックリスト型
 
 ```
 # テーマ・全体像
@@ -102,7 +136,7 @@ bash scripts/notebooklm_auth_push.sh
 
 ### Step 4. プロンプト markdown を count 個のファイルに保存
 
-ファイル名: `outputs/infographic_YYYY-MM-DD_1.md` ～ `outputs/infographic_YYYY-MM-DD_N.md`
+ファイル名: `$SAVE_DIR/infographic_01.md` ～ `$SAVE_DIR/infographic_NN.md`（`NN` は2桁ゼロ詰めの連番）。
 
 各ファイルの構成：
 ```markdown
@@ -111,85 +145,97 @@ bash scripts/notebooklm_auth_push.sh
 [そのパターンのプロンプト全文]
 ```
 
-### Step 5. count 枚のインフォグラフィックを生成・1 枚ずつ即アップロード
+### Step 5. count 枚のインフォグラフィックを生成し draft/ に保存
 
-**ポリシー**: 各画像は生成完了後すぐに Drive にアップロード→ローカル削除する（全枚数まとめてではなく1枚ずつ）。アップロードした Drive URL は配列に保存し、Step 6 の Gmail 通知で使う。
-
-アップロード先フォルダ ID: `1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb`（outputs/images）
+**ポリシー**: 各画像は生成完了後すぐに `$SAVE_DIR`（＝プロジェクトの `draft/`）へ保存する。**Drive へのアップロードは行わない。ローカル削除もしない。** プロンプト md（Step 4）も同じ `$SAVE_DIR` に置き、`infographic_NN.png` と `infographic_NN.md` がペアで残る。
 
 **共通変数**:
 ```bash
 ROOT=$(git rev-parse --show-toplevel)
-DATE=$(date +%Y-%m-%d)
-NYANKO_URL="https://drive.google.com/file/d/1SHyiHZ8io64nUXculZMqLkh8_TlV_goI/view?usp=drive_link"
-FOLDER_ID="1iAz0cWYNeLXSUk88Gc1o3986xGSseAKb"
-
-PNG_URLS=()  # Drive URL を蓄積
-MD_URLS=()
+NYANKO_REF="$ROOT/references/スーパーニャンコアイコン.png"  # ローカル参照画像（Drive DL 不要）
+mkdir -p "$SAVE_DIR"
 ```
 
-**ヘルパー**（1枚ぶんのアップロード＋ローカル削除をまとめた処理）:
+**ブランチ判定**: `PROJECT_DIR`（Step 1）に `notebook-id.md` があり中身が非空なら **再利用ブランチ**、無ければ **新規作成ブランチ**。
 
-ローカル環境（gws が使える場合）:
 ```bash
-upload_pair() {
-  local i="$1"
-  local png="$ROOT/outputs/infographic_${DATE}_${i}.png"
-  local md="$ROOT/outputs/infographic_${DATE}_${i}.md"
-  local png_id md_id
-
-  png_id=$(gws drive +upload "$png" --parent "$FOLDER_ID" 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('id',''))")
-  md_id=$(gws drive +upload "$md"  --parent "$FOLDER_ID" 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('id',''))")
-
-  [ -n "$png_id" ] && [ -n "$md_id" ] || { echo "❌ アップロード失敗: $i 枚目"; return 1; }
-
-  PNG_URLS+=("https://drive.google.com/file/d/${png_id}/view")
-  MD_URLS+=("https://drive.google.com/file/d/${md_id}/view")
-
-  rm "$png" "$md"
-  echo "✓ $i 枚目アップロード＋ローカル削除完了"
-}
+REUSE=false
+if [ -n "$PROJECT_DIR" ] && [ -s "$NBID_FILE" ]; then
+  NOTEBOOK_ID=$(head -1 "$NBID_FILE" | tr -d '[:space:]')
+  [ -n "$NOTEBOOK_ID" ] && REUSE=true
+fi
 ```
 
-リモート環境（gws がない場合）は `mcp__claude_ai_Google_Drive__create_file` を `parent="$FOLDER_ID"` で各ファイルに呼び、返ってきた `id` から URL を組み立てて配列に追記、その後ローカルを削除する（コードは環境に応じて組み立てる）。
+---
 
-**1枚目**: `make-infographic --keep` で notebook を作成しながら生成 → 即アップロード。スーパーニャンコ参照画像も `--extra-source-url` でソースに追加。notebook_id を出力からパースする。
+#### 【再利用ブランチ】`REUSE=true`（既存 notebook を使う・新規作成も削除もしない）
+
+**1枚目を生成する前に、ソースを担保する**（無いものだけ追加）:
 
 ```bash
-OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" make-infographic \
-  --file /tmp/infographic_source.txt \
-  --title "図解_${DATE}" \
-  --infographic-title "[メインタイトル]" \
-  --instructions "[パターン1のプロンプト全文]" \
-  --extra-source-url "$NYANKO_URL" \
-  --language ja --orientation landscape --detail standard --style sketch-note \
-  --output "$ROOT/outputs/infographic_${DATE}_1.png" \
-  --keep 2>&1)
-echo "$OUTPUT"
-NOTEBOOK_ID=$(echo "$OUTPUT" | grep "ノートブック作成" | sed 's/.*: //')
+SRC=$(python3 "$ROOT/scripts/notebooklm_manager.py" list-sources "$NOTEBOOK_ID")
 
-upload_pair 1
+# 原稿テキスト
+if ! echo "$SRC" | grep -q "infographic_source.txt"; then
+  python3 "$ROOT/scripts/notebooklm_manager.py" add-text "$NOTEBOOK_ID" \
+    --file /tmp/infographic_source.txt
+fi
+
+# スーパーニャンコ参照画像（references/ のローカル画像を --file で追加）
+if ! echo "$SRC" | grep -q "super-nyanko-ref"; then
+  python3 "$ROOT/scripts/notebooklm_manager.py" add-source-file "$NOTEBOOK_ID" \
+    --file "$NYANKO_REF" --title super-nyanko-ref
+fi
 ```
 
-**2枚目以降（i = 2 ～ count）**: 同じ notebook_id を使って生成 → 即アップロード。
+**全 N 枚（i = 1 ～ count）を `infographic` で生成 → `draft/` に保存**:
 
 ```bash
-# i = 2, 3, ..., count を繰り返す
+# i = 1, 2, ..., count を繰り返す（NN は2桁ゼロ詰めの連番）
 python3 "$ROOT/scripts/notebooklm_manager.py" infographic "$NOTEBOOK_ID" \
   --instructions "[パターンiのプロンプト全文]" \
   --language ja --orientation landscape --detail standard --style sketch-note \
-  --output "$ROOT/outputs/infographic_${DATE}_${i}.png"
+  --output "$SAVE_DIR/infographic_$(printf '%02d' "$i").png"
+echo "✓ $i 枚目を $SAVE_DIR に保存"
+```
 
-upload_pair "$i"
+---
+
+#### 【新規作成ブランチ】`REUSE=false`
+
+**1枚目を生成する前に、notebook を作成してソースを揃える**（原稿テキスト＋ローカルのスーパーニャンコ参照画像）。Drive からの DL は不要。
+
+```bash
+OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" create "図解_$(date +%Y-%m-%d)" 2>&1)
+echo "$OUTPUT"
+NOTEBOOK_ID=$(echo "$OUTPUT" | grep "✓ 作成:" | awk '{print $3}')
+
+# 原稿テキスト
+python3 "$ROOT/scripts/notebooklm_manager.py" add-text "$NOTEBOOK_ID" \
+  --file /tmp/infographic_source.txt
+# スーパーニャンコ参照画像（references/ のローカル画像を --file で追加）
+python3 "$ROOT/scripts/notebooklm_manager.py" add-source-file "$NOTEBOOK_ID" \
+  --file "$NYANKO_REF" --title super-nyanko-ref
+```
+
+**全 N 枚（i = 1 ～ count）を `infographic` で生成 → `draft/` に保存**:
+
+```bash
+# i = 1, 2, ..., count を繰り返す（NN は2桁ゼロ詰めの連番）
+python3 "$ROOT/scripts/notebooklm_manager.py" infographic "$NOTEBOOK_ID" \
+  --instructions "[パターンiのプロンプト全文]" \
+  --language ja --orientation landscape --detail standard --style sketch-note \
+  --output "$SAVE_DIR/infographic_$(printf '%02d' "$i").png"
+echo "✓ $i 枚目を $SAVE_DIR に保存"
 ```
 
 **`--instructions` が長い場合**: 一時ファイルに書き出して `"$(cat /tmp/prompt_N.txt)"` で渡す。
 
-アップロード失敗時はローカル削除せずユーザーに報告し、その時点で処理を止める。
+生成に失敗した枚があればユーザーに報告し、その時点で処理を止める（成功済みの png・md は `draft/` に残す）。
 
 ### Step 6. Gmail で完了通知を送信
 
-Step 5 で収集した `PNG_URLS` / `MD_URLS` を使って通知メールを送る。
+生成した png・md は `draft/`（`$SAVE_DIR`）にローカル保存される。通知メールには **保存先のローカルパス**を列挙する（Drive URL は使わない）。
 
 件名: `【インフォグラフィック完成】{DATE} {メインタイトル冒頭20字}`
 
@@ -201,24 +247,24 @@ ROOT=$(git rev-parse --show-toplevel)
 # メインタイトルの冒頭20字を抜き出す
 TITLE_SHORT=$(echo "[メインタイトル]" | cut -c1-20)
 
-# 本文を組み立て（Step 5 で収集した PNG_URLS / MD_URLS を列挙）
 cat > /tmp/infographic_mail.txt <<EOF
-インフォグラフィック ${COUNT} 枚が生成され、Drive にアップロードされました。
+インフォグラフィック ${COUNT} 枚を生成し、プロジェクトの draft/ に保存しました。
 
-■ 画像ファイル (${COUNT} 枚)
-[各 PNG の Drive URL を番号付きで列挙]
+■ 保存先フォルダ
+  ${SAVE_DIR}
 
-■ プロンプト markdown (${COUNT} 個)
-[各 MD の Drive URL を番号付きで列挙]
+■ ファイル (${COUNT} 枚 × png/md)
+  infographic_01.png / infographic_01.md
+  …
+  infographic_NN.png / infographic_NN.md
 
 ■ NotebookLM ノートブック
-  タイトル: 図解_${DATE}
   ID: ${NOTEBOOK_ID}
 EOF
 
 bash "$ROOT/scripts/send_gmail.sh" \
   --to useakat@gmail.com \
-  --subject "【インフォグラフィック完成】${DATE} ${TITLE_SHORT}" \
+  --subject "【インフォグラフィック完成】$(date +%Y-%m-%d) ${TITLE_SHORT}" \
   --body-file /tmp/infographic_mail.txt
 ```
 
@@ -226,14 +272,20 @@ bash "$ROOT/scripts/send_gmail.sh" \
 
 ## 完了後の報告
 
-- 生成した画像の Drive URL（count 枚分）
-- プロンプト markdown の Drive URL（count 個分）
-- 作成された NotebookLM notebook のタイトルと ID
+- 生成した画像のローカルパス（`draft/infographic_NN.png`、count 枚分）
+- プロンプト markdown のローカルパス（`draft/infographic_NN.md`、count 個分）
+- NotebookLM notebook の ID
+  - 新規作成ブランチ: 作成した notebook のタイトルと ID
+  - 再利用ブランチ: **再利用した** notebook ID（新規作成・削除はしていない旨を明記）と、追加したソース（原稿テキスト／スーパーニャンコ）の有無
 - Gmail 送信結果（送信成功 or 失敗のメッセージ ID）
 
 ## 注意事項
 
-- notebook は1つ作成される（`--keep` で保持）
+- **既存 notebook の再利用**: プロジェクトフォルダ（`projects/w003/<YYYYMMDD_topic>/`）に `notebook-id.md`（ハイフン区切り・1行目に notebook ID）があれば、その notebook を使って生成する（新規作成・削除しない）。`--file` のパスから自動判定するほか、`--project-dir` で明示指定もできる。
+  - 再利用時は 1枚目の前に `list-sources` でソースを確認し、`infographic_source.txt`（原稿）と `super-nyanko-ref`（ニャンコ参照画像）が無ければ自動で追加する。
+  - 既存 notebook に原稿以外のソース（Deep Research の文献等）があると、図解の内容にそれらが混ざる場合がある（再利用は「その notebook の内容で図解してよい」前提）。
+- notebook は新規作成ブランチでは `create` で1つ作成され、そのまま保持される（自動削除しない）
+- **スーパーニャンコ参照画像はローカルの `references/スーパーニャンコアイコン.png` を `--file` で追加する**（Drive からの DL は不要。`--file` 経路は拡張子から MIME を判定するため `file` コマンドにも依存しない）
+- **生成物（png・md）はプロジェクトの `draft/`（`$SAVE_DIR`）に保存する。Drive へのアップロードは行わない**（`PROJECT_DIR` が空のときのみ `outputs/` にフォールバック）
 - 画像生成は1枚あたり数分かかる場合がある
-- gws がない環境（リモート）では Drive MCP ツールを使用する
 
