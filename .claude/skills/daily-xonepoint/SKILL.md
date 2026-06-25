@@ -1,11 +1,11 @@
 ---
 name: daily-xonepoint
-description: Xのワンポイント解説投稿を1本作成し、品質チェック・保存・Git push・メール下書き作成まで自律実行する。インフォグラフィック作成はユーザー承認後に実行する。
+description: Xのワンポイント解説投稿を1本作成し、品質チェック・保存・Git push・メール下書き作成まで自律実行する。インフォグラフィック作成は画像承認後、メール下書き作成は最終確定の承認後に実行する。
 tools: Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch, mcp__claude_ai_Gmail__create_draft, mcp__mcp-gsheets__sheets_get_values, mcp__mcp-gsheets__sheets_update_values
 ---
 
 あなたはXのワンポイント科学解説投稿を制作するエージェントです。
-**以下のSTEPを順番に実行してください。ただし STEP 2（ネタ選択）と STEP 7（画像生成）は必ずユーザーの確認・選択を待つ。それ以外のSTEPは完了したら直ちに次へ進む。**
+**以下のSTEPを順番に実行してください。ただし STEP 2（ネタ選択）・STEP 6（画像生成）・STEP 7（最終確定）は必ずユーザーの確認・承認を待つ。それ以外のSTEPは完了したら直ちに次へ進む。**
 
 > このフローは `projects/w003/spec.md` の制作フローに対応する（対話実行）。spec.md を正とし、齟齬があれば spec.md を優先する。
 
@@ -188,13 +188,35 @@ check-brand が **不合格（警告）** を返した場合は、メール本�
 ⚠️ ブランド適合チェック不合格（最高得点版を採用しました。人手レビュー推奨）
 ```
 
-**STEP 5 完了後、直ちに STEP 6 へ進む（ここではユーザー入力を待たない）**
+**STEP 5 完了後、直ちに STEP 6（画像生成）へ進む（ここではユーザー入力を待たない）**
 
 ---
 
-# STEP 6: メール下書き作成
+# STEP 6: 画像生成（ユーザー承認後・**必ず停止する**）
 
-STEP 4・STEP 5 で記憶した【タイトル案】【最終原稿】【チェックサマリー】を使用して、`mcp__claude_ai_Gmail__create_draft` ツールで Gmail 下書きを作成する。
+1. STEP 5 で確定した【最終原稿】（投稿テキスト）をユーザーに提示し、**画像を生成してよいか承認を求める**。
+   **ユーザーが承認するまで画像生成しない。** 修正指示があれば反映してから再提示する。
+2. 承認後、`/visual_infographic` でインフォグラフィック画像を **5パターン**生成する。
+3. 生成画像を STEP 3 で作成したフォルダの `draft/infographic_[連番].png` に保存する。
+   - `[連番]` は 01 から始め、既に使われている番号の次を付ける（spec.md の Naming 準拠）。
+
+---
+
+# STEP 7: 最終確定（ユーザー承認・**必ず停止する**）
+
+> 投稿テキストと画像がすべて出そろった段階で、**完成として確定してよいか**をユーザーに確認する。以降の保存・Drive アップロード・Gmail 下書きは、この承認後に **確定版** に対してのみ行う。
+
+1. 最新の確定テキスト（`output/index.md` を正とする）と生成画像をユーザーに提示し、「**この内容で完成・確定してよいか**」を尋ねる。
+2. **ユーザーが明示承認するまで STEP 8 以降に進まない。** 修正指示があれば反映し、テーマフォルダ（`output/index.md` ／必要なら画像）を再保存してから再提示する。
+3. 承認が得られたら、その時点の `output/index.md` を **【確定版】** として以降のステップで使う。
+
+---
+
+# STEP 8: メール下書き作成（最終承認後・**1回だけ**）
+
+> Gmail 下書きは、STEP 7 で完成確定の承認を得た **【確定版】** に対して **1回だけ** 作成する。`create_draft` は更新・削除ができないため、確定前に作ると修正のたびに下書きが増える。**STEP 7 の承認前は絶対に作成しない。**
+
+STEP 4・STEP 5 で記憶した【タイトル案】【チェックサマリー】と、STEP 7 で確定した【確定版】本文を使用して、`mcp__claude_ai_Gmail__create_draft` ツールで Gmail 下書きを作成する。
 
 1. 以下の形式で本文を組み立てる：
    ```
@@ -208,18 +230,18 @@ STEP 4・STEP 5 で記憶した【タイトル案】【最終原稿】【チェ�
 
    [最終原稿]
 
-   （STEP 5 で確定した【最終原稿】）
+   （STEP 7 で確定した【確定版】）
 
    [/最終原稿]
 
    [投稿文]
 
-   （STEP 5 で確定した【最終原稿】）
+   （STEP 7 で確定した【確定版】）
 
    [/投稿文]
    ```
 
-2. 【最終原稿】の内容から **10〜15字以内** の短いトピック要約を生成する：
+2. 【確定版】の内容から **10〜15字以内** の短いトピック要約を生成する：
    - 「ネタの核心キーワード＋ポイント」を名詞句で表現する
    - 例: 「ミューオン 寿命の伸び」「光速 水の中で遅くなる」「電子 2重スリット」
    - 記号・助詞は最小限に。スペース区切りで2〜3語に収める
@@ -229,7 +251,7 @@ STEP 4・STEP 5 で記憶した【タイトル案】【最終原稿】【チェ�
    TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S'
    ```
 
-4. `mcp__claude_ai_Gmail__create_draft` ツールを呼び出す：
+4. `mcp__claude_ai_Gmail__create_draft` ツールを呼び出す（**STEP 7 承認後に1回だけ**）：
    - `to`: `["useakat@gmail.com"]`
    - `subject`: `"【ワンポイント解説】{短いトピック要約} YYYYMMDD HH:MM:SS"`
    - `body`: 上記で組み立てた本文
@@ -237,26 +259,15 @@ STEP 4・STEP 5 で記憶した【タイトル案】【最終原稿】【チェ�
 ## 実行ルール
 
 - **`mcp__claude_ai_Gmail__create_draft` ツールを使用する** — bash スクリプトではなく MCP ツールを直接呼び出す
+- **STEP 7 の承認前は絶対に作成しない。承認後に作成するのは1回だけ。**
 - **成功判定はレスポンスに draft ID が含まれることで行う**
 - **失敗した場合は、エラー内容をそのまま報告する**
 
-**メール下書き作成後、STEP 7 へ進む。**
-
 ---
 
-# STEP 7: 画像生成（ユーザー承認後・**必ず停止する**）
+# STEP 9: チャット履歴を保存
 
-1. STEP 5 で確定した【最終原稿】（投稿テキスト）をユーザーに提示し、**画像を生成してよいか承認を求める**。
-   **ユーザーが承認するまで画像生成しない。** 修正指示があれば反映してから再提示する。
-2. 承認後、`/visual_infographic` でインフォグラフィック画像を **5パターン**生成する。
-3. 生成画像を STEP 3 で作成したフォルダの `draft/infographic_[連番].png` に保存する。
-   - `[連番]` は 01 から始め、既に使われている番号の次を付ける（spec.md の Naming 準拠）。
-
----
-
-# STEP 8: チャット履歴を保存
-
-このセッションのやり取りを Markdown 化し、STEP 3 のテーマフォルダ直下に `chat_history.md` として保存する（次の STEP 9 で Drive にも一緒に保存される）。
+このセッションのやり取りを Markdown 化し、STEP 3 のテーマフォルダ直下に `chat_history.md` として保存する（次の STEP 10 で Drive にも一緒に保存される）。
 
 ```bash
 OUT=$(python3 scripts/save_session_history.py --title "{topic}" --slug "{slug}" 2>&1 | tail -1)
@@ -265,9 +276,9 @@ cp "$OUT" "projects/w003/YYYYMMDD_[topic]/chat_history.md"
 
 ---
 
-# STEP 9: 投稿フォルダを Drive へアップロード
+# STEP 10: 投稿フォルダを Drive へアップロード
 
-画像生成・チャット履歴保存まで終わった STEP 3 のテーマフォルダを、丸ごと Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像・chat_history.md 含む・フォルダ構造を再現）。
+メール下書き作成・チャット履歴保存まで終わった STEP 3 のテーマフォルダを、丸ごと Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像・chat_history.md 含む・フォルダ構造を再現）。
 
 ```bash
 bash scripts/drive_put_folder.sh "projects/w003/YYYYMMDD_[topic]" 1DTPEzOmWd-kWQElyBByuVHjSantTl7-g
@@ -277,16 +288,17 @@ bash scripts/drive_put_folder.sh "projects/w003/YYYYMMDD_[topic]" 1DTPEzOmWd-kWQ
 
 # 完了判定
 
-すべてのSTEP（1〜9）が完了したら、以下を報告する：
+すべてのSTEP（1〜10）が完了したら、以下を報告する：
 
 - ✅ ネタ選定完了（シードネタNo.X / 採用テーマ: 〜）
 - ✅ ネタを「使用済み」に更新完了
 - ✅ テーマフォルダ作成完了（projects/w003/YYYYMMDD_topic/）
 - ✅ 原稿作成完了（draft/draft.md・output/draft.md 保存）
 - ✅ 品質チェック完了
-- ✅ メール下書き作成完了（draft ID: xxxxxx）
 - ✅ 画像生成完了（5パターン / draft/infographic_*.png）
+- ✅ 最終確定の承認取得（STEP 7）
+- ✅ メール下書き作成完了（最終承認後・draft ID: xxxxxx）
 - ✅ チャット履歴保存完了（chat_history.md）
 - ✅ Drive アップロード完了（xClaude/projects/w003/YYYYMMDD_topic/）
 
-**STEP 2（ネタ選択）と STEP 7（画像承認）では必ずユーザーの応答を待つ。それ以外は自動で進める。**
+**STEP 2（ネタ選択）・STEP 6（画像承認）・STEP 7（最終確定）では必ずユーザーの応答を待つ。それ以外は自動で進める。**

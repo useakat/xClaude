@@ -72,13 +72,15 @@
 5. **ファクトチェック** — `/check-fact`
 6. **ブランド適合チェック** — `/check-brand projects/w003/brand.md {本文}`（採点ループ＋トンマナ調整。brand.md の採点基準で全項目 8 点以上、最大 5 回ループ）
 7. **画像生成** — `/visual_infographic` 5 パターン生成 → **ローカルの `draft/` フォルダに保存**（Drive へのアップロードは行わない）。**タイトルは `output/index.md` の冒頭1文**を使用。各プロンプトは **`projects/w003/infographic_template/` の型テンプレートを基に作成**（内容に合う 5 型を選択）
-8. **Gmail 下書き作成** — 上記「Gmail 下書き」の本文フォーマットで作成する（**`[投稿文]`〜`[/投稿文]` の閉じタグまで必須**）。画像添付があるため `bash scripts/create_gmail_draft.sh --attach output/infographic.png` を使う
-9. **チャット履歴を保存** — このセッションのやり取りを `bash scripts/save_session_history.py --title "{topic}" --slug "{slug}"` で Markdown 化し、生成物をテーマフォルダ直下に `chat_history.md` としてコピー保存する（投稿フォルダに同梱し、次の Drive アップロードで一緒に保存する）
-10. **投稿フォルダを Drive へアップロード** — テーマフォルダ `projects/w003/YYYYMMDD_[topic]/` を丸ごと `bash scripts/drive_put_folder.sh projects/w003/YYYYMMDD_[topic] 1DTPEzOmWd-kWQElyBByuVHjSantTl7-g` で Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像含む・フォルダ構造を再現）
+8. **最終確定（ユーザー承認）** — 投稿テキストと画像が出そろったら、最新の確定版（`output/index.md`）と画像を提示し「**この内容で完成・確定してよいか**」を確認する。**承認まで以降に進まない。** 修正は反映・再保存して再提示する
+9. **Gmail 下書き作成** — **フロー 8 の最終確定の承認後に、確定版で 1 回だけ**作成する。上記「Gmail 下書き」の本文フォーマット（**`[投稿文]`〜`[/投稿文]` の閉じタグまで必須**）。画像添付があるため `bash scripts/create_gmail_draft.sh --attach output/infographic.png` を使う
+10. **チャット履歴を保存** — このセッションのやり取りを `bash scripts/save_session_history.py --title "{topic}" --slug "{slug}"` で Markdown 化し、生成物をテーマフォルダ直下に `chat_history.md` としてコピー保存する（投稿フォルダに同梱し、次の Drive アップロードで一緒に保存する）
+11. **投稿フォルダを Drive へアップロード** — テーマフォルダ `projects/w003/YYYYMMDD_[topic]/` を丸ごと `bash scripts/drive_put_folder.sh projects/w003/YYYYMMDD_[topic] 1DTPEzOmWd-kWQElyBByuVHjSantTl7-g` で Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像含む・フォルダ構造を再現）
 
 ### その他
 - ネタ使用後、即座に Sheets の I 列を「使用済み」に更新する
 - 画像生成前に必ず投稿テキストをユーザーに確認してもらい、承認を取る
+- **Gmail 下書きは、投稿テキストと画像が完全に確定し、ユーザーが最終承認（フロー 8）してから 1 回だけ作成する**（承認前に作らない。`create_draft` は更新・削除不可のため、確定前に作ると修正のたびに下書きが増える）
 
 ## Verification
 - テキスト字数が 140〜300 字の範囲に収まっている
