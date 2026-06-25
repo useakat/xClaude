@@ -200,6 +200,8 @@ check-brand が **不合格（警告）** を返した場合は、メール本�
 3. 生成画像を STEP 3 で作成したフォルダの `draft/infographic_[連番].png` に保存する。
    - `[連番]` は 01 から始め、既に使われている番号の次を付ける（spec.md の Naming 準拠）。
 
+> **画像は git にコミットしない。** 投稿フォルダ内の画像（`draft/`・`output/` の `*.png`）は `.gitignore` の `/projects/w003/**/*.png` で除外されている。画像はローカルと STEP 10 の Drive アップロード（`xClaude/projects/w003`）で保存し、git にはテキスト（`*.md`）のみ残す。誤って `git add -A` 等で index に入った場合は `git rm --cached <png>` で外す。
+
 ---
 
 # STEP 7: 最終確定（ユーザー承認・**必ず停止する**）
