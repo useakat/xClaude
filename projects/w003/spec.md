@@ -21,9 +21,18 @@
 
 ## Naming
 
+### フォルダの役割（draft/ と output/ の分担）
+
+- **`draft/`** … 中間生成物を置く。原稿の生出力 `draft.md`、推敲の各版 `draft_vN.md`、**5パターンすべての図解候補**（`infographic_[連番].png`＋プロンプト `infographic_[連番].md`）。
+- **`output/`** … **最終版のみ**を置く。次の3種だけにする：
+  1. `index.md`（最終原稿の正本）
+  2. `infographic_[連番].png`（採用した最終図解1枚）
+  3. `infographic_[連番].md`（その最終図解の生成プロンプト）
+- 中間版（`draft.md`・`draft_vN.md`・不採用の図解候補）を `output/` に残さない。誤って置いた場合は `draft/` へ移す（重複時は `_vN` を付ける）。
+
 ### 下書き原稿
 
-`projects/w003/YYYYMMDD_[topic]/draft/draft.md`
+`projects/w003/YYYYMMDD_[topic]/draft/draft.md`（推敲版は `draft/draft_vN.md`）
 
 ### 生成図解
 
@@ -31,6 +40,10 @@
 
 * `[連番]` は、01 から始まり、すでに使われている番号の次の番号をつける
 * 図解プロンプトの型テンプレートは `projects/w003/infographic_template/`（`step_flow` / `compare_contrast` / `radial` / `timeline` / `pyramid` / `checklist`）に置く。`/visual_infographic` はこれらを基にプロンプトを作成する
+
+### 完成版（output/）
+
+`projects/w003/YYYYMMDD_[topic]/output/index.md`（最終原稿）／`output/infographic_[連番].png`（採用した最終図解）／`output/infographic_[連番].md`（その生成プロンプト）
 
 ### Gmail 下書き
 
@@ -93,3 +106,4 @@
 - Gmail 下書きの本文が `[投稿文]`〜`[/投稿文]` の**開き・閉じ両タグ**で囲まれている（`python3 scripts/extract_tag.py 投稿文` で非空抽出できる）
 - チャット履歴 `chat_history.md` が投稿フォルダに保存されている
 - 投稿フォルダが Drive (xClaude/projects/w003) にアップロード済み
+- **`output/` に最終版以外のファイルが無い**（`index.md`＋採用図解 `infographic_[連番].png`＋その `infographic_[連番].md` の3種のみ。中間版 `draft.md`・`draft_vN.md`・不採用図解は `draft/` にある）
