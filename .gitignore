@@ -22,5 +22,5 @@ gcp/
 /.envrc
 tmux-*.log
 
-# W003 図解の draft バリエーション画像はコミットしない（output の完成版のみ残す）
-/projects/w003/*/draft/*.png
+# W003 投稿フォルダ内の画像はコミットしない（Drive に保存する。リポジトリ肥大を防ぐ）
+/projects/w003/**/*.png
