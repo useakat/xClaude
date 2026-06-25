@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-25
+
+- **daily-xonepoint の Gmail 下書き作成を最終確定の承認後に移動** — Gmail 下書きを画像生成前の自動実行から「最終確定ゲート（STEP 7）でユーザー承認後に1回だけ作成」へ変更。`create_draft` が更新・削除不可で修正のたびに下書きが溜まる問題を解消。ステップ順を 6 画像→7 最終確定→8 Gmail→9 チャット履歴→10 Drive に再構成し spec.md も整合。[→報告書](../reports/20260625_daily_xonepoint_gmail_after_final_approval/)
+
+---
+
 ## 2026-06-22
 
 - **W003 Gmail 下書きの本文フォーマットを明文化（`[投稿文]` 閉じタグ必須化）** — `[/投稿文]` 欠落で `extract_tag.py` が本文を抽出できず cron 投稿フローで投稿されない不具合を修正。原因は spec.md step 8 の本文フォーマット未定義。spec.md に `[投稿文]…[/投稿文]` 付きフォーマット（daily-xonepoint STEP 6 準拠）を明記し、`create_gmail_draft.sh --attach` 指定・Verification を開き/閉じ両タグ必須に変更。
