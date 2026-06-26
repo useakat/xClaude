@@ -7,6 +7,13 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-26
+
+- **writer-xshort スキルを追加** — 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140字のX投稿文を生成してGmail下書きを作成する全自動スキル。ユーザー確認なし・`ソース: {シート名}[{ネタ番号}]` をメール本文に含め追跡可能。[→報告書](../reports/20260626_writer_xshort_skill/)
+- **W003 output/draft ディレクトリの役割分担を spec.md に明文化** — `output/` は最終版3種のみ（index.md・採用図解PNG・生成プロンプト）、中間版はすべて `draft/` に置くルールを spec.md の Naming セクションと Verification に追記。既存投稿フォルダ（betelgeuse）の中間版も整理。[→報告書](../reports/20260626_w003_output_draft_role/)
+
+---
+
 ## 2026-06-25
 
 - **daily-xonepoint の Gmail 下書き作成を最終確定の承認後に移動** — Gmail 下書きを画像生成前の自動実行から「最終確定ゲート（STEP 7）でユーザー承認後に1回だけ作成」へ変更。`create_draft` が更新・削除不可で修正のたびに下書きが溜まる問題を解消。ステップ順を 6 画像→7 最終確定→8 Gmail→9 チャット履歴→10 Drive に再構成し spec.md も整合。[→報告書](../reports/20260625_daily_xonepoint_gmail_after_final_approval/)
