@@ -235,3 +235,5 @@
 3. [The Computers of Voyager（Hackaday, 2024）](https://hackaday.com/2024/05/06/the-computers-of-voyager/) — ボイジャーの搭載コンピュータの構成とメモリ容量（合計およそ68キロバイト）、複雑な基本ソフトを持たず古い専用言語で機械に直接書かれている設計を解説した技術記事。
 4. [Hydrazine（Wikipedia）](https://en.wikipedia.org/wiki/Hydrazine) — ボイジャーの燃料ヒドラジンが触媒で分解して推力を得る単推薬であること、および凝固点が約2℃であることを記した百科事典項目。
 5. [NASA still maintains some of the Voyager spacecraft code in a 1970s-era programming language…（Space Daily, 2026）](https://spacedaily.com/nasa-still-maintains-some-of-the-voyager-spacecraft-code-in-a-1970s-era-programming-language-that-almost-nobody-on-earth-fully-understands-anymore-and-the-handful-of-engineers-who-do-are-now-in-their/) — ボイジャーのフライトソフトを扱える技術者がごく限られ、最後の初代ボイジャー技術者ラリー・ゾッタレリが2016年に引退したことを伝える記事。
+
+#最近の学び #眠れない夜に #ノンフィクション #エッセイ #コラム #人生 #哲学 #思考 #問い #読書 #宇宙 #NASA #ボイジャー #宇宙探査 #科学
