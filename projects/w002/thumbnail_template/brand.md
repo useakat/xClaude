@@ -1,7 +1,7 @@
 # brand — note 記事サムネイル
 
 執念の物語 note 記事のサムネイル（1280×670px）のトーン・ビジュアル指針。
-例画像: `../../reference/thumbnails/`（venera7 / SOHO）から抽出。
+例画像: `../../reference/thumbnails/` から抽出。
 
 ## Inherits
 - `../../../../brand.md`（共通ブランド定義：人格・温度感・フォント・共通NG）

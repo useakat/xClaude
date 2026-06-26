@@ -117,8 +117,8 @@ B7. **文字配分込み構成【対話③】** — 決定タイトル＋構成�
     3. 誤った出典は差し替え・不足出典は追加して draft.md を更新する
     4. 変更内容を output/index.md の `## 参考情報` にも反映する
 11. **画像生成**: `/visual_section-planner` スキルを使い、各H2セクションに配置する図解・イメージ・写真画像の案を立て、`draft/image-plan.md` に保存する。ユーザーが1案に絞り込んだのち `/visual_section-imager` で実画像を生成する。
-12. **サムネイル生成**: `thumbnail/` フォルダで以下を行う。
-    1. **インプット確認**: `thumbnail/plan.md`（目的・KPI・失格条件）、`thumbnail/brand.md`（サムネのトーン）、`draft/draft.md`（記事内容）、`thumbnail/design-brief_template.md`（テンプレ）を読む。雛形が無ければ既存記事の `thumbnail/` からコピーして用意する。
+12. **サムネイル生成**: `thumbnail/` フォルダで以下を行う。フォルダが無ければ`w002/thumbnail_template` をthumbnailという名前でコピーして用意する。
+    1. **インプット確認**: `thumbnail/plan.md`（目的・KPI・失格条件）、`thumbnail/brand.md`（サムネのトーン）、`draft/draft.md`（記事内容）、`thumbnail/design-brief_template.md`（テンプレ）を読む。
     2. **デザイン指示書**: テンプレに沿って `thumbnail/design-brief.md` を作成する（媒体分類・目的・KPI・文字階層・構図・配色・禁止事項・レビュー基準）。記事タイトルをメイン／サブコピーに割り付け、強調キーワードを1箇所だけ黄色に決める。
     3. **生成プロンプト**: design-brief をもとに `thumbnail/nanobanana-prompt.md` を作成する。被写体、**画面内に入れる日本語文字（崩さず正確に）**、レイアウト・視線誘導、配色、Negative prompt を含める。
     4. **画像生成（手動・外部）**: Claude は `nanobanana-prompt.md` を提示するところまで担当する。**ユーザーが nano banana（Gemini 2.5 Flash Image）で画像を生成し、`output/images/thumbnail.png`（1280×672px）として保存する**。リポジトリに生成ツールが無いため Claude は画像生成自体を実行しない。日本語が崩れる場合はサブコピーを短縮するか、生成後にテキストを重ねる。
