@@ -68,7 +68,8 @@
       "Bash(gws drive files get *)",
       "WebSearch",
       "WebFetch",
-      "mcp__*"
+      "mcp__*",
+      "Bash(git diff *)"
     ]
   },
   "hooks": {
