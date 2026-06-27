@@ -69,7 +69,9 @@
       "WebSearch",
       "WebFetch",
       "mcp__*",
-      "Bash(git diff *)"
+      "Bash(git diff *)",
+      "Bash(python3 - *)",
+      "Bash(head *)"
     ]
   },
   "hooks": {
