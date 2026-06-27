@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-27
+
+- **z01 プロジェクト定義と汎用 writer-xpost スキルを追加** — 140字テキストのみ・高頻度でX反応を観測する z01（X短文投稿）プロジェクトを新設し、テーマ＋文字数範囲から「フォーカス→冒頭フック→本文」を全自動生成する汎用 writer `writer-xpost` を追加。z01 spec.md は本文生成を `/writer-xpost` に委譲。[→報告書](../reports/20260627_z01_writer_xpost_skill/)
+
+---
+
 ## 2026-06-26
 
 - **writer-xshort スキルを追加** — 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140字のX投稿文を生成してGmail下書きを作成する全自動スキル。ユーザー確認なし・`ソース: {シート名}[{ネタ番号}]` をメール本文に含め追跡可能。[→報告書](../reports/20260626_writer_xshort_skill/)
