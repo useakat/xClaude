@@ -1,10 +1,10 @@
 ---
 name: writer-xshort
-description: 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140文字のX投稿文を作成してGmail下書きを作成する。ユーザー確認なし全自動。
+description: 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140文字の短文原稿を作成してGmail下書きに保存する（投稿は行わず下書き作成のみ）。ユーザー確認なし全自動。
 tools: Bash, mcp__mcp-gsheets__sheets_get_values
 ---
 
-4シートからランダムにネタを1件選び、135-140文字のX投稿文を生成してGmail下書きを作成する。**全STEPを自動で実行する。ユーザーの確認・承認は不要。**
+4シートからランダムにネタを1件選び、135-140文字の短文原稿を生成してGmail下書きに保存する。**投稿は一切行わず、Gmail 下書きを作成するだけ。全STEPを自動で実行する。ユーザーの確認・承認は不要。**
 
 ---
 
