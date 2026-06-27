@@ -4,6 +4,9 @@
     "GOOGLE_PROJECT_ID": "charming-well-464402-u4"
   },
   "permissions": {
+    "additionalDirectories": [
+      "/root/xClaude"
+    ],
     "deny": [
       "Write(.claude/settings.local.json)",
       "Edit(.claude/settings.local.json)"
