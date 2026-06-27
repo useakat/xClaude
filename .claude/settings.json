@@ -65,22 +65,7 @@
       "Bash(gws drive files get *)",
       "WebSearch",
       "WebFetch",
-      "mcp__mcp-gsheets__sheets_check_access",
-      "mcp__mcp-gsheets__sheets_get_metadata",
-      "mcp__mcp-gsheets__sheets_get_values",
-      "mcp__mcp-gsheets__sheets_batch_get_values",
-      "mcp__mcp-gsheets__sheets_append_values",
-      "mcp__mcp-gsheets__sheets_update_values",
-      "mcp__claude_ai_Gmail__search_threads",
-      "mcp__claude_ai_Gmail__get_thread",
-      "mcp__claude_ai_Gmail__create_draft",
-      "mcp__claude_ai_Gmail__list_drafts",
-      "mcp__claude_ai_Gmail__create_label",
-      "mcp__claude_ai_Gmail__list_labels",
-      "mcp__claude_ai_Gmail__label_thread",
-      "mcp__claude_ai_Gmail__unlabel_thread",
-      "mcp__claude_ai_Google_Drive__search_files",
-      "mcp__claude_ai_Google_Drive__read_file_content"
+      "mcp__*"
     ]
   },
   "hooks": {
