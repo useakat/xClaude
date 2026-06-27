@@ -74,18 +74,17 @@ python3 -c "import random, sys; n=int(sys.argv[1]); print(random.randint(0, n-1)
 - **【ネタ番号】**: 選択行の A 列値（No または ID）
 - **【ネタ内容】**: 選択行の主要テキスト（上表の「使用する内容列」を結合）
 
-#### STEP 3: 135〜140 字の投稿文生成
-`brand.md`（Writing Rules / Do Not）に準拠した X 投稿文を生成する。
-- 構成: フック → 核心 → 締めの 3 パート。
-- ソース別の書き方は `brand.md`「ソース別の書き方」に従う。
+#### STEP 3: 投稿文生成（`/writer-xpost` を使う）
+投稿文の作成は `/writer-xpost` スキルに委ねる。STEP 2 で選んだネタをテーマとして、文字数範囲 135〜140 字を指定して呼び出す：
 
-生成後、python3 で実文字数を計測する:
-
-```bash
-python3 -c "text='''（生成した投稿文）'''; print(len(text))"
+```
+/writer-xpost
+テーマ: {STEP 2 の【ネタ内容】}
+文字数: 135〜140字
 ```
 
-135〜140 字の範囲外なら再生成する（最大 2 回。2 回試みても外れる場合は最も近いものを採用）。
+- `/writer-xpost` は本作業フォルダ（z01）の `spec.md`・`plan.md`・`brand.md` を読み込み、投稿文を作成する。
+- `/writer-xpost` の出力（フォーカス候補・冒頭フック候補・投稿内容）のうち、**投稿内容** を投稿文として採用する。本フローでは draft への保存は不要（Gmail 下書きが成果物のため、保存はスキップしてよい）。
 
 #### STEP 4: Gmail 下書き作成
 1. 本文を `/tmp/xshort_mail.txt` に Write する（Naming の本文フォーマット）。
