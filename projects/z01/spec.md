@@ -40,39 +40,39 @@
 
 ### 制作フロー（この spec.md を正として実行する。`/writer-xshort` スキルは廃止予定で使わない）
 
-#### STEP 1: 4 シートのデータ取得
-SS1 から以下 4 シートを取得する（ヘッダー行を除く全行が対象。ステータスによるフィルタは行わない）:
-
-```
-sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!A:K")
-sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="noteNeta!A:G")
-sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="newsTopics!A:G")
-sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="thoughts!A:C")
-```
-
-各シートから使用する列:
-
-| シート       | ID/No 列 | 使用する内容列                      |
-|-------------|----------|-------------------------------------|
-| onePointNeta | A(No)    | B(テーマ), E(仕組みのポイント)      |
-| noteNeta     | A(No)    | B(タイトル案), E(危機の内容)        |
-| newsTopics   | A(No)    | C(タイトル), D(概要), E(ポイント)   |
-| thoughts     | A(ID)    | B(内容)                             |
-
-ヘッダー行（1 行目）を除いた全データ行を 1 つのプールとして把握する。
-
-#### STEP 2: ランダム選択
-4 シートの全データ行を 1 つのプールに集約し、python3 でランダムな 1 件を選ぶ:
+#### STEP 1: ソースシートをランダムに決定
+SS1 の 4 シート（`onePointNeta` / `noteNeta` / `newsTopics` / `thoughts`）から、**等確率で 1 シートをランダムに選ぶ**：
 
 ```bash
-python3 -c "import random, sys; n=int(sys.argv[1]); print(random.randint(0, n-1))" {全行数}
+python3 -c "import random; print(random.choice(['onePointNeta','noteNeta','newsTopics','thoughts']))"
 ```
 
-全行数 N =（onePointNeta 行数）+（noteNeta 行数）+（newsTopics 行数）+（thoughts 行数）。
-取得したインデックスがどのシートの何行目かを特定し、以下を記憶する:
-- **【ソースシート】**: シート名（例: `onePointNeta`）
-- **【ネタ番号】**: 選択行の A 列値（No または ID）
-- **【ネタ内容】**: 選択行の主要テキスト（上表の「使用する内容列」を結合）
+- シートを先に等確率で選ぶことで、行数の多いシート（noteNeta など）への偏りを避け、各シートが均等に選ばれるようにする。
+- 選んだシート名を **【ソースシート】** として記憶する。
+
+#### STEP 2: 選んだシートからランダムに 1 行を取得
+1. 選んだシートのデータだけを取得する（ステータスによるフィルタは行わない）。範囲は次のとおり：
+
+   | シート       | 取得範囲          | ID/No 列 | 使用する内容列                      |
+   |-------------|-------------------|----------|-------------------------------------|
+   | onePointNeta | `onePointNeta!A:K` | A(No)    | B(テーマ), E(仕組みのポイント)      |
+   | noteNeta     | `noteNeta!A:G`     | A(No)    | B(タイトル案), E(危機の内容)        |
+   | newsTopics   | `newsTopics!A:G`   | A(No)    | C(タイトル), D(概要), E(ポイント)   |
+   | thoughts     | `thoughts!A:C`     | A(ID)    | B(内容)                             |
+
+   ```
+   sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="{選んだシートの取得範囲}")
+   ```
+
+2. ヘッダー行（1 行目）を除いたデータ行数を数え、その範囲で **ランダムに 1 行**を選ぶ：
+
+   ```bash
+   python3 -c "import random, sys; n=int(sys.argv[1]); print(random.randint(0, n-1))" {データ行数}
+   ```
+
+3. 選んだ行について以下を記憶する：
+   - **【ネタ番号】**: 選択行の A 列値（No または ID）
+   - **【ネタ内容】**: 選択行の主要テキスト（上表の「使用する内容列」を結合）
 
 #### STEP 3: 投稿文生成（`/writer-xpost` を使う）
 投稿文の作成は `/writer-xpost` スキルに委ねる。STEP 2 で選んだネタをテーマとして、文字数範囲 135〜140 字を指定して呼び出す：
