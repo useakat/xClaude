@@ -69,9 +69,14 @@
       "WebSearch",
       "WebFetch",
       "mcp__*",
+      "mcp__mcp-gsheets",
+      "mcp__mcp-gsheets__sheets_get_values",
       "Bash(git diff *)",
       "Bash(python3 - *)",
-      "Bash(head *)"
+      "Bash(head *)",
+      "Skill(writer-xpost)",
+      "Skill(check-fact)",
+      "Skill(check-brand)"
     ]
   },
   "hooks": {
