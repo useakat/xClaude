@@ -86,7 +86,27 @@ python3 -c "import random, sys; n=int(sys.argv[1]); print(random.randint(0, n-1)
 - `/writer-xpost` は本作業フォルダ（z01）の `spec.md`・`plan.md`・`brand.md` を読み込み、投稿文を作成する。
 - `/writer-xpost` の出力（フォーカス候補・冒頭フック候補・投稿内容）のうち、**投稿内容** を投稿文として採用する。本フローでは draft への保存は不要（Gmail 下書きが成果物のため、保存はスキップしてよい）。
 
-#### STEP 4: Gmail 下書き作成
+#### STEP 4: ファクトチェック（`/check-fact` を使う）
+採用した投稿文を `/check-fact` でファクトチェックする（テキスト入力モード）：
+
+```
+/check-fact {STEP 3 で採用した投稿文}
+```
+
+- 明確な事実誤り（数値・固有名詞・年代・因果の誤り）があれば訂正を反映する。
+- 訂正で字数が 135〜140 字から外れた場合は、`brand.md` の削る対象優先度に従って範囲内に収め直す。
+
+#### STEP 5: ブランド適合チェック（`/check-brand` を使う）
+ファクトチェック済みの投稿文を `/check-brand` でブランド適合チェックする：
+
+```
+/check-brand brand.md {ファクトチェック済みの投稿文}
+```
+
+- `brand.md` の採点基準で全項目が基準を満たすまで該当箇所を書き直す（採点ループ）。最後にトンマナ調整する。
+- 事実は変えない。字数 135〜140 字を維持する。
+
+#### STEP 6: Gmail 下書き作成
 1. 本文を `/tmp/xshort_mail.txt` に Write する（Naming の本文フォーマット）。
 2. 件名用トピック要約を生成する（投稿文の核心キーワードを名詞句で **10〜15 字以内**。例:「スマホGPS 相対性理論」）。
 3. JST 日時を取得する: `TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S'`
@@ -101,7 +121,7 @@ bash scripts/create_gmail_draft.sh \
 
 成功判定は `✓ 下書き作成完了` の出力で行う。
 
-#### STEP 5: 完了報告
+#### STEP 7: 完了報告
 以下を出力して終了する:
 
 ```
@@ -123,6 +143,8 @@ bash scripts/create_gmail_draft.sh \
 
 ## Verification
 - テキスト字数が **135〜140 字**に収まっている（`python3 -c "print(len('''…'''))"` で確認）。
+- `/check-fact` を通過している（事実誤りが訂正済み）。
+- `/check-brand` のブランド適合チェックを通過している（採点基準を満たす）。
 - `brand.md`（Writing Rules / Do Not）と矛盾しない。
 - `plan.md` の目的（反応観測・高頻度・テキストのみ）に沿う。
 - Gmail 下書きの本文が `[投稿文]`〜`[/投稿文]` の開き・閉じ両タグで囲まれている。
