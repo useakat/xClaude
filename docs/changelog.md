@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **z01 短文投稿の cron 自動化（投稿スクリプト新設・writer-xshort 周辺調整）** — `【X短文投稿】` 下書きを X 投稿する `scripts/run_xshort_post.sh`（`post_from_email.sh … z01 x_post_short.log`）を新設し crontab に毎日 7:00/13:00/19:00 を登録。下書き作成用 `run_xshort_draft.sh` も追加（手動用）、`writer-xshort` 説明文を「投稿せず下書き作成のみ」と正確化。[→報告書](../reports/20260627_z01_xshort_post_cron/)
 - **z01 プロジェクト定義と汎用 writer-xpost スキルを追加** — 140字テキストのみ・高頻度でX反応を観測する z01（X短文投稿）プロジェクトを新設し、テーマ＋文字数範囲から「フォーカス→冒頭フック→本文」を全自動生成する汎用 writer `writer-xpost` を追加。z01 spec.md は本文生成を `/writer-xpost` に委譲。[→報告書](../reports/20260627_z01_writer_xpost_skill/)
+- **W003 ネタ選定を「シートから5候補提示→ユーザー選択」に変更（日 mod 3 分野グループ廃止）** — spec.md フロー step 2 から `日 mod 3` の分野自動決定を廃止し、未使用ネタから分野を問わず PE01 に刺さる5候補を提示してユーザーが選ぶ方式に。補充トリガーも未使用10件未満→20件未満に変更。[→報告書](../reports/20260627_w003_neta_selection_user_choice/)
 
 ---
 
