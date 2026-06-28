@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-28
+
+- **z01 ネタ選定を onePointNeta 除外・noteNeta:newsTopics:thoughts 2:2:1 加重に変更** — spec.md STEP 1 のソースシート選択を等確率4シートから 3 シートの重み付きランダム（`random.choices(weights=[2,2,1])`）に変更し、onePointNeta を選定対象外に。STEP 2 取得範囲テーブルからも onePointNeta 行を削除。[→報告書](../reports/20260628_z01_neta_selection_weighted/)
+
+---
+
 ## 2026-06-27
 
 - **z01 短文投稿の cron 自動化（投稿スクリプト新設・writer-xshort 周辺調整）** — `【X短文投稿】` 下書きを X 投稿する `scripts/run_xshort_post.sh`（`post_from_email.sh … z01 x_post_short.log`）を新設し crontab に毎日 7:00/13:00/19:00 を登録。下書き作成用 `run_xshort_draft.sh` も追加（手動用）、`writer-xshort` 説明文を「投稿せず下書き作成のみ」と正確化。[→報告書](../reports/20260627_z01_xshort_post_cron/)
