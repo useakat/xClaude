@@ -76,7 +76,9 @@
       "Bash(head *)",
       "Skill(writer-xpost)",
       "Skill(check-fact)",
-      "Skill(check-brand)"
+      "Skill(check-brand)",
+      "Bash(git pull *)",
+      "Bash(TZ=* date *)"
     ]
   },
   "hooks": {
