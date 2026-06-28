@@ -42,6 +42,9 @@ fi
 
 cd "$REPO_ROOT"
 
+# 結果ステータス: none=投稿対象なし / posted=投稿成功 / failed=投稿試行失敗
+RESULT="none"
+
 LOOP_COUNT=0
 MAX_LOOPS=20
 
@@ -125,6 +128,7 @@ print(ts[-1]['id'] if ts else '')
     log "[DRY RUN] ラベル付与・INBOX解除・record_output はスキップ"
     log "[DRY RUN] 1 ループで終了（同じメールが何度も処理されないように）"
     rm -f "$TMP_IMAGE"
+    RESULT="posted"
     break
   fi
   # ---- DRY RUN 分岐おわり ----
@@ -145,6 +149,7 @@ print(ts[-1]['id'] if ts else '')
   if [ $POST_RC -ne 0 ] || [ -z "$TWEET_URL" ]; then
     log "X 投稿失敗。ループ終了 (thread:$THREAD_ID)"
     rm -f "$TMP_IMAGE"
+    RESULT="failed"
     break
   fi
 
@@ -169,6 +174,7 @@ print(ts[-1]['id'] if ts else '')
 
   # 1件処理したら終了（複数メールが溜まっていても最古の1件のみ投稿）
   log "1件処理完了。ループ終了"
+  RESULT="posted"
   break
 done
 
@@ -176,4 +182,13 @@ if [ $LOOP_COUNT -ge $MAX_LOOPS ]; then
   log "ループ上限 ($MAX_LOOPS) に到達したため終了"
 fi
 
-log "完了"
+# 終了コード: 0=投稿成功 / 20=投稿対象なし（フォールバック合図）/ 1=投稿試行失敗
+case "$RESULT" in
+  posted) EXIT_CODE=0 ;;
+  none)   EXIT_CODE=20 ;;
+  failed) EXIT_CODE=1 ;;
+  *)      EXIT_CODE=1 ;;
+esac
+
+log "完了 (result=$RESULT, exit=$EXIT_CODE)"
+exit $EXIT_CODE
