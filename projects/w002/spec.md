@@ -40,11 +40,16 @@
 ### 本文下書き
 `YYYY-MM-DD_<短いタイトル>/draft/draft.md`
 
+### 画像プラン
+- 案出し（各セクション複数案）: `YYYY-MM-DD_<短いタイトル>/draft/image-plan.md`
+- 確定案（各セクション1案・ユーザー選択後）: `YYYY-MM-DD_<短いタイトル>/draft/image-plan_final.md`
+
 ### 画像・生成プロンプト案
-- `YYYY-MM-DD_<短いタイトル>/draft/images/<H2セクションタイトル>_<画像種類>_<連番>.md`
-- `YYYY-MM-DD_<短いタイトル>/draft/images/<H2セクションタイトル>_<画像種類>_<連番>.png`
+- プロンプト（種類ごとに1ファイル）: `YYYY-MM-DD_<短いタイトル>/draft/images/<H2セクションタイトル>_<画像種類>.md`
+- 画像: `YYYY-MM-DD_<短いタイトル>/draft/images/<H2セクションタイトル>_<画像種類>_<連番>.png`
 
 * 画像種類：図解 / イメージ / 写真
+* 図解は NotebookLM で各3枚生成（連番 01〜03）。イメージは外部の画像生成AI（nano banana 等）でユーザーが生成する。写真案はスキップ。
 
 ### 公開原稿
 `YYYY-MM-DD_<短いタイトル>/output/index.md`
@@ -61,8 +66,8 @@
 - URL は必須（DOI があれば優先。リンク先が開けること）。
 
 ### 画像・生成プロンプト
-- `YYYY-MM-DD_<短いタイトル>/output/images/<H2セクションタイトル>_<画像種類>.md`
-- `YYYY-MM-DD_<短いタイトル>/output/images/<H2セクションタイトル>_<画像種類>.png`
+- プロンプト: `YYYY-MM-DD_<短いタイトル>/output/images/<H2セクションタイトル>_<画像種類>.md`
+- 画像: `YYYY-MM-DD_<短いタイトル>/output/images/<H2セクションタイトル>_<画像種類>.png`
 
 ### サムネイル
 作業フォルダ: `YYYY-MM-DD_<短いタイトル>/thumbnail/`
@@ -116,7 +121,11 @@ B7. **文字配分込み構成【対話③】** — 決定タイトル＋構成�
     2. 不審な出典・確認できない記述について WebSearch / WebFetch で実 URL と実記載内容を検証する
     3. 誤った出典は差し替え・不足出典は追加して draft.md を更新する
     4. 変更内容を output/index.md の `## 参考情報` にも反映する
-11. **画像生成**: `/visual_section-planner` スキルを使い、各H2セクションに配置する図解・イメージ・写真画像の案を立て、`draft/image-plan.md` に保存する。ユーザーが1案に絞り込んだのち `/visual_section-imager` で実画像を生成する。
+11. **画像生成**:
+    1. **案出し**: `/visual_section-planner` スキルを使い、各H2セクションに配置する図解・イメージ・写真画像の案を立て、`draft/image-plan.md` に保存する（各セクション複数案）。
+    2. **案の選択【対話】**: `draft/image-plan.md` の内容をユーザーに表示し、**各セクションどの案を採用するかを決めてもらう**。`image-plan.md` は3案のまま残す（上書きしない）。
+    3. **確定案の保存**: 選ばれた案（各セクション1案）を、`image-plan.md` と同じ `## H2 → 種類 — 説明` の構造で `draft/image-plan_final.md` に保存する。種類（図解／イメージ／写真）も残す。
+    4. **実画像化**: `/visual_section-imager`（入力 `draft/image-plan_final.md`）を実行する。同スキルはまず図解・イメージのプロンプトを `draft/images/` に**ファイル保存し（図解は `projects/visual_prompts/` のテンプレに沿う＝内容に応じて用途別テンプレを自動選択、合わなければ汎用 `infographic_template.md`。本文はチャットに表示せず保存先パスだけ伝える）**、ユーザーがファイルで内容を確認し**承認してから**、図解画像を NotebookLM で各3枚生成する。イメージ画像はスキルでは生成せず、保存したプロンプトファイルで**ユーザーが外部の画像生成AI（nano banana 等）で生成する**。写真案はスキップ。
 12. **サムネイル生成**: `thumbnail/` フォルダで以下を行う。フォルダが無ければ`w002/thumbnail_template` をthumbnailという名前でコピーして用意する。
     1. **インプット確認**: `thumbnail/plan.md`（目的・KPI・失格条件）、`thumbnail/brand.md`（サムネのトーン）、`draft/draft.md`（記事内容）、`thumbnail/design-brief_template.md`（テンプレ）を読む。
     2. **デザイン指示書**: テンプレに沿って `thumbnail/design-brief.md` を作成する（媒体分類・目的・KPI・文字階層・構図・配色・禁止事項・レビュー基準）。記事タイトルをメイン／サブコピーに割り付け、強調キーワードを1箇所だけ黄色に決める。
