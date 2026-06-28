@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **z01 ネタ選定を onePointNeta 除外・noteNeta:newsTopics:thoughts 2:2:1 加重に変更** — spec.md STEP 1 のソースシート選択を等確率4シートから 3 シートの重み付きランダム（`random.choices(weights=[2,2,1])`）に変更し、onePointNeta を選定対象外に。STEP 2 取得範囲テーブルからも onePointNeta 行を削除。[→報告書](../reports/20260628_z01_neta_selection_weighted/)
 - **定時投稿に X短文フォールバックを追加＋21:00 に短文投稿 cron** — `post_from_email.sh` に終了コード（0=成功/20=対象なし/1=失敗）を導入し、6/12/17 のワンポイント・質問回答・X長文ラッパーを「対象なし(20)なら z01短文を代替投稿」に変更。crontab は z01専用投稿を 7/13/19 から 21:00 へ置換。[→報告書](../reports/20260628_post_fallback_xshort/)
+- **z01 Gmail 下書きに `[最終原稿]` ブロックを追加** — 本文フォーマットで `[投稿文]` の前に `[最終原稿]…[/最終原稿]` を追加し、両ブロックに同一投稿文を入れる形に変更（`[最終原稿]`＝人間可読の確定稿、`[投稿文]`＝cron `extract_tag.py` 抽出用）。STEP 6・Verification も整合。spec.md のみの変更で `extract_tag.py` は無変更で安全。
 
 ---
 
