@@ -53,13 +53,13 @@
 ### 制作フロー（この spec.md を正として実行する。`/writer-xshort` スキルは廃止予定で使わない）
 
 #### STEP 1: ソースシートをランダムに決定
-SS1 の 4 シート（`onePointNeta` / `noteNeta` / `newsTopics` / `thoughts`）から、**等確率で 1 シートをランダムに選ぶ**：
+SS1 の 3 シート（`noteNeta` / `newsTopics` / `thoughts`）から、**2:2:1 の重み付きで 1 シートをランダムに選ぶ**（`onePointNeta` は選定対象外）：
 
 ```bash
-python3 -c "import random; print(random.choice(['onePointNeta','noteNeta','newsTopics','thoughts']))"
+python3 -c "import random; print(random.choices(['noteNeta','newsTopics','thoughts'], weights=[2,2,1])[0])"
 ```
 
-- シートを先に等確率で選ぶことで、行数の多いシート（noteNeta など）への偏りを避け、各シートが均等に選ばれるようにする。
+- `onePointNeta` を除外し、物語型（noteNeta）・ニュース（newsTopics）・思想（thoughts）を 2:2:1 の割合で出す方針。先にシートを重み付きで選ぶことで、行数の多いシートへの偏りを避けつつ狙った配分にする。
 - 選んだシート名を **【ソースシート】** として記憶する。
 
 #### STEP 2: 選んだシートからランダムに 1 行を取得
@@ -67,7 +67,6 @@ python3 -c "import random; print(random.choice(['onePointNeta','noteNeta','newsT
 
    | シート       | 取得範囲          | ID/No 列 | 使用する内容列                      |
    |-------------|-------------------|----------|-------------------------------------|
-   | onePointNeta | `onePointNeta!A:K` | A(No)    | B(テーマ), E(仕組みのポイント)      |
    | noteNeta     | `noteNeta!A:G`     | A(No)    | B(タイトル案), E(危機の内容)        |
    | newsTopics   | `newsTopics!A:G`   | A(No)    | C(タイトル), D(概要), E(ポイント)   |
    | thoughts     | `thoughts!A:C`     | A(ID)    | B(内容)                             |

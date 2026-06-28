@@ -78,7 +78,10 @@
       "Skill(check-fact)",
       "Skill(check-brand)",
       "Bash(git pull *)",
-      "Bash(TZ=* date *)"
+      "Bash(TZ=* date *)",
+      "Bash(cd *)",
+      "Bash(echo *)",
+      "Bash(git -C *xClaude push*)"
     ]
   },
   "hooks": {
