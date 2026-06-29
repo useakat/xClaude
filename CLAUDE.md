@@ -253,6 +253,7 @@ bash scripts/gws_auth.sh [--scopes "追加スコープ"]
 - **Sheets の読み書きは mcp-gsheets MCP ツールを使う**（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）
   - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics）
   - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what / outputs）
+  - **mcp-gsheets の認証は `GOOGLE_SERVICE_ACCOUNT_KEY`（JSON文字列）で行う。`settings.json` / `.mcp.json` の env に `GOOGLE_APPLICATION_CREDENTIALS`（ファイルパス）を書かない・混入させない**（Google Auth Library が最優先で掴み、`${HOME}` 未展開パスで認証失敗する。過去に複数回再発）。起動時の混入対策として `scripts/mcp_gsheets_launch.sh` が `GOOGLE_APPLICATION_CREDENTIALS` を unset してから mcp-gsheets を起動する。
 
 #### Drive ファイルダウンロードのルール（トークン節約）
 - **ローカル環境**: `bash scripts/drive_get.sh <file-id> <output-path>`
