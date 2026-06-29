@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-06-29
 
 - **X短文投稿(z01)の outputs 記録に neta_id / thought_id を追加** — `record_output.py` を argparse 化し `--neta-id`/`--thought-id` を追加（outputs の D/E 列）。`post_from_email.sh` が投稿後に本文の `ソース: {シート}[{番号}]` を抽出し、thoughts→thought_id（ID）/ それ以外→neta_id（`noteNeta[33]` のシート名付き）で記録。`ソース:` 行が無い他フローは従来どおり。[→報告書](../reports/20260629_outputs_neta_thought_id/)
+- **ワンポイント解説(W003)の X投稿時に outputs へ neta_id 記録を復活** — `post_from_email.sh` のネタ抽出を「`[ネタID]` タグ → 無ければ `ソース:` 行」の2マーカー対応に拡張。W003 下書きの `[ネタID]onePointNeta[{No}][/ネタID]` から neta_id＝`onePointNeta[N]`（過去形式と一致）を記録。z01 の挙動は不変。
 
 ---
 
