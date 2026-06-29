@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-06-29
+
+- **X短文投稿(z01)の outputs 記録に neta_id / thought_id を追加** — `record_output.py` を argparse 化し `--neta-id`/`--thought-id` を追加（outputs の D/E 列）。`post_from_email.sh` が投稿後に本文の `ソース: {シート}[{番号}]` を抽出し、thoughts→thought_id（ID）/ それ以外→neta_id（`noteNeta[33]` のシート名付き）で記録。`ソース:` 行が無い他フローは従来どおり。[→報告書](../reports/20260629_outputs_neta_thought_id/)
+
+---
+
 ## 2026-06-28
 
 - **z01 ネタ選定を onePointNeta 除外・noteNeta:newsTopics:thoughts 2:2:1 加重に変更** — spec.md STEP 1 のソースシート選択を等確率4シートから 3 シートの重み付きランダム（`random.choices(weights=[2,2,1])`）に変更し、onePointNeta を選定対象外に。STEP 2 取得範囲テーブルからも onePointNeta 行を削除。[→報告書](../reports/20260628_z01_neta_selection_weighted/)

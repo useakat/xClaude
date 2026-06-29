@@ -167,8 +167,20 @@ print(ts[-1]['id'] if ts else '')
     --params "{\"userId\":\"me\",\"id\":\"$THREAD_ID\"}" \
     --json "{\"addLabelIds\":[\"$POSTED_LABEL_ID\"],\"removeLabelIds\":[\"INBOX\"]}" 2>/dev/null >/dev/null
 
-  # 投稿記録
-  python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" 2>&1 | tee -a "$LOG_PATH"
+  # 投稿記録（本文に「ソース: {シート}[{番号}]」があれば neta_id/thought_id も記録）
+  #   thoughts → thought_id 列に ID のみ（例 T007）
+  #   noteNeta/newsTopics 等 → neta_id 列にシート名付きトークン（例 noteNeta[33]）
+  SRC_ARGS=$(printf '%s' "$BODY" | python3 -c "
+import re, sys, shlex
+m = re.search(r'ソース[:：]\s*([A-Za-z]+)\[([^\]]+)\]', sys.stdin.read())
+if m:
+    sheet, _id = m.group(1), m.group(2)
+    if sheet == 'thoughts':
+        print('--thought-id ' + shlex.quote(_id))
+    else:
+        print('--neta-id ' + shlex.quote(f'{sheet}[{_id}]'))
+" 2>/dev/null || true)
+  eval python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" $SRC_ARGS 2>&1 | tee -a "$LOG_PATH"
 
   rm -f "$TMP_IMAGE"
 
