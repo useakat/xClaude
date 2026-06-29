@@ -167,12 +167,16 @@ print(ts[-1]['id'] if ts else '')
     --params "{\"userId\":\"me\",\"id\":\"$THREAD_ID\"}" \
     --json "{\"addLabelIds\":[\"$POSTED_LABEL_ID\"],\"removeLabelIds\":[\"INBOX\"]}" 2>/dev/null >/dev/null
 
-  # 投稿記録（本文に「ソース: {シート}[{番号}]」があれば neta_id/thought_id も記録）
+  # 投稿記録（本文のネタマーカーがあれば neta_id/thought_id も記録）
+  #   マーカー: [ネタID]{シート}[{番号}][/ネタID]（W003 等） または ソース: {シート}[{番号}]（z01）
   #   thoughts → thought_id 列に ID のみ（例 T007）
-  #   noteNeta/newsTopics 等 → neta_id 列にシート名付きトークン（例 noteNeta[33]）
+  #   それ以外（onePointNeta/noteNeta/newsTopics）→ neta_id 列にシート名付きトークン（例 onePointNeta[15]）
   SRC_ARGS=$(printf '%s' "$BODY" | python3 -c "
 import re, sys, shlex
-m = re.search(r'ソース[:：]\s*([A-Za-z]+)\[([^\]]+)\]', sys.stdin.read())
+body = sys.stdin.read()
+m = re.search(r'\[ネタID\]\s*([A-Za-z]+)\[([^\]]+)\]\s*\[/ネタID\]', body)
+if not m:
+    m = re.search(r'ソース[:：]\s*([A-Za-z]+)\[([^\]]+)\]', body)
 if m:
     sheet, _id = m.group(1), m.group(2)
     if sheet == 'thoughts':
