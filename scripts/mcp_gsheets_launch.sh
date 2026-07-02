@@ -12,4 +12,7 @@ if [ -z "${GOOGLE_SERVICE_ACCOUNT_KEY:-}" ] && [ -f "$KEY_FILE" ]; then
   export GOOGLE_SERVICE_ACCOUNT_KEY="$(cat "$KEY_FILE")"
 fi
 
-exec npx -y mcp-gsheets@latest
+# @latest は spawn/reconnect のたびにレジストリ問い合わせを強制し、レジストリ不通時にハングして
+# Claude Code 側の初期化タイムアウト（-32000 / Failed to reconnect）を招く。
+# バージョン固定 + --prefer-offline でキャッシュ優先起動にし、再接続を高速・堅牢にする。
+exec npx --prefer-offline -y mcp-gsheets@1.8.1
