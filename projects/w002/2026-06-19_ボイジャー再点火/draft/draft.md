@@ -127,7 +127,7 @@
 
 ボイジャーの頭脳は、1970年代の代物だ。
 
-今のスマートウォッチにも、はるかに及ばない。機体に積まれたメモリは、全部あわせても、わずか68キロバイト [3]。スマホの写真、たった1枚分にも満たない。そもそも、OS、つまり機械全体をとりまとめる基本ソフトすら積んでいない。プログラムは、機械にじかに語りかける、古い専用言語で書かれていた [1]。
+今のスマートウォッチにも、はるかに及ばない。機体に積まれたメモリは、全部あわせても、わずか68キロバイト [6]。スマホの写真、たった1枚分にも満たない。そもそも、OS、つまり機械全体をとりまとめる基本ソフトすら積んでいない。プログラムは、機械にじかに語りかける、古い専用言語で書かれていた [1]。
 
 普通に考えれば、これは「時代遅れ」であり、弱点だ。
 
@@ -232,6 +232,7 @@
 
 1. [Voyager 1 Fires Up Thrusters After 37 Years（NASA Jet Propulsion Laboratory, 2017）](https://www.jpl.nasa.gov/news/voyager-1-fires-up-thrusters-after-37-years/) — 2017年11月28日に4本のTCMスラスタを37年ぶりに噴射したこと、最終使用が1980年11月8日の土星フライバイであること、10ミリ秒のパフ、結果が片道19時間35分かけてゴールドストーンのDSNアンテナへ届いたこと、チーフエンジニア クリス・ジョーンズが旧式のアセンブラ言語で書かれたソフトを精査して安全に試験したこと、各スラスタのヒーターに乏しい電力を割く必要があったこと、推進担当 トッド・バーバーの所感。
 2. [Voyager 1 Team Accomplishes Tricky Thruster Swap（NASA, 2024）](https://science.nasa.gov/blogs/voyager/2024/09/10/voyager-1-team-accomplishes-tricky-thruster-swap/) — 燃料タンクのゴム製ダイアフラム由来のシリカ（二酸化ケイ素）で燃料管が内径0.25mmから0.035mm（髪の毛の約半分）へ狭窄したこと、2002年以前から姿勢制御スラスタの系統切替を重ねてきた経緯、冷えたスラスタは点火で損傷する恐れがあること、メインヒーターを最大1時間オフにして温めに必要な電力を捻出したこと、2018年にTCMスラスタへ切り替え2024年に元の系統へ戻した経緯、スーザン・ドッドの所感。
-3. [The Computers of Voyager（Hackaday, 2024）](https://hackaday.com/2024/05/06/the-computers-of-voyager/) — ボイジャーの搭載コンピュータは CCS・AACS（各18ビット・4,096語×2）と FDS（16ビット・8,198語×2）から成り、メモリ技術は放射線に強いメッキ線（plated-wire）メモリで、合計メモリ容量がおよそ68キロバイトであること。複雑な基本ソフト（OS）を持たないベアメタル構成で、プログラムが古い専用のアセンブリ言語で機械に直接書かれていること。
+3. [The Computers of Voyager（Hackaday, 2024）](https://hackaday.com/2024/05/06/the-computers-of-voyager/) — ボイジャーの CCS・AACS が各18ビット・4キロワードの冗長なメッキ線（plated-wire）不揮発メモリを持つこと、複雑な基本ソフト（OS）を前提としないベアメタルに近い構成で、機械に直接プログラムを書く古い設計であることを解説した技術記事。
 4. [Hydrazine（Wikipedia）](https://en.wikipedia.org/wiki/Hydrazine) — ヒドラジンが、1種類の推進剤を触媒で分解して推力を得る単推薬（モノプロペラント）として宇宙機のスラスタに使われること、および凝固点（融点）が約2℃であること。
 5. [NASA still maintains some of the Voyager spacecraft code in a 1970s-era programming language…（Space Daily, 2026）](https://spacedaily.com/nasa-still-maintains-some-of-the-voyager-spacecraft-code-in-a-1970s-era-programming-language-that-almost-nobody-on-earth-fully-understands-anymore-and-the-handful-of-engineers-who-do-are-now-in-their/) — ボイジャーのフライトソフトが1970年代の専用アセンブリ言語で書かれ、それをカスタムハードウェア上で流暢に扱える技術者が限られること、最後の初代ボイジャー技術者ラリー・ゾッタレリが2016年（80歳）に引退したこと。
+6. [Voyager - Frequently Asked Questions（NASA Science）](https://science.nasa.gov/mission/voyager/frequently-asked-questions/) — 搭載コンピュータが3種×2台（Computer Command System＝18ビット・4096語×2、Flight Data System＝16ビット・8198語×2、Attitude and Articulation Control System＝18ビット・4096語×2）で構成され、6台合計で約32Kワード＝**約68KB**であることを明記（原文 "Total number of words among the six computers is about 32K." / "that's a total of about 68KB"）。
