@@ -232,8 +232,9 @@
 
 1. [Voyager 1 Fires Up Thrusters After 37 Years（NASA Jet Propulsion Laboratory, 2017）](https://www.jpl.nasa.gov/news/voyager-1-fires-up-thrusters-after-37-years/) — ボイジャー1号が2017年11月28日に予備のTCMスラスタを37年ぶりに噴射し、姿勢制御の延命に成功したことを伝えるNASA/JPLの公式ニュース。
 2. [Voyager 1 Team Accomplishes Tricky Thruster Swap（NASA, 2024）](https://science.nasa.gov/blogs/voyager/2024/09/10/voyager-1-team-accomplishes-tricky-thruster-swap/) — 燃料管のシリカ詰まりの仕組みと、2024年にきわどい電力やりくりで再びスラスタを切り替え通信を維持したNASAの公式ブログ記事。
-3. [The Computers of Voyager（Hackaday, 2024）](https://hackaday.com/2024/05/06/the-computers-of-voyager/) — ボイジャーの搭載コンピュータの構成とメモリ容量（合計およそ68キロバイト）、複雑な基本ソフトを持たず古い専用言語で機械に直接書かれている設計を解説した技術記事。
+3. [The Computers of Voyager（Hackaday, 2024）](https://hackaday.com/2024/05/06/the-computers-of-voyager/) — ボイジャーの搭載コンピュータ（CCS・AACS のメッキ線メモリ 4キロワード冗長 等）と、OS を前提としないベアメタルに近い設計を解説した技術記事。
 4. [Hydrazine（Wikipedia）](https://en.wikipedia.org/wiki/Hydrazine) — ボイジャーの燃料ヒドラジンが触媒で分解して推力を得る単推薬であること、および凝固点が約2℃であることを記した百科事典項目。
 5. [NASA still maintains some of the Voyager spacecraft code in a 1970s-era programming language…（Space Daily, 2026）](https://spacedaily.com/nasa-still-maintains-some-of-the-voyager-spacecraft-code-in-a-1970s-era-programming-language-that-almost-nobody-on-earth-fully-understands-anymore-and-the-handful-of-engineers-who-do-are-now-in-their/) — ボイジャーのフライトソフトを扱える技術者がごく限られ、最後の初代ボイジャー技術者ラリー・ゾッタレリが2016年に引退したことを伝える記事。
+6. [Voyager - Frequently Asked Questions（NASA Science）](https://science.nasa.gov/mission/voyager/frequently-asked-questions/) — 搭載コンピュータ3種×2台の構成と、6台合計で約32Kワード＝約68KB というメモリ容量を明記した NASA 公式の FAQ。
 
 #最近の学び #眠れない夜に #ノンフィクション #エッセイ #コラム #人生 #哲学 #思考 #問い #読書 #宇宙 #NASA #ボイジャー #宇宙探査 #科学
