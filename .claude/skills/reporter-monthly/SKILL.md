@@ -419,6 +419,8 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 
 # 完了報告
 
+まず以下のサマリーを表示する：
+
 ```
 ✅ 月報作成完了: [month_label]
    X フォロワー: [fw_start] → [fw_end]（+[fw_diff]）
@@ -427,4 +429,4 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
    保存先: docs/reports/monthly/[month_id].md
 ```
 
-保存したファイルを Read ツールで読み込み、内容をそのまま表示する。
+**続けて、保存した月報ファイルを Read ツールで読み込み、月報の全文（front matter を除く本文すべて）をそのまま表示する。** サマリーや抜粋・箇条書きへの要約に置き換えず、保存したフォーマットのまま月報全体をユーザーに見せること。ユーザーが確認・修正判断をその場でできるようにするのが目的。
