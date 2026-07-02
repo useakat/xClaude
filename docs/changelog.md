@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-07-02
 
 - **z01 短文原稿作成をローカル cron → Claude routine（クラウド）へ移行** — 8:00 の下書き作成を routine（`trig_018f2gJJwYQ46UifKPtXjq27`・毎朝8:00 JST・Default 環境・opus・Gmail コネクタ）へ移行。クラウドでは mcp-gsheets（`.mcp.json`＋Default 環境の `GOOGLE_SERVICE_ACCOUNT_KEY`）でシート読取、Gmail 下書きは Gmail コネクタ経由。ローカル cron の `run_xshort_draft.sh` 行を撤去（スクリプトは残置）。[→報告書](../reports/20260702_z01_draft_cron_to_routine/)
+- **z01 短文投稿ネタの重複回避（短文最終使用日列＋選定フィルタ）を追加** — noteNeta/newsTopics に「短文最終使用日」列を追加し、ステータス≠ボツかつ未使用/90日以上前の行のみを候補にネタ選定するよう変更。候補0件時は下書きを作らずネタ枯渇報告のみで終了。[→報告書](../reports/20260702_z01_xshort_neta_reuse_filter/)
 
 ---
 
