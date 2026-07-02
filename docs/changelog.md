@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-03
+
+- **mcp-gsheets 起動を prefer-offline + 版固定にして再接続タイムアウト(-32000)を解消** — `npx -y mcp-gsheets@latest` が spawn/reconnect のたびにレジストリ問い合わせを強制し、不通時に60秒ハングして Claude Code 初期化タイムアウト(-32000)を招いていた。`npx --prefer-offline -y mcp-gsheets@1.8.1` に変更しキャッシュ優先起動化（レジストリ遮断下でも1.3秒で起動を確認）。[→報告書](../reports/20260703_mcp_gsheets_prefer_offline_pin/)
+
+---
+
 ## 2026-07-02
 
 - **z01 短文原稿作成をローカル cron → Claude routine（クラウド）へ移行** — 8:00 の下書き作成を routine（`trig_018f2gJJwYQ46UifKPtXjq27`・毎朝8:00 JST・Default 環境・opus・Gmail コネクタ）へ移行。クラウドでは mcp-gsheets（`.mcp.json`＋Default 環境の `GOOGLE_SERVICE_ACCOUNT_KEY`）でシート読取、Gmail 下書きは Gmail コネクタ経由。ローカル cron の `run_xshort_draft.sh` 行を撤去（スクリプトは残置）。[→報告書](../reports/20260702_z01_draft_cron_to_routine/)
