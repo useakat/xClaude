@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260702_trivia_hook_5axis_criteria_session/)
+← [変更ログへ](../changelog/) ｜ [セッション履歴→](../../history/20260702_trivia_hook_5axis_criteria/)
 
 ## 背景・動機
 
