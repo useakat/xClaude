@@ -11,6 +11,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **z01 短文原稿作成をローカル cron → Claude routine（クラウド）へ移行** — 8:00 の下書き作成を routine（`trig_018f2gJJwYQ46UifKPtXjq27`・毎朝8:00 JST・Default 環境・opus・Gmail コネクタ）へ移行。クラウドでは mcp-gsheets（`.mcp.json`＋Default 環境の `GOOGLE_SERVICE_ACCOUNT_KEY`）でシート読取、Gmail 下書きは Gmail コネクタ経由。ローカル cron の `run_xshort_draft.sh` 行を撤去（スクリプトは残置）。[→報告書](../reports/20260702_z01_draft_cron_to_routine/)
 - **z01 短文投稿ネタの重複回避（短文最終使用日列＋選定フィルタ）を追加** — noteNeta/newsTopics に「短文最終使用日」列を追加し、ステータス≠ボツかつ未使用/90日以上前の行のみを候補にネタ選定するよう変更。候補0件時は下書きを作らずネタ枯渇報告のみで終了。[→報告書](../reports/20260702_z01_xshort_neta_reuse_filter/)
+- **W003 ネタ補充フローに追加日・分野の記入を必須化** — onePointNeta シートへのネタ補充時、追加日（J列）・分野（K列）の記入をハードゲート運用として必須化。`research-trivia` の追記手順と spec.md フロー1に明記。[→報告書](../reports/20260702_w003_neta_restock_date_field_required/)
+- **research-trivia / research_trivia-source のネタ発掘条件を brand.md 冒頭フック5軸準拠に更新** — W003分野別パフォーマンス集計で物理が宇宙を上回ったことを受け、ネタ発掘条件に「直感的比較数字」「パワーワード」「体感優先の身近さ接続」を必須条件として追加。NotebookLM への実プロンプトも同期。[→報告書](../reports/20260702_trivia_hook_5axis_criteria/)
 
 ---
 

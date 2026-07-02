@@ -9,6 +9,8 @@ sidebar:
 
 > 2026-07-02 のセッション作業ログ。
 
+← [報告書へ戻る](../../reports/20260702_w003_neta_restock_date_field_required/)
+
 ---
 
 ## よーん *(19:26 JST)*
