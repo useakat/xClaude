@@ -14,5 +14,6 @@ fi
 
 # @latest は spawn/reconnect のたびにレジストリ問い合わせを強制し、レジストリ不通時にハングして
 # Claude Code 側の初期化タイムアウト（-32000 / Failed to reconnect）を招く。
-# バージョン固定 + --prefer-offline でキャッシュ優先起動にし、再接続を高速・堅牢にする。
-exec npx --prefer-offline -y mcp-gsheets@1.8.1
+# バージョン固定で再接続を高速・堅牢にする。
+# --prefer-offline はキャッシュが不完全だと ETARGET で起動失敗するため付けない。
+exec npx -y mcp-gsheets@1.8.1
