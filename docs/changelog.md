@@ -13,6 +13,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **z01 短文投稿ネタの重複回避（短文最終使用日列＋選定フィルタ）を追加** — noteNeta/newsTopics に「短文最終使用日」列を追加し、ステータス≠ボツかつ未使用/90日以上前の行のみを候補にネタ選定するよう変更。候補0件時は下書きを作らずネタ枯渇報告のみで終了。[→報告書](../reports/20260702_z01_xshort_neta_reuse_filter/)
 - **W003 ネタ補充フローに追加日・分野の記入を必須化** — onePointNeta シートへのネタ補充時、追加日（J列）・分野（K列）の記入をハードゲート運用として必須化。`research-trivia` の追記手順と spec.md フロー1に明記。[→報告書](../reports/20260702_w003_neta_restock_date_field_required/)
 - **research-trivia / research_trivia-source のネタ発掘条件を brand.md 冒頭フック5軸準拠に更新** — W003分野別パフォーマンス集計で物理が宇宙を上回ったことを受け、ネタ発掘条件に「直感的比較数字」「パワーワード」「体感優先の身近さ接続」を必須条件として追加。NotebookLM への実プロンプトも同期。[→報告書](../reports/20260702_trivia_hook_5axis_criteria/)
+- **セクション画像ワークフローを design-brief フェーズ＋テンプレ合成方式に刷新** — planner が `image/plan.md`・`image/brand.md` を読んで案出し、imager を「image-plan_final 入力→design-brief 承認→プロンプト承認→生成」の3フェーズ化。図解は `infographic_template.md` を全体ベースに構成を `infographic_layout_*` から選択（合わなければ自由記述）。セクション画像用 `image/brand.md`・`plan.md` を整備し W002 で検証。[→報告書](../reports/20260702_section_image_designbrief_workflow/)
+- **gws OAuth 再認証（2026-07-02）** — Drive/Gmail トークン失効（invalid_grant）のため再認証。`token_cache.json` をクリア。
 
 ---
 
