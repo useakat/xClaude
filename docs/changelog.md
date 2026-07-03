@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **mcp-gsheets 起動を prefer-offline + 版固定にして再接続タイムアウト(-32000)を解消** — `npx -y mcp-gsheets@latest` が spawn/reconnect のたびにレジストリ問い合わせを強制し、不通時に60秒ハングして Claude Code 初期化タイムアウト(-32000)を招いていた。`npx --prefer-offline -y mcp-gsheets@1.8.1` に変更しキャッシュ優先起動化（レジストリ遮断下でも1.3秒で起動を確認）。[→報告書](../reports/20260703_mcp_gsheets_prefer_offline_pin/)
 - **mcp-gsheets 起動スクリプトのパスを cwd 非依存の絶対パス化して projects/ 配下からの -32000 を解消** — `.mcp.json` の相対パス `scripts/mcp_gsheets_launch.sh` が、セッション cwd が `projects/w001` のとき解決できず即終了→再接続タイムアウト(-32000)を招いていた。`bash -c 'exec bash "$HOME/xClaude/scripts/mcp_gsheets_launch.sh"'` に変更し、どのディレクトリから起動しても繋がるよう是正。[→報告書](../reports/20260703_mcp_gsheets_launch_abspath/)
+- **mcp-gsheets 起動を prefer-offline → ローカルインストール方式に変更（フレッシュコンテナの ETARGET 回避）** — フレッシュなクラウドコンテナで `--prefer-offline` が陳腐化した npm メタデータキャッシュを掴み、transitive 依存 `qs@^6.15.2` を解決できず `ETARGET` で install ごと失敗しサーバ未起動（"still connecting"）になっていた。バージョン固定のローカル prefix install＋`node` 直接起動に変更（初回のみ online 取得、以降は npm/レジストリ非依存で起動）。[→報告書](../reports/20260703_mcp_gsheets_local_install/)
 
 ---
 
