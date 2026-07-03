@@ -11,9 +11,12 @@ description: Claude Code で使用できるスキルの一覧
 |---|---|
 | [draft_xstory](/xClaude/skills/draft_xstory/) | X長文ストーリー投稿（what_id W001）のネタ選定から下書き作成、ファクトチェック、トンマナチェック、Gmail下書き作成まで自律実行する |
 | [note-quick](/xClaude/skills/note-quick/) | note-quick スキル |
+| [plan-xnote-funnel](/xClaude/skills/plan-xnote-funnel/) | ネタ選定の直後に、X長文（W001）→ note（W002）の導線を前提とした「分割設計」を対話で確定する上流スキル。X長文でどこまで書くか／有料 note の“売り”に何を温存するか／セルフリプ文面まで決め、共有ブリーフ funnel-brief.md に保存する。本文は書かず、W001・W002 の制作に委譲する。 |
 | [writer-xnews](/xClaude/skills/writer-xnews/) | writer-xnews スキル |
 | [writer-xonepoint](/xClaude/skills/writer-xonepoint/) | X用ワンポイント解説投稿を1本作成する。受け取ったネタ情報をもとに投稿原稿を生成する。 |
+| [writer-xpost](/xClaude/skills/writer-xpost/) | X投稿用の汎用 writer。投稿テーマと文字数範囲を受け取り、作業フォルダの spec.md/plan.md/brand.md に従って「フォーカス決定→冒頭フック決定→本文作成」を全自動でこなし、X投稿（冒頭フック→本文→締め）を1本作成する。ユーザー確認なし。 |
 | [writer-xqa](/xClaude/skills/writer-xqa/) | X 上の質問への回答投稿を 1 本作成する。長文化を避け、3 段以内・400 字以内に圧縮し、超える内容は note 誘導で切り上げる。 |
+| [writer-xshort](/xClaude/skills/writer-xshort/) | 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140文字の短文原稿を作成してGmail下書きに保存する（投稿は行わず下書き作成のみ）。ユーザー確認なし全自動。 |
 | [writer-xstory](/xClaude/skills/writer-xstory/) | 宇宙探査や科学発見の執念の物語をテーマにした、X長文投稿を日本語で作成する。テーマを受け取り、Xの投稿文を出す。 |
 
 ## レポート生成
@@ -67,8 +70,8 @@ description: Claude Code で使用できるスキルの一覧
 | [notebooklm](/xClaude/skills/notebooklm/) | notebooklm スキル |
 | [sync-to-drive](/xClaude/skills/sync-to-drive/) | sync-to-drive スキル |
 | [visual_infographic](/xClaude/skills/visual_infographic/) | visual_infographic スキル |
-| [visual_section-imager](/xClaude/skills/visual_section-imager/) | draft/image-plan.md（H2ごとに1案へ絞り込み済み）を入力に、各画像の説明を notebook-id.md の NotebookLM notebook に渡して、図解画像はinfographic指示・イメージ画像は情景画像指示（文字なし）で各3枚生成し、draft/images に <H2タイトル>_<画像種類>_<連番>.png と使用プロンプト .md を保存する。生成失敗時は自動リトライ。写真画像案はスキップ。 |
-| [visual_section-planner](/xClaude/skills/visual_section-planner/) | 記事の本文を入力に、H2セクションごとに画像案を3つ考え、各画像（図解／イメージ／写真Web取得）の説明を、セクション分けしたmarkdown形式で出力し、draft/image-plan.md に保存する。生成プロンプトは書かず画像の説明のみ。 |
+| [visual_section-imager](/xClaude/skills/visual_section-imager/) | draft/image-plan_final.md（H2ごとに1案へ確定済み）を入力に、まず image/plan.md・image/brand.md を読み、写真以外の各セクションについて design-brief（image/design-brief_template.md がテンプレ・design-brief_example.md が例）を作成してユーザー承認を得る。承認後、その design-brief をもとに図解・イメージのプロンプトを作成して再度承認を得る。図解プロンプトは infographic_template.md を全体ベースに「図解の構成・レイアウト」を infographic_layout_* から選択（合わなければ自由記述）。最終承認後、図解は NotebookLM で各3枚生成、イメージは外部の画像生成AI（nano banana 等）で生成してもらう。写真画像案はスキップ。 |
+| [visual_section-planner](/xClaude/skills/visual_section-planner/) | 記事の本文を入力に、プロジェクトの image/plan.md・image/brand.md（セクション画像の目的・トーン）を読んでから、H2セクションごとに画像案を3つ考え、各画像（図解／イメージ／写真Web取得）の説明を、セクション分けしたmarkdown形式で出力し、draft/image-plan.md に保存する。生成プロンプトは書かず画像の説明のみ。 |
 
 ## 運用・記録
 
