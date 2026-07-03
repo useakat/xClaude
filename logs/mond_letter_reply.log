@@ -1907,3 +1907,35 @@ STEP 1 の検索結果が 0 件でした。
 
 対象メールなし。処理を終了します。
 [2026-07-03 00:00:19 JST] mond-letter-reply 完了
+[2026-07-03 06:00:01 JST] mond-letter-reply 開始
+検索結果は 0 件でした。
+
+**対象メールなし。処理を終了します。**
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` に一致する未処理レターはありませんでした。
+[2026-07-03 06:00:14 JST] mond-letter-reply 完了
+[2026-07-03 12:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+
+未処理の mond レターはありませんでした。
+[2026-07-03 12:00:16 JST] mond-letter-reply 完了
+[2026-07-03 18:00:01 JST] mond-letter-reply 開始
+STEP 1 の検索結果が 0 件でした。
+
+```
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: []
+```
+
+対象メールなし。処理を終了します。
+[2026-07-03 18:00:14 JST] mond-letter-reply 完了
