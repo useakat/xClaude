@@ -11,6 +11,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **mcp-gsheets 起動を prefer-offline + 版固定にして再接続タイムアウト(-32000)を解消** — `npx -y mcp-gsheets@latest` が spawn/reconnect のたびにレジストリ問い合わせを強制し、不通時に60秒ハングして Claude Code 初期化タイムアウト(-32000)を招いていた。`npx --prefer-offline -y mcp-gsheets@1.8.1` に変更しキャッシュ優先起動化（レジストリ遮断下でも1.3秒で起動を確認）。[→報告書](../reports/20260703_mcp_gsheets_prefer_offline_pin/)
 - **mcp-gsheets 起動スクリプトのパスを cwd 非依存の絶対パス化して projects/ 配下からの -32000 を解消** — `.mcp.json` の相対パス `scripts/mcp_gsheets_launch.sh` が、セッション cwd が `projects/w001` のとき解決できず即終了→再接続タイムアウト(-32000)を招いていた。`bash -c 'exec bash "$HOME/xClaude/scripts/mcp_gsheets_launch.sh"'` に変更し、どのディレクトリから起動しても繋がるよう是正。[→報告書](../reports/20260703_mcp_gsheets_launch_abspath/)
+- **X長文→note 導線の分割設計フロー（plan-xnote-funnel）を追加** — ネタ選定直後に「X長文の範囲／有料note の売り／セルフリプ文面」を一体で設計する上流スキルを新設し、共有ブリーフ `funnel-brief.md` を起点にする協調モードC を W001/W002 spec に追加（note 先行→X長文投稿の導線前提。既存 modeA/B は併存）。[→報告書](../reports/20260703_plan_xnote_funnel_split_design/)
+- **z01 に固有名詞の平易化・一次情報主義・読みやすさ採点を追加** — z01 brand/spec と check-fact に、カタログ名・型番・専門単位の言い換え表、数値の一次情報主義（丸め値を鵜呑みにせず論文・計算で裏取り）、読みやすさ採点（「の」3連・無読点35字超・連体修飾2段超のシグナル）を追加。[→報告書](../reports/20260703_z01_plain_naming_primary_source/)
 
 ---
 
