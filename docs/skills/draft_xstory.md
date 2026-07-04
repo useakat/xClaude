@@ -162,7 +162,7 @@ STEP 2 の【選定ネタ】タイトル案・STEP 4 の【最終原稿】【チ
 
 3. `mcp__claude_ai_Gmail__create_draft` ツールを呼び出す：
    - `to`: `["useakat@gmail.com"]`
-   - `subject`: `"【Xストーリー】YYYYMMDD HH:MM:SS の原稿ができました"`
+   - `subject`: `"【X長文】YYYYMMDD HH:MM:SS の原稿ができました"`
    - `body`: 上記で組み立てた本文
 
 ## 実行ルール
