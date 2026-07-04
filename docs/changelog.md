@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-04
+
+- **mcp-gsheets のコールドインストールを SessionStart hook で事前ウォームし、routine 実行時の接続失敗を解消** — フレッシュなクラウドコンテナで npm install(~10秒)が MCP 接続タイムアウトに間に合わず routine で Sheets 系ツールが未接続になっていた事象を、SessionStart hook（リモート限定・同期実行）での事前 install（コンテナキャッシュへの焼き込み）で解消。`$HOME` 決め打ちパスの潜在バグも修正。[→報告書](../reports/20260704_mcp_gsheets_sessionstart_prewarm/)
+
+---
+
 ## 2026-07-03
 
 - **mcp-gsheets 起動を prefer-offline + 版固定にして再接続タイムアウト(-32000)を解消** — `npx -y mcp-gsheets@latest` が spawn/reconnect のたびにレジストリ問い合わせを強制し、不通時に60秒ハングして Claude Code 初期化タイムアウト(-32000)を招いていた。`npx --prefer-offline -y mcp-gsheets@1.8.1` に変更しキャッシュ優先起動化（レジストリ遮断下でも1.3秒で起動を確認）。[→報告書](../reports/20260703_mcp_gsheets_prefer_offline_pin/)
