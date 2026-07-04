@@ -104,7 +104,7 @@ note を読みたくなる導入1文と [note URL]
     - **モードC**: 新規に作らず、`funnel-brief.md` の `## セルフリプ` 確定文面を使う。`[note URL]` は **note 公開後の実 URL に差し替える**（未公開なら `[note URL]` のまま残す）。
 12. **保存**: 本編・セルフリプ・ハッシュタグを `output/index.md` に保存する。
 13. **ネタのステータス更新（モードAのみ）**: 使用した【選定ネタ】の L列を「使用済み」に更新する（`sheets_update_values`、対象は【行番号】の L列）。
-14. **X投稿用メール下書き作成**: 確定した本編と添付画像を、**X長文投稿の cron が拾える体裁**で Gmail 下書きにする。cron は `scripts/post_from_email.sh` ＋ `x-post-from-email` エージェントが、件名キーワード `【Xストーリー】` で未処理メールを検索し、本文の `[投稿文]…[/投稿文]` を投稿文として、添付画像（PNG）を画像として X に投稿する仕組み（体裁は `/draft_xstory` STEP 6 に準拠）。
+14. **X投稿用メール下書き作成**: 確定した本編と添付画像を、**X長文投稿の cron が拾える体裁**で Gmail 下書きにする。cron は `scripts/post_from_email.sh`（`scripts/run_xlong_post.sh` 経由）が、件名キーワード `【X長文】` で未処理メールを検索し、本文の `[投稿文]…[/投稿文]` を投稿文として、添付画像（PNG）を画像として X に投稿する仕組み（体裁は `/draft_xstory` STEP 6 に準拠）。
     - まず本文を一時ファイルに書き出す（`[投稿文]` には **本編＝`output/index.md` の「## 本編」（末尾ハッシュタグ込み）** を入れる。cron が投稿するのはこの1ポストのみ）：
       ```
       [note_url]
@@ -120,7 +120,7 @@ note を読みたくなる導入1文と [note URL]
       cd {投稿フォルダ}
       bash $(git rev-parse --show-toplevel)/scripts/create_gmail_draft.sh \
         --to useakat@gmail.com \
-        --subject "【Xストーリー】$(TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S') の原稿ができました" \
+        --subject "【X長文】$(TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S') の原稿ができました" \
         --body-file /tmp/w001_xstory_body.txt \
         --attach output/thumbnail.png
       ```
@@ -142,7 +142,7 @@ note を読みたくなる導入1文と [note URL]
 - **（モードC）** セルフリプがブリーフの `## セルフリプ` 確定文面（note の売りを1文で予告）で、note 公開後に実 URL へ差し替えられている
 - **（モードC）** `funnel-brief-ref.md` にブリーフの相対パスが記録されている
 - （モードA）使用したネタの `noteNeta` シート L列が「使用済み」に更新されている
-- X投稿用 Gmail 下書きが作成されている（件名 `【Xストーリー】…`、本文に `[投稿文]…[/投稿文]`＝本編、`scripts/create_gmail_draft.sh --attach` で `output/thumbnail.png` を添付済み）
+- X投稿用 Gmail 下書きが作成されている（件名 `【X長文】…`、本文に `[投稿文]…[/投稿文]`＝本編、`scripts/create_gmail_draft.sh --attach` で `output/thumbnail.png` を添付済み）
 - note 誘導が本編に入っておらず、セルフリプ定型で分離されている
 - 末尾に関連ハッシュタグがある
 - `brand.md` と矛盾しない（煽り・上から目線・出典なき捏造・明示的 CTA がない）
