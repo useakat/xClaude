@@ -92,6 +92,10 @@
         "hooks": [
           {
             "type": "command",
+            "command": "[ \"$CLAUDE_CODE_REMOTE\" = \"true\" ] && bash \"$CLAUDE_PROJECT_DIR/scripts/mcp_gsheets_install.sh\" >/dev/null 2>&1; true"
+          },
+          {
+            "type": "command",
             "command": "pkill -f '.venv/bin/python -u server.py' 2>/dev/null; [ -d \"$CLAUDE_PROJECT_DIR/xmcp\" ] && cd \"$CLAUDE_PROJECT_DIR/xmcp\" && nohup .venv/bin/python -u server.py > /tmp/xmcp.log 2>&1 &",
             "async": true
           }

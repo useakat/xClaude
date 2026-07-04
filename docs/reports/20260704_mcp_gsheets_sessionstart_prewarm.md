@@ -47,6 +47,15 @@ sidebar:
 - `mcp_gsheets_launch.sh` 実行 → 正常に `Google Sheets MCP server running on stdio`。
 - SessionStart hook の実行文自体（`CLAUDE_CODE_REMOTE=true`/未設定の両方）を単体で動作確認し、ガードが機能することを確認。
 
+### 追記（2026-07-04 リポジトリへ実装反映）
+
+初回のコミット `2dc31a0` は `docs:`（報告書・変更ログ）**のみ**で、上記「実施内容」の実装（`mcp_gsheets_install.sh` 新規・`mcp_gsheets_launch.sh` 修正・`.claude/settings.json` の SessionStart 追加）が**コミットされていなかった**。そのため次セッション（z01 routine）でも事前ウォームが効かず、mcp-gsheets が未接続のままだった（暫定回避として `GOOGLE_SERVICE_ACCOUNT_KEY` から Sheets API を直叩きして原稿作成は完走）。本日、設計どおりの実装を実際に起こしてコミットした。再検証結果：
+
+- コールドキャッシュから `mcp_gsheets_install.sh` → **9.5秒**で install 完了、ログ記録あり。
+- ウォーム再実行 → **0.01秒**で「already warm」判定、即 exit。
+- `mcp_gsheets_launch.sh` → install 済みを確認後 `Google Sheets MCP server running on stdio` 起動確認。
+- `.claude/settings.json` の JSON バリデーション：OK。SessionStart ガード（remote=true で install 実行／未設定で skip）を確認。
+
 ## 今後の課題
 
 - 新方式が実際の routine セッションで効くかは、次回以降のセッション（SessionStart hook 実行によりコンテナキャッシュが更新された後）でしか確認できない。次回失敗した場合は `logs/mcp_gsheets_launch.log` のタイムスタンプで切り分ける。
