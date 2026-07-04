@@ -59,14 +59,42 @@ print(json.dumps({
     'q': f\"subject:{os.environ['SUBJECT']} in:inbox -label:投稿済み\",
     'maxResults': 50,
 }))")
-  THREADS_JSON=$(gws gmail users threads list --params "$PARAMS" 2>/dev/null)
-
-  THREAD_ID=$(echo "$THREADS_JSON" | python3 -c "
+  # gws クエリを実行し「クエリ失敗」と「正常に0件」を区別する。
+  # 失敗（JSONなし/不正JSON/APIエラー応答）は最大3回リトライし、それでもダメなら
+  # 中断（RESULT=failed=exit 1）にして無言スキップ（=対象なし扱い）を防ぐ。
+  THREAD_ID=""
+  QUERY_OK=0
+  for attempt in 1 2 3; do
+    RAW=$(gws gmail users threads list --params "$PARAMS" 2>/dev/null)
+    THREAD_ID=$(printf '%s' "$RAW" | python3 -c "
 import json, sys
-d = json.load(sys.stdin)
+data = sys.stdin.read()
+i = data.find('{')          # 先頭の非JSON行（keyring 情報等）を飛ばす
+if i < 0:
+    sys.exit(2)             # JSON が無い → クエリ失敗
+try:
+    d = json.loads(data[i:])
+except Exception:
+    sys.exit(2)             # 不正 JSON → クエリ失敗
+if isinstance(d, dict) and 'error' in d:
+    sys.exit(3)             # API エラー応答 → クエリ失敗
 ts = d.get('threads', [])
-print(ts[-1]['id'] if ts else '')
+print(ts[-1]['id'] if ts else '')   # 空出力 = 正常に0件
 ")
+    rc=$?
+    if [ $rc -eq 0 ]; then
+      QUERY_OK=1
+      break
+    fi
+    log "Gmail クエリ失敗 (rc=$rc, 試行 $attempt/3)。5秒後にリトライ..."
+    sleep 5
+  done
+
+  if [ $QUERY_OK -ne 1 ]; then
+    log "⚠ Gmail クエリが3回とも失敗。投稿対象の有無を判定できないため中断（要確認・投稿は行わない）。"
+    RESULT="failed"
+    break
+  fi
 
   if [ -z "$THREAD_ID" ]; then
     log "投稿対象メールなし。ループ終了"
