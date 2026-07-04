@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-04
+
+- **mcp-gsheets のコールドインストールを SessionStart hook で事前ウォームし、routine 実行時の接続失敗を解消** — フレッシュなクラウドコンテナで npm install(~10秒)が MCP 接続タイムアウトに間に合わず routine で Sheets 系ツールが未接続になっていた事象を、SessionStart hook（リモート限定・同期実行）での事前 install（コンテナキャッシュへの焼き込み）で解消。`$HOME` 決め打ちパスの潜在バグも修正。[→報告書](../reports/20260704_mcp_gsheets_sessionstart_prewarm/)
+
+---
+
 ## 2026-07-03
 
 - **mcp-gsheets 起動を prefer-offline + 版固定にして再接続タイムアウト(-32000)を解消** — `npx -y mcp-gsheets@latest` が spawn/reconnect のたびにレジストリ問い合わせを強制し、不通時に60秒ハングして Claude Code 初期化タイムアウト(-32000)を招いていた。`npx --prefer-offline -y mcp-gsheets@1.8.1` に変更しキャッシュ優先起動化（レジストリ遮断下でも1.3秒で起動を確認）。[→報告書](../reports/20260703_mcp_gsheets_prefer_offline_pin/)
@@ -58,20 +64,3 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-06-26
 
 - **writer-xshort スキルを追加** — 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140字のX投稿文を生成してGmail下書きを作成する全自動スキル。ユーザー確認なし・`ソース: {シート名}[{ネタ番号}]` をメール本文に含め追跡可能。[→報告書](../reports/20260626_writer_xshort_skill/)
-- **W003 output/draft ディレクトリの役割分担を spec.md に明文化** — `output/` は最終版3種のみ（index.md・採用図解PNG・生成プロンプト）、中間版はすべて `draft/` に置くルールを spec.md の Naming セクションと Verification に追記。既存投稿フォルダ（betelgeuse）の中間版も整理。[→報告書](../reports/20260626_w003_output_draft_role/)
-
----
-
-## 2026-06-25
-
-- **daily-xonepoint の Gmail 下書き作成を最終確定の承認後に移動** — Gmail 下書きを画像生成前の自動実行から「最終確定ゲート（STEP 7）でユーザー承認後に1回だけ作成」へ変更。`create_draft` が更新・削除不可で修正のたびに下書きが溜まる問題を解消。ステップ順を 6 画像→7 最終確定→8 Gmail→9 チャット履歴→10 Drive に再構成し spec.md も整合。[→報告書](../reports/20260625_daily_xonepoint_gmail_after_final_approval/)
-- **W003 投稿フォルダ画像を Drive 保存・git 除外に移行** — 投稿フォルダの画像（draft・output の `*.png`）を git にコミットせず Drive＋ローカル保存に統一。`.gitignore` を `/projects/w003/**/*.png` に拡張、誤コミット済み画像を untrack、spec.md / daily-xonepoint に運用を明文化。リポジトリ肥大を防止。[→報告書](../reports/20260625_w003_post_images_drive_only/)
-- **新規作業の開始前に git pull で最新化するルールを追加** — 複数環境から同じ master に push する運用で古い状態での作業・重複実装を防ぐため、CLAUDE.md の Git ルールに「作業開始前にまず git pull（未コミット変更は commit/stash 先行）」を明記。[→報告書](../reports/20260625_git_pull_before_new_work/)
-- **daily-xonepoint のメール下書きを画像添付対応に修正** — SKILL STEP 8 が添付非対応の `mcp__claude_ai_Gmail__create_draft` を指定していたため下書きに画像が付かない不具合を、`create_gmail_draft.sh --attach` 方式へ変更して修正（spec.md の指定と整合）。[→報告書](../reports/20260625_daily_xonepoint_gmail_attach_fix/)
-- **daily-xonepoint スキル・agent を非推奨化** — 制作フローの正本を `projects/w003/spec.md` に一本化。SKILL.md・agent 定義に非推奨バナーを追加し、metadata.yaml で「廃止・非推奨」カテゴリへ移動・Wiki 再生成。二重管理による不整合を解消。[→報告書](../reports/20260625_daily_xonepoint_deprecated/)
-
----
-
-## 2026-06-22
-
-- **W003 Gmail 下書きの本文フォーマットを明文化（`[投稿文]` 閉じタグ必須化）** — `[/投稿文]` 欠落で `extract_tag.py` が本文を抽出できず cron 投稿フローで投稿されない不具合を修正。原因は spec.md step 8 の本文フォーマット未定義。spec.md に `[投稿文]…[/投稿文]` 付きフォーマット（daily-xonepoint STEP 6 準拠）を明記し、`create_gmail_draft.sh --attach` 指定・Verification を開き/閉じ両タグ必須に変更。
