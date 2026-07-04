@@ -9,7 +9,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-07-04
 
-- **mcp-gsheets のコールドインストールを SessionStart hook で事前ウォームし、routine 実行時の接続失敗を解消** — フレッシュなクラウドコンテナで npm install(~10秒)が MCP 接続タイムアウトに間に合わず routine で Sheets 系ツールが未接続になっていた事象を、SessionStart hook（リモート限定・同期実行）での事前 install（コンテナキャッシュへの焼き込み）で解消。`$HOME` 決め打ちパスの潜在バグも修正。[→報告書](../reports/20260704_mcp_gsheets_sessionstart_prewarm/)
+- **mcp-gsheets のコールドインストールを SessionStart hook で事前ウォームし、routine 実行時の接続失敗を解消** — フレッシュなクラウドコンテナで npm install(~10秒)が MCP 接続タイムアウトに間に合わず routine で Sheets 系ツールが未接続になっていた事象を、SessionStart hook（リモート限定・同期実行）での事前 install（コンテナキャッシュへの焼き込み）で解消。`$HOME` 決め打ちパスの潜在バグも修正。（実装は 7/4 にリポジトリへ反映。初回コミットは docs のみで実装が未コミットだったため次セッションで未接続が再発していた）[→報告書](../reports/20260704_mcp_gsheets_sessionstart_prewarm/)
 - **post_from_email.sh：Gmail クエリ失敗と「0件」を区別しリトライする堅牢化** — cron 投稿で gws の Gmail クエリが空/エラーを返すと「投稿対象なし」と同じ無言スキップになり INBOX のメールを取りこぼす問題を修正。結果を「正常0件／APIエラー/JSON不正」に分類し失敗は最大3回リトライ、3回失敗なら exit 1 で中断＋ログ明示（対象なし=20 と区別し z01 フォールバック暴発も防止）。[→報告書](../reports/20260704_post_from_email_query_failure_retry/)
 
 ---
