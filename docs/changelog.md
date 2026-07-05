@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-05
+
+- **mcp-gsheets 起動コマンドを `$HOME` 決め打ちから `${CLAUDE_PROJECT_DIR}` に変更し、routine 未接続を解消** — `.mcp.json` の起動コマンドが `$HOME/xClaude/...` を決め打ちしており、`$HOME` がリポジトリの実際の置き場所と一致しないコンテナでは起動コマンド自体が即失敗（`No such file or directory`）しサイレントに未接続になっていた。Claude Code がリポジトリルートを渡す `${CLAUDE_PROJECT_DIR}` に変更し、コンテナの `$HOME` 構成に依存しないようにした。[→報告書](../reports/20260705_mcp_gsheets_project_dir_abspath/)
+
+---
+
 ## 2026-07-04
 
 - **mcp-gsheets のコールドインストールを SessionStart hook で事前ウォームし、routine 実行時の接続失敗を解消** — フレッシュなクラウドコンテナで npm install(~10秒)が MCP 接続タイムアウトに間に合わず routine で Sheets 系ツールが未接続になっていた事象を、SessionStart hook（リモート限定・同期実行）での事前 install（コンテナキャッシュへの焼き込み）で解消。`$HOME` 決め打ちパスの潜在バグも修正。（実装は 7/4 にリポジトリへ反映。初回コミットは docs のみで実装が未コミットだったため次セッションで未接続が再発していた）[→報告書](../reports/20260704_mcp_gsheets_sessionstart_prewarm/)
