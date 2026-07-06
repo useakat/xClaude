@@ -22,5 +22,8 @@ gcp/
 /.envrc
 tmux-*.log
 
+# mcp-gsheets 起動診断ログ（毎セッション変化するランタイムログ）
+/logs/mcp_gsheets_launch.log
+
 # W003 投稿フォルダ内の画像はコミットしない（Drive に保存する。リポジトリ肥大を防ぐ）
 /projects/w003/**/*.png
