@@ -163,6 +163,12 @@ async def cmd_infographic(args):
         if task_id:
             print(f"  タスクID: {task_id}（完了待ち）")
             status = await client.artifacts.wait_for_completion(args.notebook_id, task_id)
+        if not getattr(status, "is_complete", False):
+            error_msg = getattr(status, "error", None) or "不明なエラー"
+            error_code = getattr(status, "error_code", None)
+            suffix = f"（{error_code}）" if error_code else ""
+            print(f"✗ 生成失敗{suffix}: {error_msg}", file=sys.stderr)
+            sys.exit(1)
         if args.output:
             await client.artifacts.download_infographic(args.notebook_id, args.output)
             print(f"✓ 保存: {args.output}")
@@ -260,6 +266,12 @@ async def cmd_make_infographic(args):
             task_id = status.task_id if hasattr(status, "task_id") else None
             if task_id:
                 status = await client.artifacts.wait_for_completion(nb_id, task_id, timeout=300)
+            if not getattr(status, "is_complete", False):
+                error_msg = getattr(status, "error", None) or "不明なエラー"
+                error_code = getattr(status, "error_code", None)
+                suffix = f"（{error_code}）" if error_code else ""
+                print(f"✗ 生成失敗{suffix}: {error_msg}", file=sys.stderr)
+                sys.exit(1)
 
             # ダウンロード
             await client.artifacts.download_infographic(nb_id, args.output)
