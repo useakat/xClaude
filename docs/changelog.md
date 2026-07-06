@@ -7,6 +7,13 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-06
+
+- **notebooklm_manager.py：インフォグラフィック生成失敗時に直前の画像を誤ダウンロードするバグを修正** — RPC生成がレート制限等で失敗しても `task_id` が空のまま処理が続行し、直前に成功した画像を無言で再ダウンロードしていた不具合を修正。`status.is_complete` を確認し、失敗時はエラー表示のうえ exit code 1 で終了するよう変更。[→報告書](../reports/20260706_notebooklm_infographic_failure_bug/)
+- **W003 図解テンプレートのサブタイトルを鉤括弧＋念押しで一字一句固定** — メインタイトルは正確なのにサブタイトルだけAIに言い換えられる事象を、6テンプレート全てのサブタイトル指定に「一字一句そのまま使用・要約禁止」の念押しを追加して解消。[→報告書](../reports/20260706_w003_infographic_subtitle_lock/)
+
+---
+
 ## 2026-07-04
 
 - **mcp-gsheets のコールドインストールを SessionStart hook で事前ウォームし、routine 実行時の接続失敗を解消** — フレッシュなクラウドコンテナで npm install(~10秒)が MCP 接続タイムアウトに間に合わず routine で Sheets 系ツールが未接続になっていた事象を、SessionStart hook（リモート限定・同期実行）での事前 install（コンテナキャッシュへの焼き込み）で解消。`$HOME` 決め打ちパスの潜在バグも修正。[→報告書](../reports/20260704_mcp_gsheets_sessionstart_prewarm/)
