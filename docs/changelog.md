@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-08
+
+- **Threads 投稿一覧の API 取得・記録基盤を新規構築** — Threads 公式 API（`graph.threads.net`）で自分の投稿一覧＋メトリクス（views/いいね/リプ/リポスト/引用/シェア）を取得し、発信記録の新設「Threads投稿一覧」シートへ permalink 突合で upsert。OAuth 長期トークン（60日・`gcp/threads_token.json`）、IPv4 固定（VPS の IPv6 不通対策）、日次取得 cron（5:00）＋月次トークン更新 cron を整備。[→報告書](../reports/20260708_threads_posts_api_integration/)
+
+---
+
 ## 2026-07-07
 
 - **プロジェクトMCPサーバーの信頼確認を自動承認し、リモート実行でのgsheets切断を解消** — `.mcp.json` 定義のMCPサーバー（mcp-gsheets等）がコンテナ固有の信頼状態（`~/.claude.json` の `enabledMcpjsonServers`）に依存し、毎回まっさらなリモートコンテナでは未承認状態から始まり、無人実行中に信頼確認待ちでタイムアウト・接続断していた。`.claude/settings.json` に `enableAllProjectMcpServers: true` を追加し、リポジトリ側から恒久的に承認済みとした。[→報告書](../reports/20260707_mcp_gsheets_project_trust_auto_approve/)
