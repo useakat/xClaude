@@ -1,5 +1,6 @@
 {
   "autoMemoryEnabled": false,
+  "enableAllProjectMcpServers": true,
   "env": {
     "GOOGLE_PROJECT_ID": "charming-well-464402-u4"
   },
