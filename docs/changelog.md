@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-07
+
+- **プロジェクトMCPサーバーの信頼確認を自動承認し、リモート実行でのgsheets切断を解消** — `.mcp.json` 定義のMCPサーバー（mcp-gsheets等）がコンテナ固有の信頼状態（`~/.claude.json` の `enabledMcpjsonServers`）に依存し、毎回まっさらなリモートコンテナでは未承認状態から始まり、無人実行中に信頼確認待ちでタイムアウト・接続断していた。`.claude/settings.json` に `enableAllProjectMcpServers: true` を追加し、リポジトリ側から恒久的に承認済みとした。[→報告書](../reports/20260707_mcp_gsheets_project_trust_auto_approve/)
+
+---
+
 ## 2026-07-06
 
 - **notebooklm_manager.py：インフォグラフィック生成失敗時に直前の画像を誤ダウンロードするバグを修正** — RPC生成がレート制限等で失敗しても `task_id` が空のまま処理が続行し、直前に成功した画像を無言で再ダウンロードしていた不具合を修正。`status.is_complete` を確認し、失敗時はエラー表示のうえ exit code 1 で終了するよう変更。[→報告書](../reports/20260706_notebooklm_infographic_failure_bug/)
