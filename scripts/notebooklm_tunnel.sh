@@ -17,7 +17,7 @@
 set -euo pipefail
 
 PORT=1080
-SSH_HOST="Administrator@<WINDOWS_SERVER_IP>"
+SSH_HOST="nbtunnel@<WINDOWS_SERVER_IP>"
 PROXY="socks5://127.0.0.1:${PORT}"
 
 is_up() {
