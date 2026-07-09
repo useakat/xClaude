@@ -2,7 +2,7 @@
   "mcpServers": {
     "mcp-gsheets": {
       "command": "bash",
-      "args": ["-c", "exec bash \"${CLAUDE_PROJECT_DIR}/scripts/mcp_gsheets_launch.sh\""],
+      "args": ["-c", "d=\"${CLAUDE_PROJECT_DIR:-$PWD}\"; while [ -n \"$d\" ] && [ \"$d\" != \"/\" ]; do if [ -f \"$d/scripts/mcp_gsheets_launch.sh\" ]; then exec bash \"$d/scripts/mcp_gsheets_launch.sh\"; fi; d=$(dirname \"$d\"); done; exec bash \"$HOME/xClaude/scripts/mcp_gsheets_launch.sh\""],
       "env": {
         "GOOGLE_SERVICE_ACCOUNT_KEY": "${GOOGLE_SERVICE_ACCOUNT_KEY}",
         "GOOGLE_PROJECT_ID": "${GOOGLE_PROJECT_ID}"
