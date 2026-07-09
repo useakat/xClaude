@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-07-09
 
 - **NotebookLM トンネル復旧＋恒久ハードニング（Administrator ロックアウト／古い認証ファイルの二重根本原因を解消）** — Windows server 経由 SOCKS トンネルが SSH 認証フェーズで reset し manager が使えなくなった問題を、①Administrator の SMB 総当たりによる**アカウントロックアウト**（sshd の S4U トークン生成失敗）②新 cookie を隠していた 4/23 の古い `~/.notebooklm/storage_state.json`、の二重根本原因として特定・解消。トンネル専用ユーザ `nbtunnel`（鍵認証）化、SSH(22)/SMB(445)/RDP(3389) のファイアウォール制限、ロックアウト無効化、cookie を出口IP一致の Windows サーバ側で再採取する運用を確立。[→報告書](../reports/20260709_notebooklm_tunnel_recovery_hardening/)
+- **mcp-gsheets 起動パスを上方探索化し projects/ 配下起動の -32000 退行を修正** — 7/5 の `${CLAUDE_PROJECT_DIR}` 決め打ち化がリモートの `$HOME` 不一致は解消した一方、`CLAUDE_PROJECT_DIR` がセッション起動 cwd（`projects/w002` 等）に展開されるローカル環境で起動スクリプトが見つからず即死し -32000 を再発させていた。`CLAUDE_PROJECT_DIR` から上方向に `scripts/mcp_gsheets_launch.sh` を探索し、最後は `$HOME/xClaude` にフォールバックする方式に変更。[→報告書](../reports/20260709_mcp_gsheets_launch_upward_search/)
 
 ---
 
