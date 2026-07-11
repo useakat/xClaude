@@ -10,11 +10,16 @@ App Secret は環境変数 THREADS_APP_SECRET から読む（引数・ファイ�
 import argparse
 import json
 import os
+import socket
 import sys
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
+
+# IPv6 が通らない環境向けに DNS を IPv4 固定（graph.threads.net が IPv6 のみ解決される環境でのハング回避）
+_orig_gai = socket.getaddrinfo
+socket.getaddrinfo = lambda *a, **k: [r for r in _orig_gai(*a, **k) if r[0] == socket.AF_INET] or _orig_gai(*a, **k)
 
 THREADS_APP_ID = "4371768313073061"
 REDIRECT_URI = "https://httpbin.org/get"
