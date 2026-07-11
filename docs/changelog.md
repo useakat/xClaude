@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-11
+
+- **note記事レビュー指摘のルール化（W002 brand.md・spec.md・共通 brand.md 改訂）** — ケプラー記事の対話レビューで出た32件の指摘を分析し、W002 brand.md に「ひらがな開きは接続詞・助詞のみ／翻訳語自体が日常語であること／段落頭接続詞の連続禁止／読者の即時疑問チェック（動力・位置・因果）／喪失の書き分け／暗転前の平常描写／危機は数える／ダッシュ全面禁止」等の8ルール＋セルフチェック5項目を追加。spec.md をセクション別字数比較表提示＋セルフチェック2周制に強化し、共通 brand.md の「ひらがな多め」適用範囲を明確化。[→報告書](../reports/20260711_w002_brand_review_rules/)
+
+---
+
 ## 2026-07-09
 
 - **NotebookLM トンネル復旧＋恒久ハードニング（Administrator ロックアウト／古い認証ファイルの二重根本原因を解消）** — Windows server 経由 SOCKS トンネルが SSH 認証フェーズで reset し manager が使えなくなった問題を、①Administrator の SMB 総当たりによる**アカウントロックアウト**（sshd の S4U トークン生成失敗）②新 cookie を隠していた 4/23 の古い `~/.notebooklm/storage_state.json`、の二重根本原因として特定・解消。トンネル専用ユーザ `nbtunnel`（鍵認証）化、SSH(22)/SMB(445)/RDP(3389) のファイアウォール制限、ロックアウト無効化、cookie を出口IP一致の Windows サーバ側で再採取する運用を確立。[→報告書](../reports/20260709_notebooklm_tunnel_recovery_hardening/)
