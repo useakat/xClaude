@@ -1,0 +1,36 @@
+[2026-07-11 17:00:01 JST] 開始 (threads)
+[2026-07-11 17:00:02 JST] 投稿対象メールなし。終了
+[2026-07-11 20:00:02 JST] 開始 (threads)
+[2026-07-11 20:00:03 JST] 投稿対象メールなし。終了
+[2026-07-11 20:45:44 JST] 開始 (threads)
+[2026-07-11 20:45:45 JST] 処理対象 thread_id=19f50f9c0d5c4e8b
+[2026-07-11 20:45:46 JST] [DRY RUN] 分割プレビュー:
+--- dry-run: 本文2件＋リプ1件 ---
+本文1(473字)[本文画像]: これ、ちょっと鳥肌モノなんだけど聞いてほしい。
+雨の日に飛んだロケットが、二度、雷に撃たれた。— いや、違う。ロケットが
+本文2(435字): 管制室は、宇宙船を「見る目」を失った。生きているのかさえ、わからない。
+フライトディレクターの頭をよぎる言葉は、ひとつ。
+リプ1(41字): note にも詳しく書いてます！👇
+https://t.co/3Btsr1Cg5u
+[2026-07-11 20:45:46 JST] [DRY RUN] ラベル付与・記録はスキップ
+[2026-07-12 07:00:01 JST] 開始 (threads)
+[2026-07-12 07:00:03 JST] 処理対象 thread_id=19f50f9c0d5c4e8b
+[2026-07-12 07:00:03 JST] Threads 投稿実行...
+  本文1/2 投稿 id=18107275702951156
+APIエラー (500): {"error":{"message":"Application does not have permission for this action","type":"THApiException","code":10,"fbtrace_id":"AMd1HAkXRd9NBm-D3YNjyyJ"}}
+[2026-07-12 07:00:19 JST] Threads 投稿失敗。終了 (thread:19f50f9c0d5c4e8b)
+[2026-07-12 10:21:20 JST] 開始 (threads)
+[2026-07-12 10:21:21 JST] 処理対象 thread_id=19f50f9c0d5c4e8b
+[2026-07-12 10:21:22 JST] Threads 投稿実行...
+  本文1/2 投稿 id=17948080428211795
+  本文2/2 投稿 id=18121906027806475
+  リプ1/1 投稿 id=18105543158025035
+PERMALINK=https://www.threads.com/@usephys1/post/DarJgo8nedJ
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DarJgo8nedJ（本文2件＋リプ1件）
+[2026-07-12 10:21:58 JST] 投稿成功: https://www.threads.com/@usephys1/post/DarJgo8nedJ
+[2026-07-12 12:00:01 JST] 開始 (threads)
+[2026-07-12 12:00:03 JST] 投稿対象メールなし。終了
+[2026-07-12 17:00:01 JST] 開始 (threads)
+[2026-07-12 17:00:02 JST] 投稿対象メールなし。終了
+[2026-07-12 20:00:01 JST] 開始 (threads)
+[2026-07-12 20:00:02 JST] 投稿対象メールなし。終了

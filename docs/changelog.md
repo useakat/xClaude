@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **物語型推敲チェックリストと語彙の好み帳を導入** — Z01 制作でのユーザー推敲指摘（論理整合・語彙の好み・締めの厚み・抽象語）をルール化。`style/story-check.md`（物語型5項目チェック、W001/W002/Z01 の採点基準から参照）と `style/z01-phrasebook.md`（語彙の好み帳、100行目安・場面別・上書き運用）を新設し、w002 brand.md に採点基準セクション（8項目）を新設、z01 spec.md に STEP 3.5 セルフ推敲を追加。[→報告書](../reports/20260712_story_check_phrasebook/)
 - **Threads 自動投稿の不具合修正（threads_manage_replies 再認証＋record_output の IPv6 ハング解消）** — 初回 cron で分割スレッド投稿・outputs 記録・ラベル付与が失敗。原因は (a) 返信作成に必要な `threads_manage_replies` スコープ不足（権限追加＋再認証で解決）、(b) googleapis の AAAA 優先解決×IPv6 不通による `record_output.py` の gspread 接続ハング（IPv4 固定で 60秒超→1.6秒）。再テストで全工程完走を確認、欠損 outputs も補完。[→報告書](../reports/20260712_threads_post_replies_scope_ipv6_fix/)
+- **X投稿一覧からランダム選択して【threads投稿】Gmail下書きを自動作成する仕組みを追加** — `make_threads_draft.py` 新規（候補=通常ツイート×有益×未転載、`random.sample` で4件/回、セルフリプ先頭1件取込、X投稿一覧に AH列「threads転載日」でマーク）＋cron 毎朝8時。下書きを送信すれば既存 Threads 投稿 cron が投稿する。[→報告書](../reports/20260712_threads_draft_random_pick/)
 
 ---
 
