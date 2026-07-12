@@ -2,27 +2,24 @@
 """
 X投稿の記録を Google Sheets の outputs シートに追記する。
 Usage:
-  python3 record_output.py <url> <how_id> [--neta-id NETA_ID] [--thought-id THOUGHT_ID]
+  python3 record_output.py <url> [how_id] [--neta-id NETA_ID] [--thought-id THOUGHT_ID] [--x-url X_URL]
 Example:
   python3 record_output.py https://x.com/i/web/status/123 W003
   python3 record_output.py https://x.com/i/web/status/123 z01 --neta-id "noteNeta[33]"
   python3 record_output.py https://x.com/i/web/status/123 z01 --thought-id T007
+  python3 record_output.py https://www.threads.com/@u/post/abc --x-url "https://x.com/i/web/status/123"
 
-outputs 列: 日時(A) | URL(B) | what_id(C) | neta_id(D) | thought_id(E) | note_url(F) | img-pattern_id(G)
+outputs 列: 日時(A) | URL(B) | what_id(C) | neta_id(D) | thought_id(E) | note_url(F) | img-pattern_id(G) | x_url(H)
+媒体は列を持たない（URL列（twitter.com/x.com・note.com・threads.com）から判別する）。
+threads 投稿は what_id を書かない（空のまま）。x_url(H)は threads 投稿の元になった X 投稿の URL（任意）。
+threads 投稿のカテゴリは、x_url から辿った元 X 投稿の what_id を参照する形で判定する（reporter-daily 側の処理）。
 """
 
 import argparse
 import json
 import os
 import re
-import socket
 from datetime import datetime
-
-# IPv6 が通らない環境向けに DNS を IPv4 固定する。
-# googleapis.com が AAAA（IPv6）優先で解決されると gspread の接続がハングするため
-# （threads 系スクリプトと同じ対策）。
-_orig_gai = socket.getaddrinfo
-socket.getaddrinfo = lambda *a, **k: [r for r in _orig_gai(*a, **k) if r[0] == socket.AF_INET] or _orig_gai(*a, **k)
 
 import gspread
 from google.oauth2.service_account import Credentials
@@ -64,14 +61,10 @@ def record_short_post_usage(client, neta_id: str):
     print(f"✓ 短文最終使用日を更新: {sheet_name}[{no}] → {column}{row_index} = {today}")
 
 
-def record(url: str, how_id: str, neta_id: str = "", thought_id: str = ""):
+def record(url: str, how_id: str = "", neta_id: str = "", thought_id: str = "", x_url: str = ""):
     dt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    # 列順: 日時(A), URL(B), what_id(C), neta_id(D), thought_id(E)
-    row = [dt, url, how_id]
-    if neta_id or thought_id:
-        row.append(neta_id)        # D列（thought のときは空文字）
-    if thought_id:
-        row.append(thought_id)     # E列
+    # 列順: 日時(A) URL(B) what_id(C) neta_id(D) thought_id(E) note_url(F) img-pattern_id(G) x_url(H)
+    row = [dt, url, how_id, neta_id, thought_id, "", "", x_url]
     client = get_client()
     sheet = client.open_by_key(SPREADSHEET_ID).worksheet(SHEET_NAME)
     sheet.append_row(row, value_input_option="USER_ENTERED")
@@ -83,9 +76,10 @@ def record(url: str, how_id: str, neta_id: str = "", thought_id: str = ""):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="X投稿を outputs シートに記録する")
-    parser.add_argument("url", help="ツイート URL")
-    parser.add_argument("how_id", help="what_id（例: W003 / z01）")
+    parser.add_argument("url", help="投稿 URL")
+    parser.add_argument("how_id", nargs="?", default="", help="what_id（例: W003 / z01）。threads 投稿は省略可")
     parser.add_argument("--neta-id", default="", help="neta_id 列の値（例: noteNeta[33]）")
     parser.add_argument("--thought-id", default="", help="thought_id 列の値（例: T007）")
+    parser.add_argument("--x-url", default="", help="x_url 列の値（threads 投稿の元 X 投稿 URL）")
     args = parser.parse_args()
-    record(args.url, args.how_id, args.neta_id, args.thought_id)
+    record(args.url, args.how_id, args.neta_id, args.thought_id, args.x_url)

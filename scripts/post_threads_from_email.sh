@@ -1,6 +1,6 @@
 #!/bin/bash
 # 【threads投稿】メールを1件拾って Threads に投稿し、outputs に記録する。
-# post_from_email.sh の Threads 版（本文＝[投稿文]／画像＝[画像URL]／セルフリプ＝[リプ]／リプ画像＝[リプ画像URL]）。
+# post_from_email.sh の Threads 版（本文＝[投稿文]／画像＝[画像URL]／セルフリプ＝[リプ]／リプ画像＝[リプ画像URL]／元X投稿URL＝[XURL]（任意・日報のカテゴリ判定用））。
 # Usage: bash post_threads_from_email.sh [--dry-run]
 export PATH="/usr/local/bin:$PATH"
 set -uo pipefail
@@ -9,7 +9,6 @@ DRY_RUN=0
 if [ "${1:-}" = "--dry-run" ]; then DRY_RUN=1; shift; fi
 
 SUBJECT_KEYWORD="【threads投稿】"
-HOW_ID="threads"
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LOG_PATH="$REPO_ROOT/logs/threads_post.log"
 POSTED_LABEL_ID="Label_103"
@@ -60,6 +59,7 @@ TEXT=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py 投稿文 2>/dev/nul
 IMG=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py 画像URL 2>/dev/null || true)
 REP=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py リプ 2>/dev/null || true)
 REPIMG=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py リプ画像URL 2>/dev/null || true)
+XURL=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py XURL 2>/dev/null || true)
 
 if [ -z "$TEXT" ]; then
   log "[投稿文] タグなし／空 → ラベル付与のみ: $THREAD_ID"
@@ -98,5 +98,7 @@ gws gmail users threads modify \
   --params "{\"userId\":\"me\",\"id\":\"$THREAD_ID\"}" \
   --json "{\"addLabelIds\":[\"$POSTED_LABEL_ID\"],\"removeLabelIds\":[\"INBOX\"]}" 2>/dev/null >/dev/null
 
-python3 scripts/record_output.py "$PERMALINK" "$HOW_ID" 2>&1 | tee -a "$LOG_PATH"
+RECORD_ARGS=("$PERMALINK")
+[ -n "$XURL" ] && RECORD_ARGS+=(--x-url "$XURL")
+python3 scripts/record_output.py "${RECORD_ARGS[@]}" 2>&1 | tee -a "$LOG_PATH"
 log "完了"
