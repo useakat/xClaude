@@ -1,0 +1,16 @@
+【本文】（「何百万年」→「何千万年」に修正・数値精度向上）
+
+実は、地球最大の砂漠は、灼熱のサハラではなく氷の南極大陸にある。
+
+砂漠とは、年間降水量250mm未満の陸上の乾燥地のこと。
+
+南極は、沿岸部を除く乾燥した内陸部が地球最大の砂漠になっている。特に南極点の年間降水量は、わずか2〜7ミリしかない。
+
+それでも氷に覆われているのは、そのわずかな雪が何千万年もかけて積もり続けたからだ。
+
+一番寒い大陸が、一番乾いた大地でもある。真っ白な氷は、気の遠くなるほどの年月が積み重なった姿だったんだ。
+
+（211字）
+
+【ファクト補足（本文外・出典）】
+- 東南極氷床は約3400万年前に形成開始、1400万年前に現在の規模に到達: Mountain formation explains the Antarctic ice sheet mystery - University of Southampton (https://www.southampton.ac.uk/news/2026/07/mountain-formation-explains-the-antarctic-ice-sheet-mystery.page)
