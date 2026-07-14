@@ -7,7 +7,8 @@ Gmail 下書きを作成する。過去の X 投稿を Threads へ転載する�
   2. 候補抽出: ポスト種類=通常ツイート / 目的=有益 / 親ポストURL 空 / threads転載日 空 / 本文あり
   3. ランダムに --count 件選択(重複なし)
   4. セルフリプ(親ポストURL が選択投稿を指す行)があれば先頭1件を [リプ] に取り込む
-  5. 【threads投稿】メール本文を組み立て → create_gmail_draft.sh で Gmail 下書き作成
+  5. 【threads投稿】メール本文を組み立て([投稿文]/[画像URL]/[リプ]/[リプ画像URL]/[XURL])
+     → create_gmail_draft.sh で Gmail 下書き作成。[XURL]=元X投稿URL(outputs の x_url 記録用)
   6. 成功したら選択行の「threads転載日」に当日日付を記録(重複防止マーク)
 
 - この VPS は IPv6 が通らないため DNS を IPv4 固定する(gspread のハング回避)。
@@ -91,7 +92,7 @@ def cell(row, idx):
     return row[idx].strip() if idx is not None and idx < len(row) and row[idx] else ""
 
 
-def build_body(text, img, rep_text, rep_img):
+def build_body(text, img, rep_text, rep_img, post_url):
     parts = [f"[投稿文]{text}[/投稿文]"]
     if img:
         parts.append(f"[画像URL]{img}[/画像URL]")
@@ -99,6 +100,9 @@ def build_body(text, img, rep_text, rep_img):
         parts.append(f"[リプ]{rep_text}[/リプ]")
         if rep_img:
             parts.append(f"[リプ画像URL]{rep_img}[/リプ画像URL]")
+    if post_url:
+        # 元X投稿URL。outputs の x_url(H) に記録され、日報のカテゴリ判定に使われる
+        parts.append(f"[XURL]{post_url}[/XURL]")
     return "\n".join(parts) + "\n"
 
 
@@ -175,7 +179,7 @@ def main():
             if len(kids) > 1:
                 log(f"注記: セルフリプが {len(kids)} 件。先頭1件のみ取り込みます(v1 制約)。")
 
-        body = build_body(text, img, rep_text, rep_img)
+        body = build_body(text, img, rep_text, rep_img, post_url)
         subject = "【threads投稿】" + text.replace("\n", " ")[:20]
 
         log(f"選択: 行{row_no} {post_url}")
