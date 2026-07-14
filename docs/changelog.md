@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-14
+
+- **mcp-gsheets 切断再発の修正（enableAllProjectMcpServers の実装未コミットを反映）** — 7/14 朝の日報 routine が信頼確認タイムアウトで Sheets を読めず失敗。原因は 7/7 の対策コミットが docs のみで `.claude/settings.json` への `enableAllProjectMcpServers: true` 追加が未コミットだったこと（7/4 と同じ「docs のみコミット」パターンの再発）。本体変更を反映し master へ push。[→報告書](../reports/20260714_mcp_gsheets_trust_setting_recommit/)
+
+---
+
 ## 2026-07-12
 
 - **物語型推敲チェックリストと語彙の好み帳を導入** — Z01 制作でのユーザー推敲指摘（論理整合・語彙の好み・締めの厚み・抽象語）をルール化。`style/story-check.md`（物語型5項目チェック、W001/W002/Z01 の採点基準から参照）と `style/z01-phrasebook.md`（語彙の好み帳、100行目安・場面別・上書き運用）を新設し、w002 brand.md に採点基準セクション（8項目）を新設、z01 spec.md に STEP 3.5 セルフ推敲を追加。[→報告書](../reports/20260712_story_check_phrasebook/)
