@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__mcp-gsheets__sheets_get_values",
+      "mcp__mcp-gsheets__sheets_batch_get_values",
+      "mcp__mcp-gsheets__sheets_append_values",
+      "mcp__mcp-gsheets__sheets_update_values",
+      "mcp__mcp-gsheets__sheets_batch_update_values"
+    ]
+  }
+}
