@@ -7,6 +7,14 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-15
+
+- **mcp-gsheets ツール許可を完全一致形式で明示登録（リモートでの許可プロンプト対策）** — 日報 routine で `sheets_get_values` の実行許可プロンプトが出て停止。原因はツール単位の許可が `mcp__mcp-gsheets__*`（機能しない）とサーバー名形式（リモートで抑止できず）だけだったこと。使用5ツールを完全一致形式で登録し解消。6/27 報告書記載の完全一致ルールが未コミットだった「docs のみコミット」パターン3件目の発見を含む。[→報告書](../reports/20260715_mcp_gsheets_tool_allow_exact_rules/)
+- **reporter-daily に threads/note 投稿の種類判定と x_url 連携を追加** — 日報で threads 投稿の種類を判定できるよう、outputs シートに x_url 列（転載元 X 投稿 URL）を追加。`record_output.py` に `--x-url` オプション、`post_threads_from_email.sh` に `[XURL]` タグ抽出を追加し、reporter-daily に「x_url→元 X 投稿の what_id」で種類判定する STEP 5（threads セクション）を追加。[→報告書](../reports/20260715_reporter_threads_note_category_x_url/)
+- **/record に実装コミット照合チェック（STEP 4.7）を追加** — 「報告書・変更ログだけコミットされ実装が未反映」の事故（7/4・7/7 で発生し障害再発）を防ぐため、記録の push 前に報告書の変更ファイルが実際にコミット済みか（未コミット変更なし・直近コミットに存在）を照合するステップを追加。[→報告書](../reports/20260715_record_impl_commit_check/)
+
+---
+
 ## 2026-07-14
 
 - **mcp-gsheets 切断再発の修正（enableAllProjectMcpServers の実装未コミットを反映）** — 7/14 朝の日報 routine が信頼確認タイムアウトで Sheets を読めず失敗。原因は 7/7 の対策コミットが docs のみで `.claude/settings.json` への `enableAllProjectMcpServers: true` 追加が未コミットだったこと（7/4 と同じ「docs のみコミット」パターンの再発）。本体変更を反映し master へ push。[→報告書](../reports/20260714_mcp_gsheets_trust_setting_recommit/)
