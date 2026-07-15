@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-16
+
+- **settings.local.json を git 管理化し mcp-gsheets 許可5ルールを配布（リモートで settings.json の許可が効かないため）** — 7/16 朝の日報 routine で許可プロンプトが再発。切り分けテストで「リモートでは `settings.json` の MCP ツール許可ルールは参照されず、`settings.local.json` の同じルールだけが効く」と確定。settings.local.json を .gitignore から外し、厳選5ルール入りで git 配布する対策を実施。[→報告書](../reports/20260716_settings_local_json_git_managed/)
+
+---
+
 ## 2026-07-15
 
 - **mcp-gsheets ツール許可を完全一致形式で明示登録（リモートでの許可プロンプト対策）** — 日報 routine で `sheets_get_values` の実行許可プロンプトが出て停止。原因はツール単位の許可が `mcp__mcp-gsheets__*`（機能しない）とサーバー名形式（リモートで抑止できず）だけだったこと。使用5ツールを完全一致形式で登録し解消。6/27 報告書記載の完全一致ルールが未コミットだった「docs のみコミット」パターン3件目の発見を含む。[→報告書](../reports/20260715_mcp_gsheets_tool_allow_exact_rules/)
