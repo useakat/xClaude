@@ -111,6 +111,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="選択と本文を表示するだけで下書き作成・マークをしない")
     ap.add_argument("--count", type=int, default=1, help="作成する下書きの件数(重複なしで選択)")
+    ap.add_argument("--rows", default="", help="行番号をカンマ区切りで直接指定(候補条件・マークを無視して作り直す)")
     args = ap.parse_args()
 
     ws = get_ws()
@@ -158,10 +159,16 @@ def main():
         log("転載候補がありません(全件転載済みの可能性)。終了。")
         return
 
-    count = min(args.count, len(candidates))
-    if count < args.count:
-        log(f"注記: 候補不足のため {args.count} 件中 {count} 件のみ作成します。")
-    picks = random.sample(candidates, count)
+    if args.rows:
+        # 行番号直接指定(作り直し用): 候補条件・マークを無視して対象行から下書きを作る
+        picks = [(n, rows[n - 2]) for n in (int(x) for x in args.rows.split(","))]
+        count = len(picks)
+        log(f"行指定モード: {args.rows}")
+    else:
+        count = min(args.count, len(candidates))
+        if count < args.count:
+            log(f"注記: 候補不足のため {args.count} 件中 {count} 件のみ作成します。")
+        picks = random.sample(candidates, count)
 
     today = datetime.now().strftime("%Y-%m-%d")
     made = 0
