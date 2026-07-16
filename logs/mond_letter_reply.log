@@ -2279,3 +2279,169 @@ STEP 1 の検索結果が 0 件でした。
 
 対象メールなし。処理を終了します。
 [2026-07-12 18:00:23 JST] mond-letter-reply 完了
+[2026-07-13 00:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+[2026-07-13 00:00:13 JST] mond-letter-reply 完了
+[2026-07-13 06:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` に一致する未処理メールはありませんでした。
+[2026-07-13 06:00:13 JST] mond-letter-reply 完了
+[2026-07-13 12:00:01 JST] mond-letter-reply 開始
+STEP 1 の検索結果は 0 件でした。
+
+**対象メールなし。処理を終了します。**
+
+`letter-notify@mond.how` からの未処理レター（`mond-処理済み` ラベルなし・受信トレイ内）は見つかりませんでした。
+[2026-07-13 12:00:21 JST] mond-letter-reply 完了
+[2026-07-13 18:00:01 JST] mond-letter-reply 開始
+STEP 1 の検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+[2026-07-13 18:00:16 JST] mond-letter-reply 完了
+[2026-07-14 00:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+[2026-07-14 00:00:17 JST] mond-letter-reply 完了
+[2026-07-14 06:00:01 JST] mond-letter-reply 開始
+STEP 1 で `from:letter-notify@mond.how -label:mond-処理済み in:inbox` を検索しましたが、該当スレッドがありませんでした。
+
+対象メールなし。処理を終了します。
+[2026-07-14 06:00:18 JST] mond-letter-reply 完了
+[2026-07-14 12:00:01 JST] mond-letter-reply 開始
+STEP 1 の検索結果が 0 件でした。
+
+対象メールなし。処理を終了します。
+[2026-07-14 12:00:13 JST] mond-letter-reply 完了
+[2026-07-14 18:00:01 JST] mond-letter-reply 開始
+対象メールなし。処理を終了します。
+
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+
+`letter-notify@mond.how` からの未処理レター（`mond-処理済み` ラベルなし・受信トレイ内）は見つかりませんでした。
+[2026-07-14 18:00:27 JST] mond-letter-reply 完了
+[2026-07-15 00:00:01 JST] mond-letter-reply 開始
+検索結果が 0 件でした。
+
+**対象メールなし。処理を終了します。**
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` に一致する未処理レターはありませんでした。
+[2026-07-15 00:00:15 JST] mond-letter-reply 完了
+[2026-07-15 06:00:01 JST] mond-letter-reply 開始
+STEP 1 の検索結果が 0 件でした。
+
+**対象メールなし。処理を終了します。**
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` に該当する未処理レターはありませんでした。
+[2026-07-15 06:00:17 JST] mond-letter-reply 完了
+[2026-07-15 12:00:01 JST] mond-letter-reply 開始
+Permission deny rule (.claude/settings.json): Write(.claude/settings.local.json) is not matched by file permission checks — only Edit(path) rules are. Use Edit(.claude/settings.local.json) instead (Edit rules cover all file-editing tools).
+対象メールなし。処理を終了します。
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` の結果は 0 件でした。
+
+念のため検索自体が機能しているか確認したところ、`in:anywhere` では 17 スレッドがヒットします（最新は 5/16）。つまり mond からのレターは届いているものの、いずれも INBOX には残っておらず（すべてアーカイブ済み）、未処理の新着はないという状態です。処理対象がないため下書き作成・ラベル付与は行っていません。
+
+```
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: []
+```
+
+1点補足すると、ヒットしたスレッドの一部（4/4〜5/1 あたり）は `Label_104`（mond-処理済み）が付いていないままアーカイブされているものがあります。過去に手動でアーカイブされた分だと思われますが、もし取りこぼしの回答漏れが気になるようでしたら、ラベルなしのアーカイブ済みスレッドを対象に再処理することもできます。
+[2026-07-15 12:00:33 JST] mond-letter-reply 完了
+[2026-07-15 18:00:01 JST] mond-letter-reply 開始
+Permission deny rule (.claude/settings.json): Write(.claude/settings.local.json) is not matched by file permission checks — only Edit(path) rules are. Use Edit(.claude/settings.local.json) instead (Edit rules cover all file-editing tools).
+対象メールなし。処理を終了します。
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` の検索結果は 0 件でした。
+
+念のため確認したところ、mond からのレター自体は 17 件ヒットしますが、いずれも受信トレイには残っていません（処理済みラベル付き、またはアーカイブ済み）。未処理の新規レターは届いていない状態です。
+
+```
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: []
+```
+[2026-07-15 18:00:24 JST] mond-letter-reply 完了
+[2026-07-16 00:00:01 JST] mond-letter-reply 開始
+Permission deny rule (.claude/settings.json): Write(.claude/settings.local.json) is not matched by file permission checks — only Edit(path) rules are. Use Edit(.claude/settings.local.json) instead (Edit rules cover all file-editing tools).
+対象メールなし。処理を終了します。
+
+**確認した内容**
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` が 0 件でした。ラベル名でのフィルタが効かず空振りしている可能性を疑ったので、フィルタを外して 2 段階で確認しています。
+
+- `from:letter-notify@mond.how in:inbox` → 0 件（ラベル条件を外しても受信トレイに mond レターなし）
+- `from:letter-notify@mond.how in:anywhere` → 17 件（差出人アドレス自体は正しく、Gmail へのアクセスも正常）
+
+つまり「検索が壊れている」のではなく、本当に未処理のレターが受信トレイに残っていない状態です。下書き作成・ラベル付与は行っていません。
+
+**[mond-letter-reply 完了]**
+処理スレッド数: 0 件 / 下書き作成: 0 件 / お礼スキップ: 0 件 / エラー: 0 件
+
+---
+
+ひとつ気づいた点をお伝えします。アーカイブ済みのスレッドの中に、`mond-処理済み`（Label_104）が付いていないものがいくつかあります（例：宇宙ゴミの質問 `19de26259c8c2eb0`、海が青く見える理由の質問 `19dd8d03987c7841` など）。
+
+受信トレイには無いので本スキルの処理対象外ですが、これは「回答済みだけどラベル付与前にアーカイブされた」のか「未回答のまま埋もれた」のか、メールからは判別できません。mond 側で回答済みかご確認いただき、もし未回答のものがあれば個別に対応しましょうか。
+[2026-07-16 00:00:36 JST] mond-letter-reply 完了
+[2026-07-16 06:00:01 JST] mond-letter-reply 開始
+Permission deny rule (.claude/settings.json): Write(.claude/settings.local.json) is not matched by file permission checks — only Edit(path) rules are. Use Edit(.claude/settings.local.json) instead (Edit rules cover all file-editing tools).
+対象メールなし。処理を終了します。
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` の検索結果は 0 件でした。
+
+クエリの書き方に問題がないかを確認するため、フィルタを外して段階的に検証しています：
+
+- `from:letter-notify@mond.how in:inbox` → 0 件（ラベル条件を外しても受信トレイは空）
+- `from:letter-notify@mond.how in:anywhere` → 17 件（送信元アドレスは正しく、メール自体は存在する）
+
+つまり検索クエリの不具合ではなく、mond レターが受信トレイに 1 件も残っていない、というのが実態です。既存の 17 件は最新でも 2026-05-16 で、すべてアーカイブ済み（INBOX ラベルなし）でした。
+
+1点だけお伝えしておきます。アーカイブ済み 17 件のうち、`mond-処理済み`（Label_104）が付いていないものが複数あります（例：宇宙ゴミの質問、コズミックラテの質問、膨張する宇宙の中心の質問など）。このスキルは `in:inbox` を条件にしているため処理対象外ですが、ラベルが付かないまま手動でアーカイブされたのか、回答済みなのにラベル付与だけ漏れたのかは、メールからは判断できません。もし取りこぼしが気になるようでしたら、これらを洗い出して確認しますので、お申し付けください。
+[2026-07-16 06:00:32 JST] mond-letter-reply 完了
+[2026-07-16 12:00:01 JST] mond-letter-reply 開始
+Permission deny rule (.claude/settings.json): Write(.claude/settings.local.json) is not matched by file permission checks — only Edit(path) rules are. Use Edit(.claude/settings.local.json) instead (Edit rules cover all file-editing tools).
+Confirmed: there are no mond letters awaiting processing.
+
+```
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: []
+```
+
+対象メールなし。処理を終了します。
+
+`from:letter-notify@mond.how -label:mond-処理済み in:inbox` で 0 件でしたが、ラベル名でのフィルタが効かず 0 件になっている可能性を考え、ラベル条件を外した `from:letter-notify@mond.how in:inbox` でも確認したところ、同じく 0 件でした。受信トレイに未処理のレターは残っていません。
+[2026-07-16 12:00:22 JST] mond-letter-reply 完了
+[2026-07-16 18:00:01 JST] mond-letter-reply 開始
+Permission deny rule (.claude/settings.json): Write(.claude/settings.local.json) is not matched by file permission checks — only Edit(path) rules are. Use Edit(.claude/settings.local.json) instead (Edit rules cover all file-editing tools).
+The search returned no threads.
+
+**対象メールなし。処理を終了します。**
+
+```
+[mond-letter-reply 完了]
+処理スレッド数: 0 件
+　うち下書き作成: 0 件
+　うちお礼スキップ: 0 件
+　うちエラー: 0 件
+作成した下書き ID: []
+```
+
+未処理の mond レター（`letter-notify@mond.how` からの受信トレイ内で `mond-処理済み` ラベルが付いていないもの）はありませんでした。
+
+なお、`claude.ai Google Calendar` の MCP サーバーが未認証の状態です。今回の処理には影響しませんでしたが、カレンダー連携を使う場合は claude.ai のコネクタ設定から認可が必要です。
+[2026-07-16 18:00:15 JST] mond-letter-reply 完了
