@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-07-16
 
 - **settings.local.json を git 管理化し mcp-gsheets 許可5ルールを配布（リモートで settings.json の許可が効かないため）** — 7/16 朝の日報 routine で許可プロンプトが再発。切り分けテストで「リモートでは `settings.json` の MCP ツール許可ルールは参照されず、`settings.local.json` の同じルールだけが効く」と確定。settings.local.json を .gitignore から外し、厳選5ルール入りで git 配布する対策を実施。[→報告書](../reports/20260716_settings_local_json_git_managed/)
+- **threads下書きのセルフリプ取り込み不全を修正（X投稿一覧の親ポストURLをAPIバックフィル）** — セルフリプ取り込みロジックは正しいが、検出キーの「親ポストURL」列がほぼ未記入（リプライ112行中12行）でデータ欠損が根本原因と判明。syndication API で90件補完する `backfill_x_parent_urls.py`（ネガティブキャッシュ付き）を新設し毎朝の下書き cron 前段に組込み。セルフリプ持ち候補 11→39件。`--rows` 再生成オプションも追加し既存下書き6件を[リプ]付きで作り直し。[→報告書](../reports/20260716_threads_selfreply_parent_url_backfill/)
 
 ---
 

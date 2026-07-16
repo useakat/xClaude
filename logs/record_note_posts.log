@@ -241,3 +241,44 @@ Failed to authenticate. API Error: 401 Invalid authentication credentials
 
 ボイジャー記事（`n4ce6fbbf837f`）のビュー 1055・スキ 16・スキ率 0.0152 を更新しました。過去1ヶ月の対象記事はこの1本のみでした。
 [2026-07-12 03:00:42 JST] record-note-posts 完了
+[2026-07-13 03:00:01 JST] record-note-posts 開始
+✅ note投稿一覧 更新完了
+   更新: 1件 / 新規追加: 0件
+   対象期間: 2026-07-03（過去1ヶ月）
+
+過去1ヶ月の対象記事は1本（ボイジャー1号の記事）で、既存の27行目のビュー1058・スキ18・スキ率0.017を更新しました。
+[2026-07-13 03:00:36 JST] record-note-posts 完了
+[2026-07-14 03:00:01 JST] record-note-posts 開始
+```
+✅ note投稿一覧 更新完了
+   更新: 1件 / 新規追加: 0件
+   対象期間: 2026-07-03 〜 2026-07-03
+```
+
+過去1ヶ月の対象記事は「ボイジャー1号、37年ぶりの再点火」1本で、既存の27行目（H〜J列）をビュー1058・スキ19・スキ率0.018に更新しました。
+[2026-07-14 03:00:44 JST] record-note-posts 完了
+[2026-07-15 03:00:01 JST] record-note-posts 開始
+✅ note投稿一覧 更新完了
+   更新: 1件 / 新規追加: 0件
+   対象期間: 2026-07-03（過去1ヶ月）
+
+新規記事はなく、既存記事「時代遅れ」が強みになった日。ボイジャー1号（行27）のビュー1061・スキ19・スキ率0.0179 を更新しました。
+[2026-07-15 03:00:42 JST] record-note-posts 完了
+[2026-07-16 03:00:01 JST] record-note-posts 開始
+Permission deny rule (.claude/settings.json): Write(.claude/settings.local.json) is not matched by file permission checks — only Edit(path) rules are. Use Edit(.claude/settings.local.json) instead (Edit rules cover all file-editing tools).
+✅ note投稿一覧 更新完了
+   更新: 1件 / 新規追加: 0件
+   対象期間: 2026-06-16 〜 2026-07-16
+
+過去1ヶ月の対象記事は1本のみで、すでにシートの27行目に登録済みだったため、統計値の更新だけを行いました。
+
+| 項目 | 値 |
+|---|---|
+| 記事 | 「時代遅れ」が強みになった日。ボイジャー1号、37年ぶりの再点火 |
+| 投稿日 | 2026-07-03 |
+| ビュー | 1,062 |
+| スキ | 19 |
+| スキ率 | 1.79% |
+
+新規追加はありませんでした。過去記事もまとめて更新したい場合は `/record-note-posts all` で全件を対象にできます。
+[2026-07-16 03:00:29 JST] record-note-posts 完了
