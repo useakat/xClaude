@@ -4,7 +4,8 @@ Gmail 下書きを作成する。過去の X 投稿を Threads へ転載する�
 
 フロー:
   1. 発信記録スプレッドシートの「X投稿一覧」を全取得
-  2. 候補抽出: ポスト種類=通常ツイート / 目的=有益 / 親ポストURL 空 / threads転載日 空 / 本文あり
+  2. 候補抽出: ポスト種類がリプライ・引用RT以外 / 目的に誘導・紹介を含まない /
+     親ポストURL 空 / threads転載日 空 / 本文あり
   3. ランダムに --count 件選択(重複なし)
   4. セルフリプ(親ポストURL が選択投稿を指す行)があれば先頭1件を [リプ] に取り込む
   5. 【threads投稿】メール本文を組み立て([投稿文]/[画像URL]/[リプ]/[リプ画像URL]/[XURL])
@@ -135,12 +136,14 @@ def main():
         if parent:
             children.setdefault(parent, []).append((i, row))
 
-    # 候補: 通常ツイート / 目的=有益 / 親ポストURL 空 / マーク空 / 本文あり
+    # 候補: リプライ・引用RT以外 / 目的に誘導・紹介を含まない(有益・共感・空欄はOK) /
+    #       親ポストURL 空 / マーク空 / 本文あり
     candidates = []
     for i, row in enumerate(rows, start=2):
-        if cell(row, COL["ポスト種類"]) != "通常ツイート":
+        if cell(row, COL["ポスト種類"]) in ("リプライ", "引用RT"):
             continue
-        if cell(row, COL["目的"]) != "有益":
+        purpose = cell(row, COL["目的"])
+        if "誘導" in purpose or "紹介" in purpose:
             continue
         if cell(row, COL["親ポストURL"]):
             continue
