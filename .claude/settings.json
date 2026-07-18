@@ -26,6 +26,7 @@
       "Bash(git -C *xClaude diff *)",
       "Bash(git -C *xClaude log *)",
       "Bash(git rev-parse *)",
+      "Bash(python3 *scripts/sheets_values.py *)",
       "Bash(bash *scripts/sync_to_drive.sh)",
       "Bash(bash *scripts/drive_put.sh *)",
       "Bash(bash *scripts/drive_get.sh *)",
@@ -109,6 +110,10 @@
           {
             "type": "command",
             "command": "[ \"$CLAUDE_CODE_REMOTE\" = \"true\" ] && bash \"$CLAUDE_PROJECT_DIR/scripts/wait_mcp_gsheets.sh\" >/dev/null 2>&1; true"
+          },
+          {
+            "type": "command",
+            "command": "[ \"$CLAUDE_CODE_REMOTE\" = \"true\" ] && bash \"$CLAUDE_PROJECT_DIR/scripts/sheets_pydeps_install.sh\" >/dev/null 2>&1; true"
           },
           {
             "type": "command",
