@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-18
+
+- **routine の Sheets 読み取りをサービスアカウント認証スクリプトに移行（リモート許可プロンプト対策の決着）** — 7/15〜7/17 の3対策がすべて無効と確定（リモートはリポジトリ内設定ファイルの MCP 許可ルールを参照しない。公式 docs とも矛盾する挙動で Issue #61097 に同症状の報告あり）。`scripts/sheets_values.py`（gspread＋`GOOGLE_SERVICE_ACCOUNT_KEY`）を新設し reporter-daily の読み取り7箇所を Bash 経由に置き換え。7/17 の接続待機スクリプト追加（結果的に空振り）もここに統合記録。[→報告書](../reports/20260718_routine_sheets_script_migration/)
+
+---
+
 ## 2026-07-16
 
 - **settings.local.json を git 管理化し mcp-gsheets 許可5ルールを配布（リモートで settings.json の許可が効かないため）** — 7/16 朝の日報 routine で許可プロンプトが再発。切り分けテストで「リモートでは `settings.json` の MCP ツール許可ルールは参照されず、`settings.local.json` の同じルールだけが効く」と確定。settings.local.json を .gitignore から外し、厳選5ルール入りで git 配布する対策を実施。[→報告書](../reports/20260716_settings_local_json_git_managed/)
