@@ -7,6 +7,14 @@ tools: Bash, Read, Write, Edit, Glob, Grep
 あなたは X・note・threads 運用の日報を自律的に作成するエージェントです。
 **以下の STEP を順番に、自動的に実行してください。ユーザー入力を待たない。**
 
+**シートの読み取りはすべて `scripts/sheets_values.py`（Bash 経由・サービスアカウント認証）で行う。mcp-gsheets の MCP ツールは使わない**（リモート環境では MCP ツールの許可プロンプトを抑止できず routine が停止するため）。スクリプトは repo ルートからの相対パスで呼ぶ：
+
+```bash
+python3 scripts/sheets_values.py get <spreadsheetId> "<range>"
+```
+
+出力は `{"range", "rowCount", "values"}` の JSON。
+
 ---
 
 # STEP 1: 対象日付の決定
@@ -40,30 +48,21 @@ print(d.strftime('%-m月%-d日'))
 
 **2-1. 最終行番号を取得する**
 
-```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="日次記録!A:A"
-)
+```bash
+python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "日次記録!A:A"
 ```
 
-返却された配列の長さを `N` とする（ヘッダー行を含む）。
+返却された `rowCount` を `N` とする（ヘッダー行を含む）。
 最新10行の開始行: `start = max(2, N - 9)`（1-indexed）
 
 **2-2. ヘッダー＋最新10行を取得する**
 
-```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="日次記録!A1:AB1"
-)
+```bash
+python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "日次記録!A1:AB1"
 ```
 
-```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="日次記録!A{start}:AB{N}"
-)
+```bash
+python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "日次記録!A{start}:AB{N}"
 ```
 
 取得した2つの結果を結合し（ヘッダー行 + データ行）、A列（日付）が `DATE_SHEET` に一致する行を探す。見つかったら以下の列を取得する：
@@ -77,11 +76,8 @@ sheets_get_values(
 
 # STEP 3: outputs シートから対象日の投稿記録を取得
 
-```
-sheets_get_values(
-  spreadsheetId="1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc",
-  range="outputs!A:H"
-)
+```bash
+python3 scripts/sheets_values.py get "1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc" "outputs!A:H"
 ```
 
 A列（日時）が `DATE_SHEET` で始まる行を全て抽出し `outputs_today` として記憶する（B=URL・C=what_id・F=note_url・H=x_url を保持）。
@@ -104,13 +100,10 @@ A列（日時）が `DATE_SHEET` で始まる行を全て抽出し `outputs_toda
 
 # STEP 4: X投稿一覧シートから対象日の投稿を取得・分類
 
-`sheets_get_values` MCP ツールで投稿一覧シートを取得する：
+投稿一覧シートを取得する：
 
-```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="X投稿一覧!A:P"
-)
+```bash
+python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "X投稿一覧!A:P"
 ```
 
 取得した全行を `x_posts_all` として保持する（URL・本文だけでよい。STEP 5 のフォールバック照合で使う）。
@@ -127,11 +120,8 @@ sheets_get_values(
 
 # STEP 5: Threads投稿一覧シートから対象日の投稿を取得・分類
 
-```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="Threads投稿一覧!A:S"
-)
+```bash
+python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "Threads投稿一覧!A:S"
 ```
 
 A列（投稿日時）が `DATE_SHEET` で始まる行を全て抽出する。各行について以下を取得する：
@@ -158,22 +148,16 @@ views が最も大きい投稿を `threads_top` として記憶する（STEP 8 �
 
 **6-1. note投稿一覧からタイトルを取得**
 
-```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="note投稿一覧!B:C"
-)
+```bash
+python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "note投稿一覧!B:C"
 ```
 
 note_url（outputs の F列）と一致する行のタイトル（C列）を取得する。
 
 **6-2. note購入記録から対象日の売上を集計**
 
-```
-sheets_get_values(
-  spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="note購入記録!A:F"
-)
+```bash
+python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "note購入記録!A:F"
 ```
 
 A列（購入日）が `DATE_SHEET` と一致する行を抽出し、E列（記事タイトル）でグルーピング。件数と、F列（価格）の値（タイムセール等で複数価格が混在する場合はその内訳）を記憶する。

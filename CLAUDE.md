@@ -251,6 +251,7 @@ bash scripts/gws_auth.sh [--scopes "追加スコープ"]
 その内容をそのままよーんに伝えること。よーんが手順を説明する必要はない。
 
 - **Sheets の読み書きは mcp-gsheets MCP ツールを使う**（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）
+  - **【routine / リモート環境の例外】無人実行（routine / agent）のシート読み書きは `python3 scripts/sheets_values.py`（get / append / update・サービスアカウント認証）を Bash 経由で使う。** リモート環境では MCP ツールの許可プロンプトをリポジトリ内の設定ファイルで抑止できず routine が停止するため（2026-07-18 判明）。認証は mcp-gsheets と同じ `GOOGLE_SERVICE_ACCOUNT_KEY` を使う。依存は `scripts/sheets_pydeps_install.sh` が自動インストールする（SessionStart hook で事前ウォーム済み）
   - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics）
   - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what / outputs）
   - **mcp-gsheets の認証は `GOOGLE_SERVICE_ACCOUNT_KEY`（JSON文字列）で行う。`settings.json` / `.mcp.json` の env に `GOOGLE_APPLICATION_CREDENTIALS`（ファイルパス）を書かない・混入させない**（Google Auth Library が最優先で掴み、`${HOME}` 未展開パスで認証失敗する。過去に複数回再発）。起動時の混入対策として `scripts/mcp_gsheets_launch.sh` が `GOOGLE_APPLICATION_CREDENTIALS` を unset してから mcp-gsheets を起動する。
