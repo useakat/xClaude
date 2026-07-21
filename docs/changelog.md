@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-07-21
 
 - **cron の Threads 投稿を複数画像（カルーセル）対応にし、record_output.py の記録ハングを再修正** — 複数画像の投稿が「画像URL連結」で全失敗していた不具合を、`post_threads.py` のカルーセル対応（2枚以上→item container→CAROUSEL→publish、上限20枚・セルフリプも対応）で解消。あわせて `record_output.py` の IPv4 固定パッチが x_url 対応リファクタ（`9be5617`）で消失し記録ハングが再発していたのを再追加（60秒超→1.3秒）。動物園4枚画像の実投稿＋記録完走を確認。[→報告書](../reports/20260721_threads_carousel_and_record_ipv4/)
+- **X投稿をThreadsにも自動転載し、下書き投稿を「X投稿が無い時だけ」のフォールバックに変更** — X投稿cron（onepoint/question/xlong/xshort）が投稿成功後に同じ本文・画像・セルフリプをそのまま Threads に転載（`MIRROR_THREADS=1`・非致命）。画像は投稿直後に pbs.twimg.com を syndication API（`fetch_tweet_media.py` 新規）で取得。独立していた `run_threads_post.sh`（6/17/20時）cron を削除し、各Xラッパーで「X投稿ゼロ時のみ下書きをフォールバック投稿」に変更。[→報告書](../reports/20260721_x_to_threads_mirror_integration/)
 
 ---
 
