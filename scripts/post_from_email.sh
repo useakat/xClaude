@@ -153,6 +153,10 @@ print(ts[-1]['id'] if ts else '')   # 空出力 = 正常に0件
     else
       python3 scripts/post_to_x.py --dry-run --text "$POST_TEXT" 2>&1 | tee -a "$LOG_PATH"
     fi
+    if [ "${MIRROR_THREADS:-0}" = "1" ]; then
+      log "[DRY RUN] Threads 転載も実行予定（本文＋画像はX投稿後に pbs.twimg.com から取得）"
+      python3 scripts/post_threads.py --dry-run --text "$POST_TEXT" ${REPLY_TEXT:+--reply-text "$REPLY_TEXT"} 2>&1 | tee -a "$LOG_PATH"
+    fi
     log "[DRY RUN] ラベル付与・INBOX解除・record_output はスキップ"
     log "[DRY RUN] 1 ループで終了（同じメールが何度も処理されないように）"
     rm -f "$TMP_IMAGE"
@@ -213,6 +217,26 @@ if m:
         print('--neta-id ' + shlex.quote(f'{sheet}[{_id}]'))
 " 2>/dev/null || true)
   eval python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" $SRC_ARGS 2>&1 | tee -a "$LOG_PATH"
+
+  # ---- Threads 転載（MIRROR_THREADS=1 のときだけ・非致命）----
+  # X投稿を Threads にも転載する。画像は pbs.twimg.com URL を syndication API で取得。
+  # 失敗しても X投稿は成功済みなので警告のみ（exit code は変えない）。
+  if [ "${MIRROR_THREADS:-0}" = "1" ]; then
+    log "Threads 転載開始..."
+    TH_IMG_URLS=$(python3 scripts/fetch_tweet_media.py "$TWEET_ID" 2>/dev/null || true)
+    TH_ARGS=(--text "$POST_TEXT")
+    [ -n "$TH_IMG_URLS" ] && TH_ARGS+=(--image-url "$TH_IMG_URLS")
+    [ -n "$REPLY_TEXT" ] && TH_ARGS+=(--reply-text "$REPLY_TEXT")
+    TH_OUTPUT=$(python3 scripts/post_threads.py "${TH_ARGS[@]}" 2>&1)
+    echo "$TH_OUTPUT" >> "$LOG_PATH"
+    TH_PERMALINK=$(printf '%s' "$TH_OUTPUT" | sed -n 's/^PERMALINK=//p' | tail -1)
+    if [ -n "$TH_PERMALINK" ]; then
+      log "Threads 転載成功: $TH_PERMALINK"
+      python3 scripts/record_output.py "$TH_PERMALINK" --x-url "$TWEET_URL" 2>&1 | tee -a "$LOG_PATH"
+    else
+      log "⚠ Threads 転載失敗（X投稿は成功済み）"
+    fi
+  fi
 
   rm -f "$TMP_IMAGE"
 
