@@ -19,7 +19,14 @@ import argparse
 import json
 import os
 import re
+import socket
 from datetime import datetime
+
+# IPv6 が通らない環境向けに DNS を IPv4 固定する。
+# googleapis.com が AAAA（IPv6）優先で解決されると gspread の接続がハングするため
+# （threads 系スクリプトと同じ対策）。x_url 対応リファクタ（9be5617）で一度失われ再発したので再追加。
+_orig_gai = socket.getaddrinfo
+socket.getaddrinfo = lambda *a, **k: [r for r in _orig_gai(*a, **k) if r[0] == socket.AF_INET] or _orig_gai(*a, **k)
 
 import gspread
 from google.oauth2.service_account import Credentials
