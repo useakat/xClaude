@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """Threads へ投稿する。500字を超える本文は返信チェーン（スレッド）で分割投稿する。
 セルフリプ（--reply-text）は本文スレッドの末尾に返信で連結する。画像は各先頭投稿に付ける。
+--image-url / --reply-image-url は空白・改行区切りで複数指定可（2枚以上はカルーセル投稿）。
 
 Usage:
-  python3 scripts/post_threads.py --text "本文" [--image-url URL] \
-      [--reply-text "セルフリプ"] [--reply-image-url URL] [--dry-run]
+  python3 scripts/post_threads.py --text "本文" [--image-url "URL1 URL2 ..."] \
+      [--reply-text "セルフリプ"] [--reply-image-url "URL ..."] [--dry-run]
 
 認証: gcp/threads_token.json（access_token, user_id）。要 threads_content_publish スコープ。
 IPv6 が通らない環境向けに DNS を IPv4 固定する。
@@ -107,12 +108,45 @@ def _wait_finished(token, creation_id, timeout=90):
     # タイムアウトしても publish を試みる（テキストは status 省略されることがある）
 
 
-def post_one(token, user_id, text, image_url=None, reply_to_id=None):
-    """1投稿を作成→公開し post_id を返す。"""
+CAROUSEL_MAX = 20  # Threads カルーセルの最大枚数
+
+
+def parse_urls(s):
+    """空白・改行区切りの画像URL文字列を URL リストにする。"""
+    return [u for u in re.split(r"\s+", (s or "").strip()) if u]
+
+
+def post_one(token, user_id, text, image_urls=None, reply_to_id=None):
+    """1投稿を作成→公開し post_id を返す。画像2枚以上はカルーセルにする。"""
+    image_urls = image_urls or []
+    if len(image_urls) >= 2:
+        # カルーセル: 各画像の item コンテナ → CAROUSEL コンテナ → publish
+        urls = image_urls[:CAROUSEL_MAX]
+        if len(image_urls) > CAROUSEL_MAX:
+            print(f"  ⚠ 画像 {len(image_urls)}枚 → 上限 {CAROUSEL_MAX}枚に切り詰め")
+        child_ids = []
+        for u in urls:
+            child = _api_post(f"{user_id}/threads", {
+                "access_token": token, "media_type": "IMAGE",
+                "is_carousel_item": "true", "image_url": u,
+            })["id"]
+            _wait_finished(token, child)
+            child_ids.append(child)
+        params = {
+            "access_token": token, "media_type": "CAROUSEL",
+            "children": ",".join(child_ids), "text": text,
+        }
+        if reply_to_id:
+            params["reply_to_id"] = reply_to_id
+        cid = _api_post(f"{user_id}/threads", params)["id"]
+        _wait_finished(token, cid)
+        return _api_post(f"{user_id}/threads_publish", {"access_token": token, "creation_id": cid})["id"]
+
+    # テキスト or 単一画像
     params = {"access_token": token, "text": text}
-    params["media_type"] = "IMAGE" if image_url else "TEXT"
-    if image_url:
-        params["image_url"] = image_url
+    params["media_type"] = "IMAGE" if image_urls else "TEXT"
+    if image_urls:
+        params["image_url"] = image_urls[0]
     if reply_to_id:
         params["reply_to_id"] = reply_to_id
     cid = _api_post(f"{user_id}/threads", params)["id"]
@@ -132,34 +166,36 @@ def main():
 
     body_chunks = split_text(args.text)
     reply_chunks = split_text(args.reply_text)
+    body_imgs = parse_urls(args.image_url)
+    reply_imgs = parse_urls(args.reply_image_url)
     if not body_chunks:
         sys.exit("本文が空です")
 
     if args.dry_run:
         print(f"--- dry-run: 本文{len(body_chunks)}件＋リプ{len(reply_chunks)}件 ---")
         for i, c in enumerate(body_chunks, 1):
-            tag = "[本文画像]" if (i == 1 and args.image_url) else ""
+            tag = f"[本文画像{len(body_imgs)}枚{'/カルーセル' if len(body_imgs) >= 2 else ''}]" if (i == 1 and body_imgs) else ""
             print(f"本文{i}({len(c)}字){tag}: {c[:60]}")
         for i, c in enumerate(reply_chunks, 1):
-            tag = "[リプ画像]" if (i == 1 and args.reply_image_url) else ""
+            tag = f"[リプ画像{len(reply_imgs)}枚{'/カルーセル' if len(reply_imgs) >= 2 else ''}]" if (i == 1 and reply_imgs) else ""
             print(f"リプ{i}({len(c)}字){tag}: {c[:60]}")
         return
 
     token, user_id = _load_token()
     prev_id = None
     first_id = None
-    # 本文スレッド
+    # 本文スレッド（画像は先頭投稿にまとめて付ける。2枚以上はカルーセル）
     for i, chunk in enumerate(body_chunks):
-        img = args.image_url if (i == 0 and args.image_url) else None
-        pid = post_one(token, user_id, chunk, image_url=img, reply_to_id=prev_id)
+        imgs = body_imgs if i == 0 else None
+        pid = post_one(token, user_id, chunk, image_urls=imgs, reply_to_id=prev_id)
         prev_id = pid
         if first_id is None:
             first_id = pid
         print(f"  本文{i+1}/{len(body_chunks)} 投稿 id={pid}")
     # セルフリプ（本文末尾に連結）
     for i, chunk in enumerate(reply_chunks):
-        img = args.reply_image_url if (i == 0 and args.reply_image_url) else None
-        pid = post_one(token, user_id, chunk, image_url=img, reply_to_id=prev_id)
+        imgs = reply_imgs if i == 0 else None
+        pid = post_one(token, user_id, chunk, image_urls=imgs, reply_to_id=prev_id)
         prev_id = pid
         print(f"  リプ{i+1}/{len(reply_chunks)} 投稿 id={pid}")
 
