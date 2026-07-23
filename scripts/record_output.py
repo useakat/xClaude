@@ -2,11 +2,12 @@
 """
 X投稿の記録を Google Sheets の outputs シートに追記する。
 Usage:
-  python3 record_output.py <url> [how_id] [--neta-id NETA_ID] [--thought-id THOUGHT_ID] [--x-url X_URL]
+  python3 record_output.py <url> [how_id] [--neta-id NETA_ID] [--thought-id THOUGHT_ID] [--note-url NOTE_URL] [--x-url X_URL]
 Example:
   python3 record_output.py https://x.com/i/web/status/123 W003
   python3 record_output.py https://x.com/i/web/status/123 z01 --neta-id "noteNeta[33]"
   python3 record_output.py https://x.com/i/web/status/123 z01 --thought-id T007
+  python3 record_output.py https://x.com/i/web/status/123 W001 --note-url "https://note.com/takaesu7431/n/abc"
   python3 record_output.py https://www.threads.com/@u/post/abc --x-url "https://x.com/i/web/status/123"
 
 outputs 列: 日時(A) | URL(B) | what_id(C) | neta_id(D) | thought_id(E) | note_url(F) | img-pattern_id(G) | x_url(H)
@@ -68,10 +69,10 @@ def record_short_post_usage(client, neta_id: str):
     print(f"✓ 短文最終使用日を更新: {sheet_name}[{no}] → {column}{row_index} = {today}")
 
 
-def record(url: str, how_id: str = "", neta_id: str = "", thought_id: str = "", x_url: str = ""):
+def record(url: str, how_id: str = "", neta_id: str = "", thought_id: str = "", x_url: str = "", note_url: str = ""):
     dt = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     # 列順: 日時(A) URL(B) what_id(C) neta_id(D) thought_id(E) note_url(F) img-pattern_id(G) x_url(H)
-    row = [dt, url, how_id, neta_id, thought_id, "", "", x_url]
+    row = [dt, url, how_id, neta_id, thought_id, note_url, "", x_url]
     client = get_client()
     sheet = client.open_by_key(SPREADSHEET_ID).worksheet(SHEET_NAME)
     sheet.append_row(row, value_input_option="USER_ENTERED")
@@ -87,6 +88,7 @@ if __name__ == "__main__":
     parser.add_argument("how_id", nargs="?", default="", help="what_id（例: W003 / z01）。threads 投稿は省略可")
     parser.add_argument("--neta-id", default="", help="neta_id 列の値（例: noteNeta[33]）")
     parser.add_argument("--thought-id", default="", help="thought_id 列の値（例: T007）")
+    parser.add_argument("--note-url", default="", help="note_url 列の値（W001 販促投稿の誘導先 note 記事 URL。Xnote導線記録の紐付けキー）")
     parser.add_argument("--x-url", default="", help="x_url 列の値（threads 投稿の元 X 投稿 URL）")
     args = parser.parse_args()
-    record(args.url, args.how_id, args.neta_id, args.thought_id, args.x_url)
+    record(args.url, args.how_id, args.neta_id, args.thought_id, args.x_url, args.note_url)

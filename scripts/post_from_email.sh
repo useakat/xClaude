@@ -129,6 +129,9 @@ print(ts[-1]['id'] if ts else '')   # 空出力 = 正常に0件
   # [リプ] タグ抽出（任意）
   REPLY_TEXT=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py リプ 2>/dev/null || true)
 
+  # [note_url] タグ抽出（任意。W001 販促投稿の誘導先 note URL → outputs!F に記録）
+  NOTE_URL=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py note_url 2>/dev/null | tr -d '[:space:]' || true)
+
   # 添付画像 DL
   HAS_IMAGE=0
   if bash scripts/download_gmail_attachment.sh "$MESSAGE_ID" "$TMP_IMAGE" >/dev/null 2>&1; then
@@ -147,6 +150,9 @@ print(ts[-1]['id'] if ts else '')   # 空出力 = 正常に0件
       echo "----- REPLY_TEXT -----" | tee -a "$LOG_PATH"
       echo "$REPLY_TEXT" | tee -a "$LOG_PATH"
       echo "----------------------" | tee -a "$LOG_PATH"
+    fi
+    if [ -n "$NOTE_URL" ]; then
+      log "[DRY RUN] note_url: $NOTE_URL（record_output に --note-url で渡す）"
     fi
     if [ $HAS_IMAGE -eq 1 ]; then
       python3 scripts/post_to_x.py --dry-run --text "$POST_TEXT" --image "$TMP_IMAGE" 2>&1 | tee -a "$LOG_PATH"
@@ -216,7 +222,11 @@ if m:
     else:
         print('--neta-id ' + shlex.quote(f'{sheet}[{_id}]'))
 " 2>/dev/null || true)
-  eval python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" $SRC_ARGS 2>&1 | tee -a "$LOG_PATH"
+  NOTE_ARGS=""
+  if [ -n "$NOTE_URL" ]; then
+    NOTE_ARGS="--note-url $NOTE_URL"
+  fi
+  eval python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" $SRC_ARGS $NOTE_ARGS 2>&1 | tee -a "$LOG_PATH"
 
   # ---- Threads 転載（MIRROR_THREADS=1 のときだけ・非致命）----
   # X投稿を Threads にも転載する。画像は pbs.twimg.com URL を syndication API で取得。
