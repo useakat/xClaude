@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-24
+
+- **公開済み note 記事の定期販促用 X長文の仕組みを追加（W001 モードB再定義＋セルフリプ cron 自動投稿＋note_url 自動記録）** — モードBを「2〜3ヶ月おきの繰り返し販促」前提に再定義（note投稿一覧からURL取得／ブリーフは「note の売り」だけ継承／outputs の note_url 紐付けで過去投稿と重複しないフォーカスを選ぶ／セルフリプ毎回新規）。メールに `[リプ]` タグを追加し cron が本体投稿直後にセルフリプを自動投稿、`[note_url]` タグ→outputs F列自動記録で Xnote導線記録に自動反映。モードCは note 公開直後の初回専用に。[→報告書](../reports/20260724_w001_note_promo_mode/)
+
+---
+
 ## 2026-07-21
 
 - **cron の Threads 投稿を複数画像（カルーセル）対応にし、record_output.py の記録ハングを再修正** — 複数画像の投稿が「画像URL連結」で全失敗していた不具合を、`post_threads.py` のカルーセル対応（2枚以上→item container→CAROUSEL→publish、上限20枚・セルフリプも対応）で解消。あわせて `record_output.py` の IPv4 固定パッチが x_url 対応リファクタ（`9be5617`）で消失し記録ハングが再発していたのを再追加（60秒超→1.3秒）。動物園4枚画像の実投稿＋記録完走を確認。[→報告書](../reports/20260721_threads_carousel_and_record_ipv4/)
