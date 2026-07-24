@@ -1,6 +1,6 @@
 #!/bin/bash
 # X短文投稿 (cron 実行)。X投稿を Threads にも転載する。投稿対象が無ければ Threads 下書きを代替投稿。
-# cron 例: 0 21 * * * /bin/bash /root/xClaude/scripts/run_xshort_post.sh
+# cron: 0 20 * * * /bin/bash /root/xClaude/scripts/run_xshort_post.sh
 export MIRROR_THREADS=1  # X投稿を Threads にも転載する
 DIR="$(dirname "$0")"
 /bin/bash "$DIR/post_from_email.sh" "【X短文投稿】" z01 x_post_short.log
