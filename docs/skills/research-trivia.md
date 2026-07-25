@@ -30,11 +30,13 @@ X（旧Twitter）で「実は、〇〇は△△だ」という形式でバズる
 
 ※ 条件2〜4は brand.md 冒頭フック5軸（軸1体接続動詞・軸4直感的比較数字必須・軸5パワーワード必須）に対応。3・4を満たさないネタは採用しない。
 
+**Sheets の読み書きはすべて `scripts/sheets_values.py`（Bash 経由・サービスアカウント認証）で行う。mcp-gsheets の MCP ツールは使わない**（リモート routine では MCP ツールの許可プロンプトを抑止できず routine が停止するため）。スクリプトは repo ルートからの相対パスで呼ぶ。
+
 ## リサーチ手順
 
-1. 以下を呼び出して既存ネタの一覧を取得し、重複しないよう確認する：
-   ```
-   sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="onePointNeta!A:Z")
+1. 以下を実行して既存ネタの一覧を取得し、重複しないよう確認する（出力は `{"range", "rowCount", "values"}` の JSON）：
+   ```bash
+   python3 scripts/sheets_values.py get "1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM" "onePointNeta!A:Z"
    ```
 2. WebSearchで以下の2カテゴリを分けて検索し、それぞれ5件ずつ計10件収集する：
    - **【宇宙・物理・素粒子】5件**: 「宇宙 驚き 事実」「素粒子 不思議」「physics surprising facts」「quantum mechanics trivia」などで検索
@@ -44,13 +46,17 @@ X（旧Twitter）で「実は、〇〇は△△だ」という形式でバズる
 5. **出力後、収集した各ネタを Google Sheets に保存する。No は既存の最大 No + 1 から連番で採番する（10件分実行）。必ず11列（追加日 J列・分野 K列まで）を書くこと：**
    - **追加日（J列）**: 実行当日の日付。`date +%F` で取得した値（`YYYY-MM-DD`）をそのまま入れる。プレースホルダのままにしない。
    - **分野（K列）**: **宇宙 / 物理 / 化学 / 生物 / 医学 の5つから1つ**を選ぶ。【宇宙・物理・素粒子】カテゴリのネタは `宇宙` または `物理`、【科学全般】カテゴリのネタは内容に応じて `化学` / `生物` / `医学` を割り当てる。空欄にしない。
+   ```bash
+   VALUES_JSON=$(python3 -c 'import json; print(json.dumps([
+     [No1, "テーマ1", "冒頭1行案1", "身近さ接続1", "仕組みのポイント1", "感情的締め案1", "難易度1", "出典メモ1", "未使用", "YYYY-MM-DD", "分野1"],
+     [No2, "テーマ2", "冒頭1行案2", "身近さ接続2", "仕組みのポイント2", "感情的締め案2", "難易度2", "出典メモ2", "未使用", "YYYY-MM-DD", "分野2"]
+   ], ensure_ascii=False))')
+   python3 scripts/sheets_values.py append "1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM" "onePointNeta!A:A" "$VALUES_JSON"
    ```
-   sheets_append_values(
-     spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM",
-     range="onePointNeta!A:A",
-     values=[[No, テーマ, 冒頭1行案, 身近さ接続, 仕組みのポイント, 感情的締め案, 難易度, 出典メモ, "未使用", <当日YYYY-MM-DD>, 分野]]
-   )
-   ```
+
+   - 日本語データを含むため `ensure_ascii=False` は必須
+   - 10 件まとめて 1 回の append で書き込むこと（1 件ずつ実行しない）
+   - `YYYY-MM-DD` は `date +%F` の出力で置き換える
 
 ## 出力形式
 
