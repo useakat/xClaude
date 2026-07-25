@@ -385,4 +385,4 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
    保存先: docs/reports/daily/[DATE_ISO].md
 ```
 
-保存したファイルを Read ツールで読み込み、内容をそのまま表示する。
+保存したファイルを Read ツールで読み込み、内容をコードスニペット（```で囲んだコードブロック）として全文表示する。
