@@ -41,7 +41,7 @@ const DAILY_METRICS_CONFIG = {
     // S: プロフ（手動）
     // T: ブルバフォロワ数（手動）
     NOTE_FOLLOWERS: 21,   // U: noteフォロワ数（自動）
-    IMPRESSIONS_3M: 26,   // Z: 3M累計インプ（数式）
+    IMPRESSIONS_3M: 27,   // AA: 3M累計インプ（数式）
   }
 };
 
