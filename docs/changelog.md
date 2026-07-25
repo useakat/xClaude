@@ -9,14 +9,16 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ## 2026-07-25
 
+- **research 系スキルを sheets_values.py に移行＋open_by_key に 404 リトライ追加（append 経路の本番書き込み初テスト完了）** — 7/18 の routine Sheets スクリプト移行の続編。`research-trivia` / `research-note-projectx` の `sheets_get_values` / `sheets_append_values` 呼び出しを Bash 経由の `scripts/sheets_values.py` に置換し、両スキル冒頭に「MCP ツールは使わない」方針ブロックを追加。あわせてセッション初回コールドスタート時の 404（`SpreadsheetNotFound`）を緩和する 1 秒後 1 回リトライ＋詳細ログを `open_by_key` に追加。7/18 で保留となっていた append の本番書き込みも試験行で検証し、11 セル完全一致で書き込めることを確認。[→報告書](../reports/20260725_research_skills_sheets_migration/)
 - **日次記録シート V列に Threads フォロワ数を毎朝自動記録** — GAS が毎朝書く「日次記録」シートで空だった V列「threads フォロワ数」を、ローカル python（`record_threads_followers.py` 新規）が Threads insights の `followers_count` を取得して前日行に記録（IPv4固定・SA認証・冪等・cron 5:30）。GAS トークンを持たせず自動更新トークンを使う保守性重視の選択。GAS トリガーは 5:00 に前倒し。[→報告書](../reports/20260725_threads_followers_daily_record/)
-- **日報を媒体別4セクション構成に変更（reporter-daily）** — 番号付き構成（①ポスト数〜④特記事項）をやめ、`note` / `X` / `threads` / `特記事項` の媒体別に再編。各媒体の件数の下に投稿の内訳を入れ子で並べる形にし、これまで出せなかった threads の投稿件数を Threads投稿一覧シートの当日行数から算出するようにした。入れ子は全角スペース・箇条書き間は空行という Wiki 描画の制約もルール化。[→報告書](../reports/20260725_reporter_daily_media_sections/)
 
 ---
 
 ## 2026-07-24
 
 - **公開済み note 記事の定期販促用 X長文の仕組みを追加（W001 モードB再定義＋セルフリプ cron 自動投稿＋note_url 自動記録）** — モードBを「2〜3ヶ月おきの繰り返し販促」前提に再定義（note投稿一覧からURL取得／ブリーフは「note の売り」だけ継承／outputs の note_url 紐付けで過去投稿と重複しないフォーカスを選ぶ／セルフリプ毎回新規）。メールに `[リプ]` タグを追加し cron が本体投稿直後にセルフリプを自動投稿、`[note_url]` タグ→outputs F列自動記録で Xnote導線記録に自動反映。モードCは note 公開直後の初回専用に。[→報告書](../reports/20260724_w001_note_promo_mode/)
+- **X短文投稿の cron 実行時刻を 21 時→20 時に変更（コメント同期）** — `scripts/run_xshort_post.sh` のヘッダコメントを crontab 本体（20:00 実行）と揃えるためのメンテナンス修正。
+- **gws OAuth 再認証（2026-07-24・本番公開化＋spreadsheets スコープ追加）** — Drive/Gmail に加え `spreadsheets` スコープ入りで本番公開版クライアントへ再認証（`token_cache.json` クリア済み）。
 
 ---
 
@@ -65,7 +67,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **物語型推敲チェックリストと語彙の好み帳を導入** — Z01 制作でのユーザー推敲指摘（論理整合・語彙の好み・締めの厚み・抽象語）をルール化。`style/story-check.md`（物語型5項目チェック、W001/W002/Z01 の採点基準から参照）と `style/z01-phrasebook.md`（語彙の好み帳、100行目安・場面別・上書き運用）を新設し、w002 brand.md に採点基準セクション（8項目）を新設、z01 spec.md に STEP 3.5 セルフ推敲を追加。[→報告書](../reports/20260712_story_check_phrasebook/)
 - **Threads 自動投稿の不具合修正（threads_manage_replies 再認証＋record_output の IPv6 ハング解消）** — 初回 cron で分割スレッド投稿・outputs 記録・ラベル付与が失敗。原因は (a) 返信作成に必要な `threads_manage_replies` スコープ不足（権限追加＋再認証で解決）、(b) googleapis の AAAA 優先解決×IPv6 不通による `record_output.py` の gspread 接続ハング（IPv4 固定で 60秒超→1.6秒）。再テストで全工程完走を確認、欠損 outputs も補完。[→報告書](../reports/20260712_threads_post_replies_scope_ipv6_fix/)
-- **X投稿一覧からランダム選択して【threads投稿】Gmail下書きを自動作成する仕組みを追加** — `make_threads_draft.py` 新規（候補=通常ツイート×有益×未転載、`random.sample` で4件/回、セルフリプ先頭1件取込、X投稿一覧に AH列「threads転載日」でマーク）＋cron 毎朝8時。下書きを送信すれば既存 Threads 投稿 cron が投稿する。[→報告書](../reports/20260712_threads_draft_random_pick/)
+- **X投稿一覧からランダム選択して【threads投稿】Gmail下書きを自動作成する仕組みを追加** — `make_threads_draft.py` 新規（候補=通常ツイート×有益×未転載、`random.sample` で4件/回、セルフリプ先颭1件取込、X投稿一覧に AH列「threads転載日」でマーク）＋cron 毎朝8時。下書きを送信すれば既存 Threads 投稿 cron が投稿する。[→報告書](../reports/20260712_threads_draft_random_pick/)
 
 ---
 
@@ -98,7 +100,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-07-06
 
 - **notebooklm_manager.py：インフォグラフィック生成失敗時に直前の画像を誤ダウンロードするバグを修正** — RPC生成がレート制限等で失敗しても `task_id` が空のまま処理が続行し、直前に成功した画像を無言で再ダウンロードしていた不具合を修正。`status.is_complete` を確認し、失敗時はエラー表示のうえ exit code 1 で終了するよう変更。[→報告書](../reports/20260706_notebooklm_infographic_failure_bug/)
-- **W003 図解テンプレートのサブタイトルを鉤括弧＋念押しで一字一句固定** — メインタイトルは正確なのにサブタイトルだけAIに言い換えられる事象を、6テンプレート全てのサブタイトル指定に「一字一句そのまま使用・要約禁止」の念押しを追加して解消。[→報告書](../reports/20260706_w003_infographic_subtitle_lock/)
+- **W003 図解テンプレートのサブタイトルを鈍括弧＋念押しで一字一句固定** — メインタイトルは正確なのにサブタイトルだけAIに言い換えられる事象を、6テンプレート全てのサブタイトル指定に「一字一句そのまま使用・要約禁止」の念押しを追加して解消。[→報告書](../reports/20260706_w003_infographic_subtitle_lock/)
 
 ---
 
@@ -119,9 +121,9 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **mcp-gsheets 起動を prefer-offline + 版固定にして再接続タイムアウト(-32000)を解消** — `npx -y mcp-gsheets@latest` が spawn/reconnect のたびにレジストリ問い合わせを強制し、不通時に60秒ハングして Claude Code 初期化タイムアウト(-32000)を招いていた。`npx --prefer-offline -y mcp-gsheets@1.8.1` に変更しキャッシュ優先起動化（レジストリ遮断下でも1.3秒で起動を確認）。[→報告書](../reports/20260703_mcp_gsheets_prefer_offline_pin/)
 - **mcp-gsheets 起動スクリプトのパスを cwd 非依存の絶対パス化して projects/ 配下からの -32000 を解消** — `.mcp.json` の相対パス `scripts/mcp_gsheets_launch.sh` が、セッション cwd が `projects/w001` のとき解決できず即終了→再接続タイムアウト(-32000)を招いていた。`bash -c 'exec bash "$HOME/xClaude/scripts/mcp_gsheets_launch.sh"'` に変更し、どのディレクトリから起動しても繋がるよう是正。[→報告書](../reports/20260703_mcp_gsheets_launch_abspath/)
-- **mcp-gsheets 起動を prefer-offline → ローカルインストール方式に変更（フレッシュコンテナの ETARGET 回避）** — フレッシュなクラウドコンテナで `--prefer-offline` が陳腐化した npm メタデータキャッシュを掴み、transitive 依存 `qs@^6.15.2` を解決できず `ETARGET` で install ごと失敗しサーバ未起動（"still connecting"）になっていた。バージョン固定のローカル prefix install＋`node` 直接起動に変更（初回のみ online 取得、以降は npm/レジストリ非依存で起動）。[→報告書](../reports/20260703_mcp_gsheets_local_install/)
+- **mcp-gsheets 起動を prefer-offline → ローカルインストール方式に変更（フレッシュコンテナの ETARGET 回避）** — フレッシュなクラウドコンテナで `--prefer-offline` が陳腐化した npm メタデータキャッシュを捧み、transitive 依存 `qs@^6.15.2` を解決できず `ETARGET` で install ごと失敗しサーバ未起動（"still connecting"）になっていた。バージョン固定のローカル prefix install＋`node` 直接起動に変更（初回のみ online 取得、以降は npm/レジストリ非依存で起動）。[→報告書](../reports/20260703_mcp_gsheets_local_install/)
 - **X長文→note 導線の分割設計フロー（plan-xnote-funnel）を追加** — ネタ選定直後に「X長文の範囲／有料note の売り／セルフリプ文面」を一体で設計する上流スキルを新設し、共有ブリーフ `funnel-brief.md` を起点にする協調モードC を W001/W002 spec に追加（note 先行→X長文投稿の導線前提。既存 modeA/B は併存）。[→報告書](../reports/20260703_plan_xnote_funnel_split_design/)
-- **z01 に固有名詞の平易化・一次情報主義・読みやすさ採点を追加** — z01 brand/spec と check-fact に、カタログ名・型番・専門単位の言い換え表、数値の一次情報主義（丸め値を鵜呑みにせず論文・計算で裏取り）、読みやすさ採点（「の」3連・無読点35字超・連体修飾2段超のシグナル）を追加。[→報告書](../reports/20260703_z01_plain_naming_primary_source/)
+- **z01 に固有名詞の平易化・一次情報主義・読みやすさ採点を追加** — z01 brand/spec と check-fact に、カタログ名・型番・専門単位の言い換え表、数値の一次情報主義（丸め値を鵜呪みにせず論文・計算で裏取り）、読みやすさ採点（「の」3連・無読点35字超・連体修飾2段超のシグナル）を追加。[→報告書](../reports/20260703_z01_plain_naming_primary_source/)
 
 ---
 
@@ -140,7 +142,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **X短文投稿(z01)の outputs 記録に neta_id / thought_id を追加** — `record_output.py` を argparse 化し `--neta-id`/`--thought-id` を追加（outputs の D/E 列）。`post_from_email.sh` が投稿後に本文の `ソース: {シート}[{番号}]` を抽出し、thoughts→thought_id（ID）/ それ以外→neta_id（`noteNeta[33]` のシート名付き）で記録。`ソース:` 行が無い他フローは従来どおり。[→報告書](../reports/20260629_outputs_neta_thought_id/)
 - **ワンポイント解説(W003)の X投稿時に outputs へ neta_id 記録を復活** — `post_from_email.sh` のネタ抽出を「`[ネタID]` タグ → 無ければ `ソース:` 行」の2マーカー対応に拡張。W003 下書きの `[ネタID]onePointNeta[{No}][/ネタID]` から neta_id＝`onePointNeta[N]`（過去形式と一致）を記録。z01 の挙動は不変。
-- **mcp-gsheets 認証をラッパーで両対応化＋mcp__* 無効ルール整理** — 親プロセス混入の `GOOGLE_APPLICATION_CREDENTIALS`（`${HOME}` 付き不正パス）を Auth Library が掴み失敗する問題を、起動ラッパー `scripts/mcp_gsheets_launch.sh`（`unset`＋KEY 補完）＋`.mcp.json` 経由化で恒久対策。CLAUDE.md に再発防止を明記し、/doctor 指摘の無効 `mcp__*` を有効な `mcp__<server>__*` へ置換。[→報告書](../reports/20260629_mcp_gsheets_launcher_both_envs/)
+- **mcp-gsheets 認証をラッパーで両対応化＋mcp__* 無効ルール整理** — 親プロセス混入の `GOOGLE_APPLICATION_CREDENTIALS`（`${HOME}` 付き不正パス）を Auth Library が捧み失敗する問題を、起動ラッパー `scripts/mcp_gsheets_launch.sh`（`unset`＋KEY 補完）＋`.mcp.json` 経由化で恒久対策。CLAUDE.md に再発防止を明記し、/doctor 指摘の無効 `mcp__*` を有効な `mcp__<server>__*` へ置換。[→報告書](../reports/20260629_mcp_gsheets_launcher_both_envs/)
 
 ---
 
