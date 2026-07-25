@@ -25,6 +25,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 
 # --- IPv4 固定(IPv6 が通らない環境でのハング回避)---
 _orig_getaddrinfo = __import__("socket").getaddrinfo
@@ -73,6 +74,31 @@ def get_client():
     return gspread.authorize(creds)
 
 
+def open_with_retry(client, spreadsheet_id):
+    """
+    セッション初回コールドスタート時に `open_by_key` が 404 を返すことがあるため
+    1 秒待って 1 回だけリトライする（2026-07-24 に本番 routine で観測）。
+    2 回目も 404 なら真の権限問題なので通常どおり例外を上げる。
+    """
+    try:
+        return client.open_by_key(spreadsheet_id)
+    except gspread.exceptions.SpreadsheetNotFound as e:
+        resp = getattr(e, "response", None)
+        status = getattr(resp, "status_code", None)
+        body = ""
+        try:
+            body = resp.text[:500] if resp is not None else ""
+        except Exception:
+            pass
+        print(
+            f"[sheets_values] 404 on open_by_key(attempt 1) id={spreadsheet_id} "
+            f"status={status} body={body!r} — retrying after 1s",
+            file=sys.stderr,
+        )
+        time.sleep(1)
+        return client.open_by_key(spreadsheet_id)
+
+
 def load_values(arg: str):
     raw = sys.stdin.read() if arg == "-" else arg
     values = json.loads(raw)
@@ -87,7 +113,7 @@ def main():
         sys.exit(2)
 
     command, spreadsheet_id, rng = sys.argv[1], sys.argv[2], sys.argv[3]
-    ss = get_client().open_by_key(spreadsheet_id)
+    ss = open_with_retry(get_client(), spreadsheet_id)
 
     if command == "get":
         resp = ss.values_get(rng)
