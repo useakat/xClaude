@@ -180,7 +180,13 @@ git -C /root/xClaude log --oneline -3 -- <file>
 
 # STEP 5: 変更ログへのエントリ追加
 
-`docs/changelog.md` を読み込み、適切な日付セクションに追記する。
+**編集の前に、必ずリモートの最新状態を取り込む**（複数セッションが同じ日に changelog を編集するため）：
+
+```bash
+git -C /root/xClaude fetch origin master -q && git -C /root/xClaude rebase origin/master
+```
+
+そのうえで `docs/changelog.md` を読み込み、適切な日付セクションに追記する。
 
 ## エントリ形式
 
@@ -228,10 +234,43 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 
 ---
 
+# STEP 6.5: プッシュ後の反映確認（エントリ消失の検知）
+
+push しただけでは終わらない。**master 上に自分のエントリと報告書が実際に載っているか**を必ず確認する：
+
+```bash
+git -C /root/xClaude fetch origin master -q
+
+# 1. 変更ログに自分のエントリが載っているか（今回のタイトルが出力に含まれること）
+git -C /root/xClaude show origin/master:docs/changelog.md | python3 -c "
+import sys
+s = sys.stdin.read()
+sec = s.split('## YYYY-MM-DD')[1].split('\n## ')[0]
+for l in sec.split('\n'):
+    if l.startswith('- **'): print('•', l[4:l.index('**', 4)])
+"
+
+# 2. リンク先の報告書・セッション履歴が master に存在するか（パスが出力されること）
+git -C /root/xClaude ls-tree origin/master --name-only \
+  docs/reports/YYYYMMDD_<スラグ>.md docs/history/YYYYMMDD_<スラグ>.md
+```
+
+- **自分のエントリが出力に無い場合は消失している。** 別セッションが同じ日付セクションを編集し、そのマージで自分の1行が落ちるケースがある。以下で復元する：
+
+```bash
+git -C /root/xClaude rebase origin/master   # 最新の changelog を取り込む
+# 消えたエントリを再度追記して commit → push
+```
+
+- 報告書ファイルが出力に無い場合は、報告書だけが未 push（またはマージで失われた）状態。同様に復元してから完了報告する。
+- 背景：2026-07-25、別セッションのマージにより変更ログの1行だけが静かに消え、報告書ファイルは残っているのにどこからもリンクされない状態になった。push の成功は「master に載っていること」を意味しないため、このステップを必ず実施する。
+
+---
+
 # 完了報告
 
 ```
 ✅ 記録完了
    報告書: docs/reports/YYYYMMDD_[ファイル名].md
-   変更ログ: docs/changelog.md に追記済み
+   変更ログ: docs/changelog.md に追記済み（master 上で反映を確認済み）
 ```
