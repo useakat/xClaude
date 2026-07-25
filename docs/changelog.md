@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-07-25
 
 - **research 系スキルを sheets_values.py に移行＋open_by_key に 404 リトライ追加（append 経路の本番書き込み初テスト完了）** — 7/18 の routine Sheets スクリプト移行の続編。`research-trivia` / `research-note-projectx` の `sheets_get_values` / `sheets_append_values` 呼び出しを Bash 経由の `scripts/sheets_values.py` に置換し、両スキル冒頭に「MCP ツールは使わない」方針ブロックを追加。あわせてセッション初回コールドスタート時の 404（`SpreadsheetNotFound`）を緩和する 1 秒後 1 回リトライ＋詳細ログを `open_by_key` に追加。7/18 で保留となっていた append の本番書き込みも試験行で検証し、11 セル完全一致で書き込めることを確認。[→報告書](../reports/20260725_research_skills_sheets_migration/)
+- **日次記録シート V列に Threads フォロワ数を毎朝自動記録** — GAS が毎朝書く「日次記録」シートで空だった V列「threads フォロワ数」を、ローカル python（`record_threads_followers.py` 新規）が Threads insights の `followers_count` を取得して前日行に記録（IPv4固定・SA認証・冪等・cron 5:30）。GAS トークンを持たせず自動更新トークンを使う保守性重視の選択。GAS トリガーは 5:00 に前倒し。[→報告書](../reports/20260725_threads_followers_daily_record/)
 
 ---
 

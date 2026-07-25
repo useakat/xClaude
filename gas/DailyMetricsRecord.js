@@ -520,7 +520,7 @@ function debugReplyCounts() {
 
 /**
  * 毎朝実行するトリガーを設定
- * この関数を1回手動実行すると、以降は自動的に毎朝6時にrecordDailyMetricsが実行されます
+ * この関数を1回手動実行すると、以降は自動的に毎朝5時にrecordDailyMetricsが実行されます
  */
 function setupDailyTrigger() {
   // 既存のトリガーを削除
@@ -531,13 +531,13 @@ function setupDailyTrigger() {
       Logger.log('既存のトリガーを削除しました');
     }
   });
-  
-  // 新しいトリガーを作成（毎朝6時）
+
+  // 新しいトリガーを作成（毎朝5時。Threads フォロワ記入 5:30 の前）
   ScriptApp.newTrigger('recordDailyMetrics')
     .timeBased()
-    .atHour(6)
+    .atHour(5)
     .everyDays(1)
     .create();
-  
-  Logger.log('✅ トリガーを設定しました: recordDailyMetrics を毎朝6時に実行');
+
+  Logger.log('✅ トリガーを設定しました: recordDailyMetrics を毎朝5時に実行');
 }
