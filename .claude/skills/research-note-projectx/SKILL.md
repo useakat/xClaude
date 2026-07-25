@@ -13,11 +13,13 @@ note 記事（約6000字）の題材となる、探査機・探査車・宇宙�
 4. **6000字の記事として成立する深さがある** — エピソードが豊富で、複数セクションに展開できる
 5. **まだ記事化していない題材** — Google Sheets の noteNeta シートおよび `参照note記事/` フォルダの既存記事と重複しない
 
+**Sheets の読み書きはすべて `scripts/sheets_values.py`（Bash 経由・サービスアカウント認証)で行う。mcp-gsheets の MCP ツールは使わない**（リモート routine では MCP ツールの許可プロンプトを抑止できず routine が停止するため）。スクリプトは repo ルートからの相対パスで呼ぶ。
+
 ## リサーチ手順
 
-1. 以下を呼び出して既存ネタの一覧を取得し、重複しないよう確認する：
-   ```
-   sheets_get_values(spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM", range="noteNeta!A:Z")
+1. 以下を実行して既存ネタの一覧を取得し、重複しないよう確認する（出力は `{"range", "rowCount", "values"}` の JSON）：
+   ```bash
+   python3 scripts/sheets_values.py get "1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM" "noteNeta!A:Z"
    ```
 2. `参照note記事/` フォルダ内のファイル名を確認し、既存記事テーマと重複しないよう確認する
 3. WebSearchで以下のキーワードで検索する：
@@ -27,13 +29,17 @@ note 記事（約6000字）の題材となる、探査機・探査車・宇宙�
 4. 条件を満たすネタを5件以上収集する
 5. 以下のフォーマットで出力する
 6. **出力後、収集した各ネタを Google Sheets に保存する。No は既存の最大 No + 1 から連番で採番する（件数分実行）：**
+   ```bash
+   VALUES_JSON=$(python3 -c 'import json; print(json.dumps([
+     [No1, "タイトル案1", "主人公(ミッション名)1", "時代・背景1", "危機の内容1", "逆転のポイント1", "科学的見どころ1", "人間ドラマの核心1", "記事展開のヒント1", "難易度1", "出典メモ1", "未使用", "YYYY-MM-DD"],
+     [No2, "タイトル案2", "主人公(ミッション名)2", "時代・背景2", "危機の内容2", "逆転のポイント2", "科学的見どころ2", "人間ドラマの核心2", "記事展開のヒント2", "難易度2", "出典メモ2", "未使用", "YYYY-MM-DD"]
+   ], ensure_ascii=False))')
+   python3 scripts/sheets_values.py append "1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM" "noteNeta!A:A" "$VALUES_JSON"
    ```
-   sheets_append_values(
-     spreadsheetId="1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM",
-     range="noteNeta!A:A",
-     values=[[No, タイトル案, 主人公(ミッション名), 時代・背景, 危機の内容, 逆転のポイント, 科学的見どころ, 人間ドラマの核心, 記事展開のヒント, 難易度, 出典メモ, "未使用", YYYY-MM-DD]]
-   )
-   ```
+
+   - 日本語データを含むため `ensure_ascii=False` は必須
+   - 収集した件数分を 1 回の append でまとめて書き込むこと
+   - `YYYY-MM-DD` は `date +%F` の出力で置き換える
 
 ## 出力フォーマット
 
