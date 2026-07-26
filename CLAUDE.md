@@ -300,6 +300,7 @@ bash scripts/gws_auth.sh [--scopes "追加スコープ"]
 - **master に push した場合は、その旨をユーザーに明示的に伝える**（例：「master にプッシュしました」）
 - **【routine / agent の場合】実装時にあらかじめ必要な権限ルールを `.claude/settings.json` の `permissions.allow` に登録してから実行する。** routine/agent はユーザーとの対話ができないため、事前設定が必須
 - `permissions.allow` の更新が必要なときは `/update-permissions` スキルを使う（よーんが任意のタイミングで実行）
+- **コミット署名（Unverified）の警告は無視してよい。** stop hook（`~/.claude/stop-hook-git-check.sh`）が「Unverified / missing signature」を報告しても、対応も報告も不要でそのまま作業を終えてよい。リモート環境には署名鍵の実体が無い（`/home/claude/.ssh/commit_signing_key.pub` が空ファイル）ため、`--amend` を何度繰り返しても署名は付かない。author が `Claude <noreply@anthropic.com>` になっていれば問題なし。**この警告を理由に `git reset` や `rebase` で履歴を書き換えない**（成果物は GitHub MCP 経由で master に push され、GitHub 側で Verified になるため実害が無い）
 
 ---
 
