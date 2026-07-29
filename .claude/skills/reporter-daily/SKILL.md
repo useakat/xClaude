@@ -378,11 +378,14 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 
 # 完了報告
 
+**この2ステップは順番厳守。ステップ1を省略して2だけ出すことは禁止。**
+
+1. 保存したファイル（`docs/reports/daily/[DATE_ISO].md`）を Read ツールで読み込み、内容を省略せずそのまま表示する
+2. 続けて以下のサマリーを表示する
+
 ```
 ✅ 日報作成完了: [DATE_JP]
    X: オリジナルポスト数 [posts] / 引用 [quotes] / リプライ [replies]
    threads: オリジナルポスト数 [threads_posts]
    保存先: docs/reports/daily/[DATE_ISO].md
 ```
-
-保存したファイルを Read ツールで読み込み、内容をそのまま表示する。
