@@ -149,21 +149,21 @@ xClaude/
 - 妻＋娘2人
 - 性格：マイペース / 出不精 / 朝弱い
 - 得意：アプリ開発 / むずかしい話をかみ砕くこと / 独り言
-- 趣味：星空観察 / ドラム / 朝散歩
+- 趣味：星空視察 / ドラム / 朝散歩
 -好きなもの：
    - ヨルシカ / aiko / スピッツ / ジュディマリ
    - 潜水艦映画
    - エヴァ（DEATH & REBIRTH）
-- 夢:週休4日 ！
+- 夢:週位4日 ！
 
 ## 発信軸
 ①誰に
-- 科学に興味がある20～50代で、日常の常識を揺さぶられたい人
+- 科学に興味がある20〜50代で、日常の常識を揺さぶられたい人
 - 困難を乗り越える姿勢が好きな人
 
 ②何の価値提供をして
 - 人間の知性・執念・再挑戦を語る科学のストーリー
-- 人はどう決断するか、失敗の後にどう立て直すか、常識をどう疑うか、未来にどう賭けるかという、人間の話を科学の観点からする
+- 人はどう決断するか、失敗の後にどう立て直すか、常識をどう疑うか、未来にどう賫けるかという、人間の話を科学の観点からする
 
 ③何を解消するのか
 - 理想の生き方を欲する自分と現実的・打算的な自分との葛藤。理想の生き方を欲する自分を許容していいのだという安心感を与える。
@@ -175,7 +175,7 @@ xClaude/
 -「ガチな科学」×「中の人の泥臭いドラマ」＝ 最高のエンタメ
 - 宇宙や物理の話を、理論や事実だけではなく、それを実行し続ける人間臭い努力（執念）にスポットを当てて、ワクワクする「エンタメ」として届ける
 - 宇宙と物理の「不屈の物語」を届ける
-- 科学に宿るドラマを発見して言語化する
+- 科学に孿るドラマを発見して言語化する
 - 難しい科学を「直感がひっくり返る面白さ」で届ける、世界の見え方を裏返す
 - 宇宙を遠い世界で終わらせず、生活感に接続する
 
@@ -185,7 +185,7 @@ xClaude/
 - 自然（宇宙・真理）は、冷たく巨大で過酷な場所である。しかし、そこへ挑む人間の『あきらめの悪さ（執念）』と『正しい論理』が合わさったとき、それはこの世で最も美しい物語になる
 - 制約があるからこそ知恵が立ち上がる
 - 科学は情熱の産物であり、感情と意志が強く混ざった人間くさい営み
-- 物事は計算通りにいかないのが当たり前で、その先の対応にこそ本質（美しさ）が宿る
+- 物事は計算通りにいかないのが当たり前で、その先の対応にこそ本質（美しさ）が孿る
 - 世界を変えるのは、『一人の人間』の異常な熱量と正しさである
 - 私たちは宇宙の中に生きている。だから、宇宙の出来事は私の出来事である
 - 成果そのものより"到達のしかた"に価値がある
@@ -251,10 +251,10 @@ bash scripts/gws_auth.sh [--scopes "追加スコープ"]
 その内容をそのままよーんに伝えること。よーんが手順を説明する必要はない。
 
 - **Sheets の読み書きは mcp-gsheets MCP ツールを使う**（`sheets_get_values` / `sheets_append_values` / `sheets_update_values`）
-  - **【routine / リモート環境の例外】無人実行（routine / agent）のシート読み書きは `python3 scripts/sheets_values.py`（get / append / update・サービスアカウント認証）を Bash 経由で使う。** リモート環境では MCP ツールの許可プロンプトをリポジトリ内の設定ファイルで抑止できず routine が停止するため（2026-07-18 判明）。認証は mcp-gsheets と同じ `GOOGLE_SERVICE_ACCOUNT_KEY` を使う。依存は `scripts/sheets_pydeps_install.sh` が自動インストールする（SessionStart hook で事前ウォーム済み）
+  - **【routine / リモート環境の例外】無人実行（routine / agent）のシート読み書きは `python3 scripts/sheets_values.py`（get / append / update・サービスアカウント認証）を Bash 経由で使う。** リモート環境では MCP ツールの許可プロンプトをリポジトリ内設定ファイルで抱止できず routine が停止するため（2026-07-18 判明）。認証は mcp-gsheets と同じ `GOOGLE_SERVICE_ACCOUNT_KEY` を使う。依存は `scripts/sheets_pydeps_install.sh` が自動インストールする（SessionStart hook で事前ウォーム済み）
   - SS1: `1zCT0Kv0Q0qr83c6e_jQxUJeUQ1Y8iz0Zlm_0U5RMaEM`（onePointNeta / noteNeta / newsTopics）
   - SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc`（persona / pain / what / outputs）
-  - **mcp-gsheets の認証は `GOOGLE_SERVICE_ACCOUNT_KEY`（JSON文字列）で行う。`settings.json` / `.mcp.json` の env に `GOOGLE_APPLICATION_CREDENTIALS`（ファイルパス）を書かない・混入させない**（Google Auth Library が最優先で掴み、`${HOME}` 未展開パスで認証失敗する。過去に複数回再発）。起動時の混入対策として `scripts/mcp_gsheets_launch.sh` が `GOOGLE_APPLICATION_CREDENTIALS` を unset してから mcp-gsheets を起動する。
+  - **mcp-gsheets の認証は `GOOGLE_SERVICE_ACCOUNT_KEY`（JSON文字列）で行う。`settings.json` / `.mcp.json` の env に `GOOGLE_APPLICATION_CREDENTIALS`（ファイルパス）を書かない・混入させない**（Google Auth Library が最優先で掟む、`${HOME}` 未展開パスで認証失敗する。過去に複数回再発）。起動時の混入対策として `scripts/mcp_gsheets_launch.sh` が `GOOGLE_APPLICATION_CREDENTIALS` を unset してから mcp-gsheets を起動する。
 
 #### Drive ファイルダウンロードのルール（トークン節約）
 - **ローカル環境**: `bash scripts/drive_get.sh <file-id> <output-path>`
@@ -289,7 +289,7 @@ bash scripts/gws_auth.sh [--scopes "追加スコープ"]
 1. **`.claude/skills/metadata.yaml` に追記**：`<name>: category: <カテゴリ>` を追加（カテゴリは既存のものから選ぶ：コンテンツ制作 / レポート生成 / リサーチ・分析 / 品質チェック / メール・通知 / 画像・同期 / 運用・記録 / 設定・保守）
 2. **commit する**：PostToolUse hook が `update_wiki_skills.py` を自動実行し、`docs/skills/<name>.md` と `docs/skills/index.md` を生成する
 
-`metadata.yaml` への追記を忘れると、Wiki 自動更新で新スキルが反映されない。
+`metadata.yaml` への追記を忘れると、Wiki 自動更新で新スキルが反映されません。
 
 ---
 
@@ -300,7 +300,7 @@ bash scripts/gws_auth.sh [--scopes "追加スコープ"]
 - **master に push した場合は、その旨をユーザーに明示的に伝える**（例：「master にプッシュしました」）
 - **【routine / agent の場合】実装時にあらかじめ必要な権限ルールを `.claude/settings.json` の `permissions.allow` に登録してから実行する。** routine/agent はユーザーとの対話ができないため、事前設定が必須
 - `permissions.allow` の更新が必要なときは `/update-permissions` スキルを使う（よーんが任意のタイミングで実行）
-- **コミット署名（Unverified）の警告は無視してよい。** stop hook（`~/.claude/stop-hook-git-check.sh`）が「Unverified / missing signature」を報告しても、対応も報告も不要でそのまま作業を終えてよい。リモート環境には署名鍵の実体が無い（`/home/claude/.ssh/commit_signing_key.pub` が空ファイル）ため、`--amend` を何度繰り返しても署名は付かない。author が `Claude <noreply@anthropic.com>` になっていれば問題なし。**この警告を理由に `git reset` や `rebase` で履歴を書き換えない**（成果物は GitHub MCP 経由で master に push され、GitHub 側で Verified になるため実害が無い）
+- **コミット署名（Unverified）の警告は完全に無視する。** stop hook（`~/.claude/stop-hook-git-check.sh`）が「Unverified / missing signature」を報告しても、対応・報告・確認メッセージのいずれも一切出力せず、その回答自体を書かずに作業を終える（「無視して問題ありません」等の一言メッセージも不要）。リモート環境には署名鍵の実体が無い（`/home/claude/.ssh/commit_signing_key.pub` が空ファイル）ため、`--amend` を何度繰り返しても署名は付かない。author が `Claude <noreply@anthropic.com>` になっていれば問題なし。**この警告を理由に `git reset` や `rebase` で履歴を書き換えない**（成果物は GitHub MCP 経由で master に push され、GitHub 側で Verified になるため実害が無い）
 
 ---
 
