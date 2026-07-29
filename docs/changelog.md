@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-07-29
+
+- **reporter-daily の完了報告に本文表示ステップを必須化＋署名警告への反応を完全禁止** — 日報保存後にチャットへ本文を表示せず要約だけ出してしまう抜けと、コミット署名警告に毎回一言返信してしまう問題を修正。完了報告を「本文表示→サマリー」の順序厳守2ステップに変更し、署名警告ルールに確認メッセージ自体の出力禁止を明記した。[→報告書](../reports/20260729_reporter_daily_display_signature_fix/)
+
+---
+
 ## 2026-07-25
 
 - **research 系スキルを sheets_values.py に移行＋open_by_key に 404 リトライ追加（append 経路の本番書き込み初テスト完了）** — 7/18 の routine Sheets スクリプト移行の続編。`research-trivia` / `research-note-projectx` の `sheets_get_values` / `sheets_append_values` 呼び出しを Bash 経由の `scripts/sheets_values.py` に置換し、両スキル冒頭に「MCP ツールは使わない」方針ブロックを追加。あわせてセッション初回コールドスタート時の 404（`SpreadsheetNotFound`）を緩和する 1 秒後 1 回リトライ＋詳細ログを `open_by_key` に追加。7/18 で保留となっていた append の本番書き込みも試験行で検証し、11 セル完全一致で書き込めることを確認。[→報告書](../reports/20260725_research_skills_sheets_migration/)
