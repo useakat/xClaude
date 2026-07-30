@@ -8,6 +8,8 @@ gcp/
 *.pyc
 
 # 認証・個人スクリプト（コミット対象外）
+.clasprc.json
+gas/.clasprc.json
 /get-gws-tokens.py
 /tunnel.sh
 /To
