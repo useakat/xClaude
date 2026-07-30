@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **w001/w002 に Drive フォルダ一式アップロード工程を追加し画像を Drive-only 化（w003 方式に統一）** — w001 spec フロー15／w002 spec フロー16 に `drive_put_folder.sh` によるフォルダ丸ごとアップロード（構造再現・冪等）を新設し、`.gitignore` に `/projects/w001|w002/**/*.png` を追加して追跡中の png 39件を git 追跡解除（リポジトリ肥大防止）。過去フォルダ8件（w001×4・w002×4）を Drive `xClaude/projects/` 配下へ遡及アップロード済み。[→報告書](../reports/20260730_w001_w002_drive_folder_upload/)
 - **GAS の 3M累計インプ記入先を AA列に修正し、clasp を useakat 再認証で本番デプロイ** — 「日次記録」に「週間インプ」列が挿入され 3M累計インプが Z(26)→AA(27) にシフト。`DailyMetricsRecord.js` の `IMPRESSIONS_3M` を修正し `clasp push` で反映。clasp が別アカウント（kitanagasekids）でログイン中だったため useakat へ再ログイン、認証は global を復元し `gas/.clasprc.json` へ退避、`.clasprc.json` を gitignore 化。[→報告書](../reports/20260730_gas_3m_column_fix_clasp_deploy/)
+- **週報に投稿型ごとのインプレッション合計を追加（reporter-weekly）** — 週報の「やったこと」で投稿を型（ワンポイント解説・ストーリー長文等）ごとに集約し、見出し行に本数とインプ合計（threads は views 表記）を書くフォーマットに変更。日報が無い日の投稿は数値不明として合計から除外し明記する。7/20週（2026-W30）に適用済み（SKILL.md の PLACEHOLDER 誤 push は復元済み）。[→報告書](../reports/20260730_reporter_weekly_type_impressions/)
 
 ---
 
