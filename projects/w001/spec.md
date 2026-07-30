@@ -137,8 +137,10 @@ note を読みたくなる導入1文と [note URL]
         --attach output/thumbnail.png
       ```
     - 成功判定は `✓ 下書き作成完了 (id: …)` が返ること。**gws Gmail が認証エラー（Precondition）の場合は gws を再認証してから実行する**（`scripts/gws_auth.sh` / ブラウザ認証）。**セルフリプ（2投稿目）は、note URL 確定済み（モードB/C）なら `[リプ]` タグで cron が本体投稿直後に自動投稿する。モードA（URL未確定）のみ `[リプ]` を省略し、note 公開後に手動で投稿する。**
+15. **投稿フォルダを Drive へアップロード** — 投稿フォルダ `projects/w001/YYYYMMDD_[topic]/` を丸ごと `bash scripts/drive_put_folder.sh projects/w001/YYYYMMDD_[topic] 1ZXvs-h0GngSsCOwX6fbB0rBsqO-jUaOW` で Drive `xClaude/projects/w001` 配下にアップロードする（画像含む・フォルダ構造を再現・同名は更新される冪等動作。w003 spec のフロー11 と同方式）。
 
 ### その他
+- **投稿フォルダ内の画像（`output/thumbnail.png` 等の `*.png`）は git にコミットしない**。`.gitignore` の `/projects/w001/**/*.png` で除外し、画像はローカルと Drive（フロー15 のアップロード先 `xClaude/projects/w001`）に保存する。リポジトリにはテキスト（`*.md`）のみを残す（容量肥大を防ぐため。w003 と同方式）。
 
 ## Verification
 - フォーカスが1点に絞られ（モードA＝主役にする切り口／モードB＝note 記事の一場面）、ユーザー承認を経て決定されている（`draft/focus-candidates.md` に「## 決定」あり）
@@ -165,3 +167,4 @@ note を読みたくなる導入1文と [note URL]
 - `/check-brand` のブランド適合スコアリング全項目が 8 点以上（不合格時は警告を明記）
 - `plan.md` の目的に沿う（読後に「諦めなくていい」着地／note へ続きを取りに行かせる引きがある）
 - 出力ファイル名が命名規則に揃っている
+- 投稿フォルダが Drive (xClaude/projects/w001) にアップロード済み

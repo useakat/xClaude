@@ -25,5 +25,7 @@ tmux-*.log
 /logs/mcp_gsheets_launch.log
 /logs/sheets_pydeps_install.log
 
-# W003 投稿フォルダ内の画像はコミットしない（Drive に保存する。リポジトリ肥大を防ぐ）
+# W001/W002/W003 投稿フォルダ内の画像はコミットしない（Drive に保存する。リポジトリ肥大を防ぐ）
+/projects/w001/**/*.png
+/projects/w002/**/*.png
 /projects/w003/**/*.png
