@@ -138,7 +138,8 @@ C7. **ブリーフ整合** — 制作した note の“売り”がブリーフ�
     2. 不審な出典・確認できない記述について WebSearch / WebFetch で実 URL と実記載内容を検証する
     3. 誤った出典は差し替え・不足出典は追加して draft.md を更新する
     4. 変更内容を output/index.md の `## 参考情報` にも反映する
-11. **画像生成**:
+11. **本文のセクション別確認【対話】**: チェック済みの本文（draft.md）を、導入部・各 H2 セクションの単位で順にチャットに提示し、**セクションごとにユーザーの承認を得る**。修正指摘があれば該当セクションを直し（brand.md 準拠・事実は出典の範囲内で。事実に関わる修正は notebook / 出典で裏取りしてから反映）、修正後のセクションを再提示して承認を得る。**全セクションの承認が揃ってから次のステップへ進む**。修正内容は output/index.md にも反映する。
+12. **画像生成**:
     1. **案出し**: `/visual_section-planner` スキルを使い、各H2セクションに配置する図解・イメージ・写真画像の案を立て、`draft/image-plan.md` に保存する（各セクション複数案）。
     2. **案の選択【対話】**: `draft/image-plan.md` の内容をユーザーに表示し、**各セクションどの案を採用するかを決めてもらう**。`image-plan.md` は3案のまま残す（上書きしない）。
     3. **確定案の保存**: 選ばれた案（各セクション1案）を、`image-plan.md` と同じ `## H2 → 種類 — 説明` の構造で `draft/image-plan_final.md` に保存する。種類（図解／イメージ／写真）も残す。
@@ -146,21 +147,23 @@ C7. **ブリーフ整合** — 制作した note の“売り”がブリーフ�
        - **(a) design-brief**: 写真以外の各セクションについて、`image/design-brief_template.md`（テンプレ）・`image/design-brief_example.md`（例）をもとに `draft/images/<safe>_design-brief.md` を作成 → **ユーザー承認**。
        - **(b) プロンプト**: 承認済み design-brief をもとに `draft/images/` にプロンプトを保存 → **ユーザー承認**。図解は `projects/visual_prompts/infographic_template.md` を全体ベースに、「図解の構成・レイアウト」を `infographic_layout_*` から選択（合わなければ自由記述）。
        - **(c) 生成**: 図解画像を NotebookLM で各3枚生成。イメージ画像はスキルでは生成せず、保存したプロンプトファイルで**ユーザーが外部の画像生成AI（nano banana 等）で生成する**。写真案はスキップ。
-12. **サムネイル生成**: `thumbnail/` フォルダで以下を行う。フォルダが無ければ`w002/thumbnail_template` をthumbnailという名前でコピーして用意する。
+13. **サムネイル生成**: `thumbnail/` フォルダで以下を行う。フォルダが無ければ`w002/thumbnail_template` をthumbnailという名前でコピーして用意する。
     1. **インプット確認**: `thumbnail/plan.md`（目的・KPI・失格条件）、`thumbnail/brand.md`（サムネのトーン）、`draft/draft.md`（記事内容）、`thumbnail/design-brief_template.md`（テンプレ）を読む。
     2. **デザイン指示書**: テンプレに沿って `thumbnail/design-brief.md` を作成する（媒体分類・目的・KPI・文字階層・構図・配色・禁止事項・レビュー基準）。記事タイトルをメイン／サブコピーに割り付け、強調キーワードを1箇所だけ黄色に決める。
     3. **生成プロンプト**: design-brief をもとに `thumbnail/nanobanana-prompt.md` を作成する。被写体、**画面内に入れる日本語文字（崩さず正確に）**、レイアウト・視線誘導、配色、Negative prompt を含める。
     4. **画像生成（手動・外部）**: Claude は `nanobanana-prompt.md` を提示するところまで担当する。**ユーザーが nano banana（Gemini 2.5 Flash Image）で画像を生成し、`output/images/thumbnail.png`（1280×672px）として保存する**。リポジトリに生成ツールが無いため Claude は画像生成自体を実行しない。日本語が崩れる場合はサブコピーを短縮するか、生成後にテキストを重ねる。
     5. **レビュー＆リトライ**: design-brief の「レビュー基準」と plan の「失格条件」で点検する（3秒でタイトルが読める／日本語が崩れていない／メインが最大／状況が情景で伝わる／CTA・絵文字・過剰煽りが無い）。満たさなければプロンプトを調整して再生成する。
-13. **ハッシュタグ**: `/hashtag-note {本文}`で、note記事につける hashtag を選定し、本文下書きの末尾に追加する。
-14. **ネタを使用済みに更新**: **モードA** — `noteNeta` シートの該当行 L列を「使用済み」に更新する。**モードC** — `funnel-brief.md` の `## ネタ` にある noteNeta 行番号の L列を「使用済み」に更新する（note を先に作るため、ここで更新して二重選定を防ぐ）。**モードB は何も行わない**（ネタ更新なし）。
-15. **完了メール送信**: `scripts/send_gmail.sh` で useakat@gmail.com へ通知
+14. **ハッシュタグ**: `/hashtag-note {本文}`で、note記事につける hashtag を選定し、本文下書きの末尾に追加する。
+15. **ネタを使用済みに更新**: **モードA** — `noteNeta` シートの該当行 L列を「使用済み」に更新する。**モードC** — `funnel-brief.md` の `## ネタ` にある noteNeta 行番号の L列を「使用済み」に更新する（note を先に作るため、ここで更新して二重選定を防ぐ）。**モードB は何も行わない**（ネタ更新なし）。
+16. **記事フォルダを Drive へアップロード** — 記事フォルダ `projects/w002/YYYY-MM-DD_<短いタイトル>/` を丸ごと `bash scripts/drive_put_folder.sh projects/w002/YYYY-MM-DD_<短いタイトル> 1AonY-bLf61duFKZ6dBsPq7mSQASD_HGn` で Drive `xClaude/projects/w002` 配下にアップロードする（画像含む・フォルダ構造を再現・同名は更新される冪等動作。w003 spec のフロー11 と同方式）。
+17. **完了メール送信**: `scripts/send_gmail.sh` で useakat@gmail.com へ通知
 
 ### その他
 - **構成承認前に本文（全文・サンプル段落含む）を書かない。** ユーザーの明示承認を待つ。
 - モードA では、ネタ使用後、即座に Sheets の L列を「使用済み」に更新する。
 - モードB では、ネタを新規選定せず（noteNeta は参照しない）、notebook を w001 から継承する。ネタの使用済み更新は行わない。
-- モードC では、ネタを新規選定せず（`funnel-brief.md` に確定済み）、notebook をブリーフの `notebook_id` から継承する。構成は独立5案でなくブリーフの「note の売り／課金壁」から導く。ネタの使用済み更新は行う（ステップ14）。
+- モードC では、ネタを新規選定せず（`funnel-brief.md` に確定済み）、notebook をブリーフの `notebook_id` から継承する。構成は独立5案でなくブリーフの「note の売り／課金壁」から導く。ネタの使用済み更新は行う（ステップ15）。
+- **記事フォルダ内の画像（`output/images/` 等の `*.png`）は git にコミットしない**。`.gitignore` の `/projects/w002/**/*.png` で除外し、画像はローカルと Drive（フロー16 のアップロード先 `xClaude/projects/w002`）に保存する。リポジトリにはテキスト（`*.md`）のみを残す（容量肥大を防ぐため。w003 と同方式）。
 
 ## Verification
 - 本文が **6000〜8000字**に収まっている（下限6000・上限8000目安）
@@ -179,3 +182,4 @@ C7. **ブリーフ整合** — 制作した note の“売り”がブリーフ�
 - **（モードB）** `notebook-id.md` が w001 の notebook ID を継承している
 - **（モードC）** `funnel-brief.md` を起点にし、有料部分にブリーフの“売り”が温存されている（無料部分が X の既出範囲を再掲していても可）
 - **（モードC）** `notebook-id.md` がブリーフの notebook ID を継承している／該当ネタの L列が「使用済み」に更新されている
+- 記事フォルダが Drive (xClaude/projects/w002) にアップロード済み
