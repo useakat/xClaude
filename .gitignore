@@ -31,3 +31,6 @@ tmux-*.log
 /projects/w001/**/*.png
 /projects/w002/**/*.png
 /projects/w003/**/*.png
+/projects/w001/**/*.jpg
+/projects/w002/**/*.jpg
+/projects/w003/**/*.jpg
