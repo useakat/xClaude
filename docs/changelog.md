@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-08-06
+
+- **マネタイズ月報スキル `reporter-monetization` を新設** — X・threads の型別成績（3ヶ月推移）／note マネタイズと X・threads→note 導線（CTR/CVR/売上・note_url 付き全投稿対象）／来月マネタイズ計画案の3本柱を月次で出す新スキル。集計は `monetization_metrics.py`（outputs.what_id×各一覧を突合、SA認証・IPv4・読取専用）に集約し、スキルは JSON をもとに `docs/reports/monetization/` に生成（手動実行）。2026-07 note売上 3,430円が既存月報と一致で検算。[→報告書](../reports/20260806_reporter_monetization_skill/)
+
+---
+
 ## 2026-08-04
 
 - **lovart スキルによる画像生成を W001 制作フローに導入（海王星販促投稿で初運用）** — サムネ生成を「プロンプトを渡して外部で生成」から「Claude が lovart で生成し対話で詰める」フローへ実質移行。史実準拠のため実機写真（CC0）を参考画像に添付し、肖像が残る人物は完全シルエット固定と design-brief に明文化。6回の改稿で最終版を確定し、`.gitignore` の画像除外を jpg にも拡張した。[→報告書](../reports/20260804_lovart_image_generation_w001/)
