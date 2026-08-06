@@ -162,24 +162,31 @@ def main():
     note_rows = ws_values(gc, SS_HASSHIN, "note投稿一覧")
     buy_rows = ws_values(gc, SS_HASSHIN, "note購入記録")
 
-    # --- outputs から tweet_id→what_id、note_url 付き投稿を作る ---
+    # --- outputs から tweet_id→what_id、threads permalink→元x_url、note_url 付き投稿を作る ---
     tid_to_what = {}
+    perma_to_xurl = {}   # threads permalink → 元X投稿URL（型解決は H列でなくこちらを使う）
     note_link_rows = []  # note_url 付き全投稿
     for r in outputs[1:]:
         dt = r[0] if len(r) > 0 else ""
         url = r[1] if len(r) > 1 else ""
         what = r[2] if len(r) > 2 else ""
         note_url = r[5] if len(r) > 5 else ""
+        x_url = r[7] if len(r) > 7 else ""
         tid = tweet_id(url)
         if tid and what:
             tid_to_what.setdefault(tid, what)
+        if ("threads.com" in url or "threads.net" in url) and x_url:
+            perma_to_xurl.setdefault(url, x_url)
         if note_url:
             note_link_rows.append({"dt": dt, "url": url, "what": what, "note_url": note_url,
                                     "tid": tid, "platform": platform_of(url)})
 
-    # --- X投稿一覧 索引（tweet_id → 指標）---
-    # 列: A=0投稿日時 B=1URL K=10IMP P=15エンゲージ AB=27リンククリック AC=28フォロー増
+    # --- X投稿一覧 索引（tweet_id → 指標）＋ セルフリプのリンククリックを親ポスト単位で集約 ---
+    # 列: A=0投稿日時 B=1URL J=9親ポストURL K=10IMP P=15エンゲージ AB=27リンククリック AC=28フォロー増
+    # note リンクはセルフリプ側にあるため、導線クリックは「親ポストURL が当該投稿を指すリプ行」の
+    # リンククリック合計を使う（本体ポスト行のクリックには出ないため）。
     x_by_tid = {}
+    selfreply_click_by_parent = {}  # 親ポスト tweet_id → セルフリプのリンククリック合計
     for r in x_rows[1:]:
         tid = tweet_id(r[1] if len(r) > 1 else "")
         if not tid:
@@ -191,6 +198,10 @@ def main():
             "click": parse_int(r[27]) if len(r) > 27 else 0,
             "follow": parse_int(r[28]) if len(r) > 28 else 0,
         }
+        parent_tid = tweet_id(r[9] if len(r) > 9 else "")
+        if parent_tid:
+            selfreply_click_by_parent[parent_tid] = (
+                selfreply_click_by_parent.get(parent_tid, 0) + (parse_int(r[27]) if len(r) > 27 else 0))
 
     # --- A. X 型別成績（月×型）---
     x_stat = {m: {} for m in win}
@@ -219,8 +230,11 @@ def main():
             th_by_permalink[permalink] = {"views": views}
         if m not in winset:
             continue
-        tid = tweet_id(xurl)
-        lab = label_of(tid_to_what.get(tid)) if tid and tid_to_what.get(tid) else UNREC_TH
+        # 型解決: outputs の threads行（permalink→元x_url）を優先。無ければ H列(xurl)。
+        src_xurl = perma_to_xurl.get(permalink) or xurl
+        stid = tweet_id(src_xurl)
+        what = tid_to_what.get(stid) if stid else None
+        lab = label_of(what) if what else UNREC_TH
         b = th_stat[m].setdefault(lab, new_bucket_th())
         b["count"] += 1
         b["views"] += views; b["eng"] += eng
@@ -272,7 +286,9 @@ def main():
         if w["platform"] == "X":
             x = x_by_tid.get(w["tid"])
             if x:
-                f["imp"] += x["imp"]; f["click"] += x["click"]
+                f["imp"] += x["imp"]  # 到達＝本体ポストの IMP
+            # クリックは note リンクを載せたセルフリプ行の合計（本体行には出ないため）
+            f["click"] += selfreply_click_by_parent.get(w["tid"], 0)
         elif w["platform"] == "threads":
             th = th_by_permalink.get(w["url"])
             if th:
@@ -286,14 +302,21 @@ def main():
                 f["purchases"] += s["count"]; f["sales"] += s["sales"]
 
     # --- 整形して出力 ---
+    def median(vals):
+        v = sorted(vals)
+        n = len(v)
+        if n == 0:
+            return 0
+        return v[n // 2] if n % 2 else round((v[n // 2 - 1] + v[n // 2]) / 2)
+
     def fmt_x(stat):
         out = {}
         for m in win:
             types = {}
             for lab, b in stat[m].items():
-                imps = sorted(b["imps"])
-                avg = round(b["imp"] / b["count"]) if b["count"] else 0
-                types[lab] = {"count": b["count"], "imp": b["imp"], "imp_avg": avg,
+                types[lab] = {"count": b["count"], "imp": b["imp"],
+                              "imp_avg": round(b["imp"] / b["count"]) if b["count"] else 0,
+                              "imp_median": median(b["imps"]),
                               "eng": b["eng"], "eng_avg": round(b["eng"] / b["count"]) if b["count"] else 0,
                               "click": b["click"], "follow": b["follow"]}
             out[m] = types
@@ -306,6 +329,7 @@ def main():
             for lab, b in stat[m].items():
                 types[lab] = {"count": b["count"], "views": b["views"],
                               "views_avg": round(b["views"] / b["count"]) if b["count"] else 0,
+                              "views_median": median(b["views_list"]),
                               "eng": b["eng"]}
             out[m] = types
         return out
@@ -338,8 +362,8 @@ def main():
             "outputs 未記録の投稿は型別・導線の集計対象外（型は (未記録)/(元投稿不明) に計上）。",
             "threads はリンククリック指標が無いため note 導線 CTR/CVR を算出できない（th_views のみ）。",
             "導線の売上/購入は note 記事単位（型内で重複排除）。複数型が同じ記事へ誘導する場合、型をまたいだ二重計上があり得る。月次の総売上は note_sales（note購入記録の実勢合計）を正とする。",
-            "W001 の note リンクはセルフリプ側にあり、本体ポスト行のリンククリックには計上されないため、導線 CTR は過小に出る（構造的制約）。",
-            "下書き転載の threads は元 X 投稿が outputs 未記録のことが多く、型が (元投稿不明) になりやすい。",
+            "導線クリックは note リンクを載せたセルフリプ行のリンククリック合計を使う（本体ポスト行には出ないため）。CTR は「セルフリプのクリック ÷ 本体ポストの IMP」。ただし X投稿一覧のリンククリック列が未取込（update-x-analytics 未実行）の月はクリック 0 になり CTR も 0 になる。",
+            "threads の型は outputs の threads行（permalink→元x_url→what_id）で解決する。元X投稿が outputs 未記録だと (元投稿不明) になる。",
         ],
     }
 
@@ -347,8 +371,18 @@ def main():
         print(f"=== マネタイズ集計 対象月 {target}（3ヶ月: {', '.join(win)}）===")
         print(f"\n[A] X 型別成績（{target}）")
         for lab, v in sorted(result["x_by_type"][target].items(), key=lambda kv: -kv[1]["imp"]):
-            print(f"  {lab}: {v['count']}本 IMP計{v['imp']:,}(平均{v['imp_avg']:,}) "
+            print(f"  {lab}: {v['count']}本 IMP計{v['imp']:,}(平均{v['imp_avg']:,}/中央値{v['imp_median']:,}) "
                   f"エンゲ計{v['eng']:,} クリック{v['click']} フォロー増{v['follow']}")
+        print(f"\n[A2] X IMP合計の3ヶ月推移（型×月）")
+        xtypes = set()
+        for m in win:
+            xtypes |= set(result["x_by_type"][m].keys())
+        for lab in sorted(xtypes):
+            cells = []
+            for m in win:
+                v = result["x_by_type"][m].get(lab)
+                cells.append(f"{m}={v['imp']:,}({v['count']}本)" if v else f"{m}=—")
+            print(f"  {lab}: " + " / ".join(cells))
         print(f"\n[B] threads 型別成績（{target}）")
         for lab, v in sorted(result["threads_by_type"][target].items(), key=lambda kv: -kv[1]["views"]):
             print(f"  {lab}: {v['count']}本 views計{v['views']:,}(平均{v['views_avg']:,}) エンゲ計{v['eng']:,}")
