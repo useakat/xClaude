@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-08-07
+
+- **X アナリティクス月次CSVアップロードの月次リマインド routine を新設** — マネタイズ月報の note 導線（CTR/CVR）に必要な X アナリティクスCSVのアップ忘れ防止。毎月1日9:00 JST に Drive を検索し、前月分CSV（`account_analytics_content_{前月}`）が無ければ useakat@gmail.com にリマインドメール送信、あればナガらない。cloud routine（`trig_01WhHLFmPuok7f4idXnbaPdY`・Default/sonnet-5・Drive＋Gmailコネクタ）。[→報告書](../reports/20260807_x_analytics_csv_reminder_routine/)
+
+---
+
 ## 2026-08-06
 
 - **マネタイズ月報スキル `reporter-monetization` を新設** — X・threads の型別成績（3ヶ月推移）／note マネタイズと X・threads→note 導線（CTR/CVR/売上・note_url 付き全投稿対象）／来月マネタイズ計画案の3本柱を月次で出す新スキル。集計は `monetization_metrics.py`（outputs.what_id×各一覧を突合、SA認証・IPv4・読取専用）に集約し、スキルは JSON をもとに `docs/reports/monetization/` に生成（手動実行）。2026-07 note売上 3,430円が既存月報と一致で検算。[→報告書](../reports/20260806_reporter_monetization_skill/)
