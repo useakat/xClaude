@@ -53,7 +53,7 @@
 - 画像: `YYYY-MM-DD_<短いタイトル>/draft/images/<H2セクションタイトル>_<画像種類>_<連番>.png`
 
 * 画像種類：図解 / イメージ / 写真
-* 図解は NotebookLM で各3枚生成（連番 01〜03）。イメージは外部の画像生成AI（nano banana 等）でユーザーが生成する。写真案はスキップ。
+* 図解・イメージとも `/lovart` スキル（Lovart AI）で生成する。参照画像がある場合は `upload` で CDN に上げて `--attachments` で渡す。写真案はスキップ。
 
 ### 公開原稿
 `YYYY-MM-DD_<短いタイトル>/output/index.md`
@@ -146,12 +146,12 @@ C7. **ブリーフ整合** — 制作した note の“売り”がブリーフ�
     4. **実画像化**: `/visual_section-imager`（入力 `draft/image-plan_final.md`）を実行する。同スキルは `image/plan.md`・`image/brand.md` を読み、次の2段階の承認を経て生成する（いずれも本文はチャットに表示せず保存先パスだけ伝える）：
        - **(a) design-brief**: 写真以外の各セクションについて、`image/design-brief_template.md`（テンプレ）・`image/design-brief_example.md`（例）をもとに `draft/images/<safe>_design-brief.md` を作成 → **ユーザー承認**。
        - **(b) プロンプト**: 承認済み design-brief をもとに `draft/images/` にプロンプトを保存 → **ユーザー承認**。図解は `projects/visual_prompts/infographic_template.md` を全体ベースに、「図解の構成・レイアウト」を `infographic_layout_*` から選択（合わなければ自由記述）。
-       - **(c) 生成**: 図解画像を NotebookLM で各3枚生成。イメージ画像はスキルでは生成せず、保存したプロンプトファイルで**ユーザーが外部の画像生成AI（nano banana 等）で生成する**。写真案はスキップ。
+       - **(c) 生成**: 承認済みプロンプトで `/lovart` スキル（Lovart AI）を使って図解画像・イメージ画像を生成する。実機・実物の形状を再現したい場合は、参照画像を `upload` で Lovart CDN に上げ、`--attachments` で渡して形状を忠実に描かせる。生成結果をユーザーに提示し、採用案が決まるまで修正依頼（同一スレッドで `--thread-id` 指定）または複数枚生成を繰り返す。写真案はスキップ。
 13. **サムネイル生成**: `thumbnail/` フォルダで以下を行う。フォルダが無ければ`w002/thumbnail_template` をthumbnailという名前でコピーして用意する。
     1. **インプット確認**: `thumbnail/plan.md`（目的・KPI・失格条件）、`thumbnail/brand.md`（サムネのトーン）、`draft/draft.md`（記事内容）、`thumbnail/design-brief_template.md`（テンプレ）を読む。
     2. **デザイン指示書**: テンプレに沿って `thumbnail/design-brief.md` を作成する（媒体分類・目的・KPI・文字階層・構図・配色・禁止事項・レビュー基準）。記事タイトルをメイン／サブコピーに割り付け、強調キーワードを1箇所だけ黄色に決める。
     3. **生成プロンプト**: design-brief をもとに `thumbnail/nanobanana-prompt.md` を作成する。被写体、**画面内に入れる日本語文字（崩さず正確に）**、レイアウト・視線誘導、配色、Negative prompt を含める。
-    4. **画像生成（手動・外部）**: Claude は `nanobanana-prompt.md` を提示するところまで担当する。**ユーザーが nano banana（Gemini 2.5 Flash Image）で画像を生成し、`output/images/thumbnail.png`（1280×672px）として保存する**。リポジトリに生成ツールが無いため Claude は画像生成自体を実行しない。日本語が崩れる場合はサブコピーを短縮するか、生成後にテキストを重ねる。
+    4. **画像生成**: `/lovart` スキル（Lovart AI）で `nanobanana-prompt.md` の内容を使って画像を生成する。実機・実物の形状を再現したい場合は参照画像を `upload` して `--attachments` で渡す。複数枚生成してユーザーに提示し、採用案を決めてもらう（修正は同一スレッドで `--thread-id` 指定）。採用版を `output/images/thumbnail.png`（1280×672px）として保存する。日本語が崩れる場合はサブコピーを短縮するか、生成後にテキストを重ねる。
     5. **レビュー＆リトライ**: design-brief の「レビュー基準」と plan の「失格条件」で点検する（3秒でタイトルが読める／日本語が崩れていない／メインが最大／状況が情景で伝わる／CTA・絵文字・過剰煽りが無い）。満たさなければプロンプトを調整して再生成する。
 14. **ハッシュタグ**: `/hashtag-note {本文}`で、note記事につける hashtag を選定し、本文下書きの末尾に追加する。
 15. **ネタを使用済みに更新**: **モードA** — `noteNeta` シートの該当行 L列を「使用済み」に更新する。**モードC** — `funnel-brief.md` の `## ネタ` にある noteNeta 行番号の L列を「使用済み」に更新する（note を先に作るため、ここで更新して二重選定を防ぐ）。**モードB は何も行わない**（ネタ更新なし）。

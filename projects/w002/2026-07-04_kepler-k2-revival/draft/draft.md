@@ -297,3 +297,11 @@ K2が開いたのは、その次の問いだ。「その惑星は、いったい
 5. [NASA Science「Webb Discovers Methane, Carbon Dioxide in Atmosphere of K2-18 b」（2023）](https://science.nasa.gov/missions/webb/webb-discovers-methane-carbon-dioxide-in-atmosphere-of-k2-18-b/) — K2-18b がハビタブルゾーンのスーパーアースであること、ハッブルが大気の最初の手がかりを与え、ジェイムズ・ウェッブがメタン・二酸化炭素（炭素をふくむ分子）を検出したことの根拠として参照。
 6. [NASA Science「Kepler's Second Light: How K2 Will Work」](https://science.nasa.gov/resource/keplers-second-light-how-k2-will-work/) — K2 が太陽光の望遠鏡への差し込みを避けるため、一つの視野を最大83日（およそ80日）見つめては機体を回転させ、次の視野へ移る運用であることの根拠として参照。
 7. [Tian et al. 2025「Research on the Accumulative Damage of Flywheels Due to In-Space Charging Effects」Aerospace 12(2), 98](https://www.mdpi.com/2226-4310/12/2/98) — 高エネルギー電子が機体外壁を貫通して内部の孤立導体に電荷を蓄積し（内部帯電）、CME・フレア時に放電が激化してホイールのベアリングを損傷するメカニズムの根拠として参照。
+
+### 画像クレジット
+
+- K2 ミッションパッチ — Tom Barclay（NASA Ames Research Center, K2 チーム）による NASA Ames Director's Colloquium 発表資料「[K2 and the Microlensing Experiment](https://speakerdeck.com/mrtommyb/k2-and-the-microlensing-experiment?slide=51)」（2016年7月5日）より。
+
+---
+
+#宇宙 #天文学 #科学 #サイエンス #NASA #宇宙開発 #物理学 #系外惑星 #最近の学び #この経験に学べ #ノンフィクション #エッセイ #コラム #人生 #哲学 #意思決定 #自己啓発 #思考 #問い #マインドセット #モチベーション #成長
