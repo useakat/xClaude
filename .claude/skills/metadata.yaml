@@ -53,6 +53,8 @@ skills:
     category: 品質チェック
   check-brand:
     category: 品質チェック
+  check-reader:
+    category: 品質チェック
   mond-letter-reply:
     category: メール・通知
   make-infographic:
