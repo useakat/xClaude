@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-08-08
+
+- **Threads転載の publish 一時エラー（素材が見つからない）をリトライするよう改修** — X投稿直後の転載で、画像コンテナ作成直後の整合性遅延により publish が code24/subcode4279009「素材が見つからない」で失敗し Threads 転載が落ちていた（8/7 朝のワンポイント）。`post_threads.py` に publish の一時エラー時リトライ（8秒×最大5回）＋FINISHED後3秒バッファを追加。8/7分は手動再転載済み。[→報告書](../reports/20260808_threads_publish_retry/)
+
+---
+
 ## 2026-08-07
 
 - **X アナリティクス月次CSVアップロードの月次リマインド routine を新設** — マネタイズ月報の note 導線（CTR/CVR）に必要な X アナリティクスCSVのアップ忘れ防止。毎月1日9:00 JST に Drive を検索し、前月分CSV（`account_analytics_content_{前月}`）が無ければ useakat@gmail.com にリマインドメール送信、あればナガらない。cloud routine（`trig_01WhHLFmPuok7f4idXnbaPdY`・Default/sonnet-5・Drive＋Gmailコネクタ）。[→報告書](../reports/20260807_x_analytics_csv_reminder_routine/)
