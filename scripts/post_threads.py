@@ -85,6 +85,28 @@ def _api_post(path, params):
         raise SystemExit(f"APIエラー ({e.code}): {e.read().decode()}")
 
 
+def _publish(token, user_id, creation_id, retries=5, wait=8):
+    """コンテナを publish する。Threads の一時的な整合性遅延（作成直後の
+    「素材が見つからない」= code 24 / subcode 4279009 や code 1）に備え、
+    その種のエラーのときだけ数回リトライする。それ以外のエラーは即中断。"""
+    url = f"{API}/{user_id}/threads_publish"
+    data = urllib.parse.urlencode({"access_token": token, "creation_id": creation_id}).encode()
+    last = ""
+    for i in range(retries):
+        try:
+            return json.load(urllib.request.urlopen(urllib.request.Request(url, data=data), timeout=60))["id"]
+        except urllib.error.HTTPError as e:
+            body = e.read().decode()
+            last = f"{e.code}: {body}"
+            transient = ('4279009' in body or '"code":24' in body
+                         or 'does not exist' in body or '"code":1' in body)
+            if i < retries - 1 and transient:
+                print(f"  publish 一時エラー、{wait}秒後にリトライ ({i+1}/{retries})", flush=True)
+                time.sleep(wait)
+                continue
+            raise SystemExit(f"APIエラー (publish {last})")
+
+
 def _api_get(path, params):
     q = urllib.parse.urlencode(params)
     try:
@@ -140,7 +162,8 @@ def post_one(token, user_id, text, image_urls=None, reply_to_id=None):
             params["reply_to_id"] = reply_to_id
         cid = _api_post(f"{user_id}/threads", params)["id"]
         _wait_finished(token, cid)
-        return _api_post(f"{user_id}/threads_publish", {"access_token": token, "creation_id": cid})["id"]
+        time.sleep(3)  # publish 前の整合性バッファ
+        return _publish(token, user_id, cid)
 
     # テキスト or 単一画像
     params = {"access_token": token, "text": text}
@@ -151,8 +174,8 @@ def post_one(token, user_id, text, image_urls=None, reply_to_id=None):
         params["reply_to_id"] = reply_to_id
     cid = _api_post(f"{user_id}/threads", params)["id"]
     _wait_finished(token, cid)
-    pid = _api_post(f"{user_id}/threads_publish", {"access_token": token, "creation_id": cid})["id"]
-    return pid
+    time.sleep(3)  # publish 前の整合性バッファ
+    return _publish(token, user_id, cid)
 
 
 def main():
