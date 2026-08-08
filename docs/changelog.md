@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-08-08
 
 - **Threads転載の publish 一時エラー（素材が見つからない）をリトライするよう改修** — X投稿直後の転載で、画像コンテナ作成直後の整合性遅延により publish が code24/subcode4279009「素材が見つからない」で失敗し Threads 転載が落ちていた（8/7 朝のワンポイント）。`post_threads.py` に publish の一時エラー時リトライ（8秒×最大5回）＋FINISHED後3秒バッファを追加。8/7分は手動再転載済み。[→報告書](../reports/20260808_threads_publish_retry/)
+- **素朴な読者チェック `/check-reader` を新設（story-check 7項目化・phrasebook 追記）** — check-fact・check-brand を1発合格した Z01 原稿にユーザー推敲8往復が必要だった件の再発防止。制作文脈を知らない読者役サブエージェントに原稿だけを読ませ「疑問・誤解した映像・フック未回収」を検出する `/check-reader` を新設し z01 spec の STEP 3.7 に組み込み。story-check.md に「フックの回収」「語の重複」を追加して7項目化（W001/W002 の採点にも反映）、z01-phrasebook.md に「危機・運命の描写」カテゴリを追記。[→報告書](../reports/20260808_check_reader_skill_story_check7/)
 
 ---
 
