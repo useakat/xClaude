@@ -34,3 +34,13 @@ tmux-*.log
 /projects/w001/**/*.jpg
 /projects/w002/**/*.jpg
 /projects/w003/**/*.jpg
+
+# 3Dモデル等の作業用バイナリも同様（参照画像づくりの中間生成物。Drive に保存する）
+/projects/w001/**/*.glb
+/projects/w002/**/*.glb
+/projects/w003/**/*.glb
+/projects/w001/**/*.zip
+/projects/w002/**/*.zip
+/projects/w003/**/*.zip
+/projects/w002/**/images/3d/*.json
+/projects/w002/**/images/3d/*.html
