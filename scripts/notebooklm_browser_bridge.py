@@ -36,6 +36,11 @@ from notebooklm.rpc.decoder import decode_response  # noqa: E402
 from notebooklm._research import ResearchAPI  # noqa: E402
 from notebooklm._notebooks import NotebooksAPI  # noqa: E402
 from notebooklm._sources import SourcesAPI  # noqa: E402
+from notebooklm._chat import ChatAPI  # noqa: E402
+
+# 旧ドメイン宛の URL は、ブラウザのページ（新ドメイン）から見ると別オリジンになり
+# CORS で弾かれる。ブリッジ側で新ドメインへ書き換える。
+OLD_ORIGIN = "https://notebooklm.google.com"
 
 SSH_HOST = "Administrator@133.18.136.38"
 REMOTE_SERVER = r"%USERPROFILE%\nbrpc_server.py"
@@ -103,13 +108,70 @@ class BrowserBridge:
             self.proc = None
 
 
+class _FakeResponse:
+    """httpx.Response の最小互換（ChatAPI が直接 http_client を使うため）。"""
+
+    def __init__(self, status_code: int, text: str):
+        self.status_code = status_code
+        self.text = text
+
+    def raise_for_status(self):
+        if self.status_code != 200:
+            raise BridgeError(f"HTTP {self.status_code}: {self.text[:200]}")
+
+
+class _FakeHttpClient:
+    """post() をブリッジ経由に差し替えた httpx.AsyncClient 互換の最小実装。"""
+
+    def __init__(self, bridge: BrowserBridge):
+        self.bridge = bridge
+
+    async def post(self, url: str, content: str = "", **_):
+        url = url.replace(OLD_ORIGIN, self.bridge.origin)
+        res = await asyncio.to_thread(self.bridge.call, url, content)
+        return _FakeResponse(res.get("status", -1), res.get("text", ""))
+
+
 class BridgeCore:
-    """vendor の *API クラスが必要とする最小の core（rpc_call と auth のみ）。"""
+    """vendor の *API クラスが必要とする最小の core。"""
+
+    MAX_CACHE = 50
 
     def __init__(self, bridge: BrowserBridge):
         self.bridge = bridge
         self.auth = AuthTokens(cookies={}, csrf_token=bridge.csrf, session_id=bridge.sid)
         self._reqid_counter = 100000
+        self._http_client = _FakeHttpClient(bridge)
+        self._conversations: dict[str, list] = {}
+
+    # --- ChatAPI が使う補助 ---
+    def get_http_client(self):
+        return self._http_client
+
+    def get_cached_conversation(self, conversation_id: str) -> list:
+        return self._conversations.get(conversation_id, [])
+
+    def cache_conversation_turn(self, conversation_id: str, query: str, answer: str, turn_number: int) -> None:
+        turns = self._conversations.setdefault(conversation_id, [])
+        turns.append({"query": query, "answer": answer, "turn_number": turn_number})
+        if len(self._conversations) > self.MAX_CACHE:
+            self._conversations.pop(next(iter(self._conversations)))
+
+    def clear_conversation_cache(self, conversation_id: str | None = None) -> None:
+        if conversation_id:
+            self._conversations.pop(conversation_id, None)
+        else:
+            self._conversations.clear()
+
+    async def get_source_ids(self, notebook_id: str) -> list:
+        """ノート内の全ソースIDを返す（ChatAPI が質問対象の指定に使う）。"""
+        sources = await SourcesAPI(self).list(notebook_id)
+        ids = []
+        for s in sources:
+            sid = getattr(s, "id", None) or (s.get("id") if isinstance(s, dict) else None)
+            if sid:
+                ids.append(sid)
+        return ids
 
     def _build_url(self, method, source_path: str = "/") -> str:
         from urllib.parse import urlencode
@@ -151,6 +213,15 @@ async def cmd_list_sources(core, args):
         title = getattr(s, "title", None) or (s.get("title") if isinstance(s, dict) else "")
         print(f"- {title}")
     print(f"--- {len(sources)} 件 ---")
+
+
+async def cmd_ask(core, args):
+    question = args.question
+    if question == "-":  # 長文は標準入力から受け取る
+        question = sys.stdin.read()
+    result = await ChatAPI(core).ask(args.notebook_id, question)
+    # 回答本文のみ出力（references を含めると巨大になるため）
+    print(getattr(result, "answer", result))
 
 
 async def cmd_deep_research(core, args):
@@ -202,6 +273,10 @@ def main():
     p_ls = sub.add_parser("list-sources")
     p_ls.add_argument("notebook_id")
 
+    p_ask = sub.add_parser("ask")
+    p_ask.add_argument("notebook_id")
+    p_ask.add_argument("question", help="質問文。'-' を渡すと標準入力から読む")
+
     p_dr = sub.add_parser("deep-research")
     p_dr.add_argument("notebook_id")
     p_dr.add_argument("query")
@@ -214,6 +289,7 @@ def main():
         "list": cmd_list,
         "create": cmd_create,
         "list-sources": cmd_list_sources,
+        "ask": cmd_ask,
         "deep-research": cmd_deep_research,
     }
 
