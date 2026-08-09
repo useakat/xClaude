@@ -79,6 +79,7 @@ W003 の運用で NotebookLM に必要なのは実質 Deep Research（ソース�
 
 ## 今後の課題
 
-- `ask` / `add-source` / `infographic` などは旧方式のまま。必要になった時点で同じブリッジ上に追加する（画像生成は lovart で足りているため急がない）
+- ~~`ask` / `add-source` / `infographic` などは旧方式のまま。必要になった時点で同じブリッジ上に追加する（画像生成は lovart で足りているため急がない）~~
+  → **`ask` は 2026-08-09 に追加済み**（[報告書](../20260809_notebooklm_bridge_ask_command/)）。残るは `add-source` / `infographic` など
 - ブラウザのログインセッション自体が切れた場合は、`scripts/windows/nblogin.py` を Windows 側で実行して再ログインする（cookie の scp 取り込みは**不要になった**）
 - `notebooklm_reauth.md` は cookie 採取＋scp を前提とした旧手順のまま。運用が固まったら本方式に合わせて更新する
