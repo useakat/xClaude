@@ -176,3 +176,150 @@ RuntimeError: GOOGLE_SERVICE_ACCOUNT_KEY が設定されていません
 [2026-07-16 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
 [2026-07-16 17:00:02 JST] 投稿対象メールなし。ループ終了
 [2026-07-16 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-17 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-17 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-17 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-18 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-18 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-18 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-19 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-19 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-19 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-20 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-20 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-07-20 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-07-21 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-21 17:00:02 JST] 処理対象 thread_id=19f7f3ecad82cff1
+[2026-07-21 17:00:05 JST] 添付画像あり
+[2026-07-21 17:00:05 JST] X 投稿実行...
+📷 画像アップロード中: /tmp/xpost_image.png
+✓ メディアID: 2079476495454773249
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2079476498575315328
+[2026-07-21 17:00:07 JST] 投稿成功: https://x.com/i/web/status/2079476498575315328
+✓ 記録完了: ['2026-07-21 17:00:08', 'https://x.com/i/web/status/2079476498575315328', 'W001', '', '', '', '', '']
+[2026-07-21 17:20:11 JST] 1件処理完了。ループ終了
+[2026-07-21 17:20:11 JST] 完了 (result=posted, exit=0)
+[2026-07-22 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-22 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-22 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-23 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-23 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-23 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-24 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-24 17:00:02 JST] Gmail クエリ失敗 (rc=3, 試行 1/3)。5秒後にリトライ...
+[2026-07-24 17:00:07 JST] Gmail クエリ失敗 (rc=3, 試行 2/3)。5秒後にリトライ...
+[2026-07-24 17:00:13 JST] Gmail クエリ失敗 (rc=3, 試行 3/3)。5秒後にリトライ...
+[2026-07-24 17:00:18 JST] ⚠ Gmail クエリが3回とも失敗。投稿対象の有無を判定できないため中断（要確認・投稿は行わない）。
+[2026-07-24 17:00:18 JST] 完了 (result=failed, exit=1)
+[2026-07-25 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-25 17:00:02 JST] 処理対象 thread_id=19f97294e5528049
+[2026-07-25 17:00:05 JST] 添付画像あり
+[2026-07-25 17:00:05 JST] X 投稿実行...
+📷 画像アップロード中: /tmp/xpost_image.png
+✓ メディアID: 2080926046795538432
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2080926050637529589
+[2026-07-25 17:00:07 JST] 投稿成功: https://x.com/i/web/status/2080926050637529589
+[2026-07-25 17:00:07 JST] リプ投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2080926054013964466
+✓ 記録完了: ['2026-07-25 17:00:09', 'https://x.com/i/web/status/2080926050637529589', 'W001', '', '', 'https://note.com/takaesu7431/n/ne410d5bd0b1f', '', '']
+[2026-07-25 17:00:10 JST] Threads 転載開始...
+  本文1/2 投稿 id=18110864995977532
+  本文2/2 投稿 id=17925437496392095
+  リプ1/1 投稿 id=18084014747559787
+PERMALINK=https://www.threads.com/@usephys1/post/DbNVfCpoIkX
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DbNVfCpoIkX（本文2件＋リプ1件）
+[2026-07-25 17:00:53 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DbNVfCpoIkX
+✓ 記録完了: ['2026-07-25 17:00:53', 'https://www.threads.com/@usephys1/post/DbNVfCpoIkX', '', '', '', '', '', 'https://x.com/i/web/status/2080926050637529589']
+[2026-07-25 17:00:54 JST] 1件処理完了。ループ終了
+[2026-07-25 17:00:54 JST] 完了 (result=posted, exit=0)
+[2026-07-26 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-26 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-26 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-27 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-27 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-27 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-28 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-28 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-28 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-29 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-29 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-07-29 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-07-30 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-30 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-30 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-07-31 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-07-31 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-07-31 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-01 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-01 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-01 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-02 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-02 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-02 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-03 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-03 17:00:02 JST] 処理対象 thread_id=19fc2e3e11a0d142
+[2026-08-03 17:00:05 JST] 添付画像あり
+[2026-08-03 17:00:05 JST] X 投稿実行...
+📷 画像アップロード中: /tmp/xpost_image.png
+✓ メディアID: 2084187539158818816
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2084187541989924953
+[2026-08-03 17:00:07 JST] 投稿成功: https://x.com/i/web/status/2084187541989924953
+[2026-08-03 17:00:07 JST] リプ投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2084187544661729349
+✓ 記録完了: ['2026-08-03 17:00:09', 'https://x.com/i/web/status/2084187541989924953', 'W001', '', '', 'https://note.com/takaesu7431/n/n788d470684e1', '', '']
+[2026-08-03 17:00:10 JST] Threads 転載開始...
+  本文1/2 投稿 id=17859709695677980
+  本文2/2 投稿 id=18020972459696467
+  リプ1/1 投稿 id=18028491854836672
+PERMALINK=https://www.threads.com/@usephys1/post/Dbkgo2HoHFj
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dbkgo2HoHFj（本文2件＋リプ1件）
+[2026-08-03 17:00:56 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dbkgo2HoHFj
+✓ 記録完了: ['2026-08-03 17:00:56', 'https://www.threads.com/@usephys1/post/Dbkgo2HoHFj', '', '', '', '', '', 'https://x.com/i/web/status/2084187541989924953']
+[2026-08-03 17:00:59 JST] 1件処理完了。ループ終了
+[2026-08-03 17:00:59 JST] 完了 (result=posted, exit=0)
+[2026-08-04 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-04 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-04 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-05 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-05 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-05 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-06 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-06 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-06 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-07 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-07 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-07 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-08 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-08 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-08 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-09 17:00:01 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-09 17:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-09 17:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-09 19:30:36 JST] 開始 (subject:【X長文】, howID:W001)
+[2026-08-09 19:30:37 JST] 処理対象 thread_id=19fe601b3073a3d8
+[2026-08-09 19:30:41 JST] 添付画像あり
+[2026-08-09 19:30:41 JST] X 投稿実行...
+📷 画像アップロード中: /tmp/xpost_image.png
+✓ メディアID: 2086399763407392768
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2086399767538737221
+[2026-08-09 19:30:43 JST] 投稿成功: https://x.com/i/web/status/2086399767538737221
+[2026-08-09 19:30:43 JST] リプ投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2086399770541908364
+✓ 記録完了: ['2026-08-09 19:30:44', 'https://x.com/i/web/status/2086399767538737221', 'W001', '', '', 'https://note.com/takaesu7431/n/ndaeed905f827', '', '']
+[2026-08-09 19:30:46 JST] Threads 転載開始...
+  本文1/2 投稿 id=17860059363678763
+  本文2/2 投稿 id=18082257632302755
+  リプ1/1 投稿 id=18182142307409543
+PERMALINK=https://www.threads.com/@usephys1/post/Db0OpKuIGkX
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Db0OpKuIGkX（本文2件＋リプ1件）
+[2026-08-09 19:31:33 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Db0OpKuIGkX
+✓ 記録完了: ['2026-08-09 19:31:33', 'https://www.threads.com/@usephys1/post/Db0OpKuIGkX', '', '', '', '', '', 'https://x.com/i/web/status/2086399767538737221']
+[2026-08-09 19:31:35 JST] 1件処理完了。ループ終了
+[2026-08-09 19:31:35 JST] 完了 (result=posted, exit=0)

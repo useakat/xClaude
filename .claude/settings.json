@@ -96,7 +96,9 @@
       "Bash(TZ=* date *)",
       "Bash(cd *)",
       "Bash(echo *)",
-      "Bash(git -C *xClaude push*)"
+      "Bash(git -C *xClaude push*)",
+      "Bash(ssh Administrator@133.18.136.38:*)",
+      "Bash(python3 *notebooklm_browser_bridge.py *)"
     ]
   },
   "hooks": {
