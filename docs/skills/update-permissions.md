@@ -1,6 +1,6 @@
 ---
 title: update-permissions
-description: このセッションでよーんが許可を求められた操作を一覧表示し、settings.json の permissions.allow への追記を提案する。
+description: "このセッションでよーんが許可を求められた操作を一覧表示し、settings.json の permissions.allow への追記を提案する。"
 category: 設定・保守
 ---
 

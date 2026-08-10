@@ -1,6 +1,6 @@
 ---
 title: visual_infographic
-description: visual_infographic スキル
+description: "visual_infographic スキル"
 category: 画像・同期
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: save-session
-description: save-session スキル
+description: "save-session スキル"
 category: 運用・記録
 ---
 

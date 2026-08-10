@@ -1,6 +1,6 @@
 ---
 title: research_pain-xpost
-description: 特定のXポストのリプライ・引用RTを取得し、読者のニーズや疑問を分析して note 記事のテーマを提案する。承認後に noteNeta シートへ追記する。
+description: "特定のXポストのリプライ・引用RTを取得し、読者のニーズや疑問を分析して note 記事のテーマを提案する。承認後に noteNeta シートへ追記する。"
 category: リサーチ・分析
 ---
 

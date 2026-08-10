@@ -1,6 +1,6 @@
 ---
 title: research
-description: research スキル
+description: "research スキル"
 category: リサーチ・分析
 ---
 

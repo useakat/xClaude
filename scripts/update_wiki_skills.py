@@ -4,6 +4,7 @@ Wiki スキル一覧を自動更新するスクリプト
 .claude/skills/ をスキャンして metadata.yaml を更新し、docs/skills/index.md と スキル詳細ページを生成
 """
 
+import json
 import os
 import yaml
 from pathlib import Path
@@ -105,9 +106,12 @@ def generate_skill_detail_page(skill_name, skill_info, metadata, output_dir):
         body = content
 
     # frontmatter を作成
+    # description は「: 」やコロン・引用符を含みうるので、JSON二重引用符（YAML互換）で
+    # 安全にクォートする（無クォートだと YAML が mapping と誤解しビルドが壊れる）。
+    desc_yaml = json.dumps(description, ensure_ascii=False)
     frontmatter = f"""---
 title: {skill_name}
-description: {description}
+description: {desc_yaml}
 category: {category}
 ---
 """

@@ -1,6 +1,6 @@
 ---
 title: research_xhook
-description: research_xhook スキル
+description: "research_xhook スキル"
 category: リサーチ・分析
 ---
 

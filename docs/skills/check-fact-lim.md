@@ -1,6 +1,6 @@
 ---
 title: check-fact-lim
-description: ファクトチェック付き品質レビュー（NotebookLM の特定ノートブックのソースのみを根拠にする）。第1引数に notebook_id、第2引数以降にテキストまたは Drive ファイル ID を受け取る。
+description: "ファクトチェック付き品質レビュー（NotebookLM の特定ノートブックのソースのみを根拠にする）。第1引数に notebook_id、第2引数以降にテキストまたは Drive ファイル ID を受け取る。"
 category: 品質チェック
 ---
 
@@ -18,7 +18,7 @@ category: 品質チェック
 
 ## あなたの役割
 批判的かつ客観的なレビュワーとして振る舞ってください。
-このスキルは、ファクトチェック・完全性チェックの根拠を **指定された NotebookLM ノートブックのソースだけ** に限定する。GPT やウェブ検索ではなく、`scripts/notebooklm_manager.py ask` を使って、その notebook のソースのみを参照させる。
+このスキルは、ファクトチェック・完全性チェックの根拠を **指定された NotebookLM ノートブックのソースだけ** に限定する。GPT やウェブ検索ではなく、`scripts/notebooklm_browser_bridge.py ask` を使って、その notebook のソースのみを参照させる（旧 `notebooklm_manager.py` は cookie 認証失効のため使わない。ブリッジは Windows 常駐ブラウザ1セッション前提のため**並行実行しない**。一時失敗時は1回リトライ）。
 
 ## 入力モード（自動判定）
 
@@ -27,7 +27,7 @@ category: 品質チェック
 1. **notebook_id（必須・先頭トークン）**: `$ARGUMENTS` の最初の空白区切りトークンを notebook_id とする。
    - notebook_id が取得できない場合は、以下で notebook 一覧を提示し、ユーザーに指定を求めて **停止する**：
      ```bash
-     python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py list
+     python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_browser_bridge.py list
      ```
 2. **チェック対象（notebook_id を除いた残り）**: 残りの文字列を以下の優先順位で取得する。
    - 残りが空（サブエージェントとして呼ばれた場合など）→ 会話のコンテキスト（直前のメッセージ・prompt の内容）からチェック対象テキストを取得する。
@@ -97,7 +97,7 @@ category: 品質チェック
 
 ## チェック方法
 
-> **根拠の限定**: STEP1・STEP2 ともに、判定の根拠は **指定された notebook_id のソースのみ** とする。`notebooklm_manager.py ask <notebook_id> "<質問文>"` は、その notebook のソースだけを参照して回答する。質問文は長文・改行を含むため、必ず一時ファイルに書き出してから `"$(cat ...)"` で渡し、シェルのクォート崩れを防ぐ。
+> **根拠の限定**: STEP1・STEP2 ともに、判定の根拠は **指定された notebook_id のソースのみ** とする。`notebooklm_browser_bridge.py ask <notebook_id> -` は、その notebook のソースだけを参照して回答する。質問文は長文・改行を含むため、必ず一時ファイルに書き出してから標準入力（`- < ファイル`）で渡し、シェルのクォート崩れを防ぐ。
 
 ### STEP 1: 完全性チェック（1回）
 
@@ -142,7 +142,7 @@ category: 品質チェック
 
 2. **NotebookLM に送信**：
    ```bash
-   python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py ask <notebook_id> "$(cat /tmp/check_fact_lim_prompt.txt)"
+   python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_browser_bridge.py ask <notebook_id> - < /tmp/check_fact_lim_prompt.txt
    ```
    - 出力をそのまま表示する
    - 呼び出しがエラー／空応答の場合はエラーメッセージをそのまま表示し、Claude 自身が完全性チェックを代行する（スコアは Claude が判断）
@@ -223,7 +223,7 @@ STEP 2 のループに入る前に、**Claude 自身が**チェック対象テ�
 
 2. **NotebookLM に送信**：
    ```bash
-   python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_manager.py ask <notebook_id> "$(cat /tmp/check_fact_lim_prompt.txt)"
+   python3 $(git rev-parse --show-toplevel)/scripts/notebooklm_browser_bridge.py ask <notebook_id> - < /tmp/check_fact_lim_prompt.txt
    ```
    - 呼び出しがエラー／空応答／スコア未取得の場合はエラーメッセージをそのまま表示し、Claude 自身がファクトチェックを代行する（スコアは Claude が判断）
    - 出力をそのまま表示する

@@ -1,6 +1,6 @@
 ---
 title: visual_section-planner
-description: 記事の本文を入力に、プロジェクトの image/plan.md・image/brand.md（セクション画像の目的・トーン）を読んでから、H2セクションごとに画像案を3つ考え、各画像（図解／イメージ／写真Web取得）の説明を、セクション分けしたmarkdown形式で出力し、draft/image-plan.md に保存する。生成プロンプトは書かず画像の説明のみ。
+description: "記事の本文を入力に、プロジェクトの image/plan.md・image/brand.md（セクション画像の目的・トーン）を読んでから、H2セクションごとに画像案を3つ考え、各画像（図解／イメージ／写真Web取得）の説明を、セクション分けしたmarkdown形式で出力し、draft/image-plan.md に保存する。生成プロンプトは書かず画像の説明のみ。"
 category: 画像・同期
 ---
 

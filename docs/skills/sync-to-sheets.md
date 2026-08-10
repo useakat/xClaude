@@ -1,6 +1,6 @@
 ---
 title: sync-to-sheets
-description: sync-to-sheets スキル
+description: "sync-to-sheets スキル"
 category: 廃止・非推奨
 ---
 

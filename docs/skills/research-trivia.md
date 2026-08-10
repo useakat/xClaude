@@ -1,6 +1,6 @@
 ---
 title: research-trivia
-description: research-trivia スキル
+description: "research-trivia スキル"
 category: リサーチ・分析
 ---
 

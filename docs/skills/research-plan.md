@@ -1,6 +1,6 @@
 ---
 title: research-plan
-description: research-plan スキル
+description: "research-plan スキル"
 category: リサーチ・分析
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: daily-xonepoint
-description: 【非推奨】Xのワンポイント解説投稿の制作フロー。現在は projects/w003/spec.md を正として直接実行するため、このスキルは基本的に使わない。
+description: "【非推奨】Xのワンポイント解説投稿の制作フロー。現在は projects/w003/spec.md を正として直接実行するため、このスキルは基本的に使わない。"
 category: 廃止・非推奨
 ---
 

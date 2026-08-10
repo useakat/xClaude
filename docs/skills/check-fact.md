@@ -1,6 +1,6 @@
 ---
 title: check-fact
-description: ファクトチェック付き品質レビュー。テキストまたは Drive ファイル ID を入力として受け付ける。
+description: "ファクトチェック付き品質レビュー。テキストまたは Drive ファイル ID を入力として受け付ける。"
 category: 品質チェック
 ---
 

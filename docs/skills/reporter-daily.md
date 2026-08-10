@@ -1,6 +1,6 @@
 ---
 title: reporter-daily
-description: X・note・threads 運用の日報を作成し、docs/reports/daily/ に保存する。スプレッドシートから前日の数値を取得し、投稿実績をもとに特記事項をAI生成する。
+description: "X・note・threads 運用の日報を作成し、docs/reports/daily/ に保存する。スプレッドシートから前日の数値を取得し、投稿実績をもとに特記事項をAI生成する。"
 category: レポート生成
 ---
 

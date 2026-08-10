@@ -1,6 +1,6 @@
 ---
 title: writer-xshort
-description: 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140文字の短文原稿を作成してGmail下書きに保存する（投稿は行わず下書き作成のみ）。ユーザー確認なし全自動。
+description: "4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140文字の短文原稿を作成してGmail下書きに保存する（投稿は行わず下書き作成のみ）。ユーザー確認なし全自動。"
 category: コンテンツ制作
 ---
 

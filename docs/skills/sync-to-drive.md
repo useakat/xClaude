@@ -1,6 +1,6 @@
 ---
 title: sync-to-drive
-description: sync-to-drive スキル
+description: "sync-to-drive スキル"
 category: 画像・同期
 ---
 

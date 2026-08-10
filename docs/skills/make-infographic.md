@@ -1,6 +1,6 @@
 ---
 title: make-infographic
-description: make-infographic スキル
+description: "make-infographic スキル"
 category: 画像・同期
 ---
 

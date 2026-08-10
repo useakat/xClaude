@@ -1,6 +1,6 @@
 ---
 title: analyze-target
-description: analyze-target スキル
+description: "analyze-target スキル"
 category: リサーチ・分析
 ---
 

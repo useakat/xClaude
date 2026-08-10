@@ -1,6 +1,6 @@
 ---
 title: draft_xstory
-description: X長文ストーリー投稿（what_id W001）のネタ選定から下書き作成、ファクトチェック、トンマナチェック、Gmail下書き作成まで自律実行する
+description: "X長文ストーリー投稿（what_id W001）のネタ選定から下書き作成、ファクトチェック、トンマナチェック、Gmail下書き作成まで自律実行する"
 category: コンテンツ制作
 ---
 
