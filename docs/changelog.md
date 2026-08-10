@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **note 記事の下書き保存を画像・サムネ込みで自動化（W002 フローに組み込み）** — 記事完成後の「note を開いて本文を貼り、画像を1枚ずつ挿入し、サムネを設定する」手作業を廃止。`send_note_draft.py` にアイキャッチ設定（`image_upload/note_eyecatch`・MIME明示が必須）と本文画像の S3 presigned アップロード＋figure 埋め込み（`x-amz-security-token` 必須）を追加し argparse 化（`--base-dir`/`--eyecatch`/`--no-images`）。w002 spec にフロー16 を新設し、手動作業を有料エリア設定と公開のみに縮小した。[→報告書](../reports/20260810_note_draft_images_eyecatch/)
 - **note 公開後の outputs 記録を自動化（record-note-posts に STEP 6 を追加）＋W002 記事3件をバックフィル** — note投稿一覧は cron で自動更新される一方 outputs は手動記録のままで、W002 記事3本が未記録だった。`/record-note-posts` に outputs 同期を相乗りさせ、neta_id は記事フォルダの `note-record.md` からタイトル完全一致で解決（引けなければ空欄＋報告・推測しない）。実データ検証で未記録16件中15件がワークフロー外の旧記事と判明したため除外ガードを追加し、ケプラー・ボイジャー・アポロ12 の3件をバックフィルした。[→報告書](../reports/20260810_outputs_auto_record_note_posts/)
+- **日報の記載ルール5点を reporter-daily に反映（note順序・販売数・note販促用・リプライ除外）** — 8/9 の日報でユーザー手直しが5回発生し、いずれも毎回同じ形で必要になる記載ルールだったため SKILL 側に固定。note は「記事公開→記事執筆中」の順、販売数は0件でも `販売数：0。` と明記、outputs の `note_url` がある W001 は `長文ストーリー（note販促用、〜）`、リプライ（セルフリプ・リンク誘導）はオリジナルポストの内訳から除外。あわせて販売0件時の定価取得手順（未確認なら断定せず確認依頼）と保存前チェックリストを新設。[→報告書](../reports/20260810_reporter_daily_format_rules/)
 
 ---
 
