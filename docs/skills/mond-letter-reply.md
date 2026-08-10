@@ -1,6 +1,6 @@
 ---
 title: mond-letter-reply
-description: letter-notify@mond.how からの未処理レターを読み取り、Claude Opus で回答を生成して Gmail 下書きを作成する
+description: "letter-notify@mond.how からの未処理レターを読み取り、Claude Opus で回答を生成して Gmail 下書きを作成する"
 category: メール・通知
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: writer-xnews
-description: writer-xnews スキル
+description: "writer-xnews スキル"
 category: コンテンツ制作
 ---
 

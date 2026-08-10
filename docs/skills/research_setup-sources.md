@@ -1,6 +1,6 @@
 ---
 title: research_setup-sources
-description: テーマを受け取り NotebookLM ノートブックを作成して Deep Research でソースを収集・追加し、notebook_id を返す。
+description: "テーマを受け取り NotebookLM ノートブックを作成して Deep Research でソースを収集・追加し、notebook_id を返す。"
 category: リサーチ・分析
 ---
 
@@ -48,7 +48,7 @@ ROOT=$(git rev-parse --show-toplevel)
 DATE=$(date +%Y-%m-%d)
 THEME="$ARGUMENTS"
 
-OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" create "nb_${THEME}_${DATE}" 2>&1)
+OUTPUT=$(python3 "$ROOT/scripts/notebooklm_browser_bridge.py" create "nb_${THEME}_${DATE}" 2>&1)
 echo "$OUTPUT"
 NOTEBOOK_ID=$(echo "$OUTPUT" | grep "✓ 作成:" | awk '{print $3}')
 echo "NOTEBOOK_ID: $NOTEBOOK_ID"
@@ -63,7 +63,7 @@ DR_QUERY="${THEME}
 優先: 査読付き論文・大学/研究機関のページ・科学メディア・政府機関・百科事典
 除外: 企業の製品紹介ページ・販売サイト・メーカー公式サイト・ECサイト"
 
-python3 "$ROOT/scripts/notebooklm_manager.py" deep-research "$NOTEBOOK_ID" "$DR_QUERY" 2>&1
+python3 "$ROOT/scripts/notebooklm_browser_bridge.py" deep-research "$NOTEBOOK_ID" "$DR_QUERY" 2>&1
 ```
 
 Deep Research は数分かかる場合がある。完了したら追加されたソース一覧を表示する。

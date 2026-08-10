@@ -1,6 +1,6 @@
 ---
 title: record-note-posts
-description: note.com の投稿情報（ビュー・スキ・スキ率・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新する。新規記事を検知したら outputs シートにも自動記録する。
+description: "note.com の投稿情報（ビュー・スキ・スキ率・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新する。新規記事を検知したら outputs シートにも自動記録する。"
 category: 運用・記録
 ---
 

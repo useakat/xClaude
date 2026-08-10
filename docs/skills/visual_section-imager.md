@@ -1,6 +1,6 @@
 ---
 title: visual_section-imager
-description: draft/image-plan_final.md（H2ごとに1案へ確定済み）を入力に、まず image/plan.md・image/brand.md を読み、写真以外の各セクションについて design-brief（image/design-brief_template.md がテンプレ・design-brief_example.md が例）を作成してユーザー承認を得る。承認後、その design-brief をもとに図解・イメージのプロンプトを作成して再度承認を得る。図解プロンプトは infographic_template.md を全体ベースに「図解の構成・レイアウト」を infographic_layout_* から選択（合わなければ自由記述）。最終承認後、図解は NotebookLM で各3枚生成、イメージは外部の画像生成AI（nano banana 等）で生成してもらう。写真画像案はスキップ。
+description: "draft/image-plan_final.md（H2ごとに1案へ確定済み）を入力に、まず image/plan.md・image/brand.md を読み、写真以外の各セクションについて design-brief（image/design-brief_template.md がテンプレ・design-brief_example.md が例）を作成してユーザー承認を得る。承認後、その design-brief をもとに図解・イメージのプロンプトを作成して再度承認を得る。図解プロンプトは infographic_template.md を全体ベースに「図解の構成・レイアウト」を infographic_layout_* から選択（合わなければ自由記述）。最終承認後、図解は NotebookLM で各3枚生成、イメージは外部の画像生成AI（nano banana 等）で生成してもらう。写真画像案はスキップ。"
 category: 画像・同期
 ---
 

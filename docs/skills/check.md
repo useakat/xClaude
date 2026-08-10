@@ -1,6 +1,6 @@
 ---
 title: check
-description: check スキル
+description: "check スキル"
 category: 品質チェック
 ---
 

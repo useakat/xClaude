@@ -1,6 +1,6 @@
 ---
 title: writer_note-story
-description: writer_note-story スキル
+description: "writer_note-story スキル"
 category: 廃止・非推奨
 ---
 

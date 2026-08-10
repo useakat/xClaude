@@ -1,6 +1,6 @@
 ---
 title: reporter-monetization
-description: 月次マネタイズ運用状況レポートを作成し、docs/reports/monetization/ に保存する。X・threads 投稿の型別成績（3ヶ月推移）、note マネタイズと X/threads→note 導線（CTR/CVR/売上）、来月のマネタイズ計画案（運用・導線の修正案）を、monetization_metrics.py の集計をもとに生成する。
+description: "月次マネタイズ運用状況レポートを作成し、docs/reports/monetization/ に保存する。X・threads 投稿の型別成績（3ヶ月推移）、note マネタイズと X/threads→note 導線（CTR/CVR/売上）、来月のマネタイズ計画案（運用・導線の修正案）を、monetization_metrics.py の集計をもとに生成する。"
 category: レポート生成
 ---
 

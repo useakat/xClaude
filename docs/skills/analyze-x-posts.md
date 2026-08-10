@@ -1,6 +1,6 @@
 ---
 title: analyze-x-posts
-description: analyze-x-posts スキル
+description: "analyze-x-posts スキル"
 category: リサーチ・分析
 ---
 

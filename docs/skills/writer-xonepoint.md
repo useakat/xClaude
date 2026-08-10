@@ -1,6 +1,6 @@
 ---
 title: writer-xonepoint
-description: X用ワンポイント解説投稿を1本作成する。受け取ったネタ情報をもとに投稿原稿を生成する。
+description: "X用ワンポイント解説投稿を1本作成する。受け取ったネタ情報をもとに投稿原稿を生成する。"
 category: コンテンツ制作
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: note-quick
-description: note-quick スキル
+description: "note-quick スキル"
 category: コンテンツ制作
 ---
 

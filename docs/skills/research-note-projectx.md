@@ -1,6 +1,6 @@
 ---
 title: research-note-projectx
-description: research-note-projectx スキル
+description: "research-note-projectx スキル"
 category: リサーチ・分析
 ---
 

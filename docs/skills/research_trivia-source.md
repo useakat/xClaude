@@ -1,6 +1,6 @@
 ---
 title: research_trivia-source
-description: research_trivia-source スキル
+description: "research_trivia-source スキル"
 category: リサーチ・分析
 ---
 
@@ -71,7 +71,7 @@ ROOT=$(git rev-parse --show-toplevel)
 DATE=$(date +%Y-%m-%d)
 THEME="$ARGUMENTS"
 
-OUTPUT=$(python3 "$ROOT/scripts/notebooklm_manager.py" create "trivia_${THEME}_${DATE}" 2>&1)
+OUTPUT=$(python3 "$ROOT/scripts/notebooklm_browser_bridge.py" create "trivia_${THEME}_${DATE}" 2>&1)
 echo "$OUTPUT"
 NOTEBOOK_ID=$(echo "$OUTPUT" | grep "✓ 作成:" | awk '{print $3}')
 echo "NOTEBOOK_ID: $NOTEBOOK_ID"
@@ -90,7 +90,7 @@ DR_QUERY="${THEME}
 優先: 査読付き論文・大学/研究機関のページ・科学メディア・政府機関・百科事典
 除外: 企業の製品紹介ページ・販売サイト・メーカー公式サイト・ECサイト"
 
-python3 "$ROOT/scripts/notebooklm_manager.py" deep-research "$NOTEBOOK_ID" "$DR_QUERY" 2>&1
+python3 "$ROOT/scripts/notebooklm_browser_bridge.py" deep-research "$NOTEBOOK_ID" "$DR_QUERY" 2>&1
 ```
 
 追加されたソース一覧が出力される。
@@ -101,7 +101,7 @@ NotebookLM に、ソースをもとに【ネタ選定条件】と【想定読者
 この時点ではタイトルと選定理由のみを求め、解説文は書かせない。
 
 ```bash
-python3 "$ROOT/scripts/notebooklm_manager.py" ask "$NOTEBOOK_ID" \
+python3 "$ROOT/scripts/notebooklm_browser_bridge.py" ask "$NOTEBOOK_ID" \
 "以下の条件で、ソースから驚きのある事実を 3〜5 個リストアップしてください。
 解説文はまだ不要です。タイトルと選定理由（1〜2 文）だけ出力してください。
 
@@ -138,7 +138,7 @@ Step 4 のネタリストを確認後、続けて解説文を生成する場合�
 Step 4 の会話履歴が残っている同一ノートブックで `ask` を続けて実行する。
 
 ```bash
-python3 "$ROOT/scripts/notebooklm_manager.py" ask "$NOTEBOOK_ID" \
+python3 "$ROOT/scripts/notebooklm_browser_bridge.py" ask "$NOTEBOOK_ID" \
 "先ほどリストアップしたネタについて、それぞれ以下の書き方で解説文を書いてください。
 
 【解説の書き方】

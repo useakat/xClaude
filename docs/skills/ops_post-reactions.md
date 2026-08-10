@@ -1,6 +1,6 @@
 ---
 title: ops_post-reactions
-description: ops_post-reactions スキル
+description: "ops_post-reactions スキル"
 category: リサーチ・分析
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: deep-research
-description: deep-research スキル
+description: "deep-research スキル"
 category: リサーチ・分析
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: notebooklm
-description: notebooklm スキル
+description: "notebooklm スキル"
 category: 画像・同期
 ---
 
