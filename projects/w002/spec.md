@@ -164,15 +164,38 @@ C7. **ブリーフ整合** — 制作した note の“売り”がブリーフ�
     5. **レビュー＆リトライ**: design-brief の「レビュー基準」と plan の「失格条件」で点検する（3秒でタイトルが読める／日本語が崩れていない／メインが最大／状況が情景で伝わる／CTA・絵文字・過剰煽りが無い）。満たさなければプロンプトを調整して再生成する。
 14. **ハッシュタグ**: `/hashtag-note {本文}`で、note記事につける hashtag を選定し、本文下書きの末尾に追加する。
 15. **ネタを使用済みに更新**: **モードA** — `noteNeta` シートの該当行 L列を「使用済み」に更新する。**モードC** — `funnel-brief.md` の `## ネタ` にある noteNeta 行番号の L列を「使用済み」に更新する（note を先に作るため、ここで更新して二重選定を防ぐ）。**モードB は何も行わない**（ネタ更新なし）。
-16. **記事フォルダを Drive へアップロード** — 記事フォルダ `projects/w002/YYYY-MM-DD_<短いタイトル>/` を丸ごと `bash scripts/drive_put_folder.sh projects/w002/YYYY-MM-DD_<短いタイトル> 1AonY-bLf61duFKZ6dBsPq7mSQASD_HGn` で Drive `xClaude/projects/w002` 配下にアップロードする（画像含む・フォルダ構造を再現・同名は更新される冪等動作。w003 spec のフロー11 と同方式）。
-17. **完了メール送信**: `scripts/send_gmail.sh` で useakat@gmail.com へ通知
+16. **note に下書き保存（画像・サムネ込み）**: `output/index.md` の最終原稿を note.com に下書きとして保存する。
+    ```bash
+    ART=projects/w002/YYYY-MM-DD_<短いタイトル>
+    python3 scripts/send_note_draft.py "<確定タイトル>" \
+      --base-dir "$ART/output" \
+      --eyecatch "images/thumbnail.png" < "$ART/output/index.md"
+    ```
+    - `.env` の `NOTE_SESSION` を使用（`scripts/send_note_draft.py` 側で読み込み済み）。
+    - **セクション画像**: `output/index.md` に各セクション画像を Markdown 記法 `![alt](images/<ファイル名>.png)` で**単独行**として埋め込んでおくと、スクリプトが note にアップロードして figure タグ化する（`--base-dir` からの相対パス）。単独行でないと変換されない。
+    - **サムネ（アイキャッチ）**: `--eyecatch` に `output/images/thumbnail.png`（1280×672px）を指定すると自動設定される。
+    - 返ってきた `edit_url`（下書き編集URL）をユーザーに提示する。`failed_images` が空でないときは、どの画像が失敗したかを併せて報告する（終了コード 2）。
+    - **有料エリア（続きを読むには）の設定・最終公開は note.com 上でユーザーが手動で行う**（このステップは下書き保存のみ。自動公開はしない）。
+    - ※ note の非公開 API を使うため、仕様変更で画像アップロードが落ちることがある。その場合は `--no-images` を付けて本文だけ保存し、画像は note.com 上で手動設定に切り替える。
+    - **記録ファイルの作成**: 公開後の自動記録（`/record-note-posts` の STEP 6）が neta_id を引けるよう、記事フォルダ直下に `note-record.md` を作成する。
+      ```
+      title: <note に保存した確定タイトル（完全一致）>
+      what_id: W002
+      neta_id: noteNeta[<No>]   # モードB は空欄
+      draft_edit_url: <edit_url>
+      ```
+17. **記事フォルダを Drive へアップロード** — 記事フォルダ `projects/w002/YYYY-MM-DD_<短いタイトル>/` を丸ごと `bash scripts/drive_put_folder.sh projects/w002/YYYY-MM-DD_<短いタイトル> 1AonY-bLf61duFKZ6dBsPq7mSQASD_HGn` で Drive `xClaude/projects/w002` 配下にアップロードする（画像含む・フォルダ構造を再現・同名は更新される冪等動作。w003 spec のフロー11 と同方式）。
+18. **完了メール送信**: `scripts/send_gmail.sh` で useakat@gmail.com へ通知
+19. **公開後の記録**: **自動**。note.com で公開すると、毎日 3:00 の cron（`scripts/run_record_note_posts.sh` → `/record-note-posts`）が新規記事を検知し、**note投稿一覧シート**と **outputs シート**（what_id=W002・neta_id は `note-record.md` から解決）の両方に自動記録する。
+    - 公開当日に反映したい場合のみ、手動で `/record-note-posts` を実行する。
+    - `note-record.md` のタイトルが note 上の確定タイトルと一致していないと neta_id が空欄で記録される（完了報告に「neta_id 未解決」として出るので、その場合は該当行 D列を手で埋める）。
 
 ### その他
 - **構成承認前に本文（全文・サンプル段落含む）を書かない。** ユーザーの明示承認を待つ。
 - モードA では、ネタ使用後、即座に Sheets の L列を「使用済み」に更新する。
 - モードB では、ネタを新規選定せず（noteNeta は参照しない）、notebook を w001 から継承する。ネタの使用済み更新は行わない。
 - モードC では、ネタを新規選定せず（`funnel-brief.md` に確定済み）、notebook をブリーフの `notebook_id` から継承する。構成は独立5案でなくブリーフの「note の売り／課金壁」から導く。ネタの使用済み更新は行う（ステップ15）。
-- **記事フォルダ内の画像（`output/images/` 等の `*.png`）は git にコミットしない**。`.gitignore` の `/projects/w002/**/*.png` で除外し、画像はローカルと Drive（フロー16 のアップロード先 `xClaude/projects/w002`）に保存する。リポジトリにはテキスト（`*.md`）のみを残す（容量肥大を防ぐため。w003 と同方式）。
+- **記事フォルダ内の画像（`output/images/` 等の `*.png`）は git にコミットしない**。`.gitignore` の `/projects/w002/**/*.png` で除外し、画像はローカルと Drive（フロー17 のアップロード先 `xClaude/projects/w002`）に保存する。リポジトリにはテキスト（`*.md`）のみを残す（容量肥大を防ぐため。w003 と同方式）。
 
 ## Verification
 - 本文が **6000〜8000字**に収まっている（下限6000・上限8000目安）
@@ -185,6 +208,8 @@ C7. **ブリーフ整合** — 制作した note の“売り”がブリーフ�
 - 参考文献のリンク先が存在し、開くことができる。
 - ファクトが出典確認済み（`/check-fact-lim` 通過）
 - サムネイルが plan の失格条件を満たす（タイトル可読・日本語崩れなし・文字が小さすぎない・CTAなし）
+- note に下書き保存済み（`edit_url` を取得しユーザーに提示している）
+- `note-record.md` が記事フォルダ直下にあり、`title` が note 上の確定タイトルと完全一致している（公開後の outputs 自動記録が neta_id を引くため）
 - brand.md と矛盾しない（煽り・上から目線・出典なき捏造がない）
 - plan.md の目的に沿う（読後に「諦めなくていい」読後感に着地している）
 - 出力ファイル名が命名規則に揃っている
