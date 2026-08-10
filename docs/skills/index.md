@@ -24,6 +24,7 @@ description: Claude Code で使用できるスキルの一覧
 | スキル | 用途 |
 |---|---|
 | [reporter-daily](/xClaude/skills/reporter-daily/) | X・note・threads 運用の日報を作成し、docs/reports/daily/ に保存する。スプレッドシートから前日の数値を取得し、投稿実績をもとに特記事項をAI生成する。 |
+| [reporter-monetization](/xClaude/skills/reporter-monetization/) | 月次マネタイズ運用状況レポートを作成し、docs/reports/monetization/ に保存する。X・threads 投稿の型別成績（3ヶ月推移）、note マネタイズと X/threads→note 導線（CTR/CVR/売上）、来月のマネタイズ計画案（運用・導線の修正案）を、monetization_metrics.py の集計をもとに生成する。 |
 | [reporter-monthly](/xClaude/skills/reporter-monthly/) | X・note 運用の月報を作成し、docs/reports/monthly/ に保存する。スプレッドシートから月次集計値・note売上を取得し、日報・週報をもとに総評と翌月改善計画をAI生成する。Xクリエイター収益は 0円 をデフォルトで保存（実値判明後に手動更新）。 |
 | [reporter-weekly](/xClaude/skills/reporter-weekly/) | X・note 運用の週報を作成し、docs/reports/weekly/ に保存する。スプレッドシートから週次集計値を取得し、日報をもとに「やったこと」「来週タスク」をAI生成する。 |
 
@@ -52,8 +53,10 @@ description: Claude Code で使用できるスキルの一覧
 |---|---|
 | [check](/xClaude/skills/check/) | check スキル |
 | [check-brand](/xClaude/skills/check-brand/) | 本文テキストを、指定した brand.md に適合させる。brand.md の「採点基準」で全項目8点以上になるまで書き直し、最後にトンマナ調整する。第1引数に brand.md パス（省略可）、残りを本文として受け取り、最終原稿とスコアサマリー・トンマナサマリーを返す。 |
+| [check-critic](/xClaude/skills/check-critic/) | 原稿を「知識ある読者」になりきった別コンテキストのサブエージェントに読ませ、事実への反論・単純化しすぎの箇所・本文が触れていない前提への疑問を列挙する。改稿はせず、出力は裏取り工程（check-fact-lim / check-fact）への入力として返す。第1引数に分野ヒント（省略可）、残りを本文として受け取る。 |
 | [check-fact](/xClaude/skills/check-fact/) | ファクトチェック付き品質レビュー。テキストまたは Drive ファイル ID を入力として受け付ける。 |
 | [check-fact-lim](/xClaude/skills/check-fact-lim/) | ファクトチェック付き品質レビュー（NotebookLM の特定ノートブックのソースのみを根拠にする）。第1引数に notebook_id、第2引数以降にテキストまたは Drive ファイル ID を受け取る。 |
+| [check-reader](/xClaude/skills/check-reader/) | 原稿を「素朴な読者」になりきったサブエージェントに読ませ、読みながら浮かぶ疑問・誤解した映像・フック未回収を列挙して、疑問が出なくなるまで改稿する。第1引数にペルソナ定義ファイルパス（省略可）、残りを本文として受け取る。`--plan` を先頭に付けると【構成モード】: 執筆前の構成案（agenda）を読者役に読ませ、章ごとの疑問・期待する種明かし・難所の予感を列挙して返す（改稿はしない）。 |
 
 ## メール・通知
 
@@ -78,7 +81,7 @@ description: Claude Code で使用できるスキルの一覧
 | スキル | 用途 |
 |---|---|
 | [record](/xClaude/skills/record/) | 変更・実装の記録を残す。docs/changelog.md と直近の git ログを照合し、未記録の変更候補をよーんに提案する。承認後に報告書と変更ログエントリを作成して git push する。 |
-| [record-note-posts](/xClaude/skills/record-note-posts/) | note.com の投稿情報（ビュー・スキ・スキ率・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新する。 |
+| [record-note-posts](/xClaude/skills/record-note-posts/) | note.com の投稿情報（ビュー・スキ・スキ率・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新する。新規記事を検知したら outputs シートにも自動記録する。 |
 | [save-session](/xClaude/skills/save-session/) | save-session スキル |
 | [sync-x-note-analytics](/xClaude/skills/sync-x-note-analytics/) | outputs/X投稿一覧/note投稿一覧/note購入記録 を集約して「Xnote導線記録」シートを再生成する。W001 ごとの IMP・リンクCTR・購入CVR・売上を 1 行 1 投稿の集計シートにまとめる。 |
 
