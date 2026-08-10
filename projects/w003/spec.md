@@ -1,5 +1,7 @@
 # Production Spec — X ワンポイント解説（W003）
 
+> **共通ルール**：draft ファイルの扱い（`draft.md` を上書きで推敲する・初稿は `draft/first-draft.md` に自動凍結される）は `../CLAUDE.md` を参照。w001/w002/w003 で共通。
+
 ## Media (生成する媒体)
 - X 投稿テキスト
 - インフォグラフィック画像 5パターン（ユーザー承認後に生成）
@@ -23,16 +25,16 @@
 
 ### フォルダの役割（draft/ と output/ の分担）
 
-- **`draft/`** … 中間生成物を置く。原稿の生出力 `draft.md`、推敲の各版 `draft_vN.md`、**5パターンすべての図解候補**（`infographic_[連番].png`＋プロンプト `infographic_[連番].md`）。
+- **`draft/`** … 中間生成物を置く。本文の作業ファイル `draft.md`（推敲もこれを直接更新する）、初稿の凍結 `first-draft.md`（Stop hook が自動生成・編集禁止）、**5パターンすべての図解候補**（`infographic_[連番].png`＋プロンプト `infographic_[連番].md`）。**本文の版を `draft_vN.md` として増やさない**（`../CLAUDE.md`「draft ファイルの扱い」参照）。
 - **`output/`** … **最終版のみ**を置く。次の3種だけにする：
   1. `index.md`（最終原稿の正本）
   2. `infographic_[連番].png`（採用した最終図解1枚）
   3. `infographic_[連番].md`（その最終図解の生成プロンプト）
-- 中間版（`draft.md`・`draft_vN.md`・不採用の図解候補）を `output/` に残さない。誤って置いた場合は `draft/` へ移す（重複時は `_vN` を付ける）。
+- 中間版（`draft.md`・`first-draft.md`・不採用の図解候補）を `output/` に残さない。誤って置いた場合は `draft/` へ移す。
 
 ### 下書き原稿
 
-`projects/w003/YYYYMMDD_[topic]/draft/draft.md`（推敲版は `draft/draft_vN.md`）
+`projects/w003/YYYYMMDD_[topic]/draft/draft.md`（推敲もこのファイルを直接更新する。初稿は `draft/first-draft.md` に自動で凍結される）
 
 ### 生成図解
 
@@ -82,7 +84,9 @@
 2. **ネタ選定（ユーザー確認）** — `onePointNeta` の**未使用ネタ**から、**分野を問わず** PE01 に刺さりそうなネタを **5 件**選んでユーザーに提示し、使うネタを選んでもらう（`日 mod 3` の分野グループ分けは廃止）。選定の最優先基準: 読者が今日体験した日常の物・感覚を入り口にできること（＋ brand.md 冒頭フック5軸の直感的比較数字・パワーワードが立てやすいこと）。ユーザーが選んだネタをテーマとして `/research_trivia-source {ネタ}` を実行し、出力されたトリビアネタ候補をユーザーに提示して、使うネタを決めてもらう
 3. **テーマフォルダ作成** — `projects/w003/YYYYMMDD_[topic]/`（配下に `draft/` と `output/`）を作成。以降の生成物はこのフォルダに保存する
 4. **原稿作成** — `/writer-xonepoint`
-5. **ファクトチェック** — `/check-fact`
+5. **ファクトチェック** — `/check-fact-lim <notebook_id> {本文}`（テーマフォルダの `notebook-id.md` の ID を使用。`/research_trivia-source` が作成した notebook のソースのみを根拠にする。notebook-id.md が無い場合のみ `/check-fact` にフォールバック）
+5.3. **素朴な読者チェック** — `/check-reader plan.md {本文}`。読者役（PE01）が初見で読み、疑問・誤解した映像・フック未回収を列挙する。疑問に本文中で答える形で改稿し、疑問が出なくなるまで最大3ループ
+5.6. **知識ある読者チェック** — `/check-critic --field {分野} {本文}`。知識ある読者役が、事実への反論・単純化しすぎ・本文が触れていない前提への疑問・論理の穴を列挙する。各指摘を notebook（`/check-fact-lim` への照会）で裏取りし、事実誤りは修正、本文を強める論点は字数を壊さない範囲で反映する。指摘を裏取りなしで反映しない
 6. **ブランド適合チェック** — `/check-brand projects/w003/brand.md {本文}`（採点ループ＋トンマナ調整。brand.md の採点基準で全項目 8 点以上、最大 5 回ループ）
 7. **画像生成** — `/visual_infographic` 5 パターン生成 → **ローカルの `draft/` フォルダに保存**（Drive へのアップロードは行わない）。**タイトルは `output/index.md` の冒頭1文**を使用。各プロンプトは **`projects/w003/infographic_template/` の型テンプレートを基に作成**（内容に合う 5 型を選択）
 8. **最終確定（ユーザー承認）** — 投稿テキストと画像が出そろったら、最新の確定版（`output/index.md`）と画像を提示し「**この内容で完成・確定してよいか**」を確認する。**承認まで以降に進まない。** 修正は反映・再保存して再提示する
@@ -99,11 +103,13 @@
 ## Verification
 - テキスト字数が 140〜300 字の範囲に収まっている
 - ブランド適合スコアリング（`/check-brand`）の全項目が 8 点以上（不合格時は警告を明記）
-- ファクトが出典確認済み（`/check-fact` 通過）
+- ファクトが出典確認済み（`/check-fact-lim` 通過。notebook 無し時のみ `/check-fact`）
+- `/check-reader`（素朴な読者）の疑問が解消されている
+- `/check-critic`（知識ある読者）の指摘が裏取り済みで反映・取捨が済んでいる
 - brand.mdと矛盾しない
 - plan.mdの目的に沿う
 - 出力ファイル名が揃っている
 - Gmail 下書きの本文が `[投稿文]`〜`[/投稿文]` の**開き・閉じ両タグ**で囲まれている（`python3 scripts/extract_tag.py 投稿文` で非空抽出できる）
 - チャット履歴 `chat_history.md` が投稿フォルダに保存されている
 - 投稿フォルダが Drive (xClaude/projects/w003) にアップロード済み
-- **`output/` に最終版以外のファイルが無い**（`index.md`＋採用図解 `infographic_[連番].png`＋その `infographic_[連番].md` の3種のみ。中間版 `draft.md`・`draft_vN.md`・不採用図解は `draft/` にある）
+- **`output/` に最終版以外のファイルが無い**（`index.md`＋採用図解 `infographic_[連番].png`＋その `infographic_[連番].md` の3種のみ。中間版 `draft.md`・`first-draft.md`・不採用図解は `draft/` にある）
