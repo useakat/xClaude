@@ -143,6 +143,25 @@
             "command": "echo '⚠ master に push しました と必ず伝えること'"
           }
         ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/freeze_first_draft.sh\" --record || true"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/freeze_first_draft.sh\" || true"
+          }
+        ]
       }
     ]
   },

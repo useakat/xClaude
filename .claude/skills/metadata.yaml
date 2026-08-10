@@ -47,6 +47,8 @@ skills:
     category: リサーチ・分析
   check:
     category: 品質チェック
+  check-critic:
+    category: 品質チェック
   check-fact:
     category: 品質チェック
   check-fact-lim:
