@@ -7,6 +7,13 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-08-11
+
+- **NotebookLM ブリッジのチャット応答を間引き OOM を解消** — `ask` がハング・空応答になる原因はローカル python3 が OOM Killer に殺されていたためと判明（チャットのストリーム応答が更新のたびに引用メタ全部を再送し32〜59MBに達していた）。リモート Chrome 内で最終スナップショットだけ残すトリムを実装し、転送量を24〜65分の1に削減。Windows 側にしか無かった `nbrpc_server.py` をリポジトリに取り込んだ。[→報告書](../reports/20260811_notebooklm_bridge_ask_oom_fix/)
+- **NotebookLM ブリッジに排他ロックと異常終了時の後始末を追加** — 上記修正の検証中に発覚した「並行実行の衝突」「異常終了後の残留Chromeロック」を解消。flock ベースの排他ロックで直列化し、SIGTERM時はPID指定でリモートを終了、SIGKILL（OOM）後は次回起動時に自動検知・掃除・再試行する。[→報告書](../reports/20260811_notebooklm_bridge_lock_cleanup/)
+
+---
+
 ## 2026-08-10
 
 - **note 記事の下書き保存を画像・サムネ込みで自動化（W002 フローに組み込み）** — 記事完成後の「note を開いて本文を貼り、画像を1枚ずつ挿入し、サムネを設定する」手作業を廃止。`send_note_draft.py` にアイキャッチ設定（`image_upload/note_eyecatch`・MIME明示が必須）と本文画像の S3 presigned アップロード＋figure 埋め込み（`x-amz-security-token` 必須）を追加し argparse 化（`--base-dir`/`--eyecatch`/`--no-images`）。w002 spec にフロー16 を新設し、手動作業を有料エリア設定と公開のみに縮小した。[→報告書](../reports/20260810_note_draft_images_eyecatch/)
