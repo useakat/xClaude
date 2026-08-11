@@ -310,10 +310,17 @@ def main():
     canvas.paste(rov, (ox, oy), rov)
     d = ImageDraw.Draw(canvas, "RGBA")
 
-    f_title = ImageFont.truetype(FONT, 72, index=0)
-    f_sub = ImageFont.truetype(FONT, 38, index=0)
-    f_name = ImageFont.truetype(FONT, 35, index=0)
-    f_note = ImageFont.truetype(FONT, 28, index=0)
+    # 最小文字サイズ = 画像幅の 2.19%（1280px 幅なら 28px）。image/brand.md 準拠。
+    # クレジット（但し書き）だけ下限の対象外。
+    MIN_FONT = round(CW * 0.0219)
+
+    def F(size):
+        return ImageFont.truetype(FONT, max(size, MIN_FONT), index=0)
+
+    f_title = F(72)
+    f_sub = F(38)
+    f_name = F(35)
+    f_note = F(28)
     f_cr = ImageFont.truetype(FONT, 12, index=0)
 
     def px_to_canvas(px, py):
@@ -357,7 +364,7 @@ def main():
     title = "太陽で生きる探査車、オポチュニティ"
     sub = "ゴルフカートほどの大きさ／重さ185kg"
     size = 72
-    while size > 40:                       # 1行で収まる最大サイズにする
+    while size > max(40, MIN_FONT):        # 1行で収まる最大サイズにする（下限は守る）
         f_title = ImageFont.truetype(FONT, size, index=0)
         if d.textlength(title, font=f_title) <= CW - 80:
             break

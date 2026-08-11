@@ -1,0 +1,17 @@
+# 生成の中間物（リポジトリに入れない）
+draft/images/_lovart/
+draft/images/_photos/
+thumbnail/_lovart/
+thumbnail/_text_*.npy
+thumbnail/_text_mask*.png
+
+# 3D・地図の元データ（NASA から再取得できるもの・大容量）
+reference/3d/*.glb
+reference/3d/*.blend
+reference/3d/*.zip
+reference/3d/views/
+reference/3d/views_hi/
+reference/3d/opportunity_mesh.json
+reference/3d/_*.png
+reference/maps/*.jpg
+reference/maps/_*.png
