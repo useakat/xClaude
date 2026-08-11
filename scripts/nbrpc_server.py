@@ -9,7 +9,9 @@ cookie をファイルに書き出さないため、__Secure-1PSIDTS が
 storage_state に出ない（デバイスバインド）問題を回避できる。
 
 プロトコル:
-  起動時に  {"ready":true,"csrf":"...","sid":"...","origin":"..."}  を1行出力
+  起動時に  {"ready":true,"csrf":"...","sid":"...","origin":"...","pid":<自PID>}  を1行出力
+  （pid は呼び出し側が異常終了時に taskkill /PID <pid> /T で後始末するために使う。
+    プロセス名での一括 kill と違い、並行実行中の他セッションを巻き込まない）
   以降 stdin:  {"url":"<full batchexecute url>","body":"<form-encoded body>"}
        stdout: {"status":200,"text":"<response text>"}
   {"cmd":"quit"} で終了
@@ -135,7 +137,8 @@ with sync_playwright() as p:
         emit({"ready": False, "error": "tokens not found in page"})
         ctx.close(); sys.exit(1)
 
-    emit({"ready": True, "csrf": m_csrf.group(1), "sid": m_sid.group(1), "origin": ORIGIN})
+    emit({"ready": True, "csrf": m_csrf.group(1), "sid": m_sid.group(1),
+          "origin": ORIGIN, "pid": os.getpid()})
 
     for line in sys.stdin:
         line = line.strip()

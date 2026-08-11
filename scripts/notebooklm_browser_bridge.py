@@ -17,10 +17,19 @@ NotebookLM ブラウザ経由ブリッジ（この環境側）
   python3 scripts/notebooklm_browser_bridge.py create "ノート名"
   python3 scripts/notebooklm_browser_bridge.py deep-research <notebook_id> "クエリ"
   python3 scripts/notebooklm_browser_bridge.py list-sources <notebook_id>
+
+多重起動・後始末:
+  Windows 側は単一の Chrome プロファイルを共有するため、同時に2つ動かすと
+  プロファイルロックで衝突する。ロックファイルで直列化し、先客がいれば待つ。
+  前回が異常終了して Chrome が残っていた場合は、起動失敗を検知して掃除し
+  1回だけ再試行する（OOM や SIGKILL では後始末が走らないため、次回に回復させる）。
 """
 import argparse
 import asyncio
+import fcntl
 import json
+import os
+import signal
 import subprocess
 import sys
 import time
@@ -45,9 +54,61 @@ OLD_ORIGIN = "https://notebooklm.google.com"
 SSH_HOST = "Administrator@133.18.136.38"
 REMOTE_SERVER = r"%USERPROFILE%\nbrpc_server.py"
 
+# ブリッジは Windows の単一 Chrome プロファイル前提。セッション間で直列化する。
+# flock はプロセス消滅時に必ず解放されるので、OOM や SIGKILL でも残らない。
+LOCK_PATH = Path(os.environ.get("NBLM_BRIDGE_LOCK", "/tmp/notebooklm_bridge.lock"))
+LOCK_WAIT = float(os.environ.get("NBLM_BRIDGE_LOCK_WAIT", "1200"))
+
+# 残留 Chrome がプロファイルを掴んでいるときの Playwright のエラー文言
+PROFILE_LOCK_SIGNS = ("Lock file can not be created", "SingletonLock", "ProcessSingleton")
+
 
 class BridgeError(RuntimeError):
-    pass
+    """detail には表示しきれない全文（起動失敗時の stderr 全体）を保持する。"""
+
+    def __init__(self, message: str, detail: str = ""):
+        super().__init__(message)
+        self.detail = detail
+
+
+class SessionLock:
+    """ブリッジの多重起動を防ぐ排他ロック。先客がいれば空くまで待つ。"""
+
+    def __init__(self, path: Path = LOCK_PATH, wait: float = LOCK_WAIT):
+        self.path = path
+        self.wait = wait
+        self.fh = None
+
+    def acquire(self) -> None:
+        self.fh = open(self.path, "w")
+        deadline = time.time() + self.wait
+        waited = False
+        while True:
+            try:
+                fcntl.flock(self.fh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                self.fh.write(f"{os.getpid()}\n")
+                self.fh.flush()
+                return
+            except BlockingIOError:
+                if not waited:
+                    print("→ 他セッションがブリッジ使用中。空くまで待機します…", file=sys.stderr)
+                    waited = True
+                if time.time() >= deadline:
+                    raise BridgeError(
+                        f"ブリッジが他セッションに専有されたままです（{self.wait:.0f}秒待機）。"
+                        "実行中の処理が終わってから再試行してください"
+                    )
+                time.sleep(2.0)
+
+    def release(self) -> None:
+        if not self.fh:
+            return
+        try:
+            fcntl.flock(self.fh, fcntl.LOCK_UN)
+            self.fh.close()
+        except Exception:
+            pass
+        self.fh = None
 
 
 class BrowserBridge:
@@ -59,8 +120,56 @@ class BrowserBridge:
         self.csrf = ""
         self.sid = ""
         self.origin = ""
+        self.remote_pid: int | None = None
+
+    # --- リモート操作の補助 ---
+
+    def _ssh(self, command: str, timeout: float = 60.0) -> str:
+        try:
+            res = subprocess.run(
+                ["ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=accept-new",
+                 self.ssh_host, command],
+                capture_output=True, text=True, timeout=timeout,
+            )
+            return res.stdout
+        except Exception:
+            return ""
+
+    def _kill_stale_remote(self, timeout: float = 120.0) -> None:
+        """残留 Chrome を終了し、プロファイルロックが解けるまで待つ。
+
+        ロック取得後にしか呼ばないので、他セッションを巻き込むことはない。
+        """
+        self._ssh("taskkill /F /IM chrome.exe /T")
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            time.sleep(5.0)
+            out = self._ssh('tasklist /FI "IMAGENAME eq chrome.exe" | find /C "chrome.exe"')
+            lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
+            if lines and lines[-1] == "0":
+                return
+        raise BridgeError("残留 Chrome を終了できませんでした（Windows 側を確認してください）")
+
+    def _kill_remote_session(self) -> None:
+        """自分が起動したリモートプロセスだけを木ごと終了する。"""
+        if self.remote_pid:
+            self._ssh(f"taskkill /F /PID {self.remote_pid} /T")
+
+    # --- 起動 ---
 
     def start(self, timeout: float = 180.0) -> None:
+        try:
+            self._spawn(timeout)
+        except BridgeError as e:
+            whole = str(e) + getattr(e, "detail", "")
+            if not any(sign in whole for sign in PROFILE_LOCK_SIGNS):
+                raise
+            print("→ 前回の残留 Chrome がプロファイルを掴んでいます。掃除して再試行します…",
+                  file=sys.stderr)
+            self._kill_stale_remote()
+            self._spawn(timeout)
+
+    def _spawn(self, timeout: float) -> None:
         self.proc = subprocess.Popen(
             [
                 "ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=accept-new",
@@ -74,17 +183,33 @@ class BrowserBridge:
         while time.time() < deadline:
             line = self.proc.stdout.readline()
             if not line:
-                err = self.proc.stderr.read()[:400]
-                raise BridgeError(f"ブリッジ起動に失敗しました: {err}")
+                # 全文を detail に残す（プロファイルロックの文言は末尾側に出る）
+                err = self.proc.stderr.read()
+                self._discard_local()
+                raise BridgeError(f"ブリッジ起動に失敗しました: {err[-400:]}", detail=err)
             line = line.strip()
             if not line.startswith("{"):
                 continue  # 起動時の雑多な出力は読み飛ばす
             info = json.loads(line)
             if not info.get("ready"):
-                raise BridgeError(f"ブリッジ初期化エラー: {info.get('error')}")
+                err = str(info.get("error"))
+                self._discard_local()
+                raise BridgeError(f"ブリッジ初期化エラー: {err}", detail=err)
             self.csrf, self.sid, self.origin = info["csrf"], info["sid"], info["origin"]
+            self.remote_pid = info.get("pid")
             return
+        self._discard_local()
         raise BridgeError("ブリッジ起動がタイムアウトしました")
+
+    def _discard_local(self) -> None:
+        """起動に失敗した ssh プロセスを片付ける（再試行前に呼ぶ）。"""
+        if self.proc:
+            try:
+                self.proc.kill()
+                self.proc.wait(timeout=10)
+            except Exception:
+                pass
+            self.proc = None
 
     def call(self, url: str, body: str) -> dict:
         if not self.proc:
@@ -98,13 +223,25 @@ class BrowserBridge:
         return json.loads(line)
 
     def close(self) -> None:
-        if self.proc:
+        """正常終了なら quit で閉じる。閉じられなければリモートを木ごと落とす。
+
+        ここを通らずに落ちた場合（OOM / SIGKILL）は Chrome が残るが、
+        次回起動時に _kill_stale_remote() が回復させる。
+        """
+        if not self.proc:
+            return
+        try:
+            self.proc.stdin.write(json.dumps({"cmd": "quit"}) + "\n")
+            self.proc.stdin.flush()
+            self.proc.wait(timeout=20)
+        except Exception:
             try:
-                self.proc.stdin.write(json.dumps({"cmd": "quit"}) + "\n")
-                self.proc.stdin.flush()
-                self.proc.wait(timeout=20)
-            except Exception:
                 self.proc.kill()
+            except Exception:
+                pass
+            # ssh を切っても Windows 側は生き残るため、PID 指定で確実に終了させる
+            self._kill_remote_session()
+        finally:
             self.proc = None
 
 
@@ -294,7 +431,20 @@ def main():
     }
 
     bridge = BrowserBridge()
+    lock = SessionLock()
+
+    def on_signal(signum, _frame):
+        # timeout(1) の SIGTERM や Ctrl-C でも Windows 側を残さない
+        print(f"\n→ シグナル {signum} を受信。リモートを終了します…", file=sys.stderr)
+        bridge.close()
+        lock.release()
+        sys.exit(128 + signum)
+
+    for sig in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):
+        signal.signal(sig, on_signal)
+
     try:
+        lock.acquire()
         bridge.start()
         core = BridgeCore(bridge)
         asyncio.run(cmds[args.command](core, args))
@@ -303,6 +453,7 @@ def main():
         sys.exit(1)
     finally:
         bridge.close()
+        lock.release()
 
 
 if __name__ == "__main__":
