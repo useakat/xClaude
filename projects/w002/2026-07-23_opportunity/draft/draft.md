@@ -257,3 +257,10 @@ NASAはこの現象に「クリーニング・イベント」という名前を�
 21. [How NASA's Opportunity Mars Rover Lived So Long - Space.com](https://www.space.com/opportunity-mars-rover-long-life.html) — ディープスリープ中も朝までに許容温度を下回らないぎりぎりの運用だったこと、この対策がなければ90日を大きく超える延命はなかったとされること。
 22. ['Greeley Haven' is Winter Workplace for Mars Rover - NASA/JPL](https://www.jpl.nasa.gov/news/greeley-haven-is-winter-workplace-for-mars-rover/) — オポチュニティが最初の4回の冬は日向斜面を必要としなかったこと、砂の堆積により5回目の冬（2011〜12年）で初めて15度の北向き斜面（グリーリー・ヘイブン）での越冬が必要になったこと、この手法がスピリットの3回の越冬で使われてきたものであること、名称が惑星地質学者ロナルド・グリーリーの追悼であること。
 23. [Opportunity Working in No-Flash Mode for Now - NASA/JPL](https://www.jpl.nasa.gov/news/opportunity-working-in-no-flash-mode-for-now/) — フラッシュメモリを使わない運用でも通常の観測・走行は継続でき、データはRAMに保存して休眠前に地球へ送信していたこと。
+
+<!-- ハッシュタグ -->
+## ハッシュタグ
+
+#宇宙 #火星 #NASA #科学 #天文学 #宇宙探査 #オポチュニティ #サイエンス #ノンフィクション #エッセイ #コラム #人生 #哲学 #思考
+
+お題タグ（note の公開設定画面から別枠で設定）: #最近の学び #スキしてみて

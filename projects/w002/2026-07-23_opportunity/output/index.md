@@ -257,3 +257,10 @@ NASAはこの現象に「クリーニング・イベント」という名前を�
 21. [How NASA's Opportunity Mars Rover Lived So Long - Space.com](https://www.space.com/opportunity-mars-rover-long-life.html) — オポチュニティが設計寿命を大きく超えて生き延びた理由を、運用の工夫からまとめた記事。
 22. ['Greeley Haven' is Winter Workplace for Mars Rover - NASA/JPL](https://www.jpl.nasa.gov/news/greeley-haven-is-winter-workplace-for-mars-rover/) — オポチュニティ5回目の冬の越冬地「グリーリー・ヘイブン」を発表した JPL のプレスリリース。
 23. [Opportunity Working in No-Flash Mode for Now - NASA/JPL](https://www.jpl.nasa.gov/news/opportunity-working-in-no-flash-mode-for-now/) — フラッシュメモリ不調時の「RAMのみ」運用を説明した JPL のリリース。
+
+<!-- ハッシュタグ -->
+## ハッシュタグ
+
+#宇宙 #火星 #NASA #科学 #天文学 #宇宙探査 #オポチュニティ #サイエンス #ノンフィクション #エッセイ #コラム #人生 #哲学 #思考
+
+お題タグ（note の公開設定画面から別枠で設定）: #最近の学び #スキしてみて
