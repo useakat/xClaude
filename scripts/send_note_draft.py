@@ -209,8 +209,13 @@ def create_draft(
     base_dir: Path = None,
     eyecatch: Path = None,
     upload_images: bool = True,
+    note_id: int = None,
 ) -> dict:
-    """下書きを新規作成して本文を保存する"""
+    """下書きを保存する。
+
+    note_id を渡すとその下書きを上書き更新し、省略すると新規作成する。
+    画像アップロードだけ失敗したときに下書きを増やさず再実行できるようにするための引数。
+    """
     base_dir = Path(base_dir) if base_dir else Path.cwd()
     uploaded = []
     failed = []
@@ -238,15 +243,17 @@ def create_draft(
         cache[src] = info
         return info
 
-    # ① 下書きを新規作成（ID を取得）
-    r1 = requests.post(
-        "https://note.com/api/v1/text_notes",
-        headers=_headers(),
-        json={"draft": True, "name": title},
-        timeout=30,
-    )
-    r1.raise_for_status()
-    note_id = r1.json()["data"]["id"]
+    # ① 下書きを新規作成（ID を取得）。note_id 指定時は既存の下書きを使う
+    reused = note_id is not None
+    if note_id is None:
+        r1 = requests.post(
+            "https://note.com/api/v1/text_notes",
+            headers=_headers(),
+            json={"draft": True, "name": title},
+            timeout=30,
+        )
+        r1.raise_for_status()
+        note_id = r1.json()["data"]["id"]
 
     body_html = md_to_note_html(body_md, image_resolver=resolve)
 
@@ -272,6 +279,7 @@ def create_draft(
 
     return {
         "note_id": note_id,
+        "mode": "update" if reused else "create",
         "edit_url": f"https://note.com/notes/{note_id}/edit",
         "eyecatch_url": eyecatch_url,
         "uploaded_images": uploaded,
@@ -288,6 +296,12 @@ def main():
         help="本文中の画像相対パスの基準ディレクトリ（既定: カレントディレクトリ）",
     )
     ap.add_argument("--eyecatch", help="アイキャッチ画像のパス（1280x672 推奨）")
+    ap.add_argument(
+        "--note-id",
+        type=int,
+        help="既存の下書き ID。指定するとその下書きを上書き更新する"
+        "（画像だけ失敗したときの再実行用。省略時は新規作成）",
+    )
     ap.add_argument(
         "--no-images",
         action="store_true",
@@ -310,9 +324,18 @@ def main():
         base_dir=args.base_dir,
         eyecatch=args.eyecatch,
         upload_images=not args.no_images,
+        note_id=args.note_id,
     )
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if result["failed_images"]:
+        # 画像が1点でも欠けた下書きは未完成。気づかず次の工程へ進まないよう明示する
+        print(
+            f"\nERROR: 画像 {len(result['failed_images'])} 点のアップロードに失敗しました。"
+            "この下書きは未完成です。原因を直したうえで、"
+            f"同じ下書きに --note-id {result['note_id']} を付けて再実行してください"
+            "（新しい下書きを作らないため）。",
+            file=sys.stderr,
+        )
         sys.exit(2)
 
 
