@@ -72,13 +72,15 @@ def upload_body_image(path: Path) -> dict:
 
     ① note に presigned POST を要求 → ② 返ったフィールドごと S3 に multipart POST。
     x-amz-security-token を含む全フィールドをそのまま送らないと 403 になる。
+    リクエストのキーは `filename`（2026-08 の仕様変更。旧 `file_name` は invalid_param で 400）。
+    埋め込み URL はレスポンスの `url` をそのまま使う（`post.key` は `img/` を含むため連結すると重複する）。
     """
     mime = _mime_of(path)
 
     r = requests.post(
         "https://note.com/api/v3/images/upload/presigned_post",
         headers=_headers(),
-        json={"content_type": mime, "file_name": path.name},
+        json={"content_type": mime, "filename": path.name},
         timeout=30,
     )
     r.raise_for_status()
@@ -95,10 +97,9 @@ def upload_body_image(path: Path) -> dict:
         )
     r2.raise_for_status()
 
-    key = fields.get("key", "")
     width, height = _image_size(path)
     return {
-        "src": f"https://assets.st-note.com/img/{key}",
+        "src": data["url"],
         "width": width,
         "height": height,
     }
