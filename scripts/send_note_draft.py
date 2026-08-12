@@ -167,6 +167,10 @@ def md_to_note_html(md_text: str, image_resolver=None) -> str:
         if line.strip() == "":
             continue
 
+        # HTML コメント行（`<!-- ハッシュタグ -->` など）は本文に出さない
+        if line.strip().startswith("<!--"):
+            continue
+
         # 画像行（単独行の ![alt](path) のみ figure に変換する）
         m = img_pattern.match(line.strip())
         if m:
@@ -176,10 +180,12 @@ def md_to_note_html(md_text: str, image_resolver=None) -> str:
                 size = ""
                 if info.get("width") and info.get("height"):
                     size = f' width="{info["width"]}" height="{info["height"]}"'
+                # figcaption は省略できない。無いとエディタが下書きを開けず 404 になる
+                # （2026-08-13 検証。note 自身の出力にも data-align と空の figcaption が入る）
                 parts.append(
-                    f'<figure name="{uid}" id="{uid}">'
+                    f'<figure name="{uid}" id="{uid}" data-align="center">'
                     f'<img src="{info["src"]}" alt="{alt}"{size}>'
-                    f"</figure>"
+                    f"<figcaption></figcaption></figure>"
                 )
             else:
                 # 解決できなかった画像は、壊れたリンクにせず元の記法を残す
@@ -190,7 +196,13 @@ def md_to_note_html(md_text: str, image_resolver=None) -> str:
         # インライン変換
         def convert_inline(text):
             text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
-            text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', text)
+            # URL に括弧を含むリンク（Wikipedia の …/Opportunity_(rover) など）を
+            # 最初の ")" で打ち切らないよう、括弧1段のネストを許す
+            text = re.sub(
+                r"\[([^\]]+)\]\(((?:[^()\s]|\([^()\s]*\))+)\)",
+                r'<a href="\2">\1</a>',
+                text,
+            )
             return text
 
         if line.startswith("## "):
