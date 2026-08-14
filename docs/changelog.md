@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-08-14
 
 - **NotebookLM の Deep Research 生成報告書によるソース汚染を解消（検証ループの循環を遮断）** — SOHO 販促原稿のファクトチェックで `/check-fact-lim` が誤った物理説明を2度出力。原因は、Deep Research が生成した報告書が `import_sources()` によって notebook 自身のソースに登録され、**AI の出力を AI が検証する循環**に陥っていたこと。ブリッジで生成報告書を既定除外（`--with-report` で従来動作）し、`list-sources --ids`・`delete-source` を新設。全24 notebook を棚卸しし汚染2件（SOHO・W003探査機の手ブレ対策）を削除、再照会で解消を確認した。`/check-critic` と一次情報の突き合わせが機能した初の実運用例。[→報告書](../reports/20260814_notebooklm_generated_report_contamination/)
+- **`commit_and_sync.sh` を対象限定コミットに対応させ全7スキルを追従** — `git add -A` が他セッションの未コミット作業を巻き込む問題。同日の `/record` で43ファイル・8,833行のコミットになりかけ、過去も同じ手作業回避が6回以上繰り返されていた。スクリプトが第2引数以降で対象パスを受け取る形にし（省略時は警告つきで従来動作）、コミット前にファイル一覧を表示・空コミットを防止。呼び出し元7スキル（record / reporter-daily・weekly・monthly / update-permissions / save-session / classify-followers）すべてに対象パスを明示した。[→報告書](../reports/20260814_commit_and_sync_targeted_paths/)
 
 ---
 
