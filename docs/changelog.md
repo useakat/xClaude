@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-08-14
+
+- **NotebookLM の Deep Research 生成報告書によるソース汚染を解消（検証ループの循環を遮断）** — SOHO 販促原稿のファクトチェックで `/check-fact-lim` が誤った物理説明を2度出力。原因は、Deep Research が生成した報告書が `import_sources()` によって notebook 自身のソースに登録され、**AI の出力を AI が検証する循環**に陥っていたこと。ブリッジで生成報告書を既定除外（`--with-report` で従来動作）し、`list-sources --ids`・`delete-source` を新設。全24 notebook を棚卸しし汚染2件（SOHO・W003探査機の手ブレ対策）を削除、再照会で解消を確認した。`/check-critic` と一次情報の突き合わせが機能した初の実運用例。[→報告書](../reports/20260814_notebooklm_generated_report_contamination/)
+
+---
+
 ## 2026-08-13
 
 - **note 下書きがエディタで開けない問題を解決（`figcaption` 必須）** — 保存した下書きの編集URLが404になり、一覧には並ぶのに開けなかった。データは正常（本文31,466字・figure11個・note_draft レコードあり）で、404はブラウザ内で出ていた。テスト下書き10件で1要素ずつ切り分け、**`<figcaption>` の無い `<figure>` をエディタが読み込めない**ことを特定（`data-align`・`alt`・本文量・リンクは無関係）。あわせて切り分け中に見つけた「URLに括弧を含むリンクが途中で切れる」「HTMLコメントが本文に混入する」も修正。8/10 の実装時はローカル検証だけで、下書きをエディタで開く確認をしていなかった。[→報告書](../reports/20260813_note_draft_figcaption_fix/)
