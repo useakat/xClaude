@@ -16,7 +16,14 @@ NotebookLM ブラウザ経由ブリッジ（この環境側）
   python3 scripts/notebooklm_browser_bridge.py list
   python3 scripts/notebooklm_browser_bridge.py create "ノート名"
   python3 scripts/notebooklm_browser_bridge.py deep-research <notebook_id> "クエリ"
-  python3 scripts/notebooklm_browser_bridge.py list-sources <notebook_id>
+  python3 scripts/notebooklm_browser_bridge.py list-sources <notebook_id> [--ids]
+  python3 scripts/notebooklm_browser_bridge.py delete-source <notebook_id> <source_id>
+
+ソースの品質について:
+  deep-research は既定で「Deep Research が生成した報告書」をソースに含めない。
+  取り込むと AI の要約がその notebook の一次資料になり、check-fact-lim が
+  AI の出力を AI で検証する循環に陥る（2026-08-14 に SOHO のノートで発覚）。
+  過去に混入したものは list-sources --ids で ID を調べ delete-source で除去する。
 
 多重起動・後始末:
   Windows 側は単一の Chrome プロファイルを共有するため、同時に2つ動かすと
@@ -344,12 +351,79 @@ async def cmd_create(core, args):
     print(f"✓ 作成: {nid}")
 
 
+def _source_field(s, name: str) -> str:
+    return getattr(s, name, None) or (s.get(name) if isinstance(s, dict) else "") or ""
+
+
 async def cmd_list_sources(core, args):
     sources = await SourcesAPI(core).list(args.notebook_id)
     for s in sources:
-        title = getattr(s, "title", None) or (s.get("title") if isinstance(s, dict) else "")
-        print(f"- {title}")
+        title = _source_field(s, "title")
+        if args.ids:  # delete-source に渡す source_id を出す
+            print(f"{_source_field(s, 'id')}\t{title}")
+        else:
+            print(f"- {title}")
     print(f"--- {len(sources)} 件 ---")
+
+
+async def cmd_delete_source(core, args):
+    """notebook からソースを1件削除する。
+
+    Deep Research が生成した報告書が誤ってソース化された場合など、
+    照合先として不適切なソースを取り除くために使う（2026-08-14 の SOHO 事例）。
+    source_id は `list-sources --ids` で確認する。
+    """
+    api = SourcesAPI(core)
+    sources = await api.list(args.notebook_id)
+    target = next((s for s in sources if _source_field(s, "id") == args.source_id), None)
+    if target is None:
+        raise BridgeError(f"ソースが見つかりません: {args.source_id}")
+    title = _source_field(target, "title")
+    await api.delete(args.notebook_id, args.source_id)
+    after = len(await api.list(args.notebook_id))
+    print(f"✓ 削除: {title}")
+    print(f"  ソース数: {len(sources)} → {after}")
+
+
+async def cmd_add_source(core, args):
+    """URL を指定して notebook にソースを追加する。
+
+    CLAUDE.md のリサーチ運用ルール「新たに信頼できるソースが見つかったら notebook に
+    追加する」を実行するための口。manager 側は認証が失効しているため、ブリッジに置く。
+    追加前に既存ソース数を控えて、増えたことを確認できるようにする。
+    """
+    api = SourcesAPI(core)
+    before = len(await api.list(args.notebook_id))
+    src = await api.add_url(args.notebook_id, args.url, wait=True)
+    title = getattr(src, "title", None) or (
+        src.get("title") if isinstance(src, dict) else ""
+    )
+    print(f"✓ 追加: {title or args.url}")
+    print(f"  ソース数: {before} → {before + 1}")
+
+
+async def cmd_add_text(core, args):
+    """ローカルのテキストを notebook にソースとして追加する。
+
+    PDF・論文など URL で渡せない一次資料を入れるための口。ライブラリには add_file も
+    あるが、あちらはバイナリのレジューム アップロードで、このブリッジ（JSON 1行の
+    プロキシ）を通せない。テキスト層のある PDF は抽出してからここに流す。
+    """
+    api = SourcesAPI(core)
+    content = args.content
+    if content == "-":  # 長文は標準入力から受け取る
+        content = sys.stdin.read()
+    content = content.strip()
+    if not content:
+        raise SystemExit("本文が空です")
+
+    before = len(await api.list(args.notebook_id))
+    src = await api.add_text(args.notebook_id, args.title, content, wait=True)
+    title = getattr(src, "title", None) or (
+        src.get("title") if isinstance(src, dict) else ""
+    )
+    print(f"✓ 追加: {title or args.title}（{len(content)} 字）")
+    print(f"  ソース数: {before} → {before + 1}")
 
 
 async def cmd_ask(core, args):
@@ -385,8 +459,21 @@ async def cmd_deep_research(core, args):
 
     sources = latest.get("sources") or []
     if not args.no_import and sources:
-        imported = await research.import_sources(args.notebook_id, latest.get("task_id", task_id), sources)
-        print(f"✓ ソース取り込み: {len(imported)} 件", file=sys.stderr)
+        # Deep Research が生成した「報告書」（result_type == 5）は、既定でソース化しない。
+        # これを取り込むと、AI が書いた要約がその notebook の一次資料になり、
+        # 以後の check-fact-lim が AI の出力を AI で検証する循環に陥る。
+        # 2026-08-14、SOHO のノートで実際に誤った物理説明が2度出力された。
+        to_import = sources
+        if not args.with_report:
+            to_import = [s for s in sources if s.get("result_type") != 5]
+            dropped = len(sources) - len(to_import)
+            if dropped:
+                print(f"  生成報告書 {dropped} 件は取り込まない（--with-report で取り込む）",
+                      file=sys.stderr)
+        if to_import:
+            imported = await research.import_sources(
+                args.notebook_id, latest.get("task_id", task_id), to_import)
+            print(f"✓ ソース取り込み: {len(imported)} 件", file=sys.stderr)
 
     print(json.dumps({
         "notebook_id": args.notebook_id,
@@ -409,6 +496,21 @@ def main():
 
     p_ls = sub.add_parser("list-sources")
     p_ls.add_argument("notebook_id")
+    p_ls.add_argument("--ids", action="store_true",
+                      help="source_id をタブ区切りで併記する（delete-source に渡す）")
+
+    p_del = sub.add_parser("delete-source")
+    p_del.add_argument("notebook_id")
+    p_del.add_argument("source_id", help="list-sources --ids で確認したソースID")
+
+    p_as = sub.add_parser("add-source")
+    p_as.add_argument("notebook_id")
+    p_as.add_argument("url", help="追加するソースの URL")
+
+    p_at = sub.add_parser("add-text")
+    p_at.add_argument("notebook_id")
+    p_at.add_argument("title", help="ソースのタイトル")
+    p_at.add_argument("content", help="本文。'-' を渡すと標準入力から読む")
 
     p_ask = sub.add_parser("ask")
     p_ask.add_argument("notebook_id")
@@ -420,12 +522,17 @@ def main():
     p_dr.add_argument("--timeout", type=float, default=900.0)
     p_dr.add_argument("--interval", type=float, default=20.0)
     p_dr.add_argument("--no-import", action="store_true")
+    p_dr.add_argument("--with-report", action="store_true",
+                      help="Deep Research が生成した報告書もソースとして取り込む（既定では取り込まない）")
 
     args = ap.parse_args()
     cmds = {
         "list": cmd_list,
         "create": cmd_create,
         "list-sources": cmd_list_sources,
+        "delete-source": cmd_delete_source,
+        "add-source": cmd_add_source,
+        "add-text": cmd_add_text,
         "ask": cmd_ask,
         "deep-research": cmd_deep_research,
     }
