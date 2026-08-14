@@ -399,8 +399,11 @@ git -C /root/xClaude rev-parse --show-toplevel
 
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
-  "report(daily): [DATE_JP]の日報を追加"
+  "report(daily): [DATE_JP]の日報を追加" \
+  docs/reports/daily/[DATE_ISO].md
 ```
+
+- **対象パスを必ず渡す。** 省略すると `git add -A` にフォールバックし、他セッションの未コミット作業を巻き込む（2026-08-14 に `/record` で実際に発生）。
 
 **11-2. GitHub MCP で master にプッシュ**
 

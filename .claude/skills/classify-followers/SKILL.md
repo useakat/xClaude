@@ -206,8 +206,11 @@ print(f"更新完了: {existing['total']} → {len(existing_results)}件")
 
 ```bash
 bash $(git rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
-  "feat(persona): フォロワーペルソナ分類更新（YYYY-MM-DD）"
+  "feat(persona): フォロワーペルソナ分類更新（YYYY-MM-DD）" \
+  docs/reports/YYYYMMDD_follower_persona_update.md
 ```
+
+- **対象パスを必ず渡す。** 省略すると `git add -A` にフォールバックし、他セッションの未コミット作業を巻き込む（2026-08-14 に `/record` で実際に発生）。
 
 ---
 

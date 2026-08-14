@@ -207,12 +207,20 @@ git -C /root/xClaude fetch origin master -q && git -C /root/xClaude rebase origi
 
 **6-1. ローカルコミット**
 
+**必ず対象ファイルを明示する。** 今回作成・更新した docs だけを渡し、作業ツリーの他の変更は含めない：
+
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
-  "docs: [変更タイトル]の報告書・変更ログを追加"
+  "docs: [変更タイトル]の報告書・変更ログを追加" \
+  docs/changelog.md \
+  docs/reports/YYYYMMDD_<スラグ>.md \
+  docs/history/YYYYMMDD_<スラグ>.md
 ```
 
-複数件まとめてコミットする場合は、タイトルを列挙する。
+複数件まとめてコミットする場合は、タイトルを列挙し、対象ファイルもすべて並べる。
+
+- **パスを省略すると `git add -A` にフォールバックし、他セッションの未コミット作業を巻き込む。** 複数セッションが同じリポジトリで動くため省略しない（2026-08-14 に実際に発生。それ以前も再発多数）。
+- 実装ファイル（`scripts/*.py` 等）は STEP 4.7 の時点でコミット済みのはずなので、ここでは docs のみを対象にする。
 
 **6-2. GitHub MCP で master にプッシュ**
 

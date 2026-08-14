@@ -311,8 +311,12 @@ title: 週報 [week_label]
 
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
-  "report(weekly): [week_label]の週報を追加"
+  "report(weekly): [week_label]の週報を追加" \
+  docs/reports/weekly/[week_id].md \
+  docs/reports/weekly/index.md
 ```
+
+- **対象パスを必ず渡す。** 省略すると `git add -A` にフォールバックし、他セッションの未コミット作業を巻き込む（2026-08-14 に `/record` で実際に発生）。
 
 **8-2. GitHub MCP で master にプッシュ**
 
