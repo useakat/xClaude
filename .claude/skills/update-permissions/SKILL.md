@@ -54,8 +54,11 @@ Read ツールで `/root/xClaude/.claude/settings.json` を読み込み、`permi
 
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
-  "chore(settings): [追記したパターンの概要] を permissions.allow に追加"
+  "chore(settings): [追記したパターンの概要] を permissions.allow に追加" \
+  .claude/settings.json
 ```
+
+- **対象パスを必ず渡す。** 省略すると `git add -A` にフォールバックし、他セッションの未コミット作業を巻き込む（2026-08-14 に `/record` で実際に発生）。
 
 **4-2. GitHub MCP で master にプッシュ**
 

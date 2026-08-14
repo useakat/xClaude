@@ -62,8 +62,13 @@ python3 /home/user/xClaude/scripts/save_session_history.py \
 
 ```bash
 bash /home/user/xClaude/scripts/commit_and_sync.sh \
-  "docs: <タイトル> のセッション履歴を追加"
+  "docs: <タイトル> のセッション履歴を追加" \
+  docs/history/YYYYMMDD_slug.md
 ```
+
+（報告書にリンクを追記した場合は `docs/reports/<該当ファイル>.md` も対象に加える）
+
+- **対象パスを必ず渡す。** 省略すると `git add -A` にフォールバックし、他セッションの未コミット作業を巻き込む（2026-08-14 に `/record` で実際に発生）。
 
 その後、GitHub MCP でファイルを master に push する：
 
