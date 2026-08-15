@@ -138,13 +138,17 @@ def md_to_note_html(md_text: str, image_resolver=None) -> str:
     None（＝変換せずそのまま残す）を返す関数。
     """
     lines = md_text.strip().split("\n")
-    parts = [
-        f'<table-of-contents name="{uuid.uuid4()}" id="{uuid.uuid4()}"><br></table-of-contents>'
-    ]
+    parts = []
     in_code_block = False
     code_lines = []
+    # 目次は導入（最初の H2 の手前）に置く。ここでは位置だけ覚えておき、最後に差し込む
+    toc_index = None
 
     img_pattern = re.compile(r"^!\[([^\]]*)\]\(([^)]+)\)\s*$")
+    # 画像の直後に置いた `> …` の行は、その画像のキャプション（figcaption）にする。
+    # note のエディタは alt を画面に表示するため、説明文は alt ではなくここに入れる。
+    caption_pattern = re.compile(r"^>\s?(.*)$")
+    last_figure_index = None   # 直前に出力した figure の parts 上の位置
 
     for line in lines:
         uid = str(uuid.uuid4())
@@ -171,27 +175,50 @@ def md_to_note_html(md_text: str, image_resolver=None) -> str:
         if line.strip().startswith("<!--"):
             continue
 
+        # H1 は記事タイトル（note 側で別に設定する）なので本文に出さない
+        if line.startswith("# "):
+            continue
+
+        # 水平線は note の本文では使わない
+        if line.strip() in ("---", "***", "___"):
+            continue
+
         # 画像行（単独行の ![alt](path) のみ figure に変換する）
         m = img_pattern.match(line.strip())
         if m:
             info = image_resolver(m.group(2)) if image_resolver else None
             if info:
-                alt = m.group(1).replace('"', "&quot;")
                 size = ""
                 if info.get("width") and info.get("height"):
                     size = f' width="{info["width"]}" height="{info["height"]}"'
                 # figcaption は省略できない。無いとエディタが下書きを開けず 404 になる
                 # （2026-08-13 検証。note 自身の出力にも data-align と空の figcaption が入る）
+                # alt は空にする。note のエディタは alt を画面に表示してしまい、note 自身の
+                # 出力も alt="" のため（2026-08-15）。説明文は次行の `> …` で figcaption へ。
+                last_figure_index = len(parts)
                 parts.append(
                     f'<figure name="{uid}" id="{uid}" data-align="center">'
-                    f'<img src="{info["src"]}" alt="{alt}"{size}>'
+                    f'<img src="{info["src"]}" alt=""{size}>'
                     f"<figcaption></figcaption></figure>"
                 )
             else:
                 # 解決できなかった画像は、壊れたリンクにせず元の記法を残す
                 escaped = line.strip().replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
                 parts.append(f'<p name="{uid}" id="{uid}">{escaped}</p>')
+                last_figure_index = None
             continue
+
+        # 画像の直後の `> …` はキャプション。直前の figure の figcaption に流し込む
+        cm = caption_pattern.match(line.strip())
+        if cm and last_figure_index is not None:
+            cap = cm.group(1).strip().replace("<", "&lt;").replace(">", "&gt;")
+            parts[last_figure_index] = parts[last_figure_index].replace(
+                "<figcaption></figcaption>", f"<figcaption>{cap}</figcaption>"
+            )
+            last_figure_index = None
+            continue
+
+        last_figure_index = None
 
         # インライン変換
         def convert_inline(text):
@@ -206,11 +233,17 @@ def md_to_note_html(md_text: str, image_resolver=None) -> str:
             return text
 
         if line.startswith("## "):
+            if toc_index is None:
+                toc_index = len(parts)  # 最初の H2 の直前＝導入の直後
             parts.append(f'<h2 name="{uid}" id="{uid}">{convert_inline(line[3:])}</h2>')
         elif line.startswith("### "):
             parts.append(f'<h3 name="{uid}" id="{uid}">{convert_inline(line[4:])}</h3>')
         else:
             parts.append(f'<p name="{uid}" id="{uid}">{convert_inline(line)}</p>')
+
+    toc_uid = str(uuid.uuid4())
+    toc = f'<table-of-contents name="{toc_uid}" id="{toc_uid}"><br></table-of-contents>'
+    parts.insert(toc_index if toc_index is not None else 0, toc)
 
     return "\n".join(parts)
 
