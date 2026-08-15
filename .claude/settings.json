@@ -163,6 +163,16 @@
           }
         ]
       }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/freeze_first_draft.sh\" || true"
+          }
+        ]
+      }
     ]
   },
   "mcpServers": {
