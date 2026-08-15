@@ -14,6 +14,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **first-draft 凍結フックに UserPromptSubmit を追加** — Stop フックはターン中断時に発火しないケースがあり、W001 のオポチュニティ販促記事で `draft.md` を9回更新しても `first-draft.md` が一度も作られない事象が発生。よーんの次発言で必ず発火する UserPromptSubmit を保険として追加し、Stop の取りこぼしを回収するようにした。[→報告書](../reports/20260815_first_draft_hook_userpromptsubmit/)
 - **check-reader の判定基準を「納得できるか」から「誤解・曖昧・不自然・フック未回収の有無」へ変更** — DART投稿で理解度1〜10の自己採点方式が3ループとも4/10で頭打ちになり非収束。「もっと深く知りたい」という納得要求と「誤解・曖昧・不自然」という検証可能な指標を切り分け、後者のみを判定対象にした。[→報告書](../reports/20260815_check_reader_criteria_misunderstanding/)
 - **Z01 に「驚きは1投稿に1つ」ルールを追加** — DART投稿の初稿が「進路変更」と「岩塊の反動」の2つの驚きを140字に詰め、どちらも説明不足で読者役チェックが理解度4/10のまま頭打ちになった。1投稿の驚きは最も強い1つに絞り、残りは昇格先（W001/W002/W003）候補として本文に入れないルールを z01 brand.md に追加。[→報告書](../reports/20260815_z01_single_surprise_rule/)
+- **W003 の原稿作成を共通スキル `/writer-xpost` へ統合し、可視ブロック設計ステージを新設** — W003 だけが個別スキル `writer-xonepoint` に取り残されていたため z01 と同じ `/writer-xpost` へ切替。折り返しチェックが検品（本文完成後）にしかなく手戻りが発生していたため、`writer-xpost` に可視ブロックを先に書き `/check-reader --fold` で検証するステージ2.5を新設（発動条件は brand.md/spec.md の折り返し制約有無なので z01 は影響を受けない）。[→報告書](../reports/20260815_w003_writer_xpost_migration/)
+- **W003 の画像生成を NotebookLM から Lovart へ移行** — `/visual_infographic` が依存する cookie 認証は8/6に廃止済み、後継ブリッジも `infographic` 未移植で実行不能と判明。W001・W002に続き `/lovart` へ移行し、実運用でラベル記法混入とハビタブルゾーン内の位置関係の誤りを検出・修正した。[→報告書](../reports/20260815_w003_lovart_image_generation/)
 
 ## 2026-08-14
 
