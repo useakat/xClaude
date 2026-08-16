@@ -35,7 +35,7 @@ tools: Bash, Read, Write, Edit, Glob, Grep, mcp__mcp-gsheets__sheets_get_values
 
 # STEP 1: 対象週の決定
 
-引数があればその週の月曜日（YYYY-MM-DD）として解釈する。なければ直近完了週（先週月〜日）。
+引数があればその週の月曜日（YYYY-MM-DD）として解釈する。なければ**今週（実行日を含む週）の月曜〜日曜**を対象にする。週の途中（日曜以前）に実行した場合は集計が途中経過になるため、レポート冒頭にその旨を1行明記する。
 
 ```bash
 python3 -c "
@@ -48,7 +48,7 @@ if args:
     monday = base - timedelta(days=base.weekday())
 else:
     today = datetime.now(JST).date()
-    monday = today - timedelta(days=today.weekday() + 7)
+    monday = today - timedelta(days=today.weekday())
 sunday = monday + timedelta(days=6)
 iso_week = monday.isocalendar()[1]
 prev_monday = monday - timedelta(days=7)
