@@ -31,6 +31,10 @@ tools: Bash, Read, Write, Edit, Glob, Grep, mcp__mcp-gsheets__sheets_get_values
 
 > URL マッチは tweet ID 部分で行う（outputs は `x.com`、X投稿一覧は `twitter.com` 表記のため）。
 
+> **IMP の意味**: X投稿一覧のインプレッションは毎日の更新で**投稿から最大8日分の累積**が反映される。投稿から8日未満の投稿は数値が伸び切っていない可能性があるため、直近投稿の比較時はその旨を注記する。
+
+> **routine（無人実行）時**: Sheets の読み取りは MCP ツールの代わりに `python3 scripts/sheets_values.py get <spreadsheetId> '<range>'` を Bash 経由で使う（リモート環境では MCP の許可プロンプトで停止するため。CLAUDE.md 参照）。
+
 ---
 
 # STEP 1: 対象週の決定
@@ -244,6 +248,21 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
 
 ---
 
+# STEP 8: メール送信
+
+保存したレポート本文を よーん にメールする：
+
+```bash
+bash /root/xClaude/scripts/send_gmail.sh \
+  --to useakat@gmail.com \
+  --subject "【発信運用振り返り】[week_label] YYYY-MM-DD" \
+  --body-file docs/reports/ops-weekly/[week_id].md
+```
+
+- 送信失敗（exit≠0）の場合はエラー内容を完了報告に明記する（レポート自体は保存・push 済みなので処理は続行する）
+
+---
+
 # 完了報告
 
 ```
@@ -252,6 +271,7 @@ bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.s
    伸び: 「…」 / 沈み: 「…」
    来週アクション: X個
    保存先: docs/reports/ops-weekly/[week_id].md（master に push 済み）
+   メール: useakat@gmail.com に送信済み
 ```
 
 保存したファイルを Read して内容をそのまま表示する。
