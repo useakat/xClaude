@@ -98,7 +98,8 @@
       "Bash(echo *)",
       "Bash(git -C *xClaude push*)",
       "Bash(ssh Administrator@133.18.136.38:*)",
-      "Bash(python3 *notebooklm_browser_bridge.py *)"
+      "Bash(python3 *notebooklm_browser_bridge.py *)",
+      "Bash(python3 *scripts/fetch_note_stats.py*)"
     ]
   },
   "hooks": {
