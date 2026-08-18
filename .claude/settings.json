@@ -132,7 +132,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/update_wiki_skills.py\" || true"
+            "command": "d=\"${CLAUDE_PROJECT_DIR:-$PWD}\"; while [ -n \"$d\" ] && [ \"$d\" != \"/\" ]; do if [ -f \"$d/scripts/update_wiki_skills.py\" ]; then python3 \"$d/scripts/update_wiki_skills.py\" || true; break; fi; d=$(dirname \"$d\"); done"
           }
         ]
       },
@@ -150,7 +150,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/freeze_first_draft.sh\" --record || true"
+            "command": "d=\"${CLAUDE_PROJECT_DIR:-$PWD}\"; while [ -n \"$d\" ] && [ \"$d\" != \"/\" ]; do if [ -f \"$d/scripts/freeze_first_draft.sh\" ]; then bash \"$d/scripts/freeze_first_draft.sh\" --record || true; break; fi; d=$(dirname \"$d\"); done"
           }
         ]
       }
@@ -160,7 +160,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/freeze_first_draft.sh\" || true"
+            "command": "d=\"${CLAUDE_PROJECT_DIR:-$PWD}\"; while [ -n \"$d\" ] && [ \"$d\" != \"/\" ]; do if [ -f \"$d/scripts/freeze_first_draft.sh\" ]; then bash \"$d/scripts/freeze_first_draft.sh\" || true; break; fi; d=$(dirname \"$d\"); done"
           }
         ]
       }
@@ -170,7 +170,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/scripts/freeze_first_draft.sh\" || true"
+            "command": "d=\"${CLAUDE_PROJECT_DIR:-$PWD}\"; while [ -n \"$d\" ] && [ \"$d\" != \"/\" ]; do if [ -f \"$d/scripts/freeze_first_draft.sh\" ]; then bash \"$d/scripts/freeze_first_draft.sh\" || true; break; fi; d=$(dirname \"$d\"); done"
           }
         ]
       }
