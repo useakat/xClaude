@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-08-18
+
+- **freeze_first_draft.sh / update_wiki_skills.py 呼び出しをサブディレクトリ起動対応に修正** — SOHO 投稿の初稿→最終稿の差分分析中、`first-draft.md` が凍結されていないことが発覚。`$CLAUDE_PROJECT_DIR` はローカル環境ではセッション起動時の cwd に展開されるため、`projects/w001` 等のサブディレクトリで起動したセッションでは hook が存在しないパスを指し無音失敗していた。2026-07-09 に mcp-gsheets の起動で発見・修正済みだった「上方探索」パターンを、freeze_first_draft.sh（3箇所）・update_wiki_skills.py（1箇所）に適用。あわせて story-check.md に相対時間（「40日後」等）の起点明示ルールを追加した。[→報告書](../reports/20260818_freeze_first_draft_subdir_fix/)
+
+---
+
 ## 2026-08-16
 
 - **週次の発信運用振り返り `/reporter-weekly-ops` を新設し routine 化** — 週報（数値）と月次マネタイズの間に「どの投稿が・なぜ伸びた/沈んだか」を扱う場が無かった。@galileo_fun 分析と8週実績分析（週インプの支配要因は W001 長文の有無・投稿0本日はインプ 1/4〜1/6・7月中旬にベースライン半減・切れ位置は「答えの直前」が本質）を織り込み、運用遵守チェック（W001週2本・note週1本・0本日ゼロ）→8週ローリング集計（中央値＋IQR外れ値除外平均）→要因分析→仮説検証（H1〜H4）の週次サイクルを新設。毎週日曜20時 JST の routine（claude-fable-5）がレポート作成〜メール送信まで無人実行する。初回レポート（2026-W33）作成済み。[→報告書](../reports/20260816_reporter_weekly_ops_skill/)
