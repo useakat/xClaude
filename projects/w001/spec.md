@@ -153,6 +153,7 @@ note を読みたくなる導入1文と [note URL]
         --attach output/thumbnail.png
       ```
     - 成功判定は `✓ 下書き作成完了 (id: …)` が返ること。**gws Gmail が認証エラー（Precondition）の場合は gws を再認証してから実行する**（`scripts/gws_auth.sh` / ブラウザ認証）。**セルフリプ（2投稿目）は、note URL 確定済み（モードB/C）なら `[リプ]` タグで cron が本体投稿直後に自動投稿する。モードA（URL未確定）のみ `[リプ]` を省略し、note 公開後に手動で投稿する。**
+14.5. **フック型の記録**: `draft/hook-candidates.md` の「## 決定」で採用した型（`style/hook-patterns.md` の①〜⑤。複合は主たる型を1つ）を `logs/hook_records.csv` に1行追記する。形式: `日付(JST),W001,{①〜⑤+短縮名 例:①逆説},{本編の冒頭15字},{モードとネタ 例:noteNeta[9]},`（冒頭15字は本編の先頭15文字そのまま・半角カンマは含めない。週次振り返りが X投稿一覧の本文と突合するキー）。追記は投稿フォルダの通常コミットに含める。
 15. **投稿フォルダを Drive へアップロード** — 投稿フォルダ `projects/w001/YYYYMMDD_[topic]/` を丸ごと `bash scripts/drive_put_folder.sh projects/w001/YYYYMMDD_[topic] 1ZXvs-h0GngSsCOwX6fbB0rBsqO-jUaOW` で Drive `xClaude/projects/w001` 配下にアップロードする（画像含む・フォルダ構造を再現・同名は更新される冪等動作。w003 spec のフロー11 と同方式）。
 
 ### その他

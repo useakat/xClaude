@@ -111,6 +111,7 @@
    - **`/visual_infographic` は使わない**（`scripts/notebooklm_manager.py` の cookie 認証が 2026-08-06 に廃止され、後継のブリッジに `infographic` サブコマンドが未移植のため実行不能。W001 は 8/4、W002 は 8/9 に Lovart へ移行済み）。
 8. **最終確定（ユーザー承認）** — 投稿テキストと画像が出そろったら、最新の確定版（`output/index.md`）と画像を提示し「**この内容で完成・確定してよいか**」を確認する。**承認まで以降に進まない。** 修正は反映・再保存して再提示する
 9. **Gmail 下書き作成** — **フロー 8 の最終確定の承認後に、確定版で 1 回だけ**作成する。上記「Gmail 下書き」の本文フォーマット（**`[投稿文]`〜`[/投稿文]` の閉じタグまで必須**）。画像添付があるため `bash scripts/create_gmail_draft.sh --attach output/infographic.png` を使う
+9.5. **フック型の記録** — `/writer-xpost` の冒頭フック候補で採用した型（`style/hook-patterns.md` の①〜⑤。複合は主たる型を1つ）を `logs/hook_records.csv` に1行追記する。形式: `日付(JST),W003,{①〜⑤+短縮名 例:②知識提示},{投稿文の冒頭15字},onePointNeta[{No}],`（冒頭15字は投稿文の先頭15文字そのまま・半角カンマは含めない。週次振り返りが X投稿一覧の本文と突合するキー）。追記はテーマフォルダの通常コミットに含める
 10. **チャット履歴を保存** — このセッションのやり取りを `bash scripts/save_session_history.py --title "{topic}" --slug "{slug}"` で Markdown 化し、生成物をテーマフォルダ直下に `chat_history.md` としてコピー保存する（投稿フォルダに同梱し、次の Drive アップロードで一緒に保存する）
 11. **投稿フォルダを Drive へアップロード** — テーマフォルダ `projects/w003/YYYYMMDD_[topic]/` を丸ごと `bash scripts/drive_put_folder.sh projects/w003/YYYYMMDD_[topic] 1DTPEzOmWd-kWQElyBByuVHjSantTl7-g` で Drive `xClaude/projects/w003` 配下にアップロードする（draft 画像含む・フォルダ構造を再現）
 
