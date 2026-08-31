@@ -199,6 +199,16 @@ bash scripts/create_gmail_draft.sh \
 
 成功判定は `✓ 下書き作成完了` の出力で行う。
 
+5. **フック型を記録する**。`[冒頭フック候補]` の「## 決定」で採用した型（`hook-patterns.md` の①〜⑤。複合の場合は主たる型を1つ）を、`logs/hook_records.csv` に1行追記する：
+
+```bash
+REPO=$(git rev-parse --show-toplevel)
+echo "$(TZ=Asia/Tokyo date +%F),z01,{①〜⑤+短縮名 例:⑤口火},{投稿文の冒頭15字},{ソースシート}[{ネタ番号}]," >> "$REPO/logs/hook_records.csv"
+```
+
+   - 冒頭15字は投稿文の先頭15文字そのまま（週次振り返りが X投稿一覧の本文と突合するキー。半角カンマは含めない）。
+   - **Z01 は無人フローなのでこのファイルだけを必ず commit & push する**（`bash "$REPO/scripts/commit_and_sync.sh" "record(hooks): z01 フック型を記録" logs/hook_records.csv` → master へ push。リモート環境で git push が認証エラーの場合は GitHub MCP で master へ push する）。push しないと実行環境の破棄とともに記録が消える。
+
 #### STEP 7: 完了報告
 以下を出力して終了する:
 
