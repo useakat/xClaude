@@ -45,3 +45,4 @@ tmux-*.log
 /projects/w003/**/*.zip
 /projects/w002/**/images/3d/*.json
 /projects/w002/**/images/3d/*.html
+/projects/w001/**/*.pdf
