@@ -1,6 +1,6 @@
 ---
 name: record-note-posts
-description: note.com の投稿情報（ビュー・スキ・スキ率・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新する。新規記事を検知したら outputs シートにも自動記録する。
+description: note.com の投稿情報（ビュー・スキ・インプレッション・コメント・売上・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新し、流入元の日別内訳を「note流入元」シートへ同期する。新規記事を検知したら outputs シートにも自動記録する。
 tools: Bash, mcp__mcp-gsheets__sheets_get_values, mcp__mcp-gsheets__sheets_update_values, mcp__mcp-gsheets__sheets_append_values
 ---
 
@@ -32,9 +32,26 @@ note 投稿の統計データを取得し、Sheets に記録・更新するス�
 | E | ハッシュタグ | スペース区切り（`#宇宙 #物理`） |
 | F | サムネURL | eyecatch 画像 URL |
 | G | サムネプレビュー | `=IMAGE(F{行番号})` 数式 |
-| H | ビュー | 累計 read_count |
-| I | スキ | 累計 like_count |
+| H | ビュー | 累計 pageViewCount |
+| I | スキ | 累計 likeCount |
 | J | スキ率 | スキ ÷ ビュー（小数4桁） |
+| K | インプレッション | 累計 impressionCount |
+| L | コメント | 累計 commentCount |
+| M | 売上 | 累計 salesAmount（円） |
+
+**H〜M列はすべて新ダッシュボード（GraphQL）を出典とする。** REST `/api/v1/stats/pv` は旧ダッシュボードの API なので使わない（いつ止まってもおかしくない）。`fetch_note_stats.py` の `view` / `like` / `likeRate` がそのまま H / I / J に入る。
+
+REST が返す `viewRest` / `likeRest` は**比較・検証用でシートには入れない**。両者の累計は一致しないため（2026-09-21 実測: REST 11,702 / ダッシュボード 10,775。同一期間ならほぼ一致し、ずれるのは累計のみ。スキ 403・コメント 14 は完全一致）。note 側の PV は `page_views` と `pv` の2テーブルを合成した値で、古いデータほどレガシーな累計カウンタと合わない。
+
+**やってはいけないこと**：`viewRest` と `view` を混ぜて引き算・比較しない（存在しない差が出る）。`fetch_note_stats.py` が `WARN: ... REST の累計にフォールバック` を出したときは、その回のビュー・スキは出所が混ざっているので、シートに書かず原因（NOTE_SESSION 失効など）を先に解消する。
+
+> 2026-09-21 に H〜J列を REST から GraphQL へ移行し、全28行を再構築済み（合計 11,553 → 10,746）。過去のレポートに載っている数値とは一致しない。
+
+### 別シート
+
+| シート | 内容 | 更新 |
+|---|---|---|
+| `note流入元` | 1行=1日の流入元内訳（合計 / X / Google / note.com / 直接・不明 / Yahoo / Bing / その他） | STEP 7 のスクリプト |
 
 ---
 
@@ -56,7 +73,13 @@ python3 scripts/fetch_note_stats.py [オプション]
 - 空 or `--months N` → `python3 scripts/fetch_note_stats.py` or `--months N`
 - `all` → `python3 scripts/fetch_note_stats.py --all`
 
-取得結果（JSON 配列）を `NOTE_DATA` として記憶する。
+取得結果（JSON 配列）を `NOTE_DATA` として記憶する。各要素のキー：
+`publishAt` / `url` / `name` / `charCount` / `hashtags` / `eyecatch`（REST） /
+`view` / `like` / `likeRate` / `impression` / `comment` / `sales`（新ダッシュボード・累計） /
+`viewRest` / `likeRest`（REST の累計・検証用）
+
+※ `viewRest` / `likeRest` はシートに記録しない。
+※ stderr に `WARN:` が出ていないか必ず確認する（出ていたら上の注意書きに従う）。
 
 ---
 
@@ -89,8 +112,8 @@ B列（記事URL）の一覧を取得し、`EXISTING_URLS` として記憶する
 ```
 sheets_update_values(
   spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="note投稿一覧!H{ROW}:J{ROW}",
-  values=[[{view}, {like}, {likeRate}]]
+  range="note投稿一覧!H{ROW}:M{ROW}",
+  values=[[{view}, {like}, {likeRate}, {impression}, {comment}, {sales}]]
 )
 ```
 
@@ -107,7 +130,7 @@ sheets_update_values(
 ```
 sheets_append_values(
   spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c",
-  range="note投稿一覧!A:J",
+  range="note投稿一覧!A:M",
   values=[[
     {publishAt},
     {url},
@@ -118,7 +141,10 @@ sheets_append_values(
     "=IMAGE(F{LAST_ROW+1})",
     {view},
     {like},
-    {likeRate}
+    {likeRate},
+    {impression},
+    {comment},
+    {sales}
   ]]
 )
 ```
@@ -192,6 +218,23 @@ sheets_append_values(
 
 ---
 
+# STEP 7: 流入元シートを同期
+
+`note流入元` シート（1行=1日）を更新する。スクリプトが日付をキーに upsert するので、何度実行しても行は増えない。
+
+```bash
+cd /root/xClaude
+python3 scripts/sync_note_referrers.py --period 7d
+```
+
+直近7日ぶんを対象にするのは、note 側の集計が後から確定することがあるため（当日ぶんだけ書くと取りこぼす）。
+
+出力の `updated` / `appended` を完了報告に使う。エラーが出た場合は STEP 1〜6 の結果は保持したうえで、完了報告にその旨を記載する（流入元の同期失敗で全体を失敗扱いにしない）。
+
+※ ドメイン単位の完全な内訳が必要なときは `python3 scripts/fetch_note_referrers.py --period 28d --csv` を使う（シートには主要6ドメイン＋その他に丸めて記録している）。
+
+---
+
 # 完了報告
 
 ```
@@ -202,4 +245,7 @@ sheets_append_values(
 ✅ outputs シート同期
    新規記録: K件
    （neta_id 未解決: 記事名A, 記事名B）※あれば
+
+✅ note流入元 同期
+   更新: N日分 / 新規: M日分
 ```
