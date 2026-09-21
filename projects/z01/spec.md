@@ -214,10 +214,11 @@ bash scripts/create_gmail_draft.sh \
 
 ```bash
 REPO=$(git rev-parse --show-toplevel)
-echo "$(TZ=Asia/Tokyo date +%F),z01,{①〜⑤+短縮名 例:⑤口火},{投稿文の冒頭15字},{ソースシート}[{ネタ番号}]," >> "$REPO/logs/hook_records.csv"
+echo "$(TZ=Asia/Tokyo date +%F),z01,{①〜⑤+短縮名 例:⑤口火},{投稿文の冒頭15字},{ソースシート}[{ネタ番号}],,{謎},{自分事}" >> "$REPO/logs/hook_records.csv"
 ```
 
    - 冒頭15字は投稿文の先頭15文字そのまま（週次振り返りが X投稿一覧の本文と突合するキー。半角カンマは含めない）。
+   - **謎**: 答えを知りたくなる問いが立っているかの制作時自己申告。「あり・{問いを一言 例:どうやって出し抜いた？}」または「なし」。**自分事**: 読者の生活・体・誰でも知っているものへの接続の有無。「あり・{接点を一言 例:夜空を見るたび思い出せる}」または「なし」。どちらも半角カンマは含めない（2026-09-21 追加。フック型ラベルだけでは伸びを説明できないため、週次振り返りの検証軸として制作時に宣言する）。
    - **Z01 は無人フローなのでこのファイルだけを必ず commit & push する**（`bash "$REPO/scripts/commit_and_sync.sh" "record(hooks): z01 フック型を記録" logs/hook_records.csv` → master へ push。リモート環境で git push が認証エラーの場合は GitHub MCP で master へ push する）。push しないと実行環境の破棄とともに記録が消える。
 
 #### STEP 7: 完了報告
