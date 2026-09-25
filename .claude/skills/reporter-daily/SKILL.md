@@ -84,8 +84,11 @@ python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw
 python3 scripts/sheets_values.py get "1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc" "outputs!A:H"
 ```
 
-A列（日時）が `DATE_SHEET` で始まる行を全て抽出し `outputs_today` として記憶する（B=URL・C=what_id・F=note_url・H=x_url を保持）。
+A列（日時）が `DATE_ISO` で始まる行を全て抽出し `outputs_today` として記憶する（B=URL・C=what_id・F=note_url・H=x_url を保持）。
+**outputs の A列は `YYYY-MM-DD HH:MM:SS` 形式**（例: `2026-09-24 12:00:06`）で、他のシートの `YYYY/MM/DD` 形式とは異なる。`DATE_SHEET` で照合すると0件になり、全投稿が「その他」に分類されてしまうため、必ず `DATE_ISO` で照合する（念のため `DATE_SHEET` で始まる行があればそれも含める）。
 `outputs` 全体（絞り込み前の全行）も `outputs_all` として保持しておく（STEP 5 のURL照合で使う。行数が多い場合は B列・C列・H列だけ保持すればよい）。
+
+**X 投稿の URL 照合は、URL 末尾の投稿番号（`/status/` の後ろの数字）で行う。** outputs は `x.com`、X投稿一覧は `twitter.com` 表記と、シートによってドメインが異なるため、URL 文字列をそのまま比べると一致しない（STEP 4・STEP 5 のすべての X URL 照合に適用）。
 
 `outputs`に媒体（X/threads/note）の列は無い。媒体はURL列（B列）から判別する：`threads.com`を含む→threads、`note.com`を含む→note、それ以外（`twitter.com`/`x.com`）→X。
 
