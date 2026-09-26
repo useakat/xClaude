@@ -5,6 +5,18 @@ note 掲載時は、ライセンスが帰属表示を求めるものについて
 
 ---
 
+## 船の上で_19歳が出した答え_写真_01_チャンドラセカール1934.jpg
+
+- **内容**: 若き日のスブラマニアン・チャンドラセカールの肖像（スタジオ撮影の胸像・モノクロ）。ケンブリッジ大学トリニティ・カレッジのプライズ・フェロー期にあたる
+- **撮影年**: **1934年ごろ**。Wikimedia Commons の投稿者が AIP のカタログ記録（`Chandrasekhar Subrahmanyan A6`）を典拠として記載したもの。AIP 公式リポジトリは機械アクセスがブロックされており、カタログ原本での直接確認はできていない。**キャプションでは「1934年ごろ」と幅を持たせること**
+- **作者・出典**: AIP Emilio Segrè Visual Archives
+  - 高解像度版（使用したもの）: https://chandra.harvard.edu/graphics/resources/illustrations/chandraYoungPose-tif.tif （NASA/CXC、1032×1650 TIFF）
+  - 説明ページ: https://commons.wikimedia.org/wiki/File:Subrahmanyan_Chandrasekhar_harvard.jpg
+  - NASA/CXC の肖像一覧: https://chandra.harvard.edu/resources/illustrations/chandraPortraits.html
+- **ライセンス**: **Attribution only license**（AIP 提供。帰属表示のみが条件）。※ Wikimedia Commons 側は `{{PD-because}}`（投稿者の自己申告による「古いから著作権切れ」）だが、1934年の写真が自動的にパブリックドメインになるわけではないため、この根拠は弱い。AIP が公式に出している包括許諾（「AIP is the Copyright Holder. ... we freely give permission for you to use the image in your project(s). Simply download the image and use the credit line listed.」https://aip.libguides.com/esvaguide/copyright ）に基づき、**帰属表示付きで使用する**という整理にした
+- **クレジット表記（必須）**: `Photo: AIP Emilio Segrè Visual Archives`
+- **解像度**: 1001×1600（原本 1032×1650 から縮小）
+
 ## そんな星があってはならない_写真_01_エディントン.jpg
 
 - **内容**: アーサー・スタンリー・エディントン（1882-1944）の肖像。観測機器のそばに立つ姿
