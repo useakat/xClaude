@@ -447,3 +447,10 @@
 24. [S. Chandrasekhar「The 1979 Milne Lecture — Edward Arthur Milne: His Part in the Development of Modern Astrophysics」Quarterly Journal of the Royal Astronomical Society 21, 93-107, 1980](https://ui.adsabs.harvard.edu/abs/1980QJRAS..21...93C/abstract) — チャンドラセカール本人によるミルン追悼講演。ミルンが1929年からエディントンと恒星構造をめぐる激しい論争関係にあり、「あらゆる星は、極端に高密度・高温な小さな縮退核を持つか、ほぼ全体が高密度であるかのどちらかだ」という前提に立っていたこと。限界質量の存在を指摘されても受け入れず、「量子力学の帰結が、はるかに直接的で明白な考察と矛盾するのであれば、状態方程式の導出の根底にある原理か、いま述べた一般的な考察のどちらかが間違っているに違いない……私には、物質があなたの予測するように振る舞うはずがないと分かっている……ボーア、パウリ、ファウラー、ウィルソンといった権威を並べ立てるのは、いかに印象的であっても、私の心を動かさない」と書いたこと。あわせて、フェルミ縮退の帰結を受け入れれば大質量星はブラックホールへ潰れるという結論に至るはずだが、それはエディントンが導いた結論であり「エディントン自身もミルンも受け入れなかった」とチャンドラセカール自身が総括していること。
 25. [Subrahmanyan Chandrasekhar, Wikipedia](https://en.wikipedia.org/wiki/Subrahmanyan_Chandrasekhar) — 受賞歴の年次（ブルース賞1952年、王立天文学会金メダル1953年）。
 26. [Subrahmanyan Chandrasekhar — Banquet speech, NobelPrize.org](https://www.nobelprize.org/prizes/physics/1983/chandrasekhar/speech/) — 1983年12月10日ストックホルムでの授賞晩餐会スピーチ。"I am grateful for the award since it is possible that it may provide a measure of encouragement to those, who like myself, have been motivated in their scientific pursuits, principally, for achieving personal perspectives, while wandering, mostly, in the lonely byways of Science."
+
+<!-- ハッシュタグ -->
+## ハッシュタグ
+
+#宇宙 #天文学 #科学 #サイエンス #物理学 #ブラックホール #白色矮星 #ノーベル賞 #科学史 #ノンフィクション #エッセイ #コラム #人生 #哲学 #思考 #問い #意思決定 #キャリアチェンジ #仕事論 #働き方 #物語 #有料記事
+
+お題タグ（note の公開設定画面から別枠で設定）: #最近の学び #この経験に学べ
