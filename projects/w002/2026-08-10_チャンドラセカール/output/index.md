@@ -444,7 +444,6 @@
 ---
 
 ## 参考情報
-
 1. [Chandrasekhar–Eddington dispute, Wikipedia](https://en.wikipedia.org/wiki/Chandrasekhar%E2%80%93Eddington_dispute) — 1935年の論争そのものを主題にした項目。経緯、当事者の発言、周囲の物理学者の反応、その後の決着までを通史としてまとめている。
 2. [The Chandrasekhar–Eddington dispute, MacTutor History of Mathematics](https://mathshistory.st-andrews.ac.uk/HistTopics/Chandrasekhar_Eddington/) — セント・アンドルーズ大学の数学史アーカイブによる論争の解説。二人の関係、発表当日の状況、その後のやりとりを、本人の回想の引用を交えて時系列で追う。
 3. [Chandrasekhar and the Limits of Physics, Part 2: Humiliation, Universe Today](https://www.universetoday.com/articles/chandrasekhar-and-the-limits-of-physics-part-2-humiliation) — 科学メディアによる全4回の連載の第2回。1935年の公開否定の場面を中心に扱う。
@@ -452,25 +451,24 @@
 5. [Eugene N. Parker「Subrahmanyan Chandrasekhar」Biographical Memoirs Volume 72, National Academy of Sciences, 1997](https://www.nationalacademies.org/read/5859/chapter/4) — 米国科学アカデミーの公式追悼記。生い立ちから晩年までの生涯と、研究分野を移り続けた足跡を、同僚の物理学者がまとめた評伝。
 6. [Subrahmanyan Chandrasekhar, MacTutor History of Mathematics](https://mathshistory.st-andrews.ac.uk/Biographies/Chandrasekhar/) — 数学史アーカイブによる伝記。研究テーマを時期ごとに区切って移っていった進め方が、年代とともに整理されている。
 7. [The Nobel Prize in Physics 1983, NobelPrize.org](https://www.nobelprize.org/prizes/physics/1983/summary/) — ノーベル財団の公式ページ。受賞者と受賞理由が記載されている。
-8. [S. Chandrasekhar『Eddington: The Most Distinguished Astrophysicist of His Time』Cambridge University Press, 1983](https://www.cambridge.org/core/books/eddington/56C3E24EF28DA048A93133DB96FD4FC2) — 1982年のエディントン生誕100年記念講演を書籍化したもの。版元による書誌情報。
-9. [Chandrasekhar and the Limits of Physics, Part 4: Vindication, Universe Today](https://www.universetoday.com/articles/chandrasekhar-and-the-limits-of-physics-part-4-vindication) — 同連載の第4回。ブラックホールの実在が観測で認められていく過程と、彼の晩年を扱う。
-10. [Chandrasekhar's legacy continues with naming of new NASA telescope, University of Chicago Chronicle, 1999](https://chronicle.uchicago.edu/990107/chandrasekhar.shtml) — シカゴ大学の学内紙による記事。X線観測衛星「チャンドラ」の命名とその背景を伝えている。
-11. [Eric G. Blackman「Anderson and Stoner Published White Dwarf Mass Limits Before Chandrasekhar」arXiv:1103.1342, 2011](https://arxiv.org/abs/1103.1342) — 限界質量の先行研究をめぐる優先権の論文。アンダーソンとストーナーの仕事との関係を整理している。
-12. [Luisa Bonolis「Stellar structure and compact objects before 1940: Towards relativistic astrophysics」European Physical Journal H（arXiv:1703.09991）, 2017](https://arxiv.org/abs/1703.09991) — 1940年以前の恒星構造論と高密度天体研究の科学史論文。相対論的天体物理学が成立するまでの流れを、当事者の書簡や回想を引きながらたどる。
-13. [S. Chandrasekhar オーラルヒストリー Session I（Spencer Weart によるインタビュー、1977年5月17日、シカゴ・エンリコフェルミ研究所）, Niels Bohr Library & Archives, American Institute of Physics](https://www.aip.org/history-programs/niels-bohr-library/oral-histories/4551-1) — 米国物理学協会が収録した本人への長時間インタビューの第1回。ケンブリッジ時代とエディントンとの関係が本人の言葉で語られている。
-14. [S. Chandrasekhar オーラルヒストリー Session II（同、1977年5月18日）, Niels Bohr Library & Archives, American Institute of Physics](https://www.aip.org/history-programs/niels-bohr-library/oral-histories/4551-2) — 同インタビューの第2回。論争の時期の心境と、その後の研究生活について語られている。
-15. [S. Chandrasekhar オーラルヒストリー Session III（同、1977年10月31日）, Niels Bohr Library & Archives, American Institute of Physics](https://www.aip.org/history-programs/niels-bohr-library/oral-histories/4551-3) — 同インタビューの第3回。受賞歴や学界での扱いについて触れられている。
-16. [S. Chandrasekhar『Eddington: The Most Distinguished Astrophysicist of His Time』本文（1982年ケンブリッジ講演）](https://archive.org/details/eddingtonmostdis0000chan) — 記念講演2回ぶんの全文。エディントンの業績の評価と、晩年の統一理論をめぐる議論の両方が収められている。
-17. [The Observatory, Vol. 58, No. 729（1935年2月号）pp.33-41 — 王立天文学会 1935年1月11日会合の議事録](https://articles.adsabs.harvard.edu/pdf/1935Obs....58...33.) — 論争が起きたその日の会合の公式記録。発表と討論のやりとりが発言者ごとに記録されている一次資料。
-18. [A. S. Eddington「On "Relativistic Degeneracy"」Monthly Notices of the Royal Astronomical Society 95, 194-206, 1935](https://adsabs.harvard.edu/pdf/1935MNRAS..95..194.) — エディントン自身による論文。相対論的縮退を否定する彼の主張が、本人の筆で述べられている。
-19. [A. S. Eddington「Constitution of the Stars」The Scientific Monthly, 1936年11月号, pp.385-395](https://www.jstor.org/stable/16327) — エディントンによる恒星構造論の一般向け解説。当時の彼の考え方が平易な言葉で示されている。
-20. [White Dwarf Stars（Cool Fact）, Imagine the Universe!, NASA ゴダード宇宙飛行センター](https://imagine.gsfc.nasa.gov/science/toolbox/cool_dwarf_fact2.html) — NASA による白色矮星の解説ページ。密度などの基本的な数値が日常的な比喩とともに示されている。
-21. Transactions of the International Astronomical Union, Vol. 5（第5回総会、1935年7月10〜17日パリ／1936年刊）の公式記録2件。[「Commission 35. (Stellar Constitution.)」p.345](https://doi.org/10.1017/S0251107X00017715)、[「35. Commission de la Constitution des Étoiles」p.238](https://doi.org/10.1017/S0251107X00017375) — 国際天文学連合の総会記録。「星の内部構造」委員会の構成と議事が記載されている一次資料。
-22. [W. H. McCrea「The International Astronomical Union Meeting in Paris 1935」The Observatory Vol. 58, No. 736（1935年9月号）pp.257-265](https://articles.adsabs.harvard.edu/pdf/1935Obs....58..257.) — 同総会の参加報告。各委員会で何が議論されたかが、出席した天文学者の視点で書かれている。
-23. [L. Mestel「Arthur Stanley Eddington: pioneer of stellar structure theory」Journal of Astronomical History and Heritage 7(2), 65-73, 2004](https://ui.adsabs.harvard.edu/abs/2004JAHH....7...65M/abstract) — エディントンの恒星構造論における功績を評価した科学史論文。1935年の発言の原文も引用されている。
-24. [S. Chandrasekhar「The 1979 Milne Lecture — Edward Arthur Milne: His Part in the Development of Modern Astrophysics」Quarterly Journal of the Royal Astronomical Society 21, 93-107, 1980](https://ui.adsabs.harvard.edu/abs/1980QJRAS..21...93C/abstract) — チャンドラセカール本人によるエドワード・ミルンの追悼講演。ミルンとエディントンの論争と、そこに自分の仕事がどう関わったかが語られている。
-25. [Subrahmanyan Chandrasekhar, Wikipedia](https://en.wikipedia.org/wiki/Subrahmanyan_Chandrasekhar) — 本人の項目。経歴と受賞歴が年次とともにまとめられている。
-26. [Subrahmanyan Chandrasekhar — Banquet speech, NobelPrize.org](https://www.nobelprize.org/prizes/physics/1983/chandrasekhar/speech/) — 1983年12月10日、ストックホルムでの授賞晩餐会スピーチの全文（英語）。
+8. [Chandrasekhar and the Limits of Physics, Part 4: Vindication, Universe Today](https://www.universetoday.com/articles/chandrasekhar-and-the-limits-of-physics-part-4-vindication) — 同連載の第4回。ブラックホールの実在が観測で認められていく過程と、彼の晩年を扱う。
+9. [Chandrasekhar's legacy continues with naming of new NASA telescope, University of Chicago Chronicle, 1999](https://chronicle.uchicago.edu/990107/chandrasekhar.shtml) — シカゴ大学の学内紙による記事。X線観測衛星「チャンドラ」の命名とその背景を伝えている。
+10. [Eric G. Blackman「Anderson and Stoner Published White Dwarf Mass Limits Before Chandrasekhar」arXiv:1103.1342, 2011](https://arxiv.org/abs/1103.1342) — 限界質量の先行研究をめぐる優先権の論文。アンダーソンとストーナーの仕事との関係を整理している。
+11. [Luisa Bonolis「Stellar structure and compact objects before 1940: Towards relativistic astrophysics」European Physical Journal H（arXiv:1703.09991）, 2017](https://arxiv.org/abs/1703.09991) — 1940年以前の恒星構造論と高密度天体研究の科学史論文。相対論的天体物理学が成立するまでの流れを、当事者の書簡や回想を引きながらたどる。
+12. [S. Chandrasekhar オーラルヒストリー Session I（Spencer Weart によるインタビュー、1977年5月17日、シカゴ・エンリコフェルミ研究所）, Niels Bohr Library & Archives, American Institute of Physics](https://www.aip.org/history-programs/niels-bohr-library/oral-histories/4551-1) — 米国物理学協会が収録した本人への長時間インタビューの第1回。ケンブリッジ時代とエディントンとの関係が本人の言葉で語られている。
+13. [S. Chandrasekhar オーラルヒストリー Session II（同、1977年5月18日）, Niels Bohr Library & Archives, American Institute of Physics](https://www.aip.org/history-programs/niels-bohr-library/oral-histories/4551-2) — 同インタビューの第2回。論争の時期の心境と、その後の研究生活について語られている。
+14. [S. Chandrasekhar オーラルヒストリー Session III（同、1977年10月31日）, Niels Bohr Library & Archives, American Institute of Physics](https://www.aip.org/history-programs/niels-bohr-library/oral-histories/4551-3) — 同インタビューの第3回。受賞歴や学界での扱いについて触れられている。
+15. [S. Chandrasekhar『Eddington: The Most Distinguished Astrophysicist of His Time』Cambridge University Press, 1983](https://archive.org/details/eddingtonmostdis0000chan) — 1982年のエディントン生誕100年記念講演を書籍化したもの。記念講演2回ぶんの全文。エディントンの業績の評価と、晩年の統一理論をめぐる議論の両方が収められている。
+16. [The Observatory, Vol. 58, No. 729（1935年2月号）pp.33-41 — 王立天文学会 1935年1月11日会合の議事録](https://articles.adsabs.harvard.edu/pdf/1935Obs....58...33.) — 論争が起きたその日の会合の公式記録。発表と討論のやりとりが発言者ごとに記録されている一次資料。
+17. [A. S. Eddington「On "Relativistic Degeneracy"」Monthly Notices of the Royal Astronomical Society 95, 194-206, 1935](https://adsabs.harvard.edu/pdf/1935MNRAS..95..194.) — エディントン自身による論文。相対論的縮退を否定する彼の主張が、本人の筆で述べられている。
+18. [A. S. Eddington「Constitution of the Stars」The Scientific Monthly, 1936年11月号, pp.385-395](https://www.jstor.org/stable/16327) — エディントンによる恒星構造論の一般向け解説。当時の彼の考え方が平易な言葉で示されている。
+19. [White Dwarf Stars（Cool Fact）, Imagine the Universe!, NASA ゴダード宇宙飛行センター](https://imagine.gsfc.nasa.gov/science/toolbox/cool_dwarf_fact2.html) — NASA による白色矮星の解説ページ。密度などの基本的な数値が日常的な比喩とともに示されている。
+20. Transactions of the International Astronomical Union, Vol. 5（第5回総会、1935年7月10〜17日パリ／1936年刊）の公式記録2件。[「Commission 35. (Stellar Constitution.)」p.345](https://doi.org/10.1017/S0251107X00017715)、[「35. Commission de la Constitution des Étoiles」p.238](https://doi.org/10.1017/S0251107X00017375) — 国際天文学連合の総会記録。「星の内部構造」委員会の構成と議事が記載されている一次資料。
+21. [W. H. McCrea「The International Astronomical Union Meeting in Paris 1935」The Observatory Vol. 58, No. 736（1935年9月号）pp.257-265](https://articles.adsabs.harvard.edu/pdf/1935Obs....58..257.) — 同総会の参加報告。各委員会で何が議論されたかが、出席した天文学者の視点で書かれている。
+22. [L. Mestel「Arthur Stanley Eddington: pioneer of stellar structure theory」Journal of Astronomical History and Heritage 7(2), 65-73, 2004](https://ui.adsabs.harvard.edu/abs/2004JAHH....7...65M/abstract) — エディントンの恒星構造論における功績を評価した科学史論文。1935年の発言の原文も引用されている。
+23. [S. Chandrasekhar「The 1979 Milne Lecture — Edward Arthur Milne: His Part in the Development of Modern Astrophysics」Quarterly Journal of the Royal Astronomical Society 21, 93-107, 1980](https://ui.adsabs.harvard.edu/abs/1980QJRAS..21...93C/abstract) — チャンドラセカール本人によるエドワード・ミルンの追悼講演。ミルンとエディントンの論争と、そこに自分の仕事がどう関わったかが語られている。
+24. [Subrahmanyan Chandrasekhar, Wikipedia](https://en.wikipedia.org/wiki/Subrahmanyan_Chandrasekhar) — 本人の項目。経歴と受賞歴が年次とともにまとめられている。
+25. [Subrahmanyan Chandrasekhar — Banquet speech, NobelPrize.org](https://www.nobelprize.org/prizes/physics/1983/chandrasekhar/speech/) — 1983年12月10日、ストックホルムでの授賞晩餐会スピーチの全文（英語）。
 
 <!-- ハッシュタグ -->
 ## ハッシュタグ
