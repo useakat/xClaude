@@ -27,6 +27,8 @@
       "Bash(git -C *xClaude log *)",
       "Bash(git rev-parse *)",
       "Bash(python3 *scripts/sheets_values.py *)",
+      "Bash(python3 *scripts/w001_imp_snapshot.py*)",
+      "Bash(python3 *scripts/update_x_analytics_weekly.py*)",
       "Bash(bash *scripts/sync_to_drive.sh)",
       "Bash(bash *scripts/drive_put.sh *)",
       "Bash(bash *scripts/drive_get.sh *)",

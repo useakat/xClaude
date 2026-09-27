@@ -464,6 +464,19 @@ git -C /root/xClaude rev-parse --show-toplevel
 
 ---
 
+# STEP 10.5: W001 日次IMPスナップショット（H4 検証用）
+
+```bash
+python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/w001_imp_snapshot.py
+```
+
+投稿9日以内の W001 の累積インプを `logs/w001_imp_daily.csv` に追記する（H4「長文は翌日以降もインプを引く尾がある」の検証データ。2026-09-27 追加）。
+
+- 「対象なし」と出た場合はそのまま STEP 11 へ進む
+- スクリプトがエラーになっても日報の作成・コミットは止めない（エラー内容を完了報告に1行添える）
+
+---
+
 # STEP 11: Git コミット & GitHub MCP プッシュ
 
 **11-1. ローカルコミット**
@@ -471,7 +484,8 @@ git -C /root/xClaude rev-parse --show-toplevel
 ```bash
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "report(daily): [DATE_JP]の日報を追加" \
-  docs/reports/daily/[DATE_ISO].md
+  docs/reports/daily/[DATE_ISO].md \
+  logs/w001_imp_daily.csv
 ```
 
 - **対象パスを必ず渡す。** 省略すると `git add -A` にフォールバックし、他セッションの未コミット作業を巻き込む（2026-08-14 に `/record` で実際に発生）。
