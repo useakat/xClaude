@@ -13,6 +13,8 @@ X 投稿のインプレッション監視。投稿から WINDOW_HOURS 時間以�
   python3 scripts/x_imp_alert.py --threshold 500 --hours 6   # 閾値・時間窓の一時変更
 
 認証: リポジトリ直下の .env の X_BEARER_TOKEN（post_to_x.py と同じ）
+課金: X API は従量課金（返ってきた投稿1件ごと）。start_time で時間窓内の投稿だけを
+      取得し、窓外の投稿への無駄な課金を避ける（2026-10-01）
 """
 
 import argparse
@@ -36,7 +38,8 @@ USERNAME = "usephys"
 THRESHOLD = 1000                # インプ閾値
 WINDOW_HOURS = 3                # 投稿からの時間窓
 NOTIFY_TO = "useakat@gmail.com"
-MAX_RESULTS = 20                # 取得する直近投稿数（時間窓内の投稿を十分に含む数）
+MAX_RESULTS = 10                # 1回あたりの最大取得数（start_time で時間窓内に絞るので安全弁）
+START_MARGIN_MIN = 10           # start_time の余裕（分）。時計ずれ対策。窓外の投稿はスクリプト側でも除外する
 STATE_KEEP_DAYS = 7             # 通知済み記録の保持日数
 
 STATE_PATH = REPO_ROOT / "logs" / "x_imp_alert_state.json"
@@ -78,11 +81,18 @@ def prune_state(state: dict, now: datetime) -> None:
             del state["notified"][tid]
 
 
-def fetch_recent_posts(token: str) -> list[dict]:
+def fetch_recent_posts(token: str, now: datetime, window_hours: float) -> list[dict]:
+    """時間窓内の投稿だけを取得する。
+
+    従量課金（返ってきた投稿1件ごとに課金）なので、start_time で時間窓の外の投稿を
+    API 側で除外する。窓内に投稿が無ければ 0 件で返り、課金も発生しない。
+    """
     url = f"https://api.x.com/2/users/{USER_ID}/tweets"
+    start_time = now - timedelta(hours=window_hours, minutes=START_MARGIN_MIN)
     params = {
         "max_results": MAX_RESULTS,
         "exclude": "retweets",
+        "start_time": start_time.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "tweet.fields": "created_at,public_metrics,referenced_tweets,text",
     }
     r = requests.get(url, headers={"Authorization": f"Bearer {token}"}, params=params, timeout=30)
@@ -162,7 +172,7 @@ def main() -> int:
     prune_state(state, now)
 
     try:
-        tweets = fetch_recent_posts(token)
+        tweets = fetch_recent_posts(token, now, WINDOW_HOURS)
     except Exception as e:  # noqa: BLE001
         log(f"ERROR: {e}")
         return 1
