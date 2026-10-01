@@ -1,6 +1,6 @@
 #!/bin/bash
 # X 投稿のインプ監視 (cron 実行)。投稿から3時間以内に1,000インプ到達でメール通知。
-# cron: */10 * * * * /bin/bash /root/xClaude/scripts/run_x_imp_alert.sh
+# cron: */30 * * * * /bin/bash /root/xClaude/scripts/run_x_imp_alert.sh
 export PATH="/usr/local/bin:$PATH"
 DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(dirname "$DIR")"
