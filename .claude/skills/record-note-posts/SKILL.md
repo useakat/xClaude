@@ -60,7 +60,7 @@ REST が返す `viewRest` / `likeRest` は**比較・検証用でシートには
 
 | シート | 内容 | 更新 |
 |---|---|---|
-| `note流入元` | 1行=1日の流入元内訳（合計 / X / Google / note.com / 直接・不明 / Yahoo / Bing / その他） | STEP 7 のスクリプト |
+| `note流入元` | 1行=1日の流入元内訳（合計 / X / Threads / Google / note.com / 直接・不明 / Yahoo / Bing / その他） | STEP 7 のスクリプト |
 
 ---
 
