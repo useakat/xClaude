@@ -161,7 +161,12 @@ print(ts[-1]['id'] if ts else '')   # 空出力 = 正常に0件
     fi
     if [ "${MIRROR_THREADS:-0}" = "1" ]; then
       log "[DRY RUN] Threads 転載も実行予定（本文＋画像はX投稿後に pbs.twimg.com から取得）"
-      python3 scripts/post_threads.py --dry-run --text "$POST_TEXT" ${REPLY_TEXT:+--reply-text "$REPLY_TEXT"} 2>&1 | tee -a "$LOG_PATH"
+      TH_REPLY_TEXT="$REPLY_TEXT"
+      case "$TH_REPLY_TEXT" in *note.com*)
+        log "[DRY RUN] Threads 転載: note リンクを含むセルフリプは転載しない（Threads プロフ経由の流入を分離するため）"
+        TH_REPLY_TEXT="";;
+      esac
+      python3 scripts/post_threads.py --dry-run --text "$POST_TEXT" ${TH_REPLY_TEXT:+--reply-text "$TH_REPLY_TEXT"} 2>&1 | tee -a "$LOG_PATH"
     fi
     log "[DRY RUN] ラベル付与・INBOX解除・record_output はスキップ"
     log "[DRY RUN] 1 ループで終了（同じメールが何度も処理されないように）"
@@ -236,7 +241,14 @@ if m:
     TH_IMG_URLS=$(python3 scripts/fetch_tweet_media.py "$TWEET_ID" 2>/dev/null || true)
     TH_ARGS=(--text "$POST_TEXT")
     [ -n "$TH_IMG_URLS" ] && TH_ARGS+=(--image-url "$TH_IMG_URLS")
-    [ -n "$REPLY_TEXT" ] && TH_ARGS+=(--reply-text "$REPLY_TEXT")
+    # note リンクを含むセルフリプは Threads に転載しない（2026-10-02）。
+    # Threads の投稿に note リンクを置かないことで、note流入元の Threads 列＝プロフィール経由とみなせるようにする。
+    TH_REPLY_TEXT="$REPLY_TEXT"
+    case "$TH_REPLY_TEXT" in *note.com*)
+      log "Threads 転載: note リンクを含むセルフリプは転載しない"
+      TH_REPLY_TEXT="";;
+    esac
+    [ -n "$TH_REPLY_TEXT" ] && TH_ARGS+=(--reply-text "$TH_REPLY_TEXT")
     TH_OUTPUT=$(python3 scripts/post_threads.py "${TH_ARGS[@]}" 2>&1)
     echo "$TH_OUTPUT" >> "$LOG_PATH"
     TH_PERMALINK=$(printf '%s' "$TH_OUTPUT" | sed -n 's/^PERMALINK=//p' | tail -1)
