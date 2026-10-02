@@ -202,6 +202,32 @@ function getMyTweets() {
 /**
  * ポストの種類を判定
  */
+// X投稿一覧の AI列（35列目）「noteURL」。列挿入はしない（他スクリプトが列番号固定で参照）
+const NOTE_URL_COL = 35;
+
+/**
+ * 投稿本文中の note リンク（展開後URL）を改行区切りで返す。無ければ ''。
+ * entities.urls（通常投稿）と note_tweet.entities.urls（長文投稿）の両方を見る。
+ * 画像の t.co は expanded_url が pic.twitter.com なので対象外。
+ */
+function extractNoteUrls(tweet) {
+  const sources = [];
+  if (tweet.entities && tweet.entities.urls) sources.push(tweet.entities.urls);
+  if (tweet.note_tweet && tweet.note_tweet.entities && tweet.note_tweet.entities.urls) {
+    sources.push(tweet.note_tweet.entities.urls);
+  }
+  const found = [];
+  sources.forEach(urls => {
+    urls.forEach(u => {
+      const expanded = u.expanded_url || u.unwound_url || '';
+      if (/^https?:\/\/(www\.)?note\.com\//.test(expanded) && found.indexOf(expanded) === -1) {
+        found.push(expanded);
+      }
+    });
+  });
+  return found.join('\n');
+}
+
 function getTweetType(tweet) {
   if (!tweet.referenced_tweets || tweet.referenced_tweets.length === 0) {
     return '通常ポスト';
@@ -388,6 +414,7 @@ function writeToSheet(tweets, mediaInfo) {
   
   // データ行を作成（重複を除外、既存ポストは更新）
   const newRows = [];
+  const newNoteUrls = [];  // newRows と同じ順で AI列（noteURL）に書く値
   const updateRows = [];  // 更新対象のポスト
   let duplicateCount = 0;
   let updateCount = 0;
@@ -416,6 +443,11 @@ function writeToSheet(tweets, mediaInfo) {
       const hashtagList = tweet.entities.hashtags.map(tag => '#' + tag.tag);
       hashtags = hashtagList.join(', ');
     }
+
+    // 本文中の note リンク（展開後URL）を抽出 → AI列「noteURL」（2026-10-02 追加）
+    // note 導線の集計（x_note_mentions.py --reconcile 等）が「note リンクを含む投稿」を
+    // 本文の t.co ではなく展開後 URL で判定できるようにする。複数は改行区切り。
+    const noteUrl = extractNoteUrls(tweet);
     
     // 画像枚数の取得と画像URLの抽出
     let imageCount = 0;
@@ -472,6 +504,7 @@ function writeToSheet(tweets, mediaInfo) {
       updateRows.push({
         row: rowNumber,
         parentPostUrl: parentPostUrl,
+        noteUrl: noteUrl,
         metrics: [
           impressions,                           // K
           publicMetrics.like_count || 0,         // L
@@ -495,6 +528,7 @@ function writeToSheet(tweets, mediaInfo) {
     }
     
     // 新規ポストの場合（26列）
+    newNoteUrls.push(noteUrl);
     newRows.push([
       createdAt,                             // A 投稿日時
       tweetUrl,                              // B ポストURL
@@ -536,6 +570,13 @@ function writeToSheet(tweets, mediaInfo) {
       if (!existingParentPostUrl && update.parentPostUrl) {
         sheet.getRange(update.row, 10).setValue(update.parentPostUrl);
       }
+      // AI列（noteURL）が空白かつ note リンクがある場合のみ書き込む
+      if (update.noteUrl) {
+        const existingNoteUrl = sheet.getRange(update.row, NOTE_URL_COL).getValue();
+        if (!existingNoteUrl) {
+          sheet.getRange(update.row, NOTE_URL_COL).setValue(update.noteUrl);
+        }
+      }
     });
     Logger.log(`🔄 既存ポストのメトリクスを${updateRows.length}件更新しました`);
   }
@@ -544,7 +585,14 @@ function writeToSheet(tweets, mediaInfo) {
   if (newRows.length > 0) {
     const startRow = sheet.getLastRow() + 1;
     sheet.getRange(startRow, 1, newRows.length, 26).setValues(newRows);  // 26列
-    
+
+    // AI列（noteURL）: 新規行のうち note リンクを含むものだけ書く（AA〜AH は別処理が埋めるので触らない）
+    newNoteUrls.forEach((noteUrl, i) => {
+      if (noteUrl) {
+        sheet.getRange(startRow + i, NOTE_URL_COL).setValue(noteUrl);
+      }
+    });
+
     // 書式設定
     sheet.getRange(startRow, 1, newRows.length, 1).setNumberFormat('yyyy/mm/dd hh:mm:ss');  // A列 日時
     sheet.getRange(startRow, 11, newRows.length, 7).setNumberFormat('#,##0');                // K〜Q メトリクス
