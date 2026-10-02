@@ -33,6 +33,7 @@ FIRST_DATE = "2025-08-31"
 # (列見出し, まとめる流入元名) — ここに無いものはすべて「その他」へ
 COLUMN_MAP = [
     ("X", ["X"]),
+    ("Threads", ["l.threads.com"]),  # Threads のリンクラッパー（2026-10-02 追加。以前は「その他」に合算されていた）
     ("Google", ["Google"]),
     ("note.com", ["note.com"]),
     ("直接・不明", ["no referrer"]),
@@ -40,7 +41,7 @@ COLUMN_MAP = [
     ("Bing", ["www.bing.com"]),
 ]
 HEADER = ["日付", "合計"] + [c[0] for c in COLUMN_MAP] + ["その他"]
-LAST_COL = chr(ord("A") + len(HEADER) - 1)  # 現状 I
+LAST_COL = chr(ord("A") + len(HEADER) - 1)  # 現状 J
 
 
 def to_row(day):
@@ -102,6 +103,10 @@ def main():
         return
 
     ss, ws = get_sheet(get_client())
+
+    # 列構成の変更（列の追加など）を既存シートにも反映するため、見出し行は毎回書き直す
+    ws.update(values=[HEADER], range_name=f"A1:{LAST_COL}1",
+              value_input_option="USER_ENTERED")
 
     existing = ws.get(f"A2:A{ws.row_count}") or []
     date_to_row = {}
