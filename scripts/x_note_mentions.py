@@ -45,8 +45,7 @@ MAX_RESULTS = 100
 
 SPREADSHEET_ID = "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"  # 発信記録
 SHEET_REFERRERS = "note流入元"       # A=日付, C=X, D=Threads, G=直接・不明
-SHEET_POSTS = "X投稿一覧"            # B=ポストURL, J=親ポストURL, AB=リンククリック
-SS_OUTPUTS = "1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc"  # outputs: A=日時, B=URL, F=note_url
+SHEET_POSTS = "X投稿一覧"            # A=投稿日時, AB=リンククリック, AI=noteURL（本文中の note リンク）
 
 CSV_PATH = REPO_ROOT / "logs" / "x_note_mentions.csv"
 LOG_PATH = REPO_ROOT / "logs" / "x_note_mentions.log"
@@ -177,22 +176,16 @@ def run_reconcile(month: str, ctr: float) -> int:
     x_inflow = sum(_to_int(r[2]) for r in ref_rows[1:] if len(r) > 2 and r[0].startswith(month))
     ref_days = sum(1 for r in ref_rows[1:] if r and r[0].startswith(month))
 
-    # 自分の note 導線クリック（マネタイズ月報 monetization_metrics.py と同じ定義）:
-    #   outputs の note_url 付き投稿（当月）を親ポストとし、X投稿一覧で「親ポストURL」が
-    #   その投稿を指すリプ行（＝note リンクを載せたセルフリプ）の「リンククリック」(AB) を合計する。
-    #   X投稿一覧のリンククリックは note 以外のリンクも含むため、本体行や無関係な行は使わない。
-    import re
-    tid = lambda u: (re.search(r"/status/(\d+)", u or "") or [None, ""])[1]  # noqa: E731
-    outputs = open_with_retry(get_client(), SS_OUTPUTS).worksheet("outputs").get_all_values()
-    parents = set()
-    for r in outputs[1:]:
-        if len(r) > 5 and r[0].startswith(month) and r[5].strip() and tid(r[1]):
-            parents.add(tid(r[1]))
+    # 自分の note 導線クリック: X投稿一覧で AI 列「noteURL」が空でない行（本文に note.com の
+    #   リンクを含む投稿・セルフリプ。GAS が entities から記録）の「リンククリック」(AB) を、
+    #   投稿日時（A）が当月の行で合計する。outputs の note_url 記録に依存しないので手動リプの漏れが無い。
     post_rows = ss.worksheet(SHEET_POSTS).get_all_values()
+    ym = month.replace("-", "/")
     own_clicks = 0
-    own_posts = len(parents)
+    own_posts = 0
     for r in post_rows[1:]:
-        if len(r) > 27 and tid(r[9]) in parents:
+        if len(r) >= 35 and r[0].startswith(ym) and r[34].strip():
+            own_posts += 1
             own_clicks += _to_int(r[27])
 
     # 他人のリンク投稿（CSV）
@@ -213,7 +206,7 @@ def run_reconcile(month: str, ctr: float) -> int:
     print(f"note流入元 X列 合計（note が数えた X からの流入）: {x_inflow:>6} 件（{ref_days}日分）")
     print(f"  X 経由の流入（範囲）     : {x_inflow} 〜 {x_inflow + direct} 件（＝X列 〜 X列＋直接・不明 {direct}）")
     print(f"  Threads 経由の流入（範囲）: {threads} 〜 {threads + direct} 件（＝Threads列 〜 Threads列＋直接・不明。直接・不明は X と共有）")
-    print(f"自分の note リンク（セルフリプ）のクリック合計    : {own_clicks:>6} 件（note_url 付き投稿 {own_posts} 本。X アナリティクス CSV の取込後に有効）")
+    print(f"自分の note リンク投稿のクリック合計              : {own_clicks:>6} 件（noteURL 列あり {own_posts} 行。X アナリティクス CSV の取込後に有効）")
     print(f"残差（プロフ＋固定ポスト＋他人の投稿からの流入）  : {residual:>6} 件")
     print(f"他人の note リンク投稿                           : {len(mentions):>6} 本 / IMP 合計 {mention_imp:,}")
     print(f"  └ その投稿からの流入は X からは取れない。推定 ≈ IMP × 想定CTR {ctr:.2%} = {est_inflow} 件（--ctr で変更可）")
