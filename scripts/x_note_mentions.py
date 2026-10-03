@@ -195,29 +195,57 @@ def run_reconcile(month: str, ctr: float) -> int:
             mentions = [m for m in csv.DictReader(f) if m["created_at_jst"].startswith(month)]
     mention_imp = sum(_to_int(m["impressions"]) for m in mentions)
 
-    residual = x_inflow - own_clicks
     est_inflow = round(mention_imp * ctr)
-    # 直接・不明（G列=index6）と Threads（D列=index3）。アプリ内ブラウザで参照元が落ちた分が「直接・不明」に入るため、
-    # X / Threads からの流入は「列の値 〜 列の値＋直接・不明」の範囲で読む（直接・不明は両者で共有＝上限は重複）
-    # 列順: A日付 B合計 C X D Threads E Google F note.com G 直接・不明 H Yahoo I Bing J その他
-    direct = sum(_to_int(r[6]) for r in ref_rows[1:] if len(r) > 6 and r[0].startswith(month))
-    threads = sum(_to_int(r[3]) for r in ref_rows[1:] if len(r) > 3 and r[0].startswith(month))
+    # note流入元の列順: A日付 B合計 C X D Threads E Google F note.com G 直接・不明 H Yahoo I Bing J その他
+    def msum(idx):
+        return sum(_to_int(r[idx]) for r in ref_rows[1:] if len(r) > idx and r[0].startswith(month))
+    threads, note_internal, direct = msum(3), msum(5), msum(6)
+    visible = x_inflow + note_internal + threads
+    # 推定内訳: 直接・不明（参照元が落ちた流入）を X : note : Threads の見えている比で配分する。
+    # 前提は「参照元が落ちた流入は、見えている流入と同じ比率で3経路に分布している」の1点のみ。
+    # 検索（Google 等）は参照元が落ちないので配分対象にしない。ベース分の差し引きや X の上限は置かない
+    # （bio リンク・他人の投稿経由が X列に含まれる一方 X クリック数には含まれないため、クリック数で上限を切れない）。
+    def alloc(v):
+        return round(direct * v / visible) if visible else 0
     print(f"\n== note への X 経由流入の突合（{month}）==")
-    print(f"note流入元 X列 合計（note が数えた X からの流入）: {x_inflow:>6} 件（{ref_days}日分）")
-    print(f"  X 経由の流入（範囲）     : {x_inflow} 〜 {x_inflow + direct} 件（＝X列 〜 X列＋直接・不明 {direct}）")
-    print(f"  Threads 経由の流入（範囲）: {threads} 〜 {threads + direct} 件（＝Threads列 〜 Threads列＋直接・不明。直接・不明は X と共有）")
-    print(f"自分の note リンク投稿のクリック合計              : {own_clicks:>6} 件（noteURL 列あり {own_posts} 行。X アナリティクス CSV の取込後に有効）")
-    print(f"残差（プロフ＋固定ポスト＋他人の投稿からの流入）  : {residual:>6} 件")
-    print(f"他人の note リンク投稿                           : {len(mentions):>6} 本 / IMP 合計 {mention_imp:,}")
-    print(f"  └ その投稿からの流入は X からは取れない。推定 ≈ IMP × 想定CTR {ctr:.2%} = {est_inflow} 件（--ctr で変更可）")
+    print(f"生の数字（{ref_days}日分）: X列 {x_inflow} / note列 {note_internal} / Threads列 {threads} / 直接・不明 {direct}")
+    print("推定内訳（直接・不明を X:note:Threads の見えている比で配分。前提: 参照元が落ちた流入は見えている流入と同じ比率で分布）")
+    print(f"  X 経由      : {x_inflow + alloc(x_inflow):>6}（= {x_inflow} + {alloc(x_inflow)}）")
+    print(f"  note 経由   : {note_internal + alloc(note_internal):>6}（= {note_internal} + {alloc(note_internal)}）")
+    print(f"  Threads 経由: {threads + alloc(threads):>6}（= {threads} + {alloc(threads)}）")
+    print(f"参考: 自分の note リンク投稿の X クリック {own_clicks:,} 件（noteURL 列あり {own_posts} 行。bio リンク・他人の投稿経由は含まない。X アナリティクス CSV の取込後に有効）")
+    print(f"他人の note リンク投稿: {len(mentions)} 本 / IMP 合計 {mention_imp:,}"
+          f"（その投稿からの流入は X からは取れない。推定 ≈ IMP × 想定CTR {ctr:.2%} = {est_inflow} 件、--ctr で変更可）")
     if mentions:
         print("  内訳:")
         for m in sorted(mentions, key=lambda m: -_to_int(m["impressions"]))[:10]:
             print(f"   {m['created_at_jst'][:10]} @{m['username']} IMP{_to_int(m['impressions']):,} {m['url']}")
     if own_clicks == 0:
         print("  ※ リンククリックが 0 です。当月の X アナリティクス CSV が未取込の可能性があります")
-    print("  ※ X のクリック数と note の X 列は同じものではない（アプリ内ブラウザ等で参照元が落ちる）。"
-          "2026-07 は note X列 ÷ X クリック ≒ 0.76。残差は目安として読む")
+
+    # 投稿単位の突合: note リンク投稿を投稿日でまとめ、投稿日＋翌日の note（X列＋直接・不明）と比べる
+    ref_by_day = {r[0][:10]: (_to_int(r[2]), _to_int(r[6])) for r in ref_rows[1:] if r and r[0]}
+    by_day: dict[str, list] = {}
+    for r in post_rows[1:]:
+        if len(r) >= 35 and r[0].startswith(ym) and r[34].strip() and len(r) > 27:
+            d = r[0][:10].replace("/", "-")
+            e = by_day.setdefault(d, [0, 0, r[2][:14].replace("\n", " ")])
+            e[0] += _to_int(r[27]); e[1] += 1
+    if by_day:
+        print("\n  投稿単位（投稿日 | X クリック(本数) | note X+直接・不明[当日+翌日] | 比 | 投稿冒頭）")
+        for d in sorted(by_day):
+            clicks, n, head = by_day[d]
+            dt = datetime.strptime(d, "%Y-%m-%d")
+            nx = sum(sum(ref_by_day.get((dt + timedelta(i)).strftime("%Y-%m-%d"), (0, 0))) for i in range(2))
+            ratio = f"{nx / clicks:.2f}" if clicks else "-"
+            print(f"   {d} | {clicks}({n}) | {nx} | {ratio} | {head}")
+        print("   ※ 同じ日に複数投稿があると note 側は合算。前日の投稿の流入が翌日に重なると比が大きく出る")
+
+    print("  ※ 読み方: X クリック数は推定には使わず参考値。X列には bio リンク・他人の投稿経由が含まれ、"
+          "クリック数には含まれないので、両者は同じものを測っていない。投稿単位の比（note X+直接 ÷ クリック）は "
+          "2026-02〜07 が 0.26〜0.77、2026-08 以降が 0.7〜1.3 で、古い月ほど note 側の捕捉が不完全"
+          "（note流入元は 9月導入の新ダッシュボードから遡って取得）。推定 X 経由がクリック数を大きく下回る月は、"
+          "bio・他人経由の過大見積もりではなく note 側の捕捉不足を疑う。2026-03 は X 側 CSV に返信が無く検証不能")
     return 0
 
 
