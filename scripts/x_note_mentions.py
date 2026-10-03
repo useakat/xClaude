@@ -171,9 +171,12 @@ def run_reconcile(month: str, ctr: float) -> int:
 
     ss = open_with_retry(get_client(), SPREADSHEET_ID)
 
-    # note流入元: X 列（C）の月間合計
+    # note流入元: 列は見出し名で引く（列の追加で位置が変わるため。sync_note_referrers.py の COLUMN_MAP 参照）
     ref_rows = ss.worksheet(SHEET_REFERRERS).get_all_values()
-    x_inflow = sum(_to_int(r[2]) for r in ref_rows[1:] if len(r) > 2 and r[0].startswith(month))
+    hdr = {name: i for i, name in enumerate(ref_rows[0])}
+    def col(name):
+        return hdr.get(name)
+    x_inflow = sum(_to_int(r[col("X")]) for r in ref_rows[1:] if len(r) > col("X") and r[0].startswith(month))
     ref_days = sum(1 for r in ref_rows[1:] if r and r[0].startswith(month))
 
     # 自分の note 導線クリック: X投稿一覧で AI 列「noteURL」が空でない行（本文に note.com の
@@ -196,10 +199,13 @@ def run_reconcile(month: str, ctr: float) -> int:
     mention_imp = sum(_to_int(m["impressions"]) for m in mentions)
 
     est_inflow = round(mention_imp * ctr)
-    # note流入元の列順: A日付 B合計 C X D Threads E Google F note.com G 直接・不明 H Yahoo I Bing J その他
-    def msum(idx):
+    def msum(name):
+        idx = col(name)
+        if idx is None:
+            return 0
         return sum(_to_int(r[idx]) for r in ref_rows[1:] if len(r) > idx and r[0].startswith(month))
-    threads, note_internal, direct = msum(3), msum(5), msum(6)
+    threads, note_internal, direct = msum("Threads"), msum("note.com"), msum("直接・不明")
+    bio_cols = [(n, msum(n)) for n in ("X bio", "Threads bio", "X 固定", "Threads 固定") if col(n) is not None]
     visible = x_inflow + note_internal + threads
     # 推定内訳: 直接・不明（参照元が落ちた流入）を X : note : Threads の見えている比で配分する。
     # 前提は「参照元が落ちた流入は、見えている流入と同じ比率で3経路に分布している」の1点のみ。
@@ -208,7 +214,8 @@ def run_reconcile(month: str, ctr: float) -> int:
     def alloc(v):
         return round(direct * v / visible) if visible else 0
     print(f"\n== note への X 経由流入の突合（{month}）==")
-    print(f"生の数字（{ref_days}日分）: X列 {x_inflow} / note列 {note_internal} / Threads列 {threads} / 直接・不明 {direct}")
+    print(f"生の数字（{ref_days}日分）: X列 {x_inflow} / note列 {note_internal} / Threads列 {threads} / 直接・不明 {direct}"
+          + "".join(f" / {n} {v}" for n, v in bio_cols))
     print("推定内訳（直接・不明を X:note:Threads の見えている比で配分。前提: 参照元が落ちた流入は見えている流入と同じ比率で分布）")
     print(f"  X 経由      : {x_inflow + alloc(x_inflow):>6}（= {x_inflow} + {alloc(x_inflow)}）")
     print(f"  note 経由   : {note_internal + alloc(note_internal):>6}（= {note_internal} + {alloc(note_internal)}）")
@@ -224,7 +231,8 @@ def run_reconcile(month: str, ctr: float) -> int:
         print("  ※ リンククリックが 0 です。当月の X アナリティクス CSV が未取込の可能性があります")
 
     # 投稿単位の突合: note リンク投稿を投稿日でまとめ、投稿日＋翌日の note（X列＋直接・不明）と比べる
-    ref_by_day = {r[0][:10]: (_to_int(r[2]), _to_int(r[6])) for r in ref_rows[1:] if r and r[0]}
+    ref_by_day = {r[0][:10]: (_to_int(r[col("X")]), _to_int(r[col("直接・不明")]))
+                  for r in ref_rows[1:] if r and r[0] and len(r) > max(col("X"), col("直接・不明"))}
     by_day: dict[str, list] = {}
     for r in post_rows[1:]:
         if len(r) >= 35 and r[0].startswith(ym) and r[34].strip() and len(r) > 27:

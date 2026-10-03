@@ -1,0 +1,26 @@
+{
+  "_comment": "bio/固定ポスト用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映（Caddy 再読み込み込み）。自己紹介記事の公開後に target を差し替える",
+  "domain": "usephys.net",
+  "hosts": {
+    "usephys.net": {
+      "label": "X bio",
+      "column": "X bio",
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+    },
+    "threads.usephys.net": {
+      "label": "Threads bio",
+      "column": "Threads bio",
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+    },
+    "note.usephys.net": {
+      "label": "X 固定ポスト",
+      "column": "X 固定",
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+    },
+    "tnote.usephys.net": {
+      "label": "Threads 固定ポスト",
+      "column": "Threads 固定",
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+    }
+  }
+}
