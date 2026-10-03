@@ -34,6 +34,12 @@ FIRST_DATE = "2025-08-31"
 COLUMN_MAP = [
     ("X", ["X"]),
     ("Threads", ["l.threads.com"]),  # Threads のリンクラッパー（2026-10-02 追加。以前は「その他」に合算されていた）
+    # bio / 固定ポスト用の転送ホスト（usephys.net、HTML 転送なので参照元に自ドメインが残る。2026-10-03 追加）
+    # redirect/redirects.json の column 名と揃える。旧 usephys.com のホスト名も念のため拾う
+    ("X bio", ["usephys.net", "xbio.usephys.com"]),
+    ("Threads bio", ["threads.usephys.net", "thbio.usephys.com"]),
+    ("X 固定", ["note.usephys.net", "xpin.usephys.com"]),
+    ("Threads 固定", ["tnote.usephys.net", "thpin.usephys.com"]),
     ("Google", ["Google"]),
     ("note.com", ["note.com"]),
     ("直接・不明", ["no referrer"]),
