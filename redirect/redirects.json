@@ -26,6 +26,7 @@
       }
     },
     "note.usephys.net": {
+      "_comment": "未使用（2026-10-04）: 固定ポストも通常の xpost / tpost リンクのままにし、どの投稿が固定かは「固定ポスト履歴」シートで管理する。ホストは残してあるが新しいリンクには使わない",
       "label": "X 固定ポスト",
       "column": "X 固定",
       "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
@@ -37,6 +38,7 @@
       }
     },
     "tnote.usephys.net": {
+      "_comment": "未使用（2026-10-04）: 固定ポストも通常の xpost / tpost リンクのままにし、どの投稿が固定かは「固定ポスト履歴」シートで管理する。ホストは残してあるが新しいリンクには使わない",
       "label": "Threads 固定ポスト",
       "column": "Threads 固定",
       "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
