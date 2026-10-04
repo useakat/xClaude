@@ -205,7 +205,7 @@ def run_reconcile(month: str, ctr: float) -> int:
             return 0
         return sum(_to_int(r[idx]) for r in ref_rows[1:] if len(r) > idx and r[0].startswith(month))
     threads, note_internal, direct = msum("Threads"), msum("note.com"), msum("直接・不明")
-    bio_cols = [(n, msum(n)) for n in ("X bio", "Threads bio", "X 固定", "Threads 固定") if col(n) is not None]
+    bio_cols = [(n, msum(n)) for n in ("X bio", "Threads bio", "X 固定", "Threads 固定", "Threads 投稿") if col(n) is not None]
     visible = x_inflow + note_internal + threads
     # 推定内訳: 直接・不明（参照元が落ちた流入）を X : note : Threads の見えている比で配分する。
     # 前提は「参照元が落ちた流入は、見えている流入と同じ比率で3経路に分布している」の1点のみ。

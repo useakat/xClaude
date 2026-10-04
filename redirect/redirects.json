@@ -1,6 +1,7 @@
 {
-  "_comment": "bio/固定ポスト用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映（Caddy 再読み込み込み）。自己紹介記事の公開後に target を差し替える",
+  "_comment": "bio/固定ポスト/投稿用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映。paths を持つホストは `https://<host>/<key>` でキーごとに転送先を変えられる（投稿用）。知らないキーは host の target に落ちる。クローラ（Twitterbot 等）には 302 で転送先へ飛ばし、note 本体の OG でカードを作らせる",
   "domain": "usephys.net",
+  "server_ip": "133.18.181.39",
   "hosts": {
     "usephys.net": {
       "label": "X bio",
@@ -21,6 +22,17 @@
       "label": "Threads 固定ポスト",
       "column": "Threads 固定",
       "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+    },
+    "post.usephys.net": {
+      "label": "Threads 投稿",
+      "column": "Threads 投稿",
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+      "paths": {
+        "profile": {
+          "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+          "memo": "自己紹介記事（公開後に差し替え）"
+        }
+      }
     }
   }
 }

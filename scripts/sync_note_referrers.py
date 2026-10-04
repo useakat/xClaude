@@ -40,6 +40,7 @@ COLUMN_MAP = [
     ("Threads bio", ["threads.usephys.net", "thbio.usephys.com"]),
     ("X 固定", ["note.usephys.net", "xpin.usephys.com"]),
     ("Threads 固定", ["tnote.usephys.net", "thpin.usephys.com"]),
+    ("Threads 投稿", ["post.usephys.net"]),  # 投稿内リンク用（キー別転送）。生の note リンクは従来どおり Threads 列
     ("Google", ["Google"]),
     ("note.com", ["note.com"]),
     ("直接・不明", ["no referrer"]),
