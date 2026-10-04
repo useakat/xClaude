@@ -11,11 +11,14 @@ bio / 固定ポスト / 投稿用の転送サイト（Caddy）を redirect/redir
 転送ページ（人向け）: meta referrer=origin / meta refresh / JS で note へ。JS が /hit?k=<key> にビーコンを
   送るので、その件数＝人のクリック（スキャナは JS を実行しない）。参照元は自ホストになり、note の
   流入元にホスト別の行が立つ。
+ホスト直下 `/` は転送はするがクリックに数えない（CT ログでホスト名を知ったスキャナは JS を実行するものも `/` にしか来ない）。
+  bio・固定のリンクは paths のキー付き（usephys.net/note、note.usephys.net/read 等）で貼る。
 クローラ（Twitterbot / facebookexternalhit 等）: HTML ではなく 302 で転送先へ飛ばす。クローラは JS も
   meta refresh も追わないので、HTML を返すとカード（サムネ付きプレビュー）が出ない。302 なら
   クローラが note 本体の OG タグを読んでカードを作る。
 dynamic（xpost / tpost.usephys.net）: パスが note の記事 ID（pattern）に一致したら、target の {1} に ID を埋めて転送する。
   ページは Caddy の templates が描画するので、記事ごとに paths を書く必要がない。ビーコンのキー＝記事 ID。
+  /<記事ID>/<投稿キー> と1段足すと、転送先は同じままキーが <記事ID>/<投稿キー> になり、投稿別にクリックが分かれる。
 
 使い方:
   python3 scripts/redirect_build.py            # 生成内容を表示（書き込まない）
@@ -70,7 +73,8 @@ SITE_BLOCK = """{host} {{
 
 
 # dynamic ルール: 記事 ID の抽出（path_regexp）と、名前付きキーより先に処理する handle ブロック。
-# `{1}` は Caddyfile では {re.nid.1}、templates では {{placeholder "http.regexp.nid.1"}} になる
+# `{1}` は Caddyfile では {re.nid.1}、templates では {{placeholder "http.regexp.nid.1"}} になる。
+# ビーコンのキーは記事 ID に、2段目（投稿キー）があれば "/<投稿キー>" を続ける
 DYN_MATCHER = "\t@nid path_regexp nid {pattern}\n"
 DYN_ROUTE = """\t\thandle @nid {{
 \t\t\tredir @crawler {target} 302
@@ -81,6 +85,7 @@ DYN_ROUTE = """\t\thandle @nid {{
 """
 DYN_PH_CADDY = "{re.nid.1}"
 DYN_PH_TMPL = '{{placeholder "http.regexp.nid.1"}}'
+DYN_KEY_TMPL = DYN_PH_TMPL + '{{with placeholder "http.regexp.nid.2"}}/{{.}}{{end}}'
 
 
 def render(tmpl: str, target: str, key: str) -> str:
@@ -110,7 +115,7 @@ def build(conf: dict, check_dns: bool = False) -> tuple[dict[str, str], str]:
         dyn_matcher = dyn_route = ""
         if dyn:
             # 動的ページ: templates が {{placeholder ...}} を記事 ID に置き換えて返す
-            pages[f"{host}/_dyn.html"] = render(tmpl, dyn["target"].replace("{1}", DYN_PH_TMPL), DYN_PH_TMPL)
+            pages[f"{host}/_dyn.html"] = render(tmpl, dyn["target"].replace("{1}", DYN_PH_TMPL), DYN_KEY_TMPL)
             dyn_matcher = DYN_MATCHER.format(pattern=dyn["pattern"])
             dyn_route = DYN_ROUTE.format(target=dyn["target"].replace("{1}", DYN_PH_CADDY))
         map_rows = []
