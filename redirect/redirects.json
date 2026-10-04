@@ -1,35 +1,59 @@
 {
-  "_comment": "bio/固定ポスト/投稿用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映。paths を持つホストは `https://<host>/<key>` でキーごとに転送先を変えられる（差し替え前提の導線用）。dynamic を持つホストは URL のパスから転送先を組み立てる（xpost / tpost.usephys.net/<note記事ID> → その記事。記事ごとの設定は不要）。知らないキーは host の target に落ちる。クローラ（Twitterbot 等）には 302 で転送先へ飛ばし、note 本体の OG でカードを作らせる",
+  "_comment": "bio/固定ポスト/投稿用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映。paths を持つホストは `https://<host>/<key>` でキーごとに転送先を変えられる（差し替え前提の導線用）。dynamic を持つホストは URL のパスから転送先を組み立てる（xpost / tpost.usephys.net/<note記事ID> → その記事。記事ごとの設定は不要）。さらに /<note記事ID>/<投稿キー> と1段足すと、転送先は同じままビーコンのキーが <記事ID>/<投稿キー> になり、転送クリック明細で投稿別に分かれる（Threads はリンククリック分析が無いため）。知らないキーとホスト直下 `/` は host の target に落ちる（転送はするがクリックには数えない。CT ログでホスト名を知ったスキャナは JS を実行するものも含め必ず `/` に来るため、bio・固定のリンクも paths 付きで貼る）。クローラ（Twitterbot 等）には 302 で転送先へ飛ばし、note 本体の OG でカードを作らせる",
   "domain": "usephys.net",
   "server_ip": "133.18.181.39",
   "hosts": {
     "usephys.net": {
       "label": "X bio",
       "column": "X bio",
-      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+      "paths": {
+        "note": {
+          "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+          "memo": "X bioに貼る URL は https://usephys.net/note（/ 直下はスキャナ対策で数えない）"
+        }
+      }
     },
     "threads.usephys.net": {
       "label": "Threads bio",
       "column": "Threads bio",
-      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+      "paths": {
+        "note": {
+          "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+          "memo": "Threads bioに貼る URL は https://threads.usephys.net/note（/ 直下はスキャナ対策で数えない）"
+        }
+      }
     },
     "note.usephys.net": {
       "label": "X 固定ポスト",
       "column": "X 固定",
-      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+      "paths": {
+        "read": {
+          "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+          "memo": "X 固定ポストに貼る URL は https://note.usephys.net/read（/ 直下はスキャナ対策で数えない）"
+        }
+      }
     },
     "tnote.usephys.net": {
       "label": "Threads 固定ポスト",
       "column": "Threads 固定",
-      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+      "paths": {
+        "read": {
+          "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+          "memo": "Threads 固定ポストに貼る URL は https://tnote.usephys.net/read（/ 直下はスキャナ対策で数えない）"
+        }
+      }
     },
     "xpost.usephys.net": {
       "label": "X 投稿（セルフリプ）",
       "column": "X 投稿",
       "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
       "dynamic": {
-        "_comment": "note の URL `note.com/takaesu7431/n/<ID>` の <ID> を `https://<host>/<ID>` として貼る。{1} に ID が入る。パラメータは転送側で付けるので貼るときは不要",
-        "pattern": "^/(n[0-9a-f]{10,16})/?$",
+        "_comment": "note の URL `note.com/takaesu7431/n/<ID>` の <ID> を `https://<host>/<ID>` として貼る。{1} に ID が入る。`/<ID>/<投稿キー>`（英数字・_・-、32文字まで）を付けると投稿別にクリックが分かれる。パラメータは転送側で付けるので貼るときは不要",
+        "pattern": "^/(n[0-9a-f]{10,16})(?:/([A-Za-z0-9_-]{1,32}))?/?$",
         "target": "https://note.com/takaesu7431/n/{1}?sub_rt=share_sb"
       },
       "paths": {
@@ -45,8 +69,8 @@
       "column": "Threads 投稿",
       "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
       "dynamic": {
-        "_comment": "note の URL `note.com/takaesu7431/n/<ID>` の <ID> を `https://<host>/<ID>` として貼る。{1} に ID が入る。パラメータは転送側で付けるので貼るときは不要",
-        "pattern": "^/(n[0-9a-f]{10,16})/?$",
+        "_comment": "note の URL `note.com/takaesu7431/n/<ID>` の <ID> を `https://<host>/<ID>` として貼る。{1} に ID が入る。`/<ID>/<投稿キー>`（英数字・_・-、32文字まで）を付けると投稿別にクリックが分かれる。パラメータは転送側で付けるので貼るときは不要",
+        "pattern": "^/(n[0-9a-f]{10,16})(?:/([A-Za-z0-9_-]{1,32}))?/?$",
         "target": "https://note.com/takaesu7431/n/{1}?sub_rt=share_sb"
       },
       "paths": {

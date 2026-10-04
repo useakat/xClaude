@@ -83,7 +83,14 @@ def is_human(headers: dict) -> bool:
 def count_day(host: str, day: str) -> tuple[dict[str, int], int, int]:
     """(キー別の人のクリック数, 除外数, うち参照元が X/Threads のもの) を返す。day は 'YYYY-MM-DD'（JST）
 
-    人のクリック ＝ 転送ページの JS が送るビーコン `/hit?k=<key>`（204）の件数。キー無しのページは `_root`。
+    ホスト直下 `/` のビーコン（`_root`）は人のクリックに数えない（除外に計上）。
+    CT ログでホスト名を知ったスキャナの一部は JS を実行する headless ブラウザで来てビーコンまで送るが、
+    知っているのはホスト名だけなので必ず `/` に来る。そのため bio・固定のリンクも paths 付き
+    （usephys.net/note など）で貼り、パス付きのビーコンだけを人のクリックとする
+    （2026-10-04、xpost / tpost 公開直後の数分で `_root` ビーコンが十数件来たことから判明）。
+
+    人のクリック ＝ 転送ページの JS が送るビーコン `/hit?k=<key>`（204）の件数。キー無し（ホスト直下）の `_root` は数えない。
+    動的ホストでは key は note 記事 ID、投稿キー付きなら "<記事ID>/<投稿キー>"。
     スキャナは JS を実行しないのでページ取得（`/`）は多くても `/hit` には来ない。
     除外数 ＝ ページ取得のうち bot・スキャナ判定の件数（参考）。
     参照元が X/Threads ＝ ページ取得に t.co / threads 等の Referer が付いていた件数（参考。
@@ -113,9 +120,12 @@ def count_day(host: str, day: str) -> tuple[dict[str, int], int, int]:
                 excluded += 1
             else:
                 key = dict(p.split("=", 1) for p in query.split("&") if "=" in p).get("k", "_root") or "_root"
-                by_key[key] = by_key.get(key, 0) + 1
+                if key == "_root":
+                    excluded += 1
+                else:
+                    by_key[key] = by_key.get(key, 0) + 1
             continue
-        if 200 <= status < 300 and (path in ("/", "/index.html") or path.endswith("/") or path.count("/") == 1):
+        if 200 <= status < 300 and (path in ("/", "/index.html") or path.endswith("/") or 1 <= path.count("/") <= 2):
             if not is_human(headers):
                 excluded += 1
             ref = " ".join(headers.get("Referer", []) or [])
