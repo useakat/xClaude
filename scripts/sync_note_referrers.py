@@ -17,11 +17,14 @@ Usage:
 """
 import sys
 import json
+import time
 import argparse
+from datetime import datetime, timedelta
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from fetch_note_referrers import fetch  # noqa: E402
+from note_gql import NoteGraphQL, period_vars, period_range  # noqa: E402
 from sheets_values import get_client, open_with_retry  # noqa: E402
 
 SPREADSHEET_ID = "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"  # 発信記録（SS3）
@@ -40,7 +43,10 @@ COLUMN_MAP = [
     ("Threads bio", ["threads.usephys.net", "thbio.usephys.com"]),
     ("X 固定", ["note.usephys.net", "xpin.usephys.com"]),
     ("Threads 固定", ["tnote.usephys.net", "thpin.usephys.com"]),
-    ("Threads 投稿", ["post.usephys.net"]),  # 投稿内リンク用（キー別転送）。生の note リンクは従来どおり Threads 列
+    # 投稿内リンク用（記事 ID キーの動的転送。2026-10-04 追加）。X のセルフリプは post_to_x.py が xpost に書き換える。
+    # 生の note リンクは従来どおり X 列 / Threads 列（X 列には他人の投稿経由が残る）
+    ("X 投稿", ["xpost.usephys.net"]),
+    ("Threads 投稿", ["tpost.usephys.net", "post.usephys.net"]),  # post は旧ホスト名（10/4 のテスト分のみ）
     ("Google", ["Google"]),
     ("note.com", ["note.com"]),
     ("直接・不明", ["no referrer"]),
@@ -49,6 +55,43 @@ COLUMN_MAP = [
 ]
 HEADER = ["日付", "合計"] + [c[0] for c in COLUMN_MAP] + ["その他"]
 LAST_COL = chr(ord("A") + len(HEADER) - 1)  # 現状 J
+
+
+def _fetch_day(day, gql):
+    """1日分を取得する。認証の一時拒否・レート制限（非 JSON 応答・429 等）は待って再試行する。"""
+    for attempt in range(4):
+        try:
+            return fetch(f"{day}:{day}", include_daily=True, gql=gql[0])
+        except Exception as e:  # noqa: BLE001
+            if attempt == 3:
+                raise
+            wait = 30 * (2 ** attempt)
+            print(f"  {day}: {type(e).__name__} — {wait}s 待って再試行", file=sys.stderr)
+            time.sleep(wait)
+            gql[0] = NoteGraphQL()
+
+
+def fetch_by_day(period):
+    """period を1日ずつに分けて取得し、日別の流入元を結合して返す。
+
+    note の流入元 API は「要求した期間全体での上位 N 件」以外を other に畳むため、
+    長い期間を一括で取ると件数の少ない流入元（転送ホスト usephys.net 等）が日別でも
+    「その他」に落ちる（2026-10-04 に --full で判明）。1日ずつ取れば畳まれない。
+    """
+    start, end = period_range(period_vars(period))
+    if isinstance(start, datetime):
+        start, end = start.date(), end.date()
+    daily, last_updated = [], None
+    gql = [NoteGraphQL()]  # トークンを使い回す（毎回取り直すと数百回で note 側に拒否される）
+    d = start
+    while d <= end:
+        r = _fetch_day(d.isoformat(), gql)
+        daily.extend(x for x in r["daily"] if x["date"])
+        last_updated = r["lastUpdatedAt"] or last_updated
+        d += timedelta(days=1)
+        time.sleep(0.6)  # 短時間に叩きすぎると非 JSON 応答（レート制限）になる
+    return {"startDate": start.isoformat(), "endDate": end.isoformat(),
+            "lastUpdatedAt": last_updated, "daily": daily}
 
 
 def to_row(day):
@@ -92,11 +135,10 @@ def main():
     else:
         period = args.period
 
-    result = fetch(period, include_daily=True)
-    days = [d for d in result["daily"] if d["date"]]
+    result = fetch_by_day(period)
+    days = result["daily"]
     if not days:
-        print("日別データが取得できませんでした（期間が長すぎて粒度が日でない可能性）",
-              file=sys.stderr)
+        print("日別データが取得できませんでした", file=sys.stderr)
         sys.exit(1)
 
     rows = [to_row(d) for d in days]

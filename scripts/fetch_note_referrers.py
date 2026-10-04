@@ -47,8 +47,10 @@ query($unit: DashboardPeriodUnit!, $date: Datetime!, $endDate: Datetime,
 """
 
 
-def fetch(period="28d", include_daily=True):
-    gql = NoteGraphQL()
+def fetch(period="28d", include_daily=True, gql=None):
+    # gql を渡すとクライアント（認証トークン）を使い回す。1日ずつ何百回も呼ぶときは必須
+    # （毎回トークンを取り直すと note 側で取得が拒否され始める。2026-10-04 に --full で発生）
+    gql = gql or NoteGraphQL()
     variables = {**period_vars(period), "includeTimeSeries": include_daily}
     data = gql.query(REFERRER_QUERY, variables)
 

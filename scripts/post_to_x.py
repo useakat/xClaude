@@ -10,14 +10,31 @@ Usage:
 
 import argparse
 import os
+import re
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent.parent / ".env")
 
+# 自分の note 記事リンクは転送ホスト（xpost.usephys.net/<記事ID>）経由にする（2026-10-04）。
+# クリック数がビーコンで日次記録され、note の流入元に「X 投稿」として立つ（アプリ内ブラウザで参照元が落ちない）。
+# 転送先の ?sub_rt=share_sb は転送側が付けるので、ここでは元 URL のパラメータを捨てる。
+NOTE_LINK_RE = re.compile(r"https?://(?:www\.)?note\.com/takaesu7431/n/(n[0-9a-f]{10,16})(?:\?[A-Za-z0-9_=&%.\-]*)?")
+XPOST_HOST = "https://xpost.usephys.net/"
+
+
+def to_xpost_links(text: str) -> str:
+    return NOTE_LINK_RE.sub(lambda m: XPOST_HOST + m.group(1), text)
+
+
 def post_to_x(text: str, image_path: str = None, reply_to: str = None, dry_run: bool = False) -> bool:
     import tweepy
+
+    rewritten = to_xpost_links(text)
+    if rewritten != text:
+        print("🔗 note リンクを xpost.usephys.net 経由に書き換えました")
+        text = rewritten
 
     api_key        = os.getenv("X_OAUTH_CONSUMER_KEY")
     api_secret     = os.getenv("X_OAUTH_CONSUMER_SECRET")

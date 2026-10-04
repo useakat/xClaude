@@ -3,7 +3,7 @@
 転送サイト（Caddy）のアクセスログから、経路別の bio クリック数を日次で集計し、
 「発信記録」スプレッドシートの `bioクリック` シートに upsert する。
 
-列: 日付 / X bio / Threads bio / X 固定 / Threads 固定 / 除外(bot・スキャナ) / 合計 / うち参照元がX/Threads
+列: 日付 / X bio / Threads bio / X 固定 / Threads 固定 / X 投稿 / Threads 投稿 / 除外(bot・スキャナ) / 合計 / うち参照元がX/Threads
     （経路列は redirect/redirects.json の column 順）
 対象: 各ホストの `/`（index.html）への 2xx リクエストのうち、実ブラウザと判定できるもの
     （UA が bot でない・Accept-Language あり・Accept が text/html・Sec-Fetch-Dest が document）。
