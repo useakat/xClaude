@@ -7,10 +7,16 @@
 <meta http-equiv="refresh" content="0;url={{TARGET}}">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>note へ移動しています</title>
-<script>location.replace("{{TARGET}}");</script>
+<script>
+// クリック計測用ビーコン。スキャナは JS を実行しないので、/hit の到達＝人のクリックとして数える。
+// sendBeacon はページ遷移後も送信が完了する。失敗しても転送は止めない。
+try { navigator.sendBeacon("/hit?k={{KEY}}"); } catch (e) {}
+location.replace("{{TARGET}}");
+</script>
 <style>body{font-family:sans-serif;margin:2rem;color:#333}a{color:#1d9bf0}</style>
 </head>
 <body>
+<noscript><img src="/hit?k={{KEY}}" alt="" width="1" height="1"></noscript>
 <p>note へ移動しています… 自動で移動しない場合は <a href="{{TARGET}}">こちら</a>。</p>
 </body>
 </html>
