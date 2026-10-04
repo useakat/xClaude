@@ -12,26 +12,37 @@ import argparse
 import os
 import re
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).parent.parent / ".env")
 
-# 自分の note 記事リンクは転送ホスト（xpost.usephys.net/<記事ID>）経由にする（2026-10-04）。
+# 自分の note 記事リンクは転送ホスト（xpost.usephys.net/<記事ID>/<投稿キー>）経由にする（2026-10-04）。
 # クリック数がビーコンで日次記録され、note の流入元に「X 投稿」として立つ（アプリ内ブラウザで参照元が落ちない）。
+# 投稿キーは投稿ごとに違えばよく、セルフリプなら元ポストの tweet ID（X投稿一覧の行とそのまま結合できる）、
+# 本文内リンクなら投稿日時（JST, YYYYMMDD-HHMM）にする。固定ポストもこの URL のままで、どの投稿が固定かは
+# 「固定ポスト履歴」シートで管理する。
 # 転送先の ?sub_rt=share_sb は転送側が付けるので、ここでは元 URL のパラメータを捨てる。
 NOTE_LINK_RE = re.compile(r"https?://(?:www\.)?note\.com/takaesu7431/n/(n[0-9a-f]{10,16})(?:\?[A-Za-z0-9_=&%.\-]*)?")
 XPOST_HOST = "https://xpost.usephys.net/"
+JST = timezone(timedelta(hours=9))
 
 
-def to_xpost_links(text: str) -> str:
-    return NOTE_LINK_RE.sub(lambda m: XPOST_HOST + m.group(1), text)
+def post_key(reply_to: str = None, now: datetime = None) -> str:
+    if reply_to:
+        return str(reply_to).strip()
+    return (now or datetime.now(JST)).strftime("%Y%m%d-%H%M")
+
+
+def to_xpost_links(text: str, key: str) -> str:
+    return NOTE_LINK_RE.sub(lambda m: f"{XPOST_HOST}{m.group(1)}/{key}", text)
 
 
 def post_to_x(text: str, image_path: str = None, reply_to: str = None, dry_run: bool = False) -> bool:
     import tweepy
 
-    rewritten = to_xpost_links(text)
+    rewritten = to_xpost_links(text, post_key(reply_to))
     if rewritten != text:
         print("🔗 note リンクを xpost.usephys.net 経由に書き換えました")
         text = rewritten
