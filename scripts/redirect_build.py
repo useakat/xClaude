@@ -5,6 +5,7 @@ bio / 固定ポスト / 投稿用の転送サイト（Caddy）を redirect/redir
 生成物:
   /var/www/redirect/<host>/index.html            … ホスト直下（キー無し）の HTML 転送ページ
   /var/www/redirect/<host>/<key>/index.html      … paths を持つホストのキー別転送ページ
+  /var/www/redirect/<host>/_dyn.html             … dynamic を持つホストの動的転送ページ（Caddy templates で描画）
   /etc/caddy/Caddyfile                            … ホストごとの site ブロック
 
 転送ページ（人向け）: meta referrer=origin / meta refresh / JS で note へ。JS が /hit?k=<key> にビーコンを
@@ -13,6 +14,8 @@ bio / 固定ポスト / 投稿用の転送サイト（Caddy）を redirect/redir
 クローラ（Twitterbot / facebookexternalhit 等）: HTML ではなく 302 で転送先へ飛ばす。クローラは JS も
   meta refresh も追わないので、HTML を返すとカード（サムネ付きプレビュー）が出ない。302 なら
   クローラが note 本体の OG タグを読んでカードを作る。
+dynamic（post.usephys.net）: パスが note の記事 ID（pattern）に一致したら、target の {1} に ID を埋めて転送する。
+  ページは Caddy の templates が描画するので、記事ごとに paths を書く必要がない。ビーコンのキー＝記事 ID。
 
 使い方:
   python3 scripts/redirect_build.py            # 生成内容を表示（書き込まない）
@@ -42,13 +45,13 @@ CRAWLER_UA = r"(?i)(Twitterbot|facebookexternalhit|Facebot|LinkedInBot|Slackbot|
 SITE_BLOCK = """{host} {{
 \troot * {www}/{host}
 \t@crawler header_regexp ua User-Agent {crawler_ua}
-\tmap {{path}} {{target}} {{
+{dyn_matcher}\tmap {{path}} {{target}} {{
 {map_rows}
 \t\tdefault {default_target}
 \t}}
 \troute {{
 \t\trespond /hit 204
-\t\tredir @crawler {{target}} 302
+{dyn_route}\t\tredir @crawler {{target}} 302
 \t\ttry_files {{path}} {{path}}/ /index.html
 \t\tfile_server
 \t}}
@@ -64,6 +67,20 @@ SITE_BLOCK = """{host} {{
 \t}}
 }}
 """
+
+
+# dynamic ルール: 記事 ID の抽出（path_regexp）と、名前付きキーより先に処理する handle ブロック。
+# `{1}` は Caddyfile では {re.nid.1}、templates では {{placeholder "http.regexp.nid.1"}} になる
+DYN_MATCHER = "\t@nid path_regexp nid {pattern}\n"
+DYN_ROUTE = """\t\thandle @nid {{
+\t\t\tredir @crawler {target} 302
+\t\t\trewrite * /_dyn.html
+\t\t\ttemplates
+\t\t\tfile_server
+\t\t}}
+"""
+DYN_PH_CADDY = "{re.nid.1}"
+DYN_PH_TMPL = '{{placeholder "http.regexp.nid.1"}}'
 
 
 def render(tmpl: str, target: str, key: str) -> str:
@@ -89,6 +106,13 @@ def build(conf: dict, check_dns: bool = False) -> tuple[dict[str, str], str]:
             print(f"⚠ {host}: DNS がこのサーバー（{server_ip}）を向いていないため今回は除外（A レコード追加後に再実行）", file=sys.stderr)
             continue
         pages[f"{host}/index.html"] = render(tmpl, h["target"], "_root")
+        dyn = h.get("dynamic")
+        dyn_matcher = dyn_route = ""
+        if dyn:
+            # 動的ページ: templates が {{placeholder ...}} を記事 ID に置き換えて返す
+            pages[f"{host}/_dyn.html"] = render(tmpl, dyn["target"].replace("{1}", DYN_PH_TMPL), DYN_PH_TMPL)
+            dyn_matcher = DYN_MATCHER.format(pattern=dyn["pattern"])
+            dyn_route = DYN_ROUTE.format(target=dyn["target"].replace("{1}", DYN_PH_CADDY))
         map_rows = []
         for key, p in (h.get("paths") or {}).items():
             pages[f"{host}/{key}/index.html"] = render(tmpl, p["target"], key)
@@ -96,6 +120,7 @@ def build(conf: dict, check_dns: bool = False) -> tuple[dict[str, str], str]:
             map_rows.append(f"\t\t/{key}/ {p['target']}")
         blocks.append(SITE_BLOCK.format(
             host=host, www=WWW_ROOT, logdir=LOG_DIR, crawler_ua=CRAWLER_UA,
+            dyn_matcher=dyn_matcher, dyn_route=dyn_route,
             map_rows="\n".join(map_rows) if map_rows else "\t\t# (paths なし)",
             default_target=h["target"],
         ))
@@ -114,6 +139,8 @@ def main() -> int:
     if not args.apply:
         for host, h in conf["hosts"].items():
             print(f"{host}  →  {h['target']}")
+            if h.get("dynamic"):
+                print(f"  {h['dynamic']['pattern']}  →  {h['dynamic']['target']}  (動的)")
             for key, p in (h.get("paths") or {}).items():
                 print(f"  /{key}  →  {p['target']}  ({p.get('memo', '')})")
         print("\n----- Caddyfile -----\n" + caddy)
@@ -150,6 +177,8 @@ def main() -> int:
     print(f"✅ {len(conf['hosts'])} ホスト・{len(pages)} ページを反映し、caddy を reload しました")
     for host, h in conf["hosts"].items():
         print(f"   https://{host}  →  {h['target']}")
+        if h.get("dynamic"):
+            print(f"     /<記事ID>  →  {h['dynamic']['target']}  (動的)")
         for key, p in (h.get("paths") or {}).items():
             print(f"     /{key}  →  {p['target']}")
     return 0
