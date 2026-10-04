@@ -14,7 +14,7 @@ bio / 固定ポスト / 投稿用の転送サイト（Caddy）を redirect/redir
 クローラ（Twitterbot / facebookexternalhit 等）: HTML ではなく 302 で転送先へ飛ばす。クローラは JS も
   meta refresh も追わないので、HTML を返すとカード（サムネ付きプレビュー）が出ない。302 なら
   クローラが note 本体の OG タグを読んでカードを作る。
-dynamic（post.usephys.net）: パスが note の記事 ID（pattern）に一致したら、target の {1} に ID を埋めて転送する。
+dynamic（xpost / tpost.usephys.net）: パスが note の記事 ID（pattern）に一致したら、target の {1} に ID を埋めて転送する。
   ページは Caddy の templates が描画するので、記事ごとに paths を書く必要がない。ビーコンのキー＝記事 ID。
 
 使い方:

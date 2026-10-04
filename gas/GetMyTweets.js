@@ -207,6 +207,7 @@ const NOTE_URL_COL = 35;
 
 /**
  * 投稿本文中の note リンク（展開後URL）を改行区切りで返す。無ければ ''。
+ * 自分の記事は転送ホスト xpost.usephys.net/<記事ID> 経由で貼る（post_to_x.py が書き換え）ので、それも note リンクとして拾う。
  * entities.urls（通常投稿）と note_tweet.entities.urls（長文投稿）の両方を見る。
  * 画像の t.co は expanded_url が pic.twitter.com なので対象外。
  */
@@ -220,7 +221,7 @@ function extractNoteUrls(tweet) {
   sources.forEach(urls => {
     urls.forEach(u => {
       const expanded = u.expanded_url || u.unwound_url || '';
-      if (/^https?:\/\/(www\.)?note\.com\//.test(expanded) && found.indexOf(expanded) === -1) {
+      if (/^https?:\/\/((www\.)?note\.com|xpost\.usephys\.net)\//.test(expanded) && found.indexOf(expanded) === -1) {
         found.push(expanded);
       }
     });

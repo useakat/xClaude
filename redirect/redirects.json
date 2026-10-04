@@ -1,5 +1,5 @@
 {
-  "_comment": "bio/固定ポスト/投稿用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映。paths を持つホストは `https://<host>/<key>` でキーごとに転送先を変えられる（差し替え前提の導線用）。dynamic を持つホストは URL のパスから転送先を組み立てる（post.usephys.net/<note記事ID> → その記事。記事ごとの設定は不要）。知らないキーは host の target に落ちる。クローラ（Twitterbot 等）には 302 で転送先へ飛ばし、note 本体の OG でカードを作らせる",
+  "_comment": "bio/固定ポスト/投稿用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映。paths を持つホストは `https://<host>/<key>` でキーごとに転送先を変えられる（差し替え前提の導線用）。dynamic を持つホストは URL のパスから転送先を組み立てる（xpost / tpost.usephys.net/<note記事ID> → その記事。記事ごとの設定は不要）。知らないキーは host の target に落ちる。クローラ（Twitterbot 等）には 302 で転送先へ飛ばし、note 本体の OG でカードを作らせる",
   "domain": "usephys.net",
   "server_ip": "133.18.181.39",
   "hosts": {
@@ -23,12 +23,12 @@
       "column": "Threads 固定",
       "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb"
     },
-    "post.usephys.net": {
-      "label": "Threads 投稿",
-      "column": "Threads 投稿",
+    "xpost.usephys.net": {
+      "label": "X 投稿（セルフリプ）",
+      "column": "X 投稿",
       "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
       "dynamic": {
-        "_comment": "note の URL `note.com/takaesu7431/n/<ID>` の <ID> を `https://post.usephys.net/<ID>` として貼る。{1} に ID が入る。パラメータは転送側で付けるので貼るときは不要",
+        "_comment": "note の URL `note.com/takaesu7431/n/<ID>` の <ID> を `https://<host>/<ID>` として貼る。{1} に ID が入る。パラメータは転送側で付けるので貼るときは不要",
         "pattern": "^/(n[0-9a-f]{10,16})/?$",
         "target": "https://note.com/takaesu7431/n/{1}?sub_rt=share_sb"
       },
@@ -37,7 +37,25 @@
           "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
           "memo": "自己紹介記事（公開後に差し替え）"
         }
-      }
+      },
+      "_comment": "post_to_x.py が投稿直前に本文の note.com/takaesu7431/n/<ID> をこのホストに書き換える"
+    },
+    "tpost.usephys.net": {
+      "label": "Threads 投稿",
+      "column": "Threads 投稿",
+      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+      "dynamic": {
+        "_comment": "note の URL `note.com/takaesu7431/n/<ID>` の <ID> を `https://<host>/<ID>` として貼る。{1} に ID が入る。パラメータは転送側で付けるので貼るときは不要",
+        "pattern": "^/(n[0-9a-f]{10,16})/?$",
+        "target": "https://note.com/takaesu7431/n/{1}?sub_rt=share_sb"
+      },
+      "paths": {
+        "profile": {
+          "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+          "memo": "自己紹介記事（公開後に差し替え）"
+        }
+      },
+      "_comment": "Threads に手で貼るときに使う（Threads ミラーは note リンクを落とす方針のまま）"
     }
   }
 }
