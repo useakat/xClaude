@@ -1,6 +1,6 @@
 ---
 name: add-neta
-description: 与えられたネタ（URL または テキスト）を読み、4つのネタシート（newsTopics/onePointNeta/noteNeta/thoughts）のどれに追加すべきか判断して、そのシートの列構成に合わせて追記する。重複チェック・No採番・追加日の記入まで自動で行う。
+description: 与えられたネタ（URL または テキスト）を読み、5つのネタシート（newsTopics/onePointNeta/noteNeta/thoughts/teisuNeta）のどれに追加すべきか判断して、そのシートの列構成に合わせて追記する。重複チェック・No採番・追加日の記入まで自動で行う。
 tools: Bash, Read, WebFetch, mcp__mcp-gsheets__sheets_get_values, mcp__mcp-gsheets__sheets_append_values
 ---
 
