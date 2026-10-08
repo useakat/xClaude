@@ -472,7 +472,19 @@ python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/w001_imp_snaps
 
 投稿9日以内の W001 の累積インプを `logs/w001_imp_daily.csv` に追記する（H4「長文は翌日以降もインプを引く尾がある」の検証データ。2026-09-27 追加）。
 
-- 「対象なし」と出た場合はそのまま STEP 11 へ進む
+- 「対象なし」と出た場合はそのまま STEP 10.6 へ進む
+- スクリプトがエラーになっても日報の作成・コミットは止めない（エラー内容を完了報告に1行添える）
+
+---
+
+# STEP 10.6: バズスコア・グレードの更新
+
+```bash
+python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/buzz_score.py
+```
+
+outputs でプロジェクト ID が付いた X 投稿を「同プロジェクトの直近8週の中央値」と比べた相対スコア（+1 = いつもの2倍）とグレード（S/A/B/C）を計算し、X投稿一覧の AJ:AK 列と `logs/buzz_scores.csv` を全件更新する（投稿2日未満は未採点。2026-10-08 追加。次の投稿作成で S/A 投稿を参考例として読むための土台）。
+
 - スクリプトがエラーになっても日報の作成・コミットは止めない（エラー内容を完了報告に1行添える）
 
 ---
@@ -485,7 +497,8 @@ python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/w001_imp_snaps
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "report(daily): [DATE_JP]の日報を追加" \
   docs/reports/daily/[DATE_ISO].md \
-  logs/w001_imp_daily.csv
+  logs/w001_imp_daily.csv \
+  logs/buzz_scores.csv
 ```
 
 - **対象パスを必ず渡す。** 省略すると `git add -A` にフォールバックし、他セッションの未コミット作業を巻き込む（2026-08-14 に `/record` で実際に発生）。
