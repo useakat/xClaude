@@ -3,7 +3,7 @@
 bio / 固定ポスト / 投稿用の転送サイト（Caddy）を redirect/redirects.json から生成する。
 
 生成物:
-  /var/www/redirect/<host>/index.html            … ホスト直下（キー無し）の HTML 転送ページ
+  /var/www/redirect/<host>/index.html            … ホスト直下（キー無し・不明パス）の案内ページ（転送しない）
   /var/www/redirect/<host>/<key>/index.html      … paths を持つホストのキー別転送ページ
   /var/www/redirect/<host>/_dyn.html             … dynamic を持つホストの動的転送ページ（Caddy templates で描画）
   /etc/caddy/Caddyfile                            … ホストごとの site ブロック
@@ -11,8 +11,11 @@ bio / 固定ポスト / 投稿用の転送サイト（Caddy）を redirect/redir
 転送ページ（人向け）: meta referrer=origin / meta refresh / JS で note へ。JS が /hit?k=<key> にビーコンを
   送るので、その件数＝人のクリック（スキャナは JS を実行しない）。参照元は自ホストになり、note の
   流入元にホスト別の行が立つ。
-ホスト直下 `/` は転送はするがクリックに数えない（CT ログでホスト名を知ったスキャナは JS を実行するものも `/` にしか来ない）。
-  bio・固定のリンクは paths のキー付き（usephys.net/note、note.usephys.net/read 等）で貼る。
+ホスト直下 `/`（と不明パス）は転送せず、リンク一覧の案内ページ（redirect/landing.html）を返す。
+  CT ログでホスト名を知ったスキャナは `/` にしか来ないが、JS を実行する型は転送ページの location.replace() で
+  note まで到達し、note 側の流入元（usephys.net 列）と記事 PV を偽の到達で汚していた（2026-10-05〜07 の
+  「X bio」11・4・3 は全部これ）。直下で転送しなければ note 側のノイズも消える（2026-10-08）。
+  bio・固定のリンクは paths のキー付き（usephys.net/note 等）で貼る。クローラ向けの 302 も `/` には適用しない。
 クローラ（Twitterbot / facebookexternalhit 等）: HTML ではなく 302 で転送先へ飛ばす。クローラは JS も
   meta refresh も追わないので、HTML を返すとカード（サムネ付きプレビュー）が出ない。302 なら
   クローラが note 本体の OG タグを読んでカードを作る。
@@ -36,6 +39,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONF = REPO_ROOT / "redirect" / "redirects.json"
 TEMPLATE = REPO_ROOT / "redirect" / "template.html"
+LANDING = REPO_ROOT / "redirect" / "landing.html"
 WWW_ROOT = Path("/var/www/redirect")
 CADDYFILE = Path("/etc/caddy/Caddyfile")
 LOG_DIR = Path("/var/log/caddy")
@@ -47,7 +51,10 @@ CRAWLER_UA = r"(?i)(Twitterbot|facebookexternalhit|Facebot|LinkedInBot|Slackbot|
 # /hit が /index.html に書き換えられてビーコンが 405/200 になる）
 SITE_BLOCK = """{host} {{
 \troot * {www}/{host}
-\t@crawler header_regexp ua User-Agent {crawler_ua}
+\t@crawler {{
+\t\theader_regexp ua User-Agent {crawler_ua}
+\t\tnot path / /index.html
+\t}}
 {dyn_matcher}\tmap {{path}} {{target}} {{
 {map_rows}
 \t\tdefault {default_target}
@@ -103,6 +110,7 @@ def resolves_here(host: str, server_ip: str) -> bool:
 def build(conf: dict, check_dns: bool = False) -> tuple[dict[str, str], str]:
     """(相対パス→HTML の辞書, Caddyfile 文字列) を返す。check_dns=True なら DNS 未設定のホストを除外する"""
     tmpl = TEMPLATE.read_text(encoding="utf-8")
+    landing = LANDING.read_text(encoding="utf-8")
     pages: dict[str, str] = {}
     blocks = []
     server_ip = conf.get("server_ip", "")
@@ -110,7 +118,7 @@ def build(conf: dict, check_dns: bool = False) -> tuple[dict[str, str], str]:
         if check_dns and server_ip and not resolves_here(host, server_ip):
             print(f"⚠ {host}: DNS がこのサーバー（{server_ip}）を向いていないため今回は除外（A レコード追加後に再実行）", file=sys.stderr)
             continue
-        pages[f"{host}/index.html"] = render(tmpl, h["target"], "_root")
+        pages[f"{host}/index.html"] = landing  # 直下は転送しない（案内ページ）
         dyn = h.get("dynamic")
         dyn_matcher = dyn_route = ""
         if dyn:

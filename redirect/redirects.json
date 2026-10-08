@@ -1,5 +1,5 @@
 {
-  "_comment": "bio/固定ポスト/投稿用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映。paths を持つホストは `https://<host>/<key>` でキーごとに転送先を変えられる（差し替え前提の導線用）。dynamic を持つホストは URL のパスから転送先を組み立てる（xpost / tpost.usephys.net/<note記事ID> → その記事。記事ごとの設定は不要）。さらに /<note記事ID>/<投稿キー> と1段足すと、転送先は同じままビーコンのキーが <記事ID>/<投稿キー> になり、転送クリック明細で投稿別に分かれる（Threads はリンククリック分析が無いため）。知らないキーとホスト直下 `/` は host の target に落ちる（転送はするがクリックには数えない。CT ログでホスト名を知ったスキャナは JS を実行するものも含め必ず `/` に来るため、bio・固定のリンクも paths 付きで貼る）。クローラ（Twitterbot 等）には 302 で転送先へ飛ばし、note 本体の OG でカードを作らせる",
+  "_comment": "bio/固定ポスト/投稿用の転送ホスト（usephys.net）。target を変えたら `python3 scripts/redirect_build.py --apply` で反映。paths を持つホストは `https://<host>/<key>` でキーごとに転送先を変えられる（差し替え前提の導線用）。dynamic を持つホストは URL のパスから転送先を組み立てる（xpost / tpost.usephys.net/<note記事ID> → その記事。記事ごとの設定は不要）。さらに /<note記事ID>/<投稿キー> と1段足すと、転送先は同じままビーコンのキーが <記事ID>/<投稿キー> になり、転送クリック明細で投稿別に分かれる（Threads はリンククリック分析が無いため）。知らないキーとホスト直下 `/` は転送せず案内ページ（landing.html）を返す（CT ログでホスト名を知ったスキャナが `/` から note まで到達して流入元・PV を汚していたため。2026-10-08）。host の target はクローラ向け 302 と不明キーの map 既定値にだけ使う。bio・固定のリンクは必ず paths 付きで貼る。クローラ（Twitterbot 等）には 302 で転送先へ飛ばし、note 本体の OG でカードを作らせる",
   "domain": "usephys.net",
   "server_ip": "133.18.181.39",
   "hosts": {
