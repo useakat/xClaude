@@ -13,6 +13,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **物理定数ネタ専用シート teisuNeta を新設し、/add-neta の振り分け先に追加** — 「物理定数特化アカウント」の案を、別アカウントではなく既存軸のシリーズ／note 題材として扱う判断。24 定数を note・X長文・onePoint の3展開のフォーカス＋宇宙探査との接続＋出典メモつきで postNeta に登録し、`/add-neta` の判定順2位に teisuNeta（定数そのものが主題なら teisuNeta、物語が主なら noteNeta）を追加。[→報告書](../reports/20261008_teisu_neta_sheet/)
 - **X 投稿のバズスコア・グレードを自動計算（相対スコア・日報 routine で毎日更新）** — 投稿結果を次の投稿作成に戻すループの土台。outputs で what_id が付いた X 投稿を「同プロジェクトでその投稿より前8週の中央値」と比べた相対スコア（0.7×log2 IMP比＋0.3×log2 エンゲ率比、+1 = いつもの2倍）と S/A/B/C グレードを `buzz_score.py` で計算し、X投稿一覧の AJ:AK と `logs/buzz_scores.csv` に書き込む。reporter-daily STEP 10.6 で毎日更新（投稿2日未満は未採点）。初回 131 本を採点し S は各プロジェクト 3〜4 本。絶対スコアはよーんの判断で不採用。[→報告書](../reports/20261008_buzz_score_grade/)
 - **X インプ監視の GAS 版（配布用）を作成** — PC も Claude も持たない人に同じ通知を渡すため、`x_imp_alert.py` を Google Apps Script に移植（`scripts/gas/`）。CONFIG だけ書き換えて `setup` を実行すれば本人の Google アカウントで 30 分おきに動き、判定ロジック（start_time 絞り込み・リプライ除外・1投稿1回）は Python 版と同じ。API エラーは原因ヒント付きで1回だけ通知。スマホだけで設定できる手順書（X Developer 登録・費用目安）を同梱。Node のモックで判定を検証、実 GAS 環境は未確認。[→報告書](../reports/20261008_x_imp_alert_gas/)
+- **転送サイトのホスト直下を自動転送せず案内ページにする（スキャナ由来の note 偽到達の遮断）** — 10/5〜10/7 の note 流入元「X bio」11・4・3 とボイジャー記事 PV 15・5・5 は、`usephys.net/` 直下に来た JS 実行型スキャナが転送ページ経由で note に到達したもので、人の bio クリックは 0 だった（Caddy ログに `/note` への人のアクセス無し）。直下と不明パスはリンク一覧の案内ページ（`landing.html`、転送・ビーコン無し）を返し、クローラ向け 302 も直下には適用しない。パス付きの転送・ビーコンは従来どおり。本番で動作確認済み。[→報告書](../reports/20261008_redirect_root_landing/)
 
 ## 2026-10-04
 
