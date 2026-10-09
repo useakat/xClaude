@@ -104,6 +104,8 @@
       "Bash(python3 *scripts/fetch_note_stats.py*)",
       "Bash(python3 *scripts/fetch_note_referrers.py*)",
       "Bash(python3 *scripts/sync_note_referrers.py*)",
+      "Bash(python3 *scripts/note_article_daily.py*)",
+      "Bash(python3 *scripts/note_funnel_export.py*)",
       "Bash(python3 *scripts/note_gql.py*)"
     ]
   },
