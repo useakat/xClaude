@@ -46,3 +46,6 @@ tmux-*.log
 /projects/w002/**/images/3d/*.json
 /projects/w002/**/images/3d/*.html
 /projects/w001/**/*.pdf
+
+# note 導線ダッシュボード用の書き出し（routine が都度生成）
+logs/note_funnel/
