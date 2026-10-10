@@ -35,8 +35,8 @@ load_dotenv(REPO_ROOT / ".env")
 
 USER_ID = "548606471"           # @usephys
 USERNAME = "usephys"
-THRESHOLD = 1000                # インプ閾値
-WINDOW_HOURS = 3                # 投稿からの時間窓
+THRESHOLD = 1500                # インプ閾値
+WINDOW_HOURS = 2                # 投稿からの時間窓
 NOTIFY_TO = "useakat@gmail.com"
 MAX_RESULTS = 10                # 1回あたりの最大取得数（start_time で時間窓内に絞るので安全弁）
 START_MARGIN_MIN = 10           # start_time の余裕（分）。時計ずれ対策。窓外の投稿はスクリプト側でも除外する
