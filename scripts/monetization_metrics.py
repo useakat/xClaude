@@ -230,6 +230,8 @@ def main():
             th_by_permalink[permalink] = {"views": views}
         if m not in winset:
             continue
+        if len(r) > 6 and r[6].strip():
+            continue  # G=親投稿URL あり＝自分のリプライ。型別成績の投稿数・views には数えない（2026-10-10）
         # 型解決: outputs の threads行（permalink→元x_url）を優先。無ければ H列(xurl)。
         src_xurl = perma_to_xurl.get(permalink) or xurl
         stid = tweet_id(src_xurl)
