@@ -256,7 +256,7 @@ STEP 3 の日報内容と STEP 4 の「次月への改善」をもとに、以�
 - **数値の取得元（重要）**
   - 投稿ごとの数値は**日報のスナップショット値ではなく、X投稿一覧／Threads投稿一覧シートの累計値を使う**。日報の値は翌朝時点のもので、投稿直後の数時間分しか反映されておらず、伸びしろの大きい長文が過小評価されるため
     - `python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "X投稿一覧!A:R"`（A:投稿日時 / C:本文 / K:インプ / L:いいね / M:リポスト / N:リプライ / O:ブックマーク）
-    - `python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "Threads投稿一覧!A:S"`（A:投稿日時 / C:本文 / I:views / J:いいね / K:リプライ）
+    - `python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "Threads投稿一覧!A:S"`（A:投稿日時 / C:本文 / I:views / J:いいね / K:リプライ。**G:親投稿URL が入っている行は自分のリプライなので投稿数・views 合計に含めない**）
   - 日報は「その投稿がどのプロジェクトか」「note販促用か」の判定と、投稿以外の実績の把握に使う
 - **④ の週間インプと ⑤ の投稿別インプ合計は一致しない。一致させようとしないこと**
   - ④ 週間インプ＝アカウント全体の日別インプの週合計。**週内に発生した分だけ**だが、**過去投稿やリプライが稼いだ分も含む**（投稿0件の日でも 700 前後計上される）

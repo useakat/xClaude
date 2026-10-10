@@ -6,9 +6,14 @@
 - この VPS は IPv6 が通らないため、DNS 解決を IPv4 に固定する（graph.threads.net は
   IPv6 のみ返す環境があり、放置すると接続ハングする）。
 - H列「X投稿URL」は手動入力列。スクリプトは絶対に上書きしない。
+- 自分のリプライ（セルフリプ）も /{user_id}/replies で取り、G列「親投稿URL」に返信先の permalink を
+  入れて同じシートに upsert する（2026-10-10、note 導線ファネルのセルフリプ IMP 用）。
+  このエンドポイントはトークンに threads_read_replies 権限が必要で、無いと 403 になる。その場合は
+  警告を出してリプライを飛ばし、トップ投稿だけ更新する（再認可するとそのまま取れるようになる）。
+  **G列が空＝トップ投稿、入っている＝リプライ。** 投稿数を数える処理は G列が空の行だけを対象にすること。
 
 Usage:
-  python3 scripts/fetch_threads_posts.py [--dry-run] [--max-pages N]
+  python3 scripts/fetch_threads_posts.py [--dry-run] [--max-pages N] [--no-replies]
 """
 import argparse
 import json
@@ -69,6 +74,43 @@ def fetch_posts(token, user_id, max_pages):
     return posts
 
 
+def fetch_replies(token, user_id, max_pages):
+    """自分のリプライ一覧（新しい順）。replied_to.id に返信先の media id が入る。
+    threads_read_replies 権限が無いと 403 → 警告して [] を返す。"""
+    replies = []
+    url = f"{API}/{user_id}/replies?" + urllib.parse.urlencode(
+        {"fields": POST_FIELDS + ",replied_to,root_post", "limit": 100, "access_token": token}
+    )
+    for _ in range(max_pages):
+        try:
+            with urllib.request.urlopen(url, timeout=30) as r:
+                d = json.load(r)
+        except urllib.error.HTTPError as e:
+            body = e.read().decode()
+            if e.code == 403:
+                print("⚠ リプライ一覧は取得できない（threads_read_replies 権限なし）。トップ投稿だけ更新する", file=sys.stderr)
+                return []
+            raise SystemExit(f"APIエラー ({e.code}): {body}")
+        replies.extend(d.get("data", []))
+        nxt = d.get("paging", {}).get("next")
+        if not nxt:
+            break
+        url = nxt
+    return replies
+
+
+def permalink_of(token, media_id, cache):
+    """media id → permalink（投稿一覧に無い古い親は 1 件ずつ引く）"""
+    if media_id in cache:
+        return cache[media_id]
+    try:
+        d = _get(f"{API}/{media_id}?" + urllib.parse.urlencode({"fields": "permalink", "access_token": token}))
+        cache[media_id] = d.get("permalink", "")
+    except SystemExit:
+        cache[media_id] = ""
+    return cache[media_id]
+
+
 def fetch_insights(token, media_id):
     url = f"{API}/{media_id}/insights?" + urllib.parse.urlencode(
         {"metric": INSIGHT_METRICS, "access_token": token}
@@ -98,7 +140,7 @@ def _jst(ts):
         return ts
 
 
-def build_row(post, ins, now_str):
+def build_row(post, ins, now_str, parent_url=""):
     text = post.get("text") or ""
     views = ins.get("views", 0)
     likes = ins.get("likes", 0)
@@ -116,7 +158,7 @@ def build_row(post, ins, now_str):
         post.get("media_type", ""),                       # D 種類
         len(text),                                        # E 文字数
         post.get("media_url") or post.get("thumbnail_url") or "",  # F 画像URL
-        "",                                               # G 親投稿URL（v1は空）
+        parent_url,                                       # G 親投稿URL（リプライのみ。トップ投稿は空）
     ]
     metrics = [
         views, likes, replies, reposts, quotes, shares,   # I〜N
@@ -145,6 +187,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--max-pages", type=int, default=20)
+    ap.add_argument("--no-replies", action="store_true", help="自分のリプライを取らない")
     args = ap.parse_args()
 
     token, user_id = _load_token()
@@ -152,6 +195,10 @@ def main():
 
     posts = fetch_posts(token, user_id, args.max_pages)
     print(f"投稿取得: {len(posts)} 件")
+    replies = [] if args.no_replies else fetch_replies(token, user_id, args.max_pages)
+    if replies:
+        print(f"リプライ取得: {len(replies)} 件")
+    link_cache = {p["id"]: p.get("permalink", "") for p in posts}
 
     rows = []  # (permalink, meta[A:G], metrics[I:S])
     for p in posts:
@@ -159,12 +206,21 @@ def main():
         meta, metrics = build_row(p, ins, now_str)
         rows.append((p.get("permalink", ""), meta, metrics))
         time.sleep(0.2)  # レート制限に配慮
+    for p in replies:
+        parent_id = str((p.get("replied_to") or {}).get("id") or "")
+        parent_url = permalink_of(token, parent_id, link_cache) if parent_id else ""
+        ins = fetch_insights(token, p["id"])
+        meta, metrics = build_row(p, ins, now_str, parent_url or "(親不明)")
+        rows.append((p.get("permalink", ""), meta, metrics))
+        time.sleep(0.2)
 
     if args.dry_run:
         print("--- dry-run: 書き込みはしません。先頭5件 ---")
         for permalink, meta, metrics in rows[:5]:
             print(f"[{meta[0]}] {meta[3]} views={metrics[0]} like={metrics[1]} rep={metrics[3]} | {meta[2][:36]}")
-        print(f"（合計 {len(rows)} 行を upsert 予定）")
+        for permalink, meta, metrics in [r for r in rows if r[1][6]][:5]:
+            print(f"[リプ {meta[0]}] 親={meta[6][-16:]} views={metrics[0]} | {meta[2][:36]}")
+        print(f"（合計 {len(rows)} 行を upsert 予定。うちリプライ {sum(1 for r in rows if r[1][6])} 行）")
         return
 
     ws = get_gspread_ws()

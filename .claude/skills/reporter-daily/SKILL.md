@@ -138,7 +138,7 @@ python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw
 python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "Threads投稿一覧!A:S"
 ```
 
-A列（投稿日時）が `DATE_SHEET` で始まる行を全て抽出する。各行について以下を取得する：
+A列（投稿日時）が `DATE_SHEET` で始まり、**G列（親投稿URL）が空の行**を全て抽出する（G列が入っている行は自分のリプライ（セルフリプ）で、投稿数には数えない。2026-10-10 からリプライも同じシートに入る）。各行について以下を取得する：
 - `本文`・`views`・`いいね`・`リプライ`・`リポスト`・`引用`
 
 各行を以下の優先順位でカテゴリ判定する：
