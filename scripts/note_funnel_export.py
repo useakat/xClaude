@@ -302,7 +302,18 @@ def main() -> int:
         if link_pos == "セルフリプ":
             p["リンク位置"] = "セルフリプ"
 
-    # X: noteURL のある行（xpost / 生 note リンク）。リプライ行は親を本体にする
+    def climb(row, parent_of):
+        """親をたどって最上位（親の無い行）を返す。ツリー投稿では本体→続きのリプ→リンク付きリプと
+        2 段以上になるので 1 段では足りない（10/9 ニューホライズンズ）。親が一覧に無ければその行を返す"""
+        seen = {id(row)}
+        while True:
+            parent = parent_of(row)
+            if parent is None or id(parent) in seen:
+                return row
+            seen.add(id(parent))
+            row = parent
+
+    # X: noteURL のある行（xpost / 生 note リンク）。リプライ行は親をたどって最上位を本体にする
     for r in x_rows:
         note_url = xg(r, "noteURL").strip()
         if not note_url:
@@ -310,10 +321,9 @@ def main() -> int:
         m = re.search(r"xpost\.usephys\.net/(n[0-9a-f]{10,16}(?:/[A-Za-z0-9_-]{1,32})?)", note_url)
         key = m.group(1) if m else ""
         aid = (ARTICLE_ID.search(note_url) or ARTICLE_ID.search(key or "")).group(1) if ARTICLE_ID.search(note_url) else ""
-        pm = re.search(r"/status/(\d+)", xg(r, "親ポストURL"))
-        body = x_by_id.get(pm.group(1)) if pm else None
-        pos = "セルフリプ" if body is not None else "本体"
-        body = body if body is not None else r
+        body = climb(r, lambda row: (lambda pm: x_by_id.get(pm.group(1)) if pm else None)(
+            re.search(r"/status/(\d+)", xg(row, "親ポストURL"))))
+        pos = "セルフリプ" if body is not r else "本体"
         xlc = to_int(xg(r, "リンククリック"))
         if key:
             add_post("X", body, r, pos, aid, key, clicks_by_key.get(("xpost.usephys.net", key), 0), "ビーコン", xlc,
@@ -321,7 +331,7 @@ def main() -> int:
         else:
             add_post("X", body, r, pos, aid, "", xlc, "X集計", xlc, None)
 
-    # Threads: tpost キーを持つクリック → 本文一致 → 固定ポスト履歴。リプライ行（親投稿URL あり）は親を本体にする
+    # Threads: tpost キーを持つクリック → 本文一致 → 固定ポスト履歴。リプライ行（親投稿URL あり）は親をたどって最上位を本体にする
     unknown = []
     for (host, key), c in clicks_by_key.items():
         if host != "tpost.usephys.net":
@@ -334,8 +344,8 @@ def main() -> int:
         if link_row is None:
             unknown.append(("Threads", host, key, aid, c, pin))
             continue
-        parent = t_by_url.get(tg(link_row, "親投稿URL").rstrip("/"))
-        add_post("Threads", parent if parent is not None else link_row, link_row, "セルフリプ" if parent is not None else "本体",
+        body = climb(link_row, lambda row: t_by_url.get(tg(row, "親投稿URL").rstrip("/")))
+        add_post("Threads", body, link_row, "セルフリプ" if body is not link_row else "本体",
                  aid, key, c, "ビーコン", 0, pin)
     # X の xpost キーで X投稿一覧に無いもの（テストキーなど）
     known_x_keys = {k for p in posts.values() if p["媒体"] == "X" for k in p["キー"]}
