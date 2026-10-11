@@ -7,7 +7,13 @@ Gmail 下書きを作成する。過去の X 投稿を Threads へ転載する�
   2. 候補抽出: ポスト種類がリプライ・引用RT以外 / 目的に誘導・紹介を含まない /
      親ポストURL 空 / threads転載日 空 / 本文あり
   3. ランダムに --count 件選択(重複なし)
-  4. セルフリプ(親ポストURL が選択投稿を指す行)があれば先頭1件を [リプ] に取り込む
+  4. セルフリプ(親ポストURL が選択投稿を指す行)があれば1件を [リプ] に取り込む。
+     note リンク(note.com / 「note」を含む)のあるリプを優先し、無ければ最も早い1件
+  4.5 本文が500字を超えるときは分割マーカー行「=====」を自動挿入する。
+     1投稿目が500字以内に収まる段落境界のうち、直前の段落が「転換の合図」
+     (15字以下の1行)である最も後ろの境界に置く。該当境界が無ければ入れない
+     (post_threads.py の段落境界での自動分割に任せる)。マーカーは Gmail 下書き上で
+     手で動かしてよい(post_threads.py はマーカー行で必ず切り、マーカー自体は投稿しない)
   5. 【threads投稿】メール本文を組み立て([投稿文]/[画像URL]/[リプ]/[リプ画像URL]/[XURL])
      → create_gmail_draft.sh で Gmail 下書き作成。[XURL]=元X投稿URL(outputs の x_url 記録用)
   6. 成功したら選択行の「threads転載日」に当日日付を記録(重複防止マーク)
@@ -91,6 +97,50 @@ def ensure_marker_col(ws, header):
 
 def cell(row, idx):
     return row[idx].strip() if idx is not None and idx < len(row) and row[idx] else ""
+
+
+THREADS_LIMIT = 500   # Threads 1投稿の文字数上限(post_threads.py と同じ)
+SIGNAL_MAX = 15       # 「転換の合図」とみなす1行段落の最大字数
+SPLIT_MARKER = "====="
+
+
+def is_signal_line(para):
+    """15字以下・改行なしの1行段落 = 転換の合図（「ここからが熱すぎる。」「ただし、代償があった。」）。"""
+    p = para.strip()
+    return bool(p) and "\n" not in p and len(p) <= SIGNAL_MAX
+
+
+def insert_split_marker(text):
+    """500字超の本文に分割マーカーを自動挿入する。
+    1投稿目が500字以内に収まる段落境界のうち、直前段落が転換の合図である最も後ろの境界を選ぶ。
+    無ければ元のまま返す（post_threads.py の自動分割に任せる）。"""
+    text = (text or "").strip()
+    if len(text) <= THREADS_LIMIT or SPLIT_MARKER in text:
+        return text, None
+    paras = [p for p in re.split(r"\n\s*\n", text) if p.strip()]
+    best = None
+    head = ""
+    for i, para in enumerate(paras[:-1]):  # 最後の段落の後ろでは切らない
+        head = para if not head else head + "\n\n" + para
+        if len(head) > THREADS_LIMIT:
+            break
+        if is_signal_line(para):
+            best = i
+    if best is None:
+        return text, None
+    part1 = "\n\n".join(paras[: best + 1])
+    part2 = "\n\n".join(paras[best + 1 :])
+    return part1 + "\n\n" + SPLIT_MARKER + "\n\n" + part2, paras[best].strip()
+
+
+def pick_reply(kids):
+    """セルフリプ候補から1件選ぶ。note リンクを含むものを優先し、無ければ投稿日時が最も早いもの。"""
+    kids_sorted = sorted(kids, key=lambda t: cell(t[1], COL["投稿日時"]))
+    for _, kid_row in kids_sorted:
+        body = cell(kid_row, COL["ポスト本文"])
+        if "note.com" in body or "note" in body.lower():
+            return kid_row
+    return kids_sorted[0][1]
 
 
 def build_body(text, img, rep_text, rep_img, post_url):
@@ -178,16 +228,22 @@ def main():
         post_url = cell(row, COL["ポストURL"])
         sid = status_id(post_url)
 
-        # セルフリプ: 選択投稿を親に持つ行を投稿日時昇順で並べ、先頭1件を取り込む
+        # セルフリプ: 選択投稿を親に持つ行から1件。note リンク入りを優先、無ければ最も早い1件
         rep_text = rep_img = ""
         kids = children.get(sid, [])
         if kids:
-            kids_sorted = sorted(kids, key=lambda t: cell(t[1], COL["投稿日時"]))
-            _, kid_row = kids_sorted[0]
+            kid_row = pick_reply(kids)
             rep_text = cell(kid_row, COL["ポスト本文"])
             rep_img = cell(kid_row, COL["画像URL"])
             if len(kids) > 1:
-                log(f"注記: セルフリプが {len(kids)} 件。先頭1件のみ取り込みます(v1 制約)。")
+                log(f"注記: セルフリプが {len(kids)} 件。note リンク優先で1件取り込みます: {rep_text[:30]!r}")
+
+        # 500字超なら転換の合図の直後に分割マーカーを自動挿入
+        text, signal = insert_split_marker(text)
+        if signal:
+            log(f"  分割マーカー挿入: 「{signal}」の直後")
+        elif len(text) > THREADS_LIMIT:
+            log("  分割マーカー: 該当する合図行なし(段落境界の自動分割に任せる)")
 
         body = build_body(text, img, rep_text, rep_img, post_url)
         subject = "【threads投稿】" + text.replace("\n", " ")[:20]
