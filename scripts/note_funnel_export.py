@@ -286,7 +286,11 @@ def main() -> int:
         t = (r[col(buy_hdr, "購入")] if col(buy_hdr, "購入") is not None else "").strip()
         if not t:
             continue
-        aid = title_to_id.get(t) or next((i for ttl, i in title_to_id.items() if ttl[:15] == t[:15]), "")
+        # 完全一致 → 記事題名が購入記録の題名で始まる（購入記録は「もしも空が赤かったら（後編）」のように副題を省く）
+        # → 先頭 15 文字一致
+        aid = (title_to_id.get(t)
+               or next((i for ttl, i in title_to_id.items() if len(t) >= 8 and ttl.startswith(t)), "")
+               or next((i for ttl, i in title_to_id.items() if ttl[:15] == t[:15]), ""))
         if aid:
             purchases[aid] = purchases.get(aid, 0) + 1
     rows = [["記事ID", "タイトル", "投稿日", "文字数", "ビュー（累計）", "スキ（累計）", "スキ率", "コメント", "売上",
