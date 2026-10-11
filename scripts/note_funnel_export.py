@@ -8,7 +8,7 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
   note_referrers.csv  … note流入元 シート
   pinned.csv          … 固定ポスト履歴 シート
   x_note_posts.csv    … X投稿一覧のうち noteURL がある行（数値はカンマ除去、記事ID を付与）
-  articles.csv        … note 記事ごとの指標（note投稿一覧）＋ 転送クリック合計・導線数・X 投稿数・購入数（note購入記録）・CVR・販売係数・スキ購入係数
+  articles.csv        … note 記事ごとの指標（note投稿一覧）＋ 転送クリック合計・導線数・X 投稿数・購入数（note購入記録）・CVR・販売係数・スキ購入係数・価格（note 公開 API。0 ＝ 無料記事）
   funnel_weekly.csv   … 週次ファネル（月曜始まり）: X bio / X 固定 / Threads bio / Threads 固定 の
                         インプ → リンク到達 → クリック → note 到達（到達は bio のみ）
   funnel_posts.csv    … 投稿ごとのファネル（累計）: X 本体＋セルフリプ / Threads 投稿＋セルフリプ の
@@ -125,6 +125,44 @@ def monday(d: date) -> date:
 def week_label(mon: date) -> str:
     sun = mon + timedelta(days=6)
     return f"{mon.month}/{mon.day}〜{sun.month}/{sun.day}"
+
+
+def fetch_prices(article_ids: list[str], cache_path: str) -> dict[str, int]:
+    """note の公開 API（/api/v3/notes/<key>）から記事の価格を取る。0 ＝ 無料（有料部分なし）。
+    価格はめったに変わらないので cache_path に 7 日キャッシュし、取れなかった記事は空（判定不能）のまま"""
+    import time
+    import urllib.request
+    cache: dict = {}
+    if os.path.exists(cache_path):
+        try:
+            with open(cache_path, encoding="utf-8") as f:
+                cache = json.load(f)
+        except (OSError, ValueError):
+            cache = {}
+    now = time.time()
+    out: dict[str, int] = {}
+    for aid in article_ids:
+        c = cache.get(aid)
+        if c and now - c.get("at", 0) < 7 * 86400 and isinstance(c.get("price"), int):
+            out[aid] = c["price"]
+            continue
+        try:
+            req = urllib.request.Request(f"https://note.com/api/v3/notes/{aid}", headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=15) as r:
+                price = (json.load(r).get("data") or {}).get("price")
+            if isinstance(price, int):
+                out[aid] = price
+                cache[aid] = {"price": price, "at": now}
+        except Exception as e:  # noqa: BLE001
+            print(f"⚠ 価格の取得に失敗 {aid}: {e}", file=sys.stderr)
+            if c and isinstance(c.get("price"), int):
+                out[aid] = c["price"]
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump(cache, f, ensure_ascii=False)
+    except OSError:
+        pass
+    return out
 
 
 def find_link_row(host: str, key: str, media: str, pin: dict | None, x_rows, x_idx, t_rows, t_idx):
@@ -251,7 +289,8 @@ def main() -> int:
         if aid:
             purchases[aid] = purchases.get(aid, 0) + 1
     rows = [["記事ID", "タイトル", "投稿日", "文字数", "ビュー（累計）", "スキ（累計）", "スキ率", "コメント", "売上",
-             "転送クリック合計", "導線数", "X投稿数", "最終クリック日", "購入数", "CVR", "販売係数", "スキ購入係数"]]
+             "転送クリック合計", "導線数", "X投稿数", "最終クリック日", "購入数", "CVR", "販売係数", "スキ購入係数", "価格"]]
+    prices = fetch_prices(list(articles.keys()), os.path.join(args.out, "price_cache.json"))
     for aid, a in articles.items():
         if not a.get("date"):
             continue  # note記事日次 だけに現れた記事（note投稿一覧に無い）は除く
@@ -261,7 +300,7 @@ def main() -> int:
         rows.append([aid, a["title"], a["date"], a["chars"], a["view_total"], a["like_total"], a["like_rate"], a["comments"], a["sales"],
                      clicks_by_article.get(aid, 0), len(link_count.get(aid, ())), x_note_count.get(aid, 0), last_click.get(aid, ""),
                      buys, round(buys / views, 4) if views else "",
-                     round(views / buys) if buys else "", round(likes / buys, 1) if buys else ""])
+                     round(views / buys) if buys else "", round(likes / buys, 1) if buys else "", prices.get(aid, "")])
     rows[1:] = sorted(rows[1:], key=lambda r: (-r[9], -to_int(r[4]), r[2]))
     write(os.path.join(args.out, "articles.csv"), rows)
 
