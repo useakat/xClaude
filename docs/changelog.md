@@ -12,7 +12,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **ニューホライズンズ投稿（2026-03-27）の分析から W001 ルールを追加し、Threads 転載の分割マーカー自動挿入と note リンク優先を実装** — IMP 20万超の W001 5本比較でエンゲ率・ブクマ率・詳細表示率・セルフリプ CTR（他の7倍）が最高だった要因を切り分け、既存の型に無い4点をルール化（山場は15字以下の1行段落を5個以上／締めは「捨てる」等の判断行動＋代償の数／フォーカスは締切つきの局面と、乗り越える過程が読者の繁忙期に重なる題材を優先／セルフリプは同一題材の深掘りを1文＋URL）。Threads 転載は `make_threads_draft.py` が転換の合図の直後に分割マーカー `=====` を自動挿入し `post_threads.py` がそこで切る（note リンク入りのセルフリプを優先）。「600字以内の高反応投稿は無い」は誤りで、みお（IMP 336万）は500字と訂正。[→報告書](../reports/20261011_w001_new_horizons_analysis_threads_split/)
 - **note 導線ダッシュボードを新設し、経路別ファネル（週次・投稿ごと）で毎朝自動更新** — bio・固定・投稿＋セルフリプの 6 経路を「インプ → リンク到達 → クリック → note 到達」で見る claude.ai Dashboard Artifact を新設。固定ポスト日次スナップショット・Threads アカウント views・Threads リプライ取得（threads_read_replies 再認可）を cron に追加し、routine が毎朝 06:30 に 8 データセットを差し替える。記事別に購入数・CVR を追加。投稿とクリックの突合はリンク本文一致と固定ポスト履歴のみ（日付推定は不採用）。[→報告書](../reports/20261011_note_funnel_dashboard/)
 - **X インプ通知の条件変更（2 時間以内に 1,500 インプ）と Threads views 通知の新設** — `x_imp_alert.py` の閾値・時間窓を変更し、同条件の Threads 版 `threads_views_alert.py`（Threads Graph API の views、30 分おき cron、1 投稿 1 回）を新設。Threads API は無料のため従量課金対策は不要。[→報告書](../reports/20261011_imp_alert_threshold_threads_views_alert/)
-
+- **reporter-weekly-ops の H4 記載をスナップショット方式に同期し、H7 を廃止** — W41 レポートで「H4 が0本日計測に頼り運用方針と矛盾」とよーんが指摘。実は 2026-09-27 に日次IMPスナップショット方式（2日目以降の増分＝尾の直接測定）へ設計変更済みで、SKILL.md とレポートの記述だけが旧方式のまま残っていた同期漏れだった。記述を現行方式に統一し、H7（バズ隣接の W001 沈み）はバズ非隣接の沈み例が出て切り分けが弱いため検証を廃止。[→報告書](../reports/20261011_ops_weekly_h4_sync_h7_removal/)
+- **X アナリティクス取込の Drive MCP 呼び出しを urllib に変更** — 週次取込 routine が `ModuleNotFoundError: requests` で失敗（リモート環境に requests が無い）。`fetch_x_analytics_csv.py` の HTTP 呼び出しを標準ライブラリ urllib に置き換えて依存ゼロ化。[→報告書](../reports/20261011_x_analytics_fetch_urllib/)
 
 ## 2026-10-09
 
