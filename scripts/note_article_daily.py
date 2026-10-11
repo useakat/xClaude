@@ -18,6 +18,11 @@ note 側は期間指定で記事別の PV・スキを返すので、スナップ
   python3 scripts/note_article_daily.py --fill-detail     # 転送クリック明細にある未取得の日付も埋める
   python3 scripts/note_article_daily.py --force           # 取得済みの日も取り直す
   python3 scripts/note_article_daily.py --dry-run
+  python3 scripts/note_article_daily.py --prices-only    # 価格の更新だけ
+
+あわせて note投稿一覧 の N列「価格」を note の公開 API（/api/v3/notes/<key>、0 ＝ 無料）で毎日更新する
+（2026-10-12）。ダッシュボード更新 routine の実行環境からは note.com に届かない（プロキシ 403）ので、
+価格はこのローカル cron でシートに持たせ、note_funnel_export.py はシートから読む。
 
 依存: scripts/fetch_note_stats.py（NOTE_SESSION を .env から読む）、scripts/sheets_values.py（サービスアカウント）
 cron: 毎朝 05:55 JST（run_note_article_daily.sh）。bio クリック集計（05:40）の後、
@@ -39,6 +44,9 @@ import sheets_values as sv  # noqa: E402
 SPREADSHEET_ID = "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"  # 発信記録
 SHEET_NAME = "note記事日次"
 DETAIL_SHEET = "転送クリック明細"
+POSTS_SHEET = "note投稿一覧"
+PRICE_COL = 14           # N列「価格」
+PRICE_HEADER = "価格"
 HEADER = ["日付", "記事ID", "タイトル", "PV", "スキ", "取得日時"]
 FETCH = SCRIPT_DIR / "fetch_note_stats.py"
 MAX_FETCH_DAYS = 10  # 1回の実行で取りに行く日数の上限（1日あたり 30〜60 秒かかる）
@@ -74,6 +82,49 @@ def fetch_day(day: str) -> list[dict]:
     return rows
 
 
+def fetch_price(key: str) -> int | None:
+    """note の公開 API から記事の価格（円）。0 ＝ 無料（有料部分なし）。取れなければ None"""
+    import urllib.request
+    try:
+        req = urllib.request.Request(f"https://note.com/api/v3/notes/{key}", headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            price = (json.load(r).get("data") or {}).get("price")
+        return price if isinstance(price, int) else None
+    except Exception as e:  # noqa: BLE001
+        log(f"  ⚠ 価格の取得に失敗 {key}: {e}")
+        return None
+
+
+def update_prices(ss, dry_run: bool) -> None:
+    """note投稿一覧 の各記事の価格を N列に書く（変わった記事・空の記事だけ更新）"""
+    ws = ss.worksheet(POSTS_SHEET)
+    values = ws.get_all_values()
+    if not values:
+        return
+    header_ok = len(values[0]) >= PRICE_COL and values[0][PRICE_COL - 1] == PRICE_HEADER
+    updates = []
+    if not header_ok:
+        updates.append({"range": f"{chr(64 + PRICE_COL)}1", "values": [[PRICE_HEADER]]})
+    changed = 0
+    for i, r in enumerate(values[1:], start=2):
+        url = r[1] if len(r) > 1 else ""
+        m = re.search(r"/n/(n[0-9a-f]{10,16})", url)
+        if not m:
+            continue
+        cur = (r[PRICE_COL - 1] if len(r) >= PRICE_COL else "").strip()
+        price = fetch_price(m.group(1))
+        if price is None or cur == str(price):
+            continue
+        updates.append({"range": f"{chr(64 + PRICE_COL)}{i}", "values": [[price]]})
+        changed += 1
+    if dry_run:
+        log(f"dry-run: 価格の更新 {changed} 件（書き込まない）")
+        return
+    if updates:
+        ws.batch_update(updates, value_input_option="RAW")
+    log(f"✅ {POSTS_SHEET} 価格: {changed} 件更新")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", help="対象日 YYYY-MM-DD（JST）。既定は前日")
@@ -81,6 +132,7 @@ def main() -> int:
     ap.add_argument("--fill-detail", action="store_true", help="転送クリック明細にある未取得の日付も対象に加える")
     ap.add_argument("--force", action="store_true", help="取得済みの日付も取り直す")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--prices-only", action="store_true", help="note投稿一覧 の価格だけ更新する")
     args = ap.parse_args()
 
     end = datetime.strptime(args.date, "%Y-%m-%d").date() if args.date else (datetime.now(JST).date() - timedelta(days=1))
@@ -88,6 +140,12 @@ def main() -> int:
 
     client = sv.get_client()
     ss = sv.open_with_retry(client, SPREADSHEET_ID)
+    try:
+        update_prices(ss, args.dry_run)
+    except Exception as e:  # noqa: BLE001
+        log(f"⚠ 価格の更新に失敗（日次の取得は続行）: {e}")
+    if args.prices_only:
+        return 0
     try:
         ws = ss.worksheet(SHEET_NAME)
         values = ws.get_all_values()

@@ -8,7 +8,7 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
   note_referrers.csv  … note流入元 シート
   pinned.csv          … 固定ポスト履歴 シート
   x_note_posts.csv    … X投稿一覧のうち noteURL がある行（数値はカンマ除去、記事ID を付与）
-  articles.csv        … note 記事ごとの指標（note投稿一覧）＋ 転送クリック合計・導線数・X 投稿数・購入数（note購入記録）・CVR・販売係数・スキ購入係数・価格（note 公開 API。0 ＝ 無料記事）
+  articles.csv        … note 記事ごとの指標（note投稿一覧）＋ 転送クリック合計・導線数・X 投稿数・購入数（note購入記録）・CVR・販売係数・スキ購入係数・価格（note投稿一覧 N列。note_article_daily.py が公開 API から毎日更新。0 ＝ 無料記事）
   funnel_weekly.csv   … 週次ファネル（月曜始まり）: X bio / X 固定 / Threads bio / Threads 固定 の
                         インプ → リンク到達 → クリック → note 到達（到達は bio のみ）
   funnel_posts.csv    … 投稿ごとのファネル（累計）: X 本体＋セルフリプ / Threads 投稿＋セルフリプ の
@@ -189,7 +189,7 @@ def main() -> int:
     today = datetime.now(JST).date()
 
     # ---- 読み込み ----
-    note_hdr, note_rows = table(get("note投稿一覧!A:M"))
+    note_hdr, note_rows = table(get("note投稿一覧!A:N"))
     daily_rows = get_optional("note記事日次!A:E")
     bio = get("bioクリック!A:J")
     det = get("転送クリック明細!A:D")
@@ -209,7 +209,8 @@ def main() -> int:
         m = ARTICLE_ID.search(r[1])
         if m:
             articles[m.group(1)] = {"title": r[2], "like_total": num(r[8]), "date": ymd(r[0]), "chars": num(r[3]),
-                                    "view_total": num(r[7]), "like_rate": num(r[9]), "comments": num(r[11]), "sales": num(r[12])}
+                                    "view_total": num(r[7]), "like_rate": num(r[9]), "comments": num(r[11]), "sales": num(r[12]),
+                                    "price": (r[13] if len(r) > 13 else "").strip()}
     daily: dict[tuple[str, str], tuple[str, str]] = {}
     for r in daily_rows[1:]:
         r = r + [""] * (5 - len(r))
@@ -290,7 +291,10 @@ def main() -> int:
             purchases[aid] = purchases.get(aid, 0) + 1
     rows = [["記事ID", "タイトル", "投稿日", "文字数", "ビュー（累計）", "スキ（累計）", "スキ率", "コメント", "売上",
              "転送クリック合計", "導線数", "X投稿数", "最終クリック日", "購入数", "CVR", "販売係数", "スキ購入係数", "価格"]]
-    prices = fetch_prices(list(articles.keys()), os.path.join(args.out, "price_cache.json"))
+    prices = {aid: to_int(a["price"]) for aid, a in articles.items() if a.get("price") != ""}
+    missing = [aid for aid in articles if aid not in prices]
+    if missing:  # シートに価格が無い記事だけ API（routine 環境では note.com に届かず空のまま）
+        prices.update(fetch_prices(missing, os.path.join(args.out, "price_cache.json")))
     for aid, a in articles.items():
         if not a.get("date"):
             continue  # note記事日次 だけに現れた記事（note投稿一覧に無い）は除く
