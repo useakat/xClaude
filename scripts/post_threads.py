@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Threads へ投稿する。500字を超える本文は返信チェーン（スレッド）で分割投稿する。
 セルフリプ（--reply-text）は本文スレッドの末尾に返信で連結する。画像は各先頭投稿に付ける。
+本文中に「=====」（= を3個以上並べただけの行）があれば、そこを分割位置として必ず切る
+（分割マーカー。転換の合図の直後で1投稿目を終えるための明示指定。マーカー行自体は投稿しない。
+make_threads_draft.py が自動で入れ、Gmail 下書き上で手で動かしてもよい）。
 --image-url / --reply-image-url は空白・改行区切りで複数指定可（2枚以上はカルーセル投稿）。
 
 Usage:
@@ -28,6 +31,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TOKEN_PATH = os.path.join(ROOT, "gcp", "threads_token.json")
 API = "https://graph.threads.net/v1.0"
 LIMIT = 500  # Threads 1投稿の文字数上限
+SPLIT_MARKER_RE = re.compile(r"^[ \t]*={3,}[ \t]*$", re.M)  # 分割マーカー行（例: =====）
 
 
 def _load_token():
@@ -51,10 +55,17 @@ def _pack(units, sep):
 
 
 def split_text(text):
-    """text を ≤500字のチャンクに分割（段落→文→ハードの順で自然な境界を優先）。"""
+    """text を ≤500字のチャンクに分割。分割マーカー行（=====）があればまずそこで必ず切り、
+    各区間を段落→文→ハードの順で自然な境界を優先してさらに分割する。"""
     text = (text or "").strip()
     if not text:
         return []
+    segments = [seg for seg in SPLIT_MARKER_RE.split(text) if seg.strip()]
+    if len(segments) > 1:
+        out = []
+        for seg in segments:
+            out.extend(split_text(seg))
+        return out
     if len(text) <= LIMIT:
         return [text]
     subunits = []
