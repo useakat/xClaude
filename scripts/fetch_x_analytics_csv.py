@@ -13,7 +13,8 @@ import os
 import re
 import sys
 import time
-import requests
+import urllib.error
+import urllib.request
 
 # ── 設定 ───────────────────────────────────────────────
 FOLDER_ID  = "1J45co5hN74gzxNateNRyeDtswZu0lMr3"  # Xanalytics/tmp
@@ -38,9 +39,14 @@ def get_drive_config():
 def drive_call(url, headers, tool_name, arguments):
     payload = {"jsonrpc": "2.0", "id": 1, "method": "tools/call",
                "params": {"name": tool_name, "arguments": arguments}}
-    resp = requests.post(url, headers=headers, json=payload, timeout=60)
-    resp.raise_for_status()
-    for line in resp.text.splitlines():
+    # requests は routine 環境に無いことがある（2026-10-11 に ModuleNotFoundError で週次取込が失敗）ので標準ライブラリで送る
+    req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            text = r.read().decode("utf-8")
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f"Drive MCP HTTP {e.code}: {e.read().decode('utf-8', 'replace')[:200]}")
+    for line in text.splitlines():
         if line.startswith("data:"):
             data = json.loads(line[5:].strip())
             result = data["result"]
@@ -54,7 +60,7 @@ def drive_call(url, headers, tool_name, arguments):
                 except json.JSONDecodeError:
                     return {"raw": result["content"][0]["text"]}
             return result
-    raise RuntimeError(f"Unexpected response: {resp.text[:200]}")
+    raise RuntimeError(f"Unexpected response: {text[:200]}")
 
 
 # ── メイン処理 ──────────────────────────────────────────
