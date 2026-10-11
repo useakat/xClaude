@@ -8,7 +8,7 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
   note_referrers.csv  … note流入元 シート
   pinned.csv          … 固定ポスト履歴 シート
   x_note_posts.csv    … X投稿一覧のうち noteURL がある行（数値はカンマ除去、記事ID を付与）
-  articles.csv        … note 記事ごとの指標（note投稿一覧）＋ 転送クリック合計・導線数・X 投稿数・購入数（note購入記録）・CVR
+  articles.csv        … note 記事ごとの指標（note投稿一覧）＋ 転送クリック合計・導線数・X 投稿数・購入数（note購入記録）・CVR・販売係数・スキ購入係数
   funnel_weekly.csv   … 週次ファネル（月曜始まり）: X bio / X 固定 / Threads bio / Threads 固定 の
                         インプ → リンク到達 → クリック → note 到達（到達は bio のみ）
   funnel_posts.csv    … 投稿ごとのファネル（累計）: X 本体＋セルフリプ / Threads 投稿＋セルフリプ の
@@ -239,7 +239,8 @@ def main() -> int:
             last_click[aid] = max(last_click.get(aid, ""), r[0])
             link_count.setdefault(aid, set()).add((r[1], r[2]))
 
-    # ---- articles（購入数・CVR 付き）----
+    # ---- articles（購入数・CVR・販売係数・スキ購入係数 付き）----
+    # 販売係数 ＝ ビュー ÷ 購入数（何ビューで 1 本売れるか）、スキ購入係数 ＝ スキ ÷ 購入数（2026-10-12）
     purchases: dict[str, int] = {}
     title_to_id = {a["title"]: aid for aid, a in articles.items() if a.get("title")}
     for r in buy_rows:
@@ -250,15 +251,17 @@ def main() -> int:
         if aid:
             purchases[aid] = purchases.get(aid, 0) + 1
     rows = [["記事ID", "タイトル", "投稿日", "文字数", "ビュー（累計）", "スキ（累計）", "スキ率", "コメント", "売上",
-             "転送クリック合計", "導線数", "X投稿数", "最終クリック日", "購入数", "CVR"]]
+             "転送クリック合計", "導線数", "X投稿数", "最終クリック日", "購入数", "CVR", "販売係数", "スキ購入係数"]]
     for aid, a in articles.items():
         if not a.get("date"):
             continue  # note記事日次 だけに現れた記事（note投稿一覧に無い）は除く
         views = to_int(a["view_total"])
         buys = purchases.get(aid, 0)
+        likes = to_int(a["like_total"])
         rows.append([aid, a["title"], a["date"], a["chars"], a["view_total"], a["like_total"], a["like_rate"], a["comments"], a["sales"],
                      clicks_by_article.get(aid, 0), len(link_count.get(aid, ())), x_note_count.get(aid, 0), last_click.get(aid, ""),
-                     buys, round(buys / views, 4) if views else ""])
+                     buys, round(buys / views, 4) if views else "",
+                     round(views / buys) if buys else "", round(likes / buys, 1) if buys else ""])
     rows[1:] = sorted(rows[1:], key=lambda r: (-r[9], -to_int(r[4]), r[2]))
     write(os.path.join(args.out, "articles.csv"), rows)
 
