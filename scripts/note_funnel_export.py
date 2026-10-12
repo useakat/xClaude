@@ -20,7 +20,7 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
 列名を変えるとダッシュボードの表・計算が壊れるので、変えるときはページも直す。
 
 段階の定義（2026-10-10 計画）:
-  週次（集計は FUNNEL_START ＝ 2026-10-08 から。それを含む週は開始日からの部分集計）
+  週次（集計は FUNNEL_START ＝ 2026-10-09 から。それを含む週は開始日からの部分集計）
     X bio        インプ＝その週に投稿したポストの IMP 合計（X投稿一覧 K）／リンク到達＝プロフアクセス合計（同 Q）
                  ／クリック＝bioクリック X bio／到達＝note流入元 X bio
     X 固定       インプ＝プロフアクセス合計／リンク到達＝固定ポストの IMP の週増分（固定ポスト日次）
@@ -58,8 +58,8 @@ SS2 = "1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc"  # outputs（投稿の型 w
 DEFAULT_OUT = os.path.join(REPO_ROOT, "logs", "note_funnel")
 ARTICLE_ID = re.compile(r"(n[0-9a-f]{10,16})")
 JST = timezone(timedelta(hours=9))
-FUNNEL_START = date(2026, 10, 8)  # 週次ファネルの集計開始日（よーん指示 2026-10-12。10/3〜10/7 は計測の立ち上げ期間で、スキャナ混入もあるため含めない）
-WEEK_START = FUNNEL_START - timedelta(days=FUNNEL_START.weekday())  # 集計開始日を含む週の月曜（10/5）。この週は 10/8 からの集計
+FUNNEL_START = date(2026, 10, 9)  # 週次ファネルの集計開始日（よーん指示 2026-10-12）。案内ページ化（10/8 22:57）より前はスキャナが note 到達に混ざるため、10/8 までは含めない
+WEEK_START = FUNNEL_START - timedelta(days=FUNNEL_START.weekday())  # 集計開始日を含む週の月曜（10/5）。この週は 10/9 からの集計
 SCANNER_UNTIL = "2026-10-08"    # この日まで note 到達にスキャナが混入（ホスト直下の案内ページ化前）
 
 # 転送ホスト → 経路名（bioクリック シートの列名と同じ）。redirects.json の column と一致させる
@@ -538,7 +538,7 @@ def main() -> int:
     while mon <= today:
         sun = mon + timedelta(days=6)
         live = sun >= today
-        note_warn = "到達にスキャナ混入（10/8 まで）" if mon.isoformat() <= SCANNER_UNTIL else ""
+        note_warn = "到達にスキャナ混入（10/8 まで）" if mon.isoformat() <= SCANNER_UNTIL and FUNNEL_START.isoformat() <= SCANNER_UNTIL else ""
         label = week_label(mon) if mon >= FUNNEL_START else week_label(mon).replace(f"{mon.month}/{mon.day}", f"{FUNNEL_START.month}/{FUNNEL_START.day}", 1)
         g = lambda d, k: d.get(k, 0)  # noqa: E731
         rx = reach_x.get(mon, None)
