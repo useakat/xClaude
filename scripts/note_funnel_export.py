@@ -20,7 +20,7 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
 列名を変えるとダッシュボードの表・計算が壊れるので、変えるときはページも直す。
 
 段階の定義（2026-10-10 計画）:
-  週次
+  週次（集計は FUNNEL_START ＝ 2026-10-08 から。それを含む週は開始日からの部分集計）
     X bio        インプ＝その週に投稿したポストの IMP 合計（X投稿一覧 K）／リンク到達＝プロフアクセス合計（同 Q）
                  ／クリック＝bioクリック X bio／到達＝note流入元 X bio
     X 固定       インプ＝プロフアクセス合計／リンク到達＝固定ポストの IMP の週増分（固定ポスト日次）
@@ -58,7 +58,8 @@ SS2 = "1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc"  # outputs（投稿の型 w
 DEFAULT_OUT = os.path.join(REPO_ROOT, "logs", "note_funnel")
 ARTICLE_ID = re.compile(r"(n[0-9a-f]{10,16})")
 JST = timezone(timedelta(hours=9))
-WEEK_START = date(2026, 9, 28)  # 計測開始（bio クリック 10/3）を含む週の月曜
+FUNNEL_START = date(2026, 10, 8)  # 週次ファネルの集計開始日（よーん指示 2026-10-12。10/3〜10/7 は計測の立ち上げ期間で、スキャナ混入もあるため含めない）
+WEEK_START = FUNNEL_START - timedelta(days=FUNNEL_START.weekday())  # 集計開始日を含む週の月曜（10/5）。この週は 10/8 からの集計
 SCANNER_UNTIL = "2026-10-08"    # この日まで note 到達にスキャナが混入（ホスト直下の案内ページ化前）
 
 # 転送ホスト → 経路名（bioクリック シートの列名と同じ）。redirects.json の column と一致させる
@@ -472,9 +473,12 @@ def main() -> int:
         for r in rows_:
             d = ymd(date_at(r))
             try:
-                mon = monday(date.fromisoformat(d))
+                day = date.fromisoformat(d)
             except ValueError:
                 continue
+            if day < FUNNEL_START:
+                continue
+            mon = monday(day)
             out[mon] = out.get(mon, 0) + value_at(r)
         return out
 
@@ -499,7 +503,7 @@ def main() -> int:
             aid = (ARTICLE_ID.match(key) or [None])[0] if ARTICLE_ID.match(key) else ""
             post_key = key.split("/", 1)[1] if "/" in key else ""
             p = pin_for(media, aid, post_key)
-            if p and p["開始日"] <= d and (not p["終了日"] or d <= p["終了日"]):
+            if p and p["開始日"] <= d and (not p["終了日"] or d <= p["終了日"]) and date.fromisoformat(d) >= FUNNEL_START:
                 mon = monday(date.fromisoformat(d))
                 out[mon] = out.get(mon, 0) + c
         return out
@@ -510,7 +514,7 @@ def main() -> int:
         """固定ポストの IMP/views の週増分（週の最終スナップショット − 前週以前の最終スナップショット）。基準が無い週は None"""
         snaps: dict[str, list[tuple[str, int]]] = {}
         for r in snap_rows:
-            if r[1] == media and r[0] and r[2]:
+            if r[1] == media and r[0] and r[2] and ymd(r[0]) >= FUNNEL_START.isoformat():
                 snaps.setdefault(r[2], []).append((r[0], to_int(r[3])))
         out: dict[date, int | None] = {}
         for pid, lst in snaps.items():
@@ -534,8 +538,8 @@ def main() -> int:
     while mon <= today:
         sun = mon + timedelta(days=6)
         live = sun >= today
-        note_warn = "到達にスキャナ混入（10/8 以前）" if mon.isoformat() <= SCANNER_UNTIL else ""
-        label = week_label(mon)
+        note_warn = "到達にスキャナ混入（10/8 まで）" if mon.isoformat() <= SCANNER_UNTIL else ""
+        label = week_label(mon) if mon >= FUNNEL_START else week_label(mon).replace(f"{mon.month}/{mon.day}", f"{FUNNEL_START.month}/{FUNNEL_START.day}", 1)
         g = lambda d, k: d.get(k, 0)  # noqa: E731
         rx = reach_x.get(mon, None)
         rt = reach_t.get(mon, None)
