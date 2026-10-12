@@ -13,7 +13,8 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
                         インプ → リンク到達 → クリック → note 到達（到達は bio のみ）
   funnel_posts.csv    … 投稿ごとのファネル（累計）: X 本体＋セルフリプ / Threads 投稿＋セルフリプ の
                         本体 IMP → リンク到達（セルフリプ IMP）→ クリック。型（outputs シートの what_id、W001 など）付き。
-                        X集計でリンククリックが未取込の投稿はクリックを空にする（0 と区別）
+                        X集計でリンククリックが未取込の投稿はクリックを空にする（0 と区別）。
+                        地力IMP ＝ 直前 14 日の非 W001 親ポストの IMP 中央値（アカウントの拡散力の補正用）
 
 ダッシュボード側のデータセット id は CSV のファイル名（拡張子なし）と同じ。
 列名を変えるとダッシュボードの表・計算が壊れるので、変えるときはページも直す。
@@ -106,6 +107,17 @@ def ymd(s: str) -> str:
     s = (s or "").strip().replace("/", "-")[:10]
     p = s.split("-")
     return f"{p[0]}-{p[1]:>02}-{p[2]:>02}".replace(" ", "0") if len(p) == 3 else s
+
+
+def parse_dt(s: str):
+    """'2026/03/18 17:51:21' などを datetime に。読めなければ None"""
+    s = (s or "").strip()
+    for f in ("%Y/%m/%d %H:%M:%S", "%Y/%m/%d %H:%M", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d %H:%M", "%Y/%m/%d", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(s[:19], f)
+        except ValueError:
+            continue
+    return None
 
 
 def table(rows: list[list[str]]) -> tuple[list[str], list[list[str]]]:
@@ -337,6 +349,28 @@ def main() -> int:
         if m and len(r) > 2 and r[2].strip():
             kind_by_tweet[m.group(1)] = r[2].strip()
 
+    # アカウントの地力：各 W001 投稿の直前 14 日に投稿した非 W001 の親ポスト（リプライでない行）の IMP の中央値。
+    # 平均は 1 本のバズで桁が飛ぶので中央値、7 日では本数が足りない時期があるので 14 日
+    BASE_DAYS = 14
+    base_posts: list[tuple[datetime, int]] = []
+    for r in x_rows:
+        m = re.search(r"/status/(\d+)", xg(r, "ポストURL"))
+        if not m or xg(r, "親ポストURL").strip() or kind_by_tweet.get(m.group(1)) == "W001":
+            continue
+        dt = parse_dt(xg(r, "投稿日時"))
+        imp = to_int(xg(r, "インプレッション"))
+        if dt and imp > 0:
+            base_posts.append((dt, imp))
+
+    def baseline(dt: datetime | None) -> str:
+        if dt is None:
+            return ""
+        xs = sorted(imp for d, imp in base_posts if dt - timedelta(days=BASE_DAYS) <= d < dt)
+        if not xs:
+            return ""
+        n = len(xs)
+        return str(round((xs[n // 2] if n % 2 else (xs[n // 2 - 1] + xs[n // 2]) / 2)))
+
     posts: dict[str, dict] = {}  # id → 行
 
     def add_post(media, body, link_row, link_pos, aid, key, clicks, src, xlc, pin, xlc_known=True):
@@ -351,6 +385,7 @@ def main() -> int:
                                    "記事ID": aid, "記事タイトル": title_of(aid), "本体IMP": imp, "リンク到達": 0, "リンク位置": link_pos,
                                    "クリック": 0, "クリックの出どころ": src, "Xリンククリック": 0, "固定期間": pin_text(pin), "キー": set(), "reach_rows": set(),
                                    "型": kind_by_tweet.get((re.search(r"/status/(\d+)", url) or [None, ""])[1], "") if media == "X" else "",
+                                   "地力IMP": baseline(parse_dt(xg(body, "投稿日時"))) if media == "X" else "",
                                    "xlc_known": False})
         if xlc_known:
             p["xlc_known"] = True
@@ -420,15 +455,15 @@ def main() -> int:
             unknown.append(("X", host, key, m.group(1) if m else "", c, None))
 
     rows = [["id", "媒体", "投稿日", "本体URL", "本文冒頭", "記事ID", "記事タイトル", "本体IMP", "リンク到達", "リンク位置",
-             "クリック", "クリックの出どころ", "Xリンククリック", "固定期間", "キー", "型"]]
+             "クリック", "クリックの出どころ", "Xリンククリック", "固定期間", "キー", "型", "地力IMP"]]
     for p in sorted(posts.values(), key=lambda p: p["投稿日"], reverse=True):
         # X集計の投稿でリンククリックが未取込（セルが空）なら、クリックは 0 ではなく空にする
         known = p["クリックの出どころ"] == "ビーコン" or p["xlc_known"]
         rows.append([p["id"], p["媒体"], p["投稿日"], p["本体URL"], p["本文冒頭"], p["記事ID"], p["記事タイトル"], p["本体IMP"], p["リンク到達"],
                      p["リンク位置"], p["クリック"] if known else "", p["クリックの出どころ"],
-                     (p["Xリンククリック"] if p["xlc_known"] else "") if p["媒体"] == "X" else "", p["固定期間"], " ".join(sorted(p["キー"])), p["型"]])
+                     (p["Xリンククリック"] if p["xlc_known"] else "") if p["媒体"] == "X" else "", p["固定期間"], " ".join(sorted(p["キー"])), p["型"], p["地力IMP"]])
     for media, host, key, aid, c, pin in unknown:
-        rows.append([f"{media}|{host}/{key}", media, "", "", "（元投稿不明）", aid, title_of(aid), "", "", "", c, "ビーコン", "", pin_text(pin), key, ""])
+        rows.append([f"{media}|{host}/{key}", media, "", "", "（元投稿不明）", aid, title_of(aid), "", "", "", c, "ビーコン", "", pin_text(pin), key, "", ""])
     write(os.path.join(args.out, "funnel_posts.csv"), rows)
 
     # ---- funnel_weekly（月曜始まり）----
