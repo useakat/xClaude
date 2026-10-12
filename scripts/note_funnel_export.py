@@ -511,7 +511,9 @@ def main() -> int:
     pin_x, pin_t = pinned_clicks("X"), pinned_clicks("Threads")
 
     def pinned_reach(media: str):
-        """固定ポストの IMP/views の週増分（週の最終スナップショット − 前週以前の最終スナップショット）。基準が無い週は None"""
+        """固定ポストの IMP/views の週増分（週の最終スナップショット − 前週以前の最終スナップショット）。
+        前週の記録が無い最初の週は、その週の最初のスナップショットからの差（記録開始週の部分集計。よーん指示 2026-10-12）。
+        週内のスナップショットが 1 つしか無く基準が取れない週は None"""
         snaps: dict[str, list[tuple[str, int]]] = {}
         for r in snap_rows:
             if r[1] == media and r[0] and r[2] and ymd(r[0]) >= FUNNEL_START.isoformat():
@@ -519,16 +521,20 @@ def main() -> int:
         out: dict[date, int | None] = {}
         for pid, lst in snaps.items():
             lst.sort()
-            by_week: dict[date, int] = {}
+            first: dict[date, int] = {}
+            last: dict[date, int] = {}
             for d, v in lst:
-                by_week[monday(date.fromisoformat(d))] = v  # 週内の最後の値が残る
+                mon = monday(date.fromisoformat(d))
+                first.setdefault(mon, v)
+                last[mon] = v  # 週内の最後の値が残る
             prev = None
-            for mon in sorted(by_week):
-                if prev is not None:
-                    out[mon] = (out.get(mon) or 0) + (by_week[mon] - prev)
+            for mon in sorted(last):
+                base = prev if prev is not None else (first[mon] if first[mon] != last[mon] else None)
+                if base is not None:
+                    out[mon] = (out.get(mon) or 0) + (last[mon] - base)
                 else:
                     out.setdefault(mon, None)
-                prev = by_week[mon]
+                prev = last[mon]
         return out
 
     reach_x, reach_t = pinned_reach("X"), pinned_reach("Threads")
@@ -545,9 +551,9 @@ def main() -> int:
         rt = reach_t.get(mon, None)
         for route, imp, reach, clicks, arrive, note in [
             ("X bio", g(x_imp, mon), g(x_prof, mon), g(bio_x, mon), g(ref_x, mon), note_warn),
-            ("X 固定", g(x_prof, mon), "" if rx is None else rx, g(pin_x, mon), "", "固定の到達は投稿と分けられない" + ("；IMP 増分は前週の記録待ち" if rx is None else "")),
+            ("X 固定", g(x_prof, mon), "" if rx is None else rx, g(pin_x, mon), "", "固定の到達は投稿と分けられない" + ("；IMP 増分は記録待ち" if rx is None else ("；IMP 増分は記録開始日からの差" if mon == WEEK_START else ""))),
             ("Threads bio", g(t_views, mon) if has_t_views else "", "", g(bio_t, mon), g(ref_t, mon), ("プロフ閲覧は API に無い" + ("；" + note_warn if note_warn else ""))),
-            ("Threads 固定", g(t_views, mon) if has_t_views else "", "" if rt is None else rt, g(pin_t, mon), "", "固定の到達は投稿と分けられない" + ("；views 増分は前週の記録待ち" if rt is None else "")),
+            ("Threads 固定", g(t_views, mon) if has_t_views else "", "" if rt is None else rt, g(pin_t, mon), "", "固定の到達は投稿と分けられない" + ("；views 増分は記録待ち" if rt is None else ("；views 増分は記録開始日からの差" if mon == WEEK_START else ""))),
         ]:
             rows.append([f"{mon.isoformat()}|{route}", mon.isoformat(), label, route, imp, reach, clicks, arrive, "true" if live else "false", note])
         mon += timedelta(days=7)
