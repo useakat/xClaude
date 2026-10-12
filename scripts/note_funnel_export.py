@@ -12,7 +12,8 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
   funnel_weekly.csv   … 週次ファネル（月曜始まり）: X bio / X 固定 / Threads bio / Threads 固定 の
                         インプ → リンク到達 → クリック → note 到達（到達は bio のみ）
   funnel_posts.csv    … 投稿ごとのファネル（累計）: X 本体＋セルフリプ / Threads 投稿＋セルフリプ の
-                        本体 IMP → リンク到達（セルフリプ IMP）→ クリック
+                        本体 IMP → リンク到達（セルフリプ IMP）→ クリック。型（outputs シートの what_id、W001 など）付き。
+                        X集計でリンククリックが未取込の投稿はクリックを空にする（0 と区別）
 
 ダッシュボード側のデータセット id は CSV のファイル名（拡張子なし）と同じ。
 列名を変えるとダッシュボードの表・計算が壊れるので、変えるときはページも直す。
@@ -52,6 +53,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 SHEETS_CLI = os.path.join(SCRIPT_DIR, "sheets_values.py")
 SS3 = "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"  # 発信記録
+SS2 = "1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc"  # outputs（投稿の型 what_id: W001 など）
 DEFAULT_OUT = os.path.join(REPO_ROOT, "logs", "note_funnel")
 ARTICLE_ID = re.compile(r"(n[0-9a-f]{10,16})")
 JST = timezone(timedelta(hours=9))
@@ -66,14 +68,14 @@ HOST_ROUTE = {
 }
 
 
-def get(rng: str) -> list[list[str]]:
-    out = subprocess.run([sys.executable, SHEETS_CLI, "get", SS3, rng], capture_output=True, text=True, check=True)
+def get(rng: str, ssid: str = SS3) -> list[list[str]]:
+    out = subprocess.run([sys.executable, SHEETS_CLI, "get", ssid, rng], capture_output=True, text=True, check=True)
     return json.loads(out.stdout).get("values", [])
 
 
-def get_optional(rng: str) -> list[list[str]]:
+def get_optional(rng: str, ssid: str = SS3) -> list[list[str]]:
     try:
-        return get(rng)
+        return get(rng, ssid)
     except subprocess.CalledProcessError:
         print(f"警告: {rng} が読めない（未作成？）。空として扱う", file=sys.stderr)
         return []
@@ -200,6 +202,7 @@ def main() -> int:
     buy_hdr, buy_rows = table(get_optional("note購入記録!A:G"))
     snap_hdr, snap_rows = table(get_optional("固定ポスト日次!A:F"))
     dr_hdr, dr_rows = table(get("日次記録!A:AE"))
+    out_hdr, out_rows = table(get_optional("outputs!A:C", SS2))  # 日時, URL, what_id
     x_idx = {h: i for i, h in enumerate(x_hdr)}
     t_idx = {h: i for i, h in enumerate(t_hdr)}
 
@@ -327,9 +330,16 @@ def main() -> int:
             x_by_id[m.group(1)] = r
     t_by_url = {tg(r, "投稿URL").rstrip("/"): r for r in t_rows}
 
+    # 投稿の型（outputs シートの what_id。W001 ＝ 執念の物語の X 長文）を tweet ID で引く
+    kind_by_tweet: dict[str, str] = {}
+    for r in out_rows:
+        m = re.search(r"/status/(\d+)", r[1] if len(r) > 1 else "")
+        if m and len(r) > 2 and r[2].strip():
+            kind_by_tweet[m.group(1)] = r[2].strip()
+
     posts: dict[str, dict] = {}  # id → 行
 
-    def add_post(media, body, link_row, link_pos, aid, key, clicks, src, xlc, pin):
+    def add_post(media, body, link_row, link_pos, aid, key, clicks, src, xlc, pin, xlc_known=True):
         if media == "X":
             url, date_, text = xg(body, "ポストURL"), ymd(xg(body, "投稿日時")), xg(body, "ポスト本文")
             imp, reach = to_int(xg(body, "インプレッション")), to_int(xg(link_row, "インプレッション"))
@@ -339,7 +349,11 @@ def main() -> int:
         pid = f"{media}|{url}"
         p = posts.setdefault(pid, {"id": pid, "媒体": media, "投稿日": date_, "本体URL": url, "本文冒頭": text.replace("\n", " ")[:40],
                                    "記事ID": aid, "記事タイトル": title_of(aid), "本体IMP": imp, "リンク到達": 0, "リンク位置": link_pos,
-                                   "クリック": 0, "クリックの出どころ": src, "Xリンククリック": 0, "固定期間": pin_text(pin), "キー": set(), "reach_rows": set()})
+                                   "クリック": 0, "クリックの出どころ": src, "Xリンククリック": 0, "固定期間": pin_text(pin), "キー": set(), "reach_rows": set(),
+                                   "型": kind_by_tweet.get((re.search(r"/status/(\d+)", url) or [None, ""])[1], "") if media == "X" else "",
+                                   "xlc_known": False})
+        if xlc_known:
+            p["xlc_known"] = True
         if id(link_row) not in p["reach_rows"]:
             p["reach_rows"].add(id(link_row))
             p["リンク到達"] += reach
@@ -374,12 +388,13 @@ def main() -> int:
         body = climb(r, lambda row: (lambda pm: x_by_id.get(pm.group(1)) if pm else None)(
             re.search(r"/status/(\d+)", xg(row, "親ポストURL"))))
         pos = "セルフリプ" if body is not r else "本体"
-        xlc = to_int(xg(r, "リンククリック"))
+        xlc_raw = xg(r, "リンククリック").strip()  # 空 ＝ X アナリティクス未取込（0 とは区別する）
+        xlc = to_int(xlc_raw)
         if key:
             add_post("X", body, r, pos, aid, key, clicks_by_key.get(("xpost.usephys.net", key), 0), "ビーコン", xlc,
                      pin_for("X", aid, key.split("/", 1)[1] if "/" in key else ""))
         else:
-            add_post("X", body, r, pos, aid, "", xlc, "X集計", xlc, None)
+            add_post("X", body, r, pos, aid, "", xlc, "X集計", xlc, None, xlc_known=xlc_raw != "")
 
     # Threads: tpost キーを持つクリック → 本文一致 → 固定ポスト履歴。リプライ行（親投稿URL あり）は親をたどって最上位を本体にする
     unknown = []
@@ -405,12 +420,15 @@ def main() -> int:
             unknown.append(("X", host, key, m.group(1) if m else "", c, None))
 
     rows = [["id", "媒体", "投稿日", "本体URL", "本文冒頭", "記事ID", "記事タイトル", "本体IMP", "リンク到達", "リンク位置",
-             "クリック", "クリックの出どころ", "Xリンククリック", "固定期間", "キー"]]
+             "クリック", "クリックの出どころ", "Xリンククリック", "固定期間", "キー", "型"]]
     for p in sorted(posts.values(), key=lambda p: p["投稿日"], reverse=True):
+        # X集計の投稿でリンククリックが未取込（セルが空）なら、クリックは 0 ではなく空にする
+        known = p["クリックの出どころ"] == "ビーコン" or p["xlc_known"]
         rows.append([p["id"], p["媒体"], p["投稿日"], p["本体URL"], p["本文冒頭"], p["記事ID"], p["記事タイトル"], p["本体IMP"], p["リンク到達"],
-                     p["リンク位置"], p["クリック"], p["クリックの出どころ"], p["Xリンククリック"] if p["媒体"] == "X" else "", p["固定期間"], " ".join(sorted(p["キー"]))])
+                     p["リンク位置"], p["クリック"] if known else "", p["クリックの出どころ"],
+                     (p["Xリンククリック"] if p["xlc_known"] else "") if p["媒体"] == "X" else "", p["固定期間"], " ".join(sorted(p["キー"])), p["型"]])
     for media, host, key, aid, c, pin in unknown:
-        rows.append([f"{media}|{host}/{key}", media, "", "", "（元投稿不明）", aid, title_of(aid), "", "", "", c, "ビーコン", "", pin_text(pin), key])
+        rows.append([f"{media}|{host}/{key}", media, "", "", "（元投稿不明）", aid, title_of(aid), "", "", "", c, "ビーコン", "", pin_text(pin), key, ""])
     write(os.path.join(args.out, "funnel_posts.csv"), rows)
 
     # ---- funnel_weekly（月曜始まり）----
