@@ -5,7 +5,8 @@ Gmail 下書きを作成する。過去の X 投稿を Threads へ転載する�
 フロー:
   1. 発信記録スプレッドシートの「X投稿一覧」を全取得
   2. 候補抽出: ポスト種類がリプライ・引用RT以外 / 目的に誘導・紹介を含まない /
-     親ポストURL 空 / threads転載日 空 / 本文あり
+     親ポストURL 空 / threads転載日 空 / 本文あり /
+     投稿日時が 2026/09/01 より前(9月以降の X 投稿は Threads へ同時投稿済みのため除外)
   3. ランダムに --count 件選択(重複なし)
   4. セルフリプ(親ポストURL が選択投稿を指す行)があれば1件を [リプ] に取り込む。
      note リンク(note.com / 「note」を含む)のあるリプを優先し、無ければ最も早い1件
@@ -55,6 +56,10 @@ COL = {
     "投稿日時": None, "ポストURL": None, "ポスト本文": None,
     "ポスト種類": None, "画像URL": None, "親ポストURL": None, "目的": None,
 }
+
+
+# 2026/09 以降の X 投稿は Threads にも同時投稿済みのため転載しない
+SIMULTANEOUS_POST_FROM = "2026/09/01"
 
 
 def log(msg):
@@ -202,6 +207,8 @@ def main():
             continue
         if not cell(row, COL["ポスト本文"]):
             continue
+        if cell(row, COL["投稿日時"]) >= SIMULTANEOUS_POST_FROM:
+            continue
         candidates.append((i, row))
 
     log(f"候補 {len(candidates)} 件(全 {len(rows)} 行中)")
@@ -211,7 +218,12 @@ def main():
 
     if args.rows:
         # 行番号直接指定(作り直し用): 候補条件・マークを無視して対象行から下書きを作る
-        picks = [(n, rows[n - 2]) for n in (int(x) for x in args.rows.split(","))]
+        picks = []
+        for n in (int(x) for x in args.rows.split(",")):
+            if cell(rows[n - 2], COL["投稿日時"]) >= SIMULTANEOUS_POST_FROM:
+                log(f"スキップ: 行{n} は {SIMULTANEOUS_POST_FROM} 以降の投稿(Threads 同時投稿済み)")
+                continue
+            picks.append((n, rows[n - 2]))
         count = len(picks)
         log(f"行指定モード: {args.rows}")
     else:
