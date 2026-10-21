@@ -12,10 +12,10 @@ tools: Bash, Read, Write, Edit, Glob, Grep, mcp__mcp-gsheets__sheets_get_values
 | スキル | 頻度 | 担当 |
 |---|---|---|
 | `/reporter-weekly` | 週次 | 数値週報（フォロワー・インプ・やったこと・来週タスク） |
-| **本スキル** | 週次 | **運用の振り返り**（プロジェクト別の伸び・沈みの要因分析、運用アクションの決定と消化確認） |
+| **本スキル** | 週次 | **運用の振り返り**（プロジェクト別の伸び・沈みの要因分析、運用アクションの決定と消化確認、**note 導線 施策の検証**（レジストリ指定の率指標のみ）） |
 | `/reporter-monetization` | 月次 | マネタイズ（売上・CTR/CVR・導線） |
 
-- 売上・CTR/CVR の集計はしない（monetization の領分）。
+- 売上・CTR/CVR の集計はしない（monetization の領分）。ただし「⑧ note 導線 施策の検証」は、施策レジストリが指定した率指標を `scripts/note_funnel_measures.py` の出力から転記する。月次の売上総括は引き続き monetization。
 - フォロワー・週間インプの総括数値は冒頭に1行置くだけに留める（weekly の領分）。
 - 本スキルの中心は「**どの投稿が・なぜ伸びた/沈んだか**」と「**来週の運用をどう変えるか**」。
 
@@ -29,6 +29,8 @@ tools: Bash, Read, Write, Edit, Glob, Grep, mcp__mcp-gsheets__sheets_get_values
 | 日報 | `docs/reports/daily/YYYY-MM-DD.md` |
 | 前週の運用振り返り | `docs/reports/ops-weekly/` の前週ファイル |
 | フック型記録 | `logs/hook_records.csv`（z01/W003/W001 の各制作フローが制作時に追記。冒頭15字で X投稿一覧の本文と突合する） |
+| 施策レジストリ | `docs/plans/note_funnel_measures.md`（note 導線 改善施策の順位表・判定条件・判定履歴。単一の正） |
+| note 導線の数値 | `scripts/note_funnel_measures.py` が `note_funnel_export.py` で発信記録シートから CSV を一時フォルダに書き出して集計する（`logs/note_funnel/` は参照しない） |
 
 > URL マッチは tweet ID 部分で行う（outputs は `x.com`、X投稿一覧は `twitter.com` 表記のため）。
 
@@ -99,6 +101,7 @@ print(f'week_label={monday.strftime(\"%-m月%-d日\")}週')
 
 1. `docs/reports/daily/` の当週分（月〜日）を Read し、特記事項・所感を記憶する
 2. `docs/reports/ops-weekly/[prev_week_id].md` があれば Read し、**「来週の運用アクション」セクション**を記憶する（無ければ初回として扱う）
+3. `docs/plans/note_funnel_measures.md`（施策レジストリ）を Read し、順位表の「実施中」の施策と「未着手」の上位 3 件を記憶する（⑧ の判定、⑤ の着手候補、③ の消化確認に使う）
 
 ---
 
@@ -193,6 +196,32 @@ print(f'week_label={monday.strftime(\"%-m月%-d日\")}週')
 
 ---
 
+# STEP 5.7: note 導線 施策の検証
+
+施策レジストリ `docs/plans/note_funnel_measures.md` の「実施中」の施策について、当週の数値を出して判定し、レジストリに記録する。数値はスクリプトが出し、判定だけを Claude が行う。
+
+1. 数値を出す（発信記録シートから CSV を書き出すので十数秒〜1 分かかる）：
+
+```bash
+python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/note_funnel_measures.py --week [week_start]
+```
+
+   - 失敗（exit≠0）してもレポート作成は止めない。⑧ に「未取得（エラー内容）」と書く
+   - 詳細（投稿ごとの内訳・週別）が要るときは `--json` を付けて再実行する
+
+2. 「実施中」の各施策について、出力の値をレジストリの「比較方法・判定条件（事前固定）」と照合し、**支持** / **反証** / **保留（データ不足）** のいずれかを決める。根拠は 1〜2 行。条件に満たない n や窓は「保留」にし、数値を推測しない
+3. レジストリの該当施策の `#### 判定履歴` 表に 1 行追記する（Edit ツール）：
+
+```
+| [week_id] | [値。スクリプトの「表示」列を要約] | 支持/反証/保留 | [根拠 1〜2 行] |
+```
+
+   - 同じ `[week_id]` の行が既にあれば上書きし、重複させない
+   - 判定が**確定**（支持または反証）したら、その施策の「状態」を「判定済み（支持）」などに変え、順位表の「状態」と「直近判定」も同じ内容に更新する。確定の基準はレジストリの判定条件に従う
+4. 「未着手」の上位施策を ⑤ 来週の運用アクションの候補として 1 行で示す（実施するかはよーんの判断。実施日の記入はよーんが実施したときに行う。ここでは状態を変えない）
+
+---
+
 # STEP 6: レポート生成・保存
 
 `docs/reports/ops-weekly/[week_id].md` に保存する：
@@ -261,6 +290,16 @@ title: 発信運用振り返り [week_label]
 ### ⑦ 検証結果（確定した仮説）
 
 ・（判定が確定した仮説をここに移す。結論と根拠データを1〜2行。無ければ「なし」）
+
+### ⑧ note 導線 施策の検証
+
+| ID | 施策 | 段階 | 今週の値（before→after, n） | 判定 | 根拠 |
+|---|---|---|---|---|---|
+| N5 | … | S1→S4 | … | 支持/反証/保留 | 1〜2行 |
+
+・次の着手候補: N1 …（レジストリ順位表の「未着手」上位。実施するかはよーん判断）
+
+（実施中の施策が無ければ「実施中の施策なし」。数値が取れなければ「未取得（理由）」。詳細と判定条件は `docs/plans/note_funnel_measures.md`）
 ```
 
 ---
@@ -274,8 +313,11 @@ title: 発信運用振り返り [week_label]
 bash $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/commit_and_sync.sh \
   "report(ops-weekly): [week_label]の発信運用振り返りを追加" \
   docs/reports/ops-weekly/[week_id].md \
-  docs/reports/ops-weekly/index.md
+  docs/reports/ops-weekly/index.md \
+  docs/plans/note_funnel_measures.md
 ```
+
+（`docs/plans/note_funnel_measures.md` は STEP 5.7 で判定履歴を追記したときだけ変更される。変更が無くても渡してよい）
 
 3. `git -C /root/xClaude push origin master` で push する（push 先ブランチ名を完了報告に明記）
 
@@ -303,6 +345,7 @@ bash /root/xClaude/scripts/send_gmail.sh \
    投稿: X本（X: X / threads: X / note: X）
    伸び: 「…」 / 沈み: 「…」
    来週アクション: X個
+   施策検証: X件（支持 X / 反証 X / 保留 X）→ docs/plans/note_funnel_measures.md に記録
    保存先: docs/reports/ops-weekly/[week_id].md（master に push 済み）
    メール: useakat@gmail.com に送信済み
 ```
@@ -312,5 +355,5 @@ bash /root/xClaude/scripts/send_gmail.sh \
 ## 禁止事項
 
 - 数値の推測・捏造（未取得は「未取得」と書く）
-- 売上・CTR/CVR の集計（monetization の領分）
+- 売上・CTR/CVR の集計（monetization の領分。⑧ の施策検証でレジストリが指定した率指標をスクリプト出力から転記するのは例外）
 - 要因の断定（データで確認できないことは推測と明記）

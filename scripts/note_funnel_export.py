@@ -8,7 +8,10 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
   note_referrers.csv  … note流入元 シート
   pinned.csv          … 固定ポスト履歴 シート
   x_note_posts.csv    … X投稿一覧のうち noteURL がある行（数値はカンマ除去、記事ID を付与）
-  articles.csv        … note 記事ごとの指標（note投稿一覧）＋ 転送クリック合計・導線数・X 投稿数・購入数（note購入記録）・CVR・販売係数・スキ購入係数・価格（note投稿一覧 N列。note_article_daily.py が公開 API から毎日更新。0 ＝ 無料記事）
+  articles.csv        … note 記事ごとの指標（note投稿一覧）＋ 転送クリック合計・導線数・X 投稿数・購入数（note購入記録）・CVR（現価格）・販売係数（現価格）・スキ購入係数・価格（note投稿一覧 N列。note_article_daily.py が公開 API から毎日更新。0 ＝ 無料記事）
+                         CVR は現在価格の区間（note価格履歴）の 購入 ÷ PV。価格をまたぐ累計は CVR（累計・価格混在）に残す（2026-10-21）
+  article_price_cvr.csv … 記事 × 価格区間（note価格履歴）ごとの PV（note記事日次の合計）・購入数（note購入記録を日付で区間に割当）・CVR・販売係数・売上。
+                         PV取得日数 < 日数 の区間は日次 PV が揃っていない（バックフィル前）
   funnel_weekly.csv   … 週次ファネル（月曜始まり）: X bio / Threads bio の プロフ → クリック → note 到達
                         （固定ポストの表は 2026-10-18 に廃止。固定ポストの IMP はプロフ経由でない分が大きく、
                         プロフの一部として扱えないため。投稿 → プロフ はX投稿一覧のプロフ率で見る）
@@ -214,6 +217,7 @@ def main() -> int:
     x_hdr, x_rows = table(get("X投稿一覧!A1:AK"))
     t_hdr, t_rows = table(get("Threads投稿一覧!A:S"))
     buy_hdr, buy_rows = table(get_optional("note購入記録!A:G"))
+    ph_hdr, ph_rows = table(get_optional("note価格履歴!A:F"))  # 記事ID, タイトル, 価格, 開始日, 終了日, 出典
     dr_hdr, dr_rows = table(get("日次記録!A:AE"))
     out_hdr, out_rows = table(get_optional("outputs!A:C", SS2))  # 日時, URL, what_id
     x_idx = {h: i for i, h in enumerate(x_hdr)}
@@ -296,7 +300,9 @@ def main() -> int:
 
     # ---- articles（購入数・CVR・販売係数・スキ購入係数 付き）----
     # 販売係数 ＝ ビュー ÷ 購入数（何ビューで 1 本売れるか）、スキ購入係数 ＝ スキ ÷ 購入数（2026-10-12）
+    # CVR・販売係数は現在価格の区間で計算し、累計（価格混在）は別列に残す（2026-10-21）
     purchases: dict[str, int] = {}
+    purchase_list: dict[str, list[tuple[date, int]]] = {}  # 記事ID → [(日付, 価格)]
     title_to_id = {a["title"]: aid for aid, a in articles.items() if a.get("title")}
     for r in buy_rows:
         t = (r[col(buy_hdr, "購入")] if col(buy_hdr, "購入") is not None else "").strip()
@@ -309,22 +315,92 @@ def main() -> int:
                or next((i for ttl, i in title_to_id.items() if ttl[:15] == t[:15]), ""))
         if aid:
             purchases[aid] = purchases.get(aid, 0) + 1
-    rows = [["記事ID", "タイトル", "投稿日", "文字数", "ビュー（累計）", "スキ（累計）", "スキ率", "コメント", "売上",
-             "転送クリック合計", "導線数", "X投稿数", "最終クリック日", "購入数", "CVR", "販売係数", "スキ購入係数", "価格"]]
+            bd = parse_dt(ymd(r[0]) if r else "")
+            bp = to_int(r[col(buy_hdr, "価格")] if col(buy_hdr, "価格") is not None and len(r) > col(buy_hdr, "価格") else "")
+            if bd:
+                purchase_list.setdefault(aid, []).append((bd.date(), bp))
     prices = {aid: to_int(a["price"]) for aid, a in articles.items() if a.get("price") != ""}
     missing = [aid for aid in articles if aid not in prices]
     if missing:  # シートに価格が無い記事だけ API（routine 環境では note.com に届かず空のまま）
         prices.update(fetch_prices(missing, os.path.join(args.out, "price_cache.json")))
+
+    # 価格区間（note価格履歴）。無い記事は現在価格 1 区間（開始日 ＝ 公開日）
+    daily_by_article: dict[str, dict[date, int]] = {}
+    for (d_s, aid), (pv, _like) in daily.items():
+        dd = parse_dt(d_s)
+        if dd:
+            daily_by_article.setdefault(aid, {})[dd.date()] = to_int(pv)
+    segments: dict[str, list[dict]] = {}
+    for r in ph_rows:
+        r = r + [""] * (6 - len(r))
+        sd = parse_dt(ymd(r[3]))
+        if not r[0] or not sd:
+            continue
+        ed = parse_dt(ymd(r[4])) if r[4].strip() else None
+        segments.setdefault(r[0], []).append({"price": to_int(r[2]), "start": sd.date(), "end": ed.date() if ed else None, "src": r[5]})
+    for aid, a in articles.items():
+        if aid not in segments and a.get("date") and aid in prices:
+            pd = parse_dt(a["date"])
+            if pd:
+                segments[aid] = [{"price": prices[aid], "start": pd.date(), "end": None, "src": "投稿一覧（履歴なし）"}]
+    yesterday = today - timedelta(days=1)
+    price_rows = [["記事ID", "タイトル", "価格", "開始日", "終了日", "日数", "PV", "購入数", "CVR", "販売係数", "売上", "PV取得日数", "現在価格"]]
+    current_seg: dict[str, dict] = {}
+    for aid, segs in segments.items():
+        segs.sort(key=lambda x: x["start"])
+        a = articles.get(aid, {})
+        pv_days = daily_by_article.get(aid, {})
+        assigned: set[int] = set()
+        for sg in segs:
+            end = sg["end"] or yesterday
+            if end < sg["start"]:
+                continue
+            days = (end - sg["start"]).days + 1
+            pv = sum(v for d, v in pv_days.items() if sg["start"] <= d <= end)
+            got = sum(1 for d in pv_days if sg["start"] <= d <= end)
+            buys = 0
+            # 価格が記録されている購入は、同じ価格の区間に ±1 日の幅で入れる（変更日当日に新旧価格が混在するため）。
+            # 価格が無い購入は日付だけで入れる
+            for i, (bd, bp) in enumerate(purchase_list.get(aid, [])):
+                if i in assigned:
+                    continue
+                if bp:
+                    hit = bp == sg["price"] and (sg["start"] - timedelta(days=1)) <= bd <= ((sg["end"] or today) + timedelta(days=1))
+                    if not hit:
+                        continue
+                elif not (sg["start"] <= bd <= (sg["end"] or today)):
+                    continue
+                assigned.add(i)
+                buys += 1
+            row = {"PV": pv, "購入数": buys, "CVR": round(buys / pv, 4) if pv else "", "販売係数": round(pv / buys) if buys and pv else "",
+                   "売上": buys * sg["price"], "PV取得日数": got, "日数": days}
+            if sg["end"] is None:
+                current_seg[aid] = row
+            price_rows.append([aid, a.get("title", ""), sg["price"], sg["start"].isoformat(), sg["end"].isoformat() if sg["end"] else "",
+                               days, pv, buys, row["CVR"], row["販売係数"], row["売上"], got, prices.get(aid, "")])
+        for i, (bd, bp) in enumerate(purchase_list.get(aid, [])):
+            if i not in assigned:  # 価格の合う区間が無い（履歴の価格・日付が合っていない）
+                print(f"⚠ 購入記録 {aid} {bd} ¥{bp} が note価格履歴 のどの区間にも入らない（区間: "
+                      + ", ".join(f"¥{x['price']} {x['start']}〜{x['end'] or ''}" for x in segs) + "）", file=sys.stderr)
+    price_rows[1:] = sorted(price_rows[1:], key=lambda r: (r[1], r[3]))
+    write(os.path.join(args.out, "article_price_cvr.csv"), price_rows)
+
+    rows = [["記事ID", "タイトル", "投稿日", "文字数", "ビュー（累計）", "スキ（累計）", "スキ率", "コメント", "売上",
+             "転送クリック合計", "導線数", "X投稿数", "最終クリック日", "購入数", "CVR", "販売係数", "スキ購入係数", "価格",
+             "現価格PV", "現価格購入数", "現価格PV取得日数", "現価格開始日", "CVR（累計・価格混在）", "販売係数（累計）"]]
     for aid, a in articles.items():
         if not a.get("date"):
             continue  # note記事日次 だけに現れた記事（note投稿一覧に無い）は除く
         views = to_int(a["view_total"])
         buys = purchases.get(aid, 0)
         likes = to_int(a["like_total"])
+        cur = current_seg.get(aid, {})
+        cur_start = next((sg["start"].isoformat() for sg in segments.get(aid, []) if sg["end"] is None), "")
         rows.append([aid, a["title"], a["date"], a["chars"], a["view_total"], a["like_total"], a["like_rate"], a["comments"], a["sales"],
                      clicks_by_article.get(aid, 0), len(link_count.get(aid, ())), x_note_count.get(aid, 0), last_click.get(aid, ""),
-                     buys, round(buys / views, 4) if views else "",
-                     round(views / buys) if buys else "", round(likes / buys, 1) if buys else "", prices.get(aid, "")])
+                     buys, cur.get("CVR", ""), cur.get("販売係数", ""), round(likes / buys, 1) if buys else "", prices.get(aid, ""),
+                     cur.get("PV", ""), cur.get("購入数", ""), cur.get("PV取得日数", ""), cur_start,
+                     round(buys / views, 4) if views else "", round(views / buys) if buys else ""])
     rows[1:] = sorted(rows[1:], key=lambda r: (-r[9], -to_int(r[4]), r[2]))
     write(os.path.join(args.out, "articles.csv"), rows)
 
