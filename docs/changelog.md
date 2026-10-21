@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-10-21
 
 - **note 導線の改善施策レジストリと週次検証ヘルパーを新設し、記事 × 価格区間の CVR¥ を導入** — 改善策 N1〜N11（X / Threads / note のプロフィール改善を先頭に）を `docs/plans/note_funnel_measures.md` に順位・判定条件（事前固定）・判定履歴付きで置き、`note_funnel_measures.py` が施策ごとの数値を出して `reporter-weekly-ops` STEP 5.7 が週次で判定する。CVR は価格が混ざると意味が無いので `note価格履歴` シートと `article_price_cvr.csv` で記事 × 価格区間の CVR¥（例 CVR¥300）を出し、ダッシュボードに価格別 CVR の表と価格帯 × CVR¥ の散布図を追加。`note記事日次` に累計ビューが混入していた不具合（GraphQL が返さない記事を REST 累計で埋め、警告の先頭 5 件しか除外していなかった）を直し、2/22 まで遡って全日取得。[→報告書](../reports/20261021_note_funnel_measures_registry_price_cvr/)
+- **Threads 転載下書きから 2026/09 以降の X 投稿を除外（`make_threads_draft.py`）** — 9月以降の X 投稿は Threads に同時投稿済みのため、ランダム選択と `--rows` の両方で候補から外した（候補 150 → 107 件）。裏取りで同時投稿の開始は 7/21 と分かり、7/21〜8/31 の候補 30 件中 20 件も投稿済み、行 110（ソユーズ5号）は 10/19 に重複投稿されていた。基準日の前倒しはよーんの判断待ち。[→報告書](../reports/20261021_threads_draft_exclude_since_sept/)
 
 ## 2026-10-18
 
