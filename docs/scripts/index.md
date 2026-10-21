@@ -41,3 +41,6 @@ description: scripts/ ディレクトリのスクリプト一覧
 | `commit_and_sync.sh` | git commit & push |
 | `notebooklm_manager.py` | NotebookLM クライアント |
 | `send_note_draft.py` | note.com への下書き保存 |
+| `note_article_daily.py` | note 記事ごとの日別 PV・スキを `note記事日次` に記録し、価格の変更を `note価格履歴` に区間として残す（cron 05:55） |
+| `note_funnel_export.py` | note 導線ダッシュボード用の CSV（記事 × 価格区間の CVR¥ を含む 9 本）を発信記録シートから書き出す |
+| `note_funnel_measures.py` | note 導線 改善施策レジストリ（`docs/plans/note_funnel_measures.md`）の施策ごとに検証用の数値を出す（判定は reporter-weekly-ops） |

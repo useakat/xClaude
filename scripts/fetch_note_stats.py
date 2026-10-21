@@ -212,6 +212,7 @@ def main():
             "hashtags": tags,
             "eyecatch": a.get("eyecatch", ""),
             # 新ダッシュボード（--period の期間。機能提供前の期間は null → ""）
+            "gql": bool(d),  # False ＝ その期間のダッシュボード値が無く view/like は REST 累計（2026-10-21）
             "view": view,
             "like": like,
             "likeRate": like_rate,
