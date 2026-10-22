@@ -14,6 +14,8 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **note 記事の価格設定ルールを毎朝自動で照合し、改稿の検知と動作の通知をメールで行う** — `note_article_daily.py` が `note価格履歴` に本文ハッシュ・改稿日・通知日・通知内容を持ち、公開 API の本文ハッシュで改稿日を自動記録して通知。現在価格の区間が 200 PV に達したら 規則 2（上げる）/ 3（冒頭と有料ラインを見直す）/ 4（売上/1,000 PV が前の価格を下回れば戻すか判断）を 1 回だけ【note価格】でメール。dry-run でボイジャーの ¥980 → ¥590 と赤い空（後編）の「上げる」を確認、初回は 10/23 05:55 の cron。[→報告書](../reports/20261022_note_price_rule_auto_check_revision_detect/)
 
 - **note 価格のはしご：週次振り返りの未対応列挙・ダッシュボードの「次の動作」列・判定ロジックの一本化** — 価格設定ルールの判定を `note_price_rule.py` に出し、毎朝のメール・`article_price_cvr.csv`・週次の表が同じ関数で判定する。CSV に 改稿日・窓PV・窓購入・次の動作・あとPV・通知日 など 8 列を追加。`reporter-weekly-ops` に「⑨ note 価格のはしご」（通知済みで価格も改稿日も変わっていない記事を未対応として毎週列挙）、ダッシュボード v31 の「価格別 CVR」に「次の動作」列（上げる／見直す／判断／あと nn PV）。[→報告書](../reports/20261022_note_price_ladder_weekly_dashboard_next_action/)
+
+- **check-critic（STEP 4.5）をループ化（指摘がなくなる or 最大3回）** — z01 spec で check-critic を単発検出から reader/yohn と同じ収束ループに変更。改稿版を critic に通し直し、「世界初/史上初」の限定漏れ・誇張を取りこぼさない（主張を書き換えたら数値が変わらなくても再 critic）。イカロス投稿で「世界初」の限定ズレを下書き直前までユーザーが手直しした件の再発防止。[→報告書](../reports/20261022_z01_check_critic_loop/)
 ## 2026-10-21
 
 - **note 導線の改善施策レジストリと週次検証ヘルパーを新設し、記事 × 価格区間の CVR¥ を導入** — 改善策 N1〜N11（X / Threads / note のプロフィール改善を先頭に）を `docs/plans/note_funnel_measures.md` に順位・判定条件（事前固定）・判定履歴付きで置き、`note_funnel_measures.py` が施策ごとの数値を出して `reporter-weekly-ops` STEP 5.7 が週次で判定する。CVR は価格が混ざると意味が無いので `note価格履歴` シートと `article_price_cvr.csv` で記事 × 価格区間の CVR¥（例 CVR¥300）を出し、ダッシュボードに価格別 CVR の表と価格帯 × CVR¥ の散布図を追加。`note記事日次` に累計ビューが混入していた不具合（GraphQL が返さない記事を REST 累計で埋め、警告の先頭 5 件しか除外していなかった）を直し、2/22 まで遡って全日取得。[→報告書](../reports/20261021_note_funnel_measures_registry_price_cvr/)
