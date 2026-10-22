@@ -22,7 +22,8 @@ note 側は期間指定で記事別の PV・スキを返すので、スナップ
   python3 scripts/note_article_daily.py --date 2026-10-03 --from 2026-09-14 --max-days 20  # 遡って埋める（バックフィル）
   python3 scripts/note_article_daily.py --init-price-history [--dry-run]  # note価格履歴 の初期行を購入記録から推定して作る
 
-あわせて note投稿一覧 の N列「価格」を note の公開 API（/api/v3/notes/<key>、0 ＝ 無料）で毎日更新する
+あわせて note投稿一覧 の N列「価格」を note の公開 API（/api/v3/notes/<key>、0 ＝ 無料）で毎日更新する。
+価格設定ルール（RULE_PV / RULE_BUYS）の照合と改稿検知を毎日行い、該当があれば MAIL_TO にメールする（2026-10-22）
 （2026-10-12）。ダッシュボード更新 routine の実行環境からは note.com に届かない（プロキシ 403）ので、
 価格はこのローカル cron でシートに持たせ、note_funnel_export.py はシートから読む。
 
@@ -56,7 +57,16 @@ PRICE_COL = 14           # N列「価格」
 PRICE_HEADER = "価格"
 HEADER = ["日付", "記事ID", "タイトル", "PV", "スキ", "取得日時"]
 PRICE_HIST_SHEET = "note価格履歴"
-PRICE_HIST_HEADER = ["記事ID", "タイトル", "価格", "開始日", "終了日", "出典"]
+PRICE_HIST_HEADER = ["記事ID", "タイトル", "価格", "開始日", "終了日", "出典", "本文ハッシュ", "改稿日", "通知日", "通知内容"]
+# 価格設定ルール（docs/plans/note_funnel_measures.md「note 記事の価格設定ルール」2026-10-22）
+#   現在価格の区間（改稿日があればそこから）で PV が RULE_PV に達したら、購入 RULE_BUYS 以上なら「上げる」、
+#   それ未満なら「冒頭と有料ラインを見直す」。上げた価格の 売上/1,000 PV が前の価格を下回れば「戻すか改稿か判断」。
+#   本文ハッシュ（題名＋無料部分＋有料部分の文字数・画像数）が変われば改稿日として記録し、PV はそこから数え直す。
+#   判定と改稿検知は 1 回だけメールで知らせる（通知日・通知内容）
+RULE_PV = 200
+RULE_BUYS = 2
+MAIL_TO = "useakat@gmail.com"
+SEND_GMAIL = SCRIPT_DIR / "send_gmail.sh"
 BUY_SHEET = "note購入記録"
 FETCH = SCRIPT_DIR / "fetch_note_stats.py"
 MAX_FETCH_DAYS = 10  # 1回の実行で取りに行く日数の上限（1日あたり数秒〜1 分）
@@ -98,25 +108,36 @@ def fetch_day(day: str) -> list[dict]:
     return rows
 
 
-def fetch_price(key: str) -> int | None:
-    """note の公開 API から記事の価格（円）。0 ＝ 無料（有料部分なし）。取れなければ None"""
+def fetch_note(key: str) -> dict | None:
+    """note の公開 API から記事の価格（円。0 ＝ 無料）と本文ハッシュ。取れなければ None。
+    ハッシュは 題名 ＋ 無料部分の本文 ＋ 有料部分の文字数・画像数（有料記事の API は無料部分までしか返さない）"""
+    import hashlib
     import urllib.request
     try:
         req = urllib.request.Request(f"https://note.com/api/v3/notes/{key}", headers={"User-Agent": "Mozilla/5.0"})
         with urllib.request.urlopen(req, timeout=15) as r:
-            price = (json.load(r).get("data") or {}).get("price")
-        return price if isinstance(price, int) else None
+            d = json.load(r).get("data") or {}
+        price = d.get("price")
+        sig = "\n".join(str(d.get(k) or "") for k in ("name", "body", "remained_char_num", "remained_image_num"))
+        return {"price": price if isinstance(price, int) else None, "hash": hashlib.sha1(sig.encode("utf-8")).hexdigest()[:16]}
     except Exception as e:  # noqa: BLE001
-        log(f"  ⚠ 価格の取得に失敗 {key}: {e}")
+        log(f"  ⚠ 記事の取得に失敗 {key}: {e}")
         return None
 
 
-def update_prices(ss, dry_run: bool) -> None:
-    """note投稿一覧 の各記事の価格を N列に書く（変わった記事・空の記事だけ更新）"""
+def fetch_price(key: str) -> int | None:
+    d = fetch_note(key)
+    return d["price"] if d else None
+
+
+def update_prices(ss, dry_run: bool) -> dict[str, str]:
+    """note投稿一覧 の各記事の価格を N列に書く（変わった記事・空の記事だけ更新）。
+    戻り値は 記事ID → 本文ハッシュ（価格設定ルールの改稿検知に使う）"""
+    meta: dict[str, str] = {}
     ws = ss.worksheet(POSTS_SHEET)
     values = ws.get_all_values()
     if not values:
-        return
+        return meta
     header_ok = len(values[0]) >= PRICE_COL and values[0][PRICE_COL - 1] == PRICE_HEADER
     updates = []
     if not header_ok:
@@ -129,7 +150,10 @@ def update_prices(ss, dry_run: bool) -> None:
         if not m:
             continue
         cur = (r[PRICE_COL - 1] if len(r) >= PRICE_COL else "").strip()
-        price = fetch_price(m.group(1))
+        d = fetch_note(m.group(1))
+        price = d["price"] if d else None
+        if d:
+            meta[m.group(1)] = d["hash"]
         if price is None or cur == str(price):
             continue
         updates.append({"range": f"{chr(64 + PRICE_COL)}{i}", "values": [[price]]})
@@ -138,15 +162,16 @@ def update_prices(ss, dry_run: bool) -> None:
                         "published": (r[0] if r else "")[:10]})
     if dry_run:
         log(f"dry-run: 価格の更新 {changed} 件（書き込まない）" + "".join(f"\n    {c['id']} {c['old'] or '（空）'} → {c['new']}" for c in changes))
-        return
+        return meta
     if updates:
         ws.batch_update(updates, value_input_option="RAW")
     log(f"✅ {POSTS_SHEET} 価格: {changed} 件更新")
     if changes:
         try:
-            record_price_changes(ss, changes)
+            record_price_changes(ss, changes, meta)
         except Exception as e:  # noqa: BLE001
             log(f"⚠ {PRICE_HIST_SHEET} の更新に失敗（価格の更新自体は済み）: {e}")
+    return meta
 
 
 def _hist_ws(ss, create: bool):
@@ -160,11 +185,20 @@ def _hist_ws(ss, create: bool):
         return ws
 
 
-def record_price_changes(ss, changes: list[dict]) -> None:
+def _ensure_hist_header(ws, values: list[list]) -> None:
+    """列が増えたとき（本文ハッシュ・改稿日・通知日・通知内容）に見出し行を足す"""
+    hdr = values[0] if values else []
+    if len(hdr) < len(PRICE_HIST_HEADER) or hdr[: len(PRICE_HIST_HEADER)] != PRICE_HIST_HEADER:
+        ws.update(range_name="A1", values=[PRICE_HIST_HEADER], value_input_option="RAW")
+
+
+def record_price_changes(ss, changes: list[dict], meta: dict[str, str] | None = None) -> None:
     """価格が変わった記事について、note価格履歴 の開いている行（終了日が空）を前日で閉じ、新しい区間を足す。
-    履歴に無い記事（初回）は 開始日 ＝ 公開日 で 1 行だけ足す"""
+    履歴に無い記事（初回）は 開始日 ＝ 公開日 で 1 行だけ足す。新しい行には本文ハッシュを入れる（価格変更を改稿と誤認しない）"""
+    meta = meta or {}
     ws = _hist_ws(ss, create=True)
     values = ws.get_all_values()
+    _ensure_hist_header(ws, values)
     today = datetime.now(JST).date()
     yesterday = (today - timedelta(days=1)).isoformat()
     updates, appends = [], []
@@ -173,10 +207,10 @@ def record_price_changes(ss, changes: list[dict]) -> None:
         if open_rows:
             for i in open_rows:
                 updates.append({"range": f"E{i}", "values": [[yesterday]]})
-            appends.append([c["id"], c["title"], c["new"], today.isoformat(), "", "API"])
+            appends.append([c["id"], c["title"], c["new"], today.isoformat(), "", "API", meta.get(c["id"], ""), "", "", ""])
             log(f"  {PRICE_HIST_SHEET}: {c['id']} {c['old']} → {c['new']}（{today.isoformat()}〜）")
         else:
-            appends.append([c["id"], c["title"], c["new"], c["published"] or today.isoformat(), "", "API（初回）"])
+            appends.append([c["id"], c["title"], c["new"], c["published"] or today.isoformat(), "", "API（初回）", meta.get(c["id"], ""), "", "", ""])
             log(f"  {PRICE_HIST_SHEET}: {c['id']} 初回 {c['new']}（{c['published'] or today.isoformat()}〜）")
     if updates:
         ws.batch_update(updates, value_input_option="RAW")
@@ -192,6 +226,161 @@ def _parse_date(s: str):
         except ValueError:
             continue
     return None
+
+
+def _send_mail(subject: str, body: str) -> bool:
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as f:
+        f.write(body)
+        path = f.name
+    try:
+        r = subprocess.run(["bash", str(SEND_GMAIL), "--to", MAIL_TO, "--subject", subject, "--body-file", path],
+                           capture_output=True, text=True, timeout=120)
+        if r.returncode != 0:
+            log(f"  ⚠ メール送信に失敗: {(r.stderr or r.stdout).strip()[:200]}")
+        return r.returncode == 0
+    finally:
+        Path(path).unlink(missing_ok=True)
+
+
+def check_price_rule(ss, meta: dict[str, str], daily_values: list[list], dry_run: bool) -> None:
+    """価格設定ルールの照合と改稿検知。note価格履歴 の開いている行（現在価格・有料）ごとに、
+    改稿日（あれば）以降の PV と購入数を数え、規則の動作が決まったら 1 回だけメールする。
+    本文ハッシュが前回と違えば改稿日 ＝ 今日 を記録して知らせ、PV はそこから数え直す"""
+    ws = _hist_ws(ss, create=False)
+    if ws is None:
+        return
+    values = ws.get_all_values()
+    if not values:
+        return
+    _ensure_hist_header(ws, values)
+    today = datetime.now(JST).date()
+
+    # 記事ID ↔ 題名（note投稿一覧）、購入記録（日付・記事ID・価格）、日別 PV
+    posts = ss.worksheet(POSTS_SHEET).get_all_values()
+    title_to_id: dict[str, str] = {}
+    for r in posts[1:]:
+        m = re.search(r"/n/(n[0-9a-f]{10,16})", r[1] if len(r) > 1 else "")
+        if m and len(r) > 2 and r[2].strip():
+            title_to_id[r[2].strip()] = m.group(1)
+
+    def to_id(t: str) -> str:
+        t = (t or "").strip()
+        return (title_to_id.get(t)
+                or next((i for ttl, i in title_to_id.items() if len(t) >= 8 and ttl.startswith(t)), "")
+                or next((i for ttl, i in title_to_id.items() if ttl[:15] == t[:15]), ""))
+
+    buys: list[tuple] = []  # (日付, 記事ID, 価格)
+    try:
+        brows = ss.worksheet(BUY_SHEET).get_all_values()
+        bh = brows[0] if brows else []
+        ti = bh.index("購入") if "購入" in bh else 4
+        pi = bh.index("価格") if "価格" in bh else 5
+        for r in brows[1:]:
+            bd = _parse_date(r[0] if r else "")
+            aid = to_id(r[ti] if len(r) > ti else "")
+            try:
+                bp = int(str(r[pi]).replace(",", "").strip()) if len(r) > pi and str(r[pi]).strip() else None
+            except ValueError:
+                bp = None
+            if bd and aid:
+                buys.append((bd, aid, bp))
+    except Exception as e:  # noqa: BLE001
+        log(f"  ⚠ {BUY_SHEET} の読み取りに失敗（購入 0 として照合）: {e}")
+
+    pv: dict[tuple, int] = {}
+    for r in daily_values[1:]:
+        d = _parse_date(r[0] if r else "")
+        if d and len(r) > 3:
+            try:
+                pv[(r[1], d)] = pv.get((r[1], d), 0) + int(str(r[3]).replace(",", "") or 0)
+            except ValueError:
+                pass
+
+    def seg_pv(aid, start, end):
+        return sum(v for (i, d), v in pv.items() if i == aid and start <= d <= end)
+
+    def seg_buys(aid, price, start, end):
+        return sum(1 for d, i, bp in buys if i == aid and bp == price and (start - timedelta(days=1)) <= d <= (end + timedelta(days=1)))
+
+    rows_by_id: dict[str, list[tuple[int, list]]] = {}
+    for i, r in enumerate(values[1:], start=2):
+        if r and r[0]:
+            rows_by_id.setdefault(r[0], []).append((i, r + [""] * (len(PRICE_HIST_HEADER) - len(r))))
+
+    updates, notices = [], []
+    for aid, rows in rows_by_id.items():
+        open_rows = [(i, r) for i, r in rows if not r[4].strip()]
+        if not open_rows:
+            continue
+        i, r = open_rows[-1]
+        try:
+            price = int(str(r[2]).replace(",", "").strip() or 0)
+        except ValueError:
+            continue
+        if price <= 0:
+            continue
+        title = r[1]
+        start = _parse_date(r[3])
+        if not start:
+            continue
+        # 改稿検知
+        h = meta.get(aid)
+        rev = _parse_date(r[7])
+        notified = r[9].strip()
+        if h and not r[6].strip():
+            updates.append({"range": f"G{i}", "values": [[h]]})  # 初回はハッシュを控えるだけ
+        elif h and h != r[6].strip():
+            rev = today
+            notified = ""
+            updates += [{"range": f"G{i}", "values": [[h]]}, {"range": f"H{i}", "values": [[today.isoformat()]]},
+                        {"range": f"J{i}", "values": [[""]]}]
+            notices.append(f"改稿を検知：{title[:30]} ¥{price}。改稿日 {today.isoformat()} として note価格履歴 に記録。PV と購入はここから数え直す"
+                           "（誤字の修正など軽微な変更なら改稿日を消してください）")
+        win = max(start, rev) if rev else start
+        n_pv = seg_pv(aid, win, today)
+        n_buy = seg_buys(aid, price, win, today)
+        if n_pv < RULE_PV:
+            continue
+        cur_rev = n_buy * price / n_pv * 1000
+        prev = sorted([(_parse_date(x[3]), x) for _, x in rows if x[4].strip() and _parse_date(x[3])], key=lambda t: t[0])
+        action = ""
+        if prev:
+            pr = prev[-1][1]
+            try:
+                p_price = int(str(pr[2]).replace(",", "").strip() or 0)
+            except ValueError:
+                p_price = 0
+            p_start, p_end = _parse_date(pr[3]), _parse_date(pr[4])
+            if p_price and p_price < price and p_start and p_end:
+                p_pv = seg_pv(aid, p_start, p_end)
+                p_buy = seg_buys(aid, p_price, p_start, p_end)
+                if p_pv and cur_rev < p_buy * p_price / p_pv * 1000:
+                    action = (f"戻すかブラッシュアップするか判断（規則 4：売上/1,000 PV {cur_rev:,.0f} 円 ＜ "
+                              f"¥{p_price} の {p_buy * p_price / p_pv * 1000:,.0f} 円 [PV {p_pv}・購入 {p_buy}]）")
+        if not action:
+            action = "価格を上げる（規則 2）" if n_buy >= RULE_BUYS else "冒頭と有料ラインを見直す（規則 3）"
+        if notified.split("（")[0] == action.split("（")[0]:
+            continue  # 同じ動作は通知済み
+        updates += [{"range": f"I{i}", "values": [[today.isoformat()]]}, {"range": f"J{i}", "values": [[action]]}]
+        notices.append(f"{title[:30]} ¥{price}：PV {n_pv}（{win.isoformat()}〜）・購入 {n_buy}・売上/1,000 PV {cur_rev:,.0f} 円 → {action}")
+
+    if not notices:
+        log(f"価格設定ルール: 新しい動作なし" + (f"（ハッシュ初回記録 {len(updates)} 件）" if updates else ""))
+        if updates and not dry_run:
+            ws.batch_update(updates, value_input_option="RAW")
+        return
+    body = ("note 記事の価格設定ルール（docs/plans/note_funnel_measures.md）に該当する動作があります。\n\n"
+            + "\n".join(f"・{n}" for n in notices)
+            + "\n\n規則：¥100 から始める → 200 PV で 2 部以上なら上げる → 200 PV で 1 部以下なら冒頭と有料ラインを見直して次の 200 PV を待つ"
+              " → 上げた価格の 売上/1,000 PV が前の価格を下回ったら、戻すかブラッシュアップするかをその時に判断する。\n"
+              "価格を変えると翌朝 note価格履歴 に新しい区間が立ち、改稿すると改稿日が自動で記録されます。\n")
+    if dry_run:
+        log("dry-run: 価格設定ルールの通知（送らない）\n" + body)
+        return
+    ws.batch_update(updates, value_input_option="RAW")
+    ok = _send_mail(f"【note価格】{len(notices)} 件の動作 {today.isoformat()}", body)
+    log(f"✅ 価格設定ルール: {len(notices)} 件を記録" + ("・メール送信" if ok else "（メール送信失敗）") + "\n" + "\n".join(f"    {n}" for n in notices))
 
 
 def init_price_history(ss, dry_run: bool) -> int:
@@ -283,12 +472,11 @@ def main() -> int:
     ss = sv.open_with_retry(client, SPREADSHEET_ID)
     if args.init_price_history:
         return init_price_history(ss, args.dry_run)
+    meta: dict[str, str] = {}
     try:
-        update_prices(ss, args.dry_run)
+        meta = update_prices(ss, args.dry_run)
     except Exception as e:  # noqa: BLE001
         log(f"⚠ 価格の更新に失敗（日次の取得は続行）: {e}")
-    if args.prices_only:
-        return 0
     try:
         ws = ss.worksheet(SHEET_NAME)
         values = ws.get_all_values()
@@ -297,6 +485,16 @@ def main() -> int:
         values = []
     if not values:
         values = [HEADER]
+
+    def rule_check(daily_values):
+        try:
+            check_price_rule(ss, meta, daily_values, args.dry_run)
+        except Exception as e:  # noqa: BLE001
+            log(f"⚠ 価格設定ルールの照合に失敗: {e}")
+
+    if args.prices_only:
+        rule_check(values)
+        return 0
     existing_days = {r[0] for r in values[1:] if r and r[0]}
 
     if args.fill_detail:
@@ -309,6 +507,7 @@ def main() -> int:
     targets = sorted(d for d in targets if d < today)[:args.max_days] if args.from_date else sorted(d for d in targets if d < today)[-args.max_days:]
     if not targets:
         log("取得対象の日付なし（すべて取得済み）")
+        rule_check(values)
         return 0
     log(f"取得対象: {', '.join(targets)}")
 
@@ -324,6 +523,7 @@ def main() -> int:
 
     if args.dry_run:
         log("dry-run: シートには書き込まない")
+        rule_check(values)
         return 0
 
     # 対象日の既存行を落として新しい行を足し、日付・記事ID順で全体を書き直す
@@ -336,6 +536,7 @@ def main() -> int:
     ws.clear()
     ws.update(range_name="A1", values=[HEADER] + body, value_input_option="RAW")
     log(f"✅ {SHEET_NAME}: {len(new_rows)} 日分を書き込み（全 {len(body)} 行）")
+    rule_check([HEADER] + body)
     return 0
 
 
