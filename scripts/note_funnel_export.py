@@ -24,7 +24,9 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
 列名を変えるとダッシュボードの表・計算が壊れるので、変えるときはページも直す。
 
 段階の定義（2026-10-10 計画）:
-  週次（集計は FUNNEL_START ＝ 2026-10-09 から。それを含む週は開始日からの部分集計。すべて日付基準）
+  週次（クリック・note 到達は FUNNEL_START ＝ 2026-10-09 から。それを含む週は開始日からの部分集計。すべて日付基準。
+        インプ・プロフ・フォロー・views は BIO_START ＝ 2026-09-07 の週から出し、10/9 より前の週はクリック・到達を空欄にする。
+        施策 N1〜N3 の before 窓を 10/9 より前に広げるため（よーん指示 2026-10-22））
     X bio        インプ＝総インプの週合計（日次記録 R「インプ」）／リンク到達＝プロフアクセスの週合計（同 S「プロフ」）
                  ／クリック＝bioクリック X bio（転送サイトのビーコン。自動アクセスが混ざるので参考値、ページには出さない）
                  ／到達＝note流入元 X bio／フォロー＝新規フォロワ数の週合計（日次記録 M「新規フォロワ数」）。
@@ -65,6 +67,7 @@ JST = timezone(timedelta(hours=9))
 FUNNEL_START = date(2026, 10, 9)  # 週次ファネルの集計開始日（よーん指示 2026-10-12）。案内ページ化（10/8 22:57）より前はスキャナが note 到達に混ざるため、10/8 までは含めない
 WEEK_START = FUNNEL_START - timedelta(days=FUNNEL_START.weekday())  # 集計開始日を含む週の月曜（10/5）。この週は 10/9 からの集計
 SCANNER_UNTIL = "2026-10-08"    # この日まで note 到達にスキャナが混入（ホスト直下の案内ページ化前）
+BIO_START = date(2026, 9, 7)    # 週次 bio ファネルの インプ・プロフ・フォロー・views の開始週（月曜。よーん指示 2026-10-22）。クリック・到達は FUNNEL_START から
 
 # 転送ホスト → 経路名（bioクリック シートの列名と同じ）。redirects.json の column と一致させる
 HOST_ROUTE = {
@@ -544,7 +547,7 @@ def main() -> int:
     write(os.path.join(args.out, "funnel_posts.csv"), rows)
 
     # ---- funnel_weekly（月曜始まり）----
-    def weekly_sum(rows_, date_at, value_at):
+    def weekly_sum(rows_, date_at, value_at, start=FUNNEL_START):
         out: dict[date, int] = {}
         for r in rows_:
             d = ymd(date_at(r))
@@ -552,22 +555,22 @@ def main() -> int:
                 day = date.fromisoformat(d)
             except ValueError:
                 continue
-            if day < FUNNEL_START:
-                continue
+            if day < start or WEEK_START <= day < FUNNEL_START:
+                continue  # FUNNEL_START を含む週は FUNNEL_START からの部分集計（クリック・到達と基準を揃える）
             mon = monday(day)
             out[mon] = out.get(mon, 0) + value_at(r)
         return out
 
     # X bio の総インプ・プロフアクセスは日次記録 R「インプ」・S「プロフ」の週合計（日付基準。到達と基準を揃える。2026-10-18）
     x_imp = weekly_sum([r for r in dr_rows if col(dr_hdr, "インプ") is not None and r[col(dr_hdr, "インプ")].strip()],
-                       lambda r: r[0], lambda r: to_int(r[col(dr_hdr, "インプ")]))
+                       lambda r: r[0], lambda r: to_int(r[col(dr_hdr, "インプ")]), start=BIO_START)
     x_prof = weekly_sum([r for r in dr_rows if col(dr_hdr, "プロフ") is not None and r[col(dr_hdr, "プロフ")].strip()],
-                        lambda r: r[0], lambda r: to_int(r[col(dr_hdr, "プロフ")]))
+                        lambda r: r[0], lambda r: to_int(r[col(dr_hdr, "プロフ")]), start=BIO_START)
     # 新規フォロワ数（日次記録 M）。見出しは「新規フォロヷ数」と表記ゆれがあるので正規表現で探す
     fol_i = next((i for i, h in enumerate(dr_hdr) if re.fullmatch(r"新規フォロ[ワヷ]数", h.strip())), None)
     x_follow = weekly_sum([r for r in dr_rows if fol_i is not None and fol_i < len(r) and r[fol_i].strip()],
-                          lambda r: r[0], lambda r: to_int(r[fol_i]))
-    # Threads のフォローは総フォロワ数の週純増（週内最後の値 − その前の最後の値。FUNNEL_START 前日が基準）
+                          lambda r: r[0], lambda r: to_int(r[fol_i]), start=BIO_START)
+    # Threads のフォローは総フォロワ数の週純増（週内最後の値 − その前の最後の値。BIO_START 前日が基準）
     tf_i = col(dr_hdr, "threads フォロワ数")
     t_follow: dict[date, int] = {}
     if tf_i is not None:
@@ -580,17 +583,19 @@ def main() -> int:
             if tf_i < len(r) and r[tf_i].strip():
                 series.append((d, to_int(r[tf_i])))
         series.sort()
-        prev = next((v for d, v in reversed(series) if d < FUNNEL_START), None)
+        prev = next((v for d, v in reversed(series) if d < BIO_START), None)
+        gap_last = next((v for d, v in reversed(series) if WEEK_START <= d < FUNNEL_START), None)  # FUNNEL_START 前日の値
         last: dict[date, int] = {}
         for d, v in series:
-            if d >= FUNNEL_START:
+            if d >= BIO_START and not (WEEK_START <= d < FUNNEL_START):
                 last[monday(d)] = v
         for mon in sorted(last):
-            if prev is not None:
-                t_follow[mon] = last[mon] - prev
+            base = gap_last if (mon == WEEK_START and gap_last is not None) else prev
+            if base is not None:
+                t_follow[mon] = last[mon] - base
             prev = last[mon]
     t_views = weekly_sum([r for r in dr_rows if col(dr_hdr, "threads views") is not None and r[col(dr_hdr, "threads views")].strip()],
-                         lambda r: r[0], lambda r: to_int(r[col(dr_hdr, "threads views")]))
+                         lambda r: r[0], lambda r: to_int(r[col(dr_hdr, "threads views")]), start=BIO_START)
     has_t_views = col(dr_hdr, "threads views") is not None
     bio_hdr, bio_rows = table(bio)
     bio_x = weekly_sum(bio_rows, lambda r: r[0], lambda r: to_int(r[col(bio_hdr, "X bio")]))
@@ -600,16 +605,20 @@ def main() -> int:
     ref_t = weekly_sum(ref_rows, lambda r: r[0], lambda r: to_int(r[col(ref_hdr, "Threads bio")])) if col(ref_hdr, "Threads bio") is not None else {}
 
     rows = [["id", "週", "週ラベル", "経路", "インプ", "リンク到達", "クリック", "note到達", "フォロー", "集計中", "備考"]]
-    mon = WEEK_START
+    mon = BIO_START
     while mon <= today:
         sun = mon + timedelta(days=6)
         live = sun >= today
+        pre = sun < FUNNEL_START  # クリック・到達の集計前の週（案内ページ化前はスキャナ混入のため空欄）
         note_warn = "到達にスキャナ混入（10/8 まで）" if mon.isoformat() <= SCANNER_UNTIL and FUNNEL_START.isoformat() <= SCANNER_UNTIL else ""
-        label = week_label(mon) if mon >= FUNNEL_START else week_label(mon).replace(f"{mon.month}/{mon.day}", f"{FUNNEL_START.month}/{FUNNEL_START.day}", 1)
+        if pre:
+            note_warn = f"クリック・到達は {FUNNEL_START.month}/{FUNNEL_START.day} から"
+        label = week_label(mon) if (mon >= FUNNEL_START or pre) else week_label(mon).replace(f"{mon.month}/{mon.day}", f"{FUNNEL_START.month}/{FUNNEL_START.day}", 1)
         g = lambda d, k: d.get(k, 0)  # noqa: E731
+        gc = lambda d, k: "" if pre else d.get(k, 0)  # noqa: E731  クリック・到達は FUNNEL_START より前は空欄
         for route, imp, reach, clicks, arrive, follow, note in [
-            ("X bio", g(x_imp, mon), g(x_prof, mon), g(bio_x, mon), g(ref_x, mon), g(x_follow, mon), note_warn),
-            ("Threads bio", g(t_views, mon) if has_t_views else "", "", g(bio_t, mon), g(ref_t, mon), t_follow.get(mon, ""), ("プロフ閲覧は API に無い" + ("；" + note_warn if note_warn else ""))),
+            ("X bio", g(x_imp, mon), g(x_prof, mon), gc(bio_x, mon), gc(ref_x, mon), g(x_follow, mon), note_warn),
+            ("Threads bio", t_views.get(mon, "") if has_t_views else "", "", gc(bio_t, mon), gc(ref_t, mon), t_follow.get(mon, ""), ("プロフ閲覧は API に無い" + ("；" + note_warn if note_warn else ""))),
         ]:
             rows.append([f"{mon.isoformat()}|{route}", mon.isoformat(), label, route, imp, reach, clicks, arrive, follow, "true" if live else "false", note])
         mon += timedelta(days=7)
