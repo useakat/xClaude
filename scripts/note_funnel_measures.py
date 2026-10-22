@@ -24,6 +24,10 @@ note 導線 改善施策レジストリ（docs/plans/note_funnel_measures.md）�
   price_band_coeff            価格帯別の販売係数（ビュー ÷ 購入数）の中央値（累計・参考）
 
 before / after の窓: 実施日（順位表）があればその前日までを before、当日以降を after。無ければ全期間を before。
+週単位の指標（x_bio_weekly / threads_bio_weekly / note_profile_weekly）で実施日を含む週は、実施日が土日ならその週を before、
+月火なら after、水〜金なら混在として除外する（2026-10-22）。週次 bio の窓は BIO_START（2026-09-07 の週）から。
+クリック・note 到達は FUNNEL_START（2026-10-09）より前が空欄なので、到達を使う率はその週だけで計算する。
+拡散週 VIRAL_WEEKS（9/14・9/21・9/28 の週。円周率の投稿）は N1〜N3 の窓から外す。
 投稿単位の指標は現体制の開始日（2026-06-13）以降だけを使う。
 
 使い方:
@@ -52,7 +56,11 @@ SHEETS_CLI = os.path.join(SCRIPT_DIR, "sheets_values.py")
 SS3 = "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"  # 発信記録
 DEFAULT_REGISTRY = os.path.join(REPO_ROOT, "docs", "plans", "note_funnel_measures.md")
 REGIME_START = date(2026, 6, 13)   # 現体制の開始日（reporter-weekly-ops H6 と同じ）
-FUNNEL_START = date(2026, 10, 9)   # 週次 bio ファネルの集計開始日（note_funnel_export.py と同じ）
+FUNNEL_START = date(2026, 10, 9)   # 週次 bio ファネルのクリック・到達の集計開始日（note_funnel_export.py と同じ）
+BIO_START = date(2026, 9, 7)       # 週次 bio ファネルの インプ・プロフ・フォロー の開始週（同上。よーん指示 2026-10-22）
+# 拡散週（月曜）。娘の円周率の投稿（9/19 1,125 万 IMP・9/21 957 万・9/29 98 万）でプロフアクセスが 5,427・4,419・744 に跳ねた週。
+# 宇宙探査と無関係の客層なので、N1〜N3（x_bio_weekly / threads_bio_weekly / note_profile_weekly）の窓から外す（よーん指示 2026-10-22）
+VIRAL_WEEKS = {date(2026, 9, 14), date(2026, 9, 21), date(2026, 9, 28)}
 
 
 # ---- 共通 -----------------------------------------------------------------
@@ -76,6 +84,24 @@ def to_date(s: str) -> date | None:
 
 def monday(d: date) -> date:
     return d - timedelta(days=d.weekday())
+
+
+def split_weeks(rows, start: date | None, week_of):
+    """週単位の行を before / after に分ける。実施日を含む週は、実施日が土日なら before、月火なら after、水〜金なら除外（混在）"""
+    if not start:
+        return list(rows), []
+    before, after = [], []
+    for r in rows:
+        w = week_of(r)
+        if w < monday(start):
+            before.append(r)
+        elif w > monday(start):
+            after.append(r)
+        elif start.weekday() >= 5:
+            before.append(r)
+        elif start.weekday() <= 1:
+            after.append(r)
+    return before, after
 
 
 def median(xs: list[float]) -> float | None:
@@ -248,35 +274,49 @@ def m_pinned_clicks_weekly(data, start, week):
 
 
 def bio_window(data, route, start, week):
-    rows = [r for r in data["funnel_weekly"] if r["経路"] == route]
+    rows = [r for r in data["funnel_weekly"] if r["経路"] == route and to_date(r["週"]) not in VIRAL_WEEKS]
     def agg(sel):
         tot = {k: sum(int(num(r[k]) or 0) for r in sel) for k in ("インプ", "リンク到達", "クリック", "note到達", "フォロー")}
         prof = tot["リンク到達"]
         tot["週数"] = len(sel)
+        # 到達・クリックは FUNNEL_START より前の週が空欄なので、それを使う率は到達のある週だけで計算する
+        arr = [r for r in sel if str(r.get("note到達", "")).strip() != ""]
+        tot["到達週数"] = len(arr)
+        tot["到達週プロフ"] = sum(int(num(r["リンク到達"]) or 0) for r in arr)
+        tot["到達週インプ"] = sum(int(num(r["インプ"]) or 0) for r in arr)
+        tot["到達週クリック"] = sum(int(num(r["クリック"]) or 0) for r in arr)
         if route == "X bio":
-            tot["CTR"] = tot["note到達"] / prof if prof else None
+            tot["CTR"] = tot["note到達"] / tot["到達週プロフ"] if tot["到達週プロフ"] else None
             tot["フォロー率"] = tot["フォロー"] / prof if prof else None
+            tot["週別フォロー率"] = [pct((int(num(r["フォロー"]) or 0) / int(num(r["リンク到達"])) if num(r["リンク到達"]) else None), 0) for r in sel]
         else:
-            tot["到達率"] = tot["note到達"] / tot["クリック"] if tot["クリック"] else None
+            tot["到達率"] = tot["note到達"] / tot["到達週クリック"] if tot["到達週クリック"] else None
+            tot["到達/万views"] = tot["note到達"] / tot["到達週インプ"] * 10000 if tot["到達週インプ"] else None
+            vw = [r for r in sel if str(r.get("インプ", "")).strip() != ""]  # views の取れる週だけ（日次記録 threads views は 9/28 週から）
+            tot["views週フォロー"] = sum(int(num(r["フォロー"]) or 0) for r in vw)
+            tot["フォロー/万views"] = tot["views週フォロー"] / tot["インプ"] * 10000 if tot["インプ"] else None
         return tot
-    before = [r for r in rows if not start or to_date(r["週"]) < monday(start)]
-    after = [r for r in rows if start and to_date(r["週"]) >= monday(start)]
+    before, after = split_weeks(rows, start, lambda r: to_date(r["週"]))
     return {"週別": rows, "before": agg(before), "after": agg(after)}
 
 
 def m_x_bio_weekly(data, start, week):
     w = bio_window(data, "X bio", start, week)
     b, a = w["before"], w["after"]
-    w["表示"] = (f"before {b['週数']}週 プロフ {b['リンク到達']} → 到達 {b['note到達']}（CTR {pct(b['CTR'], 0)}）フォロー {b['フォロー']}（{pct(b['フォロー率'], 0)}）"
-                + (f" / after {a['週数']}週 プロフ {a['リンク到達']} → 到達 {a['note到達']}（CTR {pct(a['CTR'], 0)}）フォロー {a['フォロー']}（{pct(a['フォロー率'], 0)}）" if a["週数"] else ""))
+    def one(x):
+        return (f"{x['週数']}週 プロフ {x['リンク到達']} フォロー {x['フォロー']}（フォロー率 {pct(x['フォロー率'], 0)}、週別 {x['週別フォロー率']}）"
+                f" / 到達のある {x['到達週数']}週 プロフ {x['到達週プロフ']} → 到達 {x['note到達']}（CTR {pct(x['CTR'], 0)}）")
+    w["表示"] = f"before {one(b)}" + (f" / after {one(a)}" if a["週数"] else "")
     return w
 
 
 def m_threads_bio_weekly(data, start, week):
     w = bio_window(data, "Threads bio", start, week)
     b, a = w["before"], w["after"]
-    w["表示"] = (f"before {b['週数']}週 views {b['インプ']} クリック {b['クリック']} 到達 {b['note到達']} フォロー {b['フォロー']}"
-                + (f" / after {a['週数']}週 views {a['インプ']} クリック {a['クリック']} 到達 {a['note到達']} フォロー {a['フォロー']}" if a["週数"] else ""))
+    def one(x):
+        return (f"{x['週数']}週 views {x['インプ']} フォロー {x['フォロー']}（views のある週 {x['views週フォロー']}、{x['フォロー/万views'] if x['フォロー/万views'] is None else round(x['フォロー/万views'], 2)}/万views）"
+                f" / 到達のある {x['到達週数']}週 views {x['到達週インプ']} クリック {x['到達週クリック']} 到達 {x['note到達']}（{x['到達/万views'] if x['到達/万views'] is None else round(x['到達/万views'], 2)}/万views）")
+    w["表示"] = f"before {one(b)}" + (f" / after {one(a)}" if a["週数"] else "")
     return w
 
 
@@ -299,18 +339,18 @@ def m_note_profile_weekly(data, start, week, cache: dict):
     ref = {}
     for r in data["note_referrers"]:
         d = to_date(r.get("日付", ""))
-        if d and d >= FUNNEL_START:
+        if d and d >= BIO_START:
             ref[monday(d)] = ref.get(monday(d), 0) + int(num(r.get("note.com")) or 0)
     rows = []
-    for w in weeks_between(FUNNEL_START, week):
+    for w in weeks_between(BIO_START, week):
         cur, prev = week_end_val(w), week_end_val(w - timedelta(days=7))
         rows.append({"週": w.isoformat(), "noteフォロワ純増": (cur - prev) if cur is not None and prev is not None else None,
                      "noteフォロワ数": cur, "note.com流入": ref.get(w, 0), "集計中": w == week})
     def agg(sel):
         inc = [r["noteフォロワ純増"] for r in sel if r["noteフォロワ純増"] is not None]
         return {"週数": len(sel), "フォロワ純増中央値": median(inc), "フォロワ純増合計": sum(inc), "note.com流入合計": sum(r["note.com流入"] for r in sel)}
-    before = [r for r in rows if not start or to_date(r["週"]) < monday(start)]
-    after = [r for r in rows if start and to_date(r["週"]) >= monday(start)]
+    rows = [r for r in rows if to_date(r["週"]) not in VIRAL_WEEKS]
+    before, after = split_weeks(rows, start, lambda r: to_date(r["週"]))
     b, a = agg(before), agg(after)
     disp = (f"before {b['週数']}週 noteフォロワ純増 {[r['noteフォロワ純増'] for r in before]}（中央値 {b['フォロワ純増中央値']}）note.com流入 {[r['note.com流入'] for r in before]}"
             + (f" / after {a['週数']}週 純増 {[r['noteフォロワ純増'] for r in after]}（中央値 {a['フォロワ純増中央値']}）note.com流入 {[r['note.com流入'] for r in after]}" if a["週数"] else ""))
