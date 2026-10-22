@@ -16,6 +16,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **note 価格のはしご：週次振り返りの未対応列挙・ダッシュボードの「次の動作」列・判定ロジックの一本化** — 価格設定ルールの判定を `note_price_rule.py` に出し、毎朝のメール・`article_price_cvr.csv`・週次の表が同じ関数で判定する。CSV に 改稿日・窓PV・窓購入・次の動作・あとPV・通知日 など 8 列を追加。`reporter-weekly-ops` に「⑨ note 価格のはしご」（通知済みで価格も改稿日も変わっていない記事を未対応として毎週列挙）、ダッシュボード v31 の「価格別 CVR」に「次の動作」列（上げる／見直す／判断／あと nn PV）。[→報告書](../reports/20261022_note_price_ladder_weekly_dashboard_next_action/)
 
 - **check-critic（STEP 4.5）をループ化（指摘がなくなる or 最大3回）** — z01 spec で check-critic を単発検出から reader/yohn と同じ収束ループに変更。改稿版を critic に通し直し、「世界初/史上初」の限定漏れ・誇張を取りこぼさない（主張を書き換えたら数値が変わらなくても再 critic）。イカロス投稿で「世界初」の限定ズレを下書き直前までユーザーが手直しした件の再発防止。[→報告書](../reports/20261022_z01_check_critic_loop/)
+- **check-yohn の z01 ペルソナに S32（主体帰属：本人の決断とルール由来の帰結を分ける）、共通コア基準8 に状態文の主語の実例を追記** — ジェミニ8号の z01 制作で、下書き提示後の対話により、check-yohn 3ループ通過後も残った2つの見逃しを蒸留。RCS 使用で自動発動する任務中断を本人の「断念」として書かない（帰結は受け身で分ける・見せ場は本人判断の熱で締める）を S32 に、「意識を失いかけた」等の状態文の主語欠落を基準8 に追記。[→報告書](../reports/20261022_check_yohn_z01_subject_attribution/)
 ## 2026-10-21
 
 - **note 導線の改善施策レジストリと週次検証ヘルパーを新設し、記事 × 価格区間の CVR¥ を導入** — 改善策 N1〜N11（X / Threads / note のプロフィール改善を先頭に）を `docs/plans/note_funnel_measures.md` に順位・判定条件（事前固定）・判定履歴付きで置き、`note_funnel_measures.py` が施策ごとの数値を出して `reporter-weekly-ops` STEP 5.7 が週次で判定する。CVR は価格が混ざると意味が無いので `note価格履歴` シートと `article_price_cvr.csv` で記事 × 価格区間の CVR¥（例 CVR¥300）を出し、ダッシュボードに価格別 CVR の表と価格帯 × CVR¥ の散布図を追加。`note記事日次` に累計ビューが混入していた不具合（GraphQL が返さない記事を REST 累計で埋め、警告の先頭 5 件しか除外していなかった）を直し、2/22 まで遡って全日取得。[→報告書](../reports/20261021_note_funnel_measures_registry_price_cvr/)
