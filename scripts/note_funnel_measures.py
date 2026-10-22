@@ -477,9 +477,6 @@ def main() -> int:
     week = monday(to_date(args.week) or date.today())
     measures = read_registry(args.registry)
     targets = measures if args.all else [m for m in measures if m["状態"].startswith("実施中")]
-    if not targets:
-        print("対象の施策がありません（実施中が 0 件。--all で全施策）")
-        return 0
 
     data_dir = args.data or export_csvs()
     data = {name: read_csv(data_dir, name) for name in ("funnel_posts", "funnel_weekly", "click_detail", "pinned", "articles", "note_referrers", "article_price_cvr")}
@@ -504,15 +501,38 @@ def main() -> int:
             results.append({"ID": m["ID"], "施策": m["施策"], "段階": m["段階"], "状態": m["状態"],
                             "実施日": m["実施日"].isoformat() if m["実施日"] else "", "指標キー": key, "値": res})
 
+    # 価格のはしご（note 記事の価格設定ルール。article_price_cvr の現在の区間。判定は note_price_rule.py）
+    ladder = []
+    for r in data["article_price_cvr"]:
+        if r.get("終了日", "") or int(num(r.get("価格")) or 0) <= 0:
+            continue
+        ladder.append({"記事": r["タイトル"], "価格": int(num(r["価格"]) or 0), "窓開始日": r.get("窓開始日", ""), "改稿日": r.get("改稿日", ""),
+                       "窓PV": int(num(r.get("窓PV")) or 0), "窓購入": int(num(r.get("窓購入")) or 0), "次の動作": r.get("次の動作", ""),
+                       "あとPV": r.get("あとPV", ""), "通知日": r.get("通知日", ""), "通知内容": r.get("通知内容", ""),
+                       "未対応": bool(r.get("通知内容", "").strip())})
+    ladder.sort(key=lambda x: (not x["未対応"], not x["次の動作"], x["記事"]))
+
     if args.json:
-        print(json.dumps({"週": week.isoformat(), "data_dir": data_dir, "結果": results}, ensure_ascii=False, indent=1, default=str))
+        print(json.dumps({"週": week.isoformat(), "data_dir": data_dir, "結果": results, "価格のはしご": ladder}, ensure_ascii=False, indent=1, default=str))
         return 0
     print(f"基準週: {week.isoformat()}（月曜）  CSV: {data_dir}\n")
-    print("| ID | 施策 | 段階 | 状態 | 指標キー | 今週の値（before→after, n） |")
-    print("|---|---|---|---|---|---|")
-    for r in results:
-        print(f"| {r['ID']} | {r['施策']} | {r['段階']} | {r['状態']}{'（' + r['実施日'] + '〜）' if r['実施日'] else ''} | {r['指標キー']} | {r['値'].get('表示', '')} |")
-    print("\n（判定は reporter-weekly-ops STEP 5.7 がレジストリの判定条件と照合して行う。詳細は --json）")
+    if not targets:
+        print("対象の施策がありません（実施中が 0 件。--all で全施策）\n")
+    else:
+        print("| ID | 施策 | 段階 | 状態 | 指標キー | 今週の値（before→after, n） |")
+        print("|---|---|---|---|---|---|")
+        for r in results:
+            print(f"| {r['ID']} | {r['施策']} | {r['段階']} | {r['状態']}{'（' + r['実施日'] + '〜）' if r['実施日'] else ''} | {r['指標キー']} | {r['値'].get('表示', '')} |")
+        print("\n（判定は reporter-weekly-ops STEP 5.7 がレジストリの判定条件と照合して行う。詳細は --json）")
+    print("\n## 価格のはしご（現在価格の区間。窓 ＝ 改稿日があればそこから）\n")
+    print("| 記事 | 価格 | 窓 | 窓PV | 購入 | 次の動作 | 通知 | 状態 |")
+    print("|---|---|---|---|---|---|---|---|")
+    for x in ladder:
+        nxt = x["次の動作"] or (f"あと {x['あとPV']} PV" if x["あとPV"] != "" else "")
+        print(f"| {x['記事'][:24]} | ¥{x['価格']} | {x['窓開始日']}〜{'（改稿）' if x['改稿日'] else ''} | {x['窓PV']} | {x['窓購入']} | {nxt} | "
+              f"{x['通知日']} | {'未対応' if x['未対応'] else ''} |")
+    pending = [x for x in ladder if x["未対応"]]
+    print(f"\n未対応: {len(pending)} 件" + ("（" + "、".join(f"{x['記事'][:12]} ¥{x['価格']} → {x['通知内容'].split('（')[0]}" for x in pending) + "）" if pending else ""))
     return 0
 
 

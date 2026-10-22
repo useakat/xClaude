@@ -63,8 +63,7 @@ PRICE_HIST_HEADER = ["記事ID", "タイトル", "価格", "開始日", "終了�
 #   それ未満なら「冒頭と有料ラインを見直す」。上げた価格の 売上/1,000 PV が前の価格を下回れば「戻すか改稿か判断」。
 #   本文ハッシュ（題名＋無料部分＋有料部分の文字数・画像数）が変われば改稿日として記録し、PV はそこから数え直す。
 #   判定と改稿検知は 1 回だけメールで知らせる（通知日・通知内容）
-RULE_PV = 200
-RULE_BUYS = 2
+from note_price_rule import RULE_PV, RULE_BUYS, decide_action  # noqa: E402  判定は note_price_rule.py が正
 MAIL_TO = "useakat@gmail.com"
 SEND_GMAIL = SCRIPT_DIR / "send_gmail.sh"
 BUY_SHEET = "note購入記録"
@@ -344,7 +343,7 @@ def check_price_rule(ss, meta: dict[str, str], daily_values: list[list], dry_run
             continue
         cur_rev = n_buy * price / n_pv * 1000
         prev = sorted([(_parse_date(x[3]), x) for _, x in rows if x[4].strip() and _parse_date(x[3])], key=lambda t: t[0])
-        action = ""
+        prev_seg = None
         if prev:
             pr = prev[-1][1]
             try:
@@ -352,14 +351,9 @@ def check_price_rule(ss, meta: dict[str, str], daily_values: list[list], dry_run
             except ValueError:
                 p_price = 0
             p_start, p_end = _parse_date(pr[3]), _parse_date(pr[4])
-            if p_price and p_price < price and p_start and p_end:
-                p_pv = seg_pv(aid, p_start, p_end)
-                p_buy = seg_buys(aid, p_price, p_start, p_end)
-                if p_pv and cur_rev < p_buy * p_price / p_pv * 1000:
-                    action = (f"戻すかブラッシュアップするか判断（規則 4：売上/1,000 PV {cur_rev:,.0f} 円 ＜ "
-                              f"¥{p_price} の {p_buy * p_price / p_pv * 1000:,.0f} 円 [PV {p_pv}・購入 {p_buy}]）")
-        if not action:
-            action = "価格を上げる（規則 2）" if n_buy >= RULE_BUYS else "冒頭と有料ラインを見直す（規則 3）"
+            if p_price and p_start and p_end:
+                prev_seg = {"price": p_price, "pv": seg_pv(aid, p_start, p_end), "buys": seg_buys(aid, p_price, p_start, p_end)}
+        action = decide_action(n_pv, n_buy, price, prev_seg)
         if notified.split("（")[0] == action.split("（")[0]:
             continue  # 同じ動作は通知済み
         updates += [{"range": f"I{i}", "values": [[today.isoformat()]]}, {"range": f"J{i}", "values": [[action]]}]

@@ -59,6 +59,8 @@ from datetime import date, datetime, timedelta, timezone
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(SCRIPT_DIR)
 SHEETS_CLI = os.path.join(SCRIPT_DIR, "sheets_values.py")
+sys.path.insert(0, SCRIPT_DIR)
+from note_price_rule import RULE_PV, decide_action  # noqa: E402  価格設定ルールの判定（note_article_daily.py と共用）
 SS3 = "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"  # 発信記録
 SS2 = "1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc"  # outputs（投稿の型 what_id: W001 など）
 DEFAULT_OUT = os.path.join(REPO_ROOT, "logs", "note_funnel")
@@ -220,7 +222,7 @@ def main() -> int:
     x_hdr, x_rows = table(get("X投稿一覧!A1:AK"))
     t_hdr, t_rows = table(get("Threads投稿一覧!A:S"))
     buy_hdr, buy_rows = table(get_optional("note購入記録!A:G"))
-    ph_hdr, ph_rows = table(get_optional("note価格履歴!A:F"))  # 記事ID, タイトル, 価格, 開始日, 終了日, 出典
+    ph_hdr, ph_rows = table(get_optional("note価格履歴!A:J"))  # 記事ID, タイトル, 価格, 開始日, 終了日, 出典, 本文ハッシュ, 改稿日, 通知日, 通知内容
     dr_hdr, dr_rows = table(get("日次記録!A:AE"))
     out_hdr, out_rows = table(get_optional("outputs!A:C", SS2))  # 日時, URL, what_id
     x_idx = {h: i for i, h in enumerate(x_hdr)}
@@ -335,25 +337,30 @@ def main() -> int:
             daily_by_article.setdefault(aid, {})[dd.date()] = to_int(pv)
     segments: dict[str, list[dict]] = {}
     for r in ph_rows:
-        r = r + [""] * (6 - len(r))
+        r = r + [""] * (10 - len(r))
         sd = parse_dt(ymd(r[3]))
         if not r[0] or not sd:
             continue
         ed = parse_dt(ymd(r[4])) if r[4].strip() else None
-        segments.setdefault(r[0], []).append({"price": to_int(r[2]), "start": sd.date(), "end": ed.date() if ed else None, "src": r[5]})
+        rv = parse_dt(ymd(r[7])) if r[7].strip() else None
+        segments.setdefault(r[0], []).append({"price": to_int(r[2]), "start": sd.date(), "end": ed.date() if ed else None, "src": r[5],
+                                              "rev": rv.date() if rv else None, "notified_at": r[8].strip(), "notice": r[9].strip()})
     for aid, a in articles.items():
         if aid not in segments and a.get("date") and aid in prices:
             pd = parse_dt(a["date"])
             if pd:
-                segments[aid] = [{"price": prices[aid], "start": pd.date(), "end": None, "src": "投稿一覧（履歴なし）"}]
+                segments[aid] = [{"price": prices[aid], "start": pd.date(), "end": None, "src": "投稿一覧（履歴なし）", "rev": None, "notified_at": "", "notice": ""}]
     yesterday = today - timedelta(days=1)
-    price_rows = [["記事ID", "タイトル", "価格", "開始日", "終了日", "日数", "PV", "購入数", "CVR", "販売係数", "売上", "PV取得日数", "現在価格"]]
+    # 価格設定ルール（note_price_rule.py）の列は現在の区間（終了日なし・有料）だけ埋める。窓 ＝ 改稿日があればそこから、無ければ区間の開始日から
+    price_rows = [["記事ID", "タイトル", "価格", "開始日", "終了日", "日数", "PV", "購入数", "CVR", "販売係数", "売上", "PV取得日数", "現在価格",
+                   "改稿日", "窓開始日", "窓PV", "窓購入", "次の動作", "あとPV", "通知日", "通知内容"]]
     current_seg: dict[str, dict] = {}
     for aid, segs in segments.items():
         segs.sort(key=lambda x: x["start"])
         a = articles.get(aid, {})
         pv_days = daily_by_article.get(aid, {})
         assigned: set[int] = set()
+        prev_seg: dict | None = None  # 直前の閉じた区間（規則 4 の比較相手）
         for sg in segs:
             end = sg["end"] or yesterday
             if end < sg["start"]:
@@ -362,6 +369,7 @@ def main() -> int:
             pv = sum(v for d, v in pv_days.items() if sg["start"] <= d <= end)
             got = sum(1 for d in pv_days if sg["start"] <= d <= end)
             buys = 0
+            buy_dates: list[date] = []
             # 価格が記録されている購入は、同じ価格の区間に ±1 日の幅で入れる（変更日当日に新旧価格が混在するため）。
             # 価格が無い購入は日付だけで入れる
             for i, (bd, bp) in enumerate(purchase_list.get(aid, [])):
@@ -375,12 +383,23 @@ def main() -> int:
                     continue
                 assigned.add(i)
                 buys += 1
+                buy_dates.append(bd)
+            ladder = ["", "", "", "", "", "", "", ""]
+            if sg["end"] is None and sg["price"] > 0:
+                win = max(sg["start"], sg["rev"]) if sg.get("rev") else sg["start"]
+                wpv = sum(v for d, v in pv_days.items() if win <= d <= end)
+                wbuys = sum(1 for d in buy_dates if d >= win - timedelta(days=1))
+                action = decide_action(wpv, wbuys, sg["price"], prev_seg)
+                ladder = [sg["rev"].isoformat() if sg.get("rev") else "", win.isoformat(), wpv, wbuys, action,
+                          "" if action else max(0, RULE_PV - wpv), sg.get("notified_at", ""), sg.get("notice", "")]
+            else:
+                prev_seg = {"price": sg["price"], "pv": pv, "buys": buys}
             row = {"PV": pv, "購入数": buys, "CVR": round(buys / pv, 4) if pv else "", "販売係数": round(pv / buys) if buys and pv else "",
                    "売上": buys * sg["price"], "PV取得日数": got, "日数": days}
             if sg["end"] is None:
                 current_seg[aid] = row
             price_rows.append([aid, a.get("title", ""), sg["price"], sg["start"].isoformat(), sg["end"].isoformat() if sg["end"] else "",
-                               days, pv, buys, row["CVR"], row["販売係数"], row["売上"], got, prices.get(aid, "")])
+                               days, pv, buys, row["CVR"], row["販売係数"], row["売上"], got, prices.get(aid, "")] + ladder)
         for i, (bd, bp) in enumerate(purchase_list.get(aid, [])):
             if i not in assigned:  # 価格の合う区間が無い（履歴の価格・日付が合っていない）
                 print(f"⚠ 購入記録 {aid} {bd} ¥{bp} が note価格履歴 のどの区間にも入らない（区間: "
