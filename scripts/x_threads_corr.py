@@ -326,8 +326,9 @@ def scatter(pairs, out_dir):
     ]
     paths = []
     for fname, kx, ky, lx, ly, log in specs:
-        fig, ax = plt.subplots(figsize=(7.5, 6))
+        fig, ax = plt.subplots(figsize=(7, 7))
         n = 0
+        xs, ys = [], []
         for p in use:
             xv, yv = p[kx], p[ky]
             if any(isinstance(v, float) and math.isnan(v) for v in (xv, yv)):
@@ -335,12 +336,24 @@ def scatter(pairs, out_dir):
             if log and (xv <= 0 or yv <= 0):
                 continue
             n += 1
+            xs.append(xv); ys.append(yv)
             pre = p["x_dt"] < REGIME_START
             ax.scatter(xv, yv, s=28, facecolors="none" if pre else colors.get(p["what"], "#7f7f7f"),
                        edgecolors=colors.get(p["what"], "#7f7f7f"), alpha=0.8)
             ax.annotate(p["text"][:8], (xv, yv), fontsize=6, alpha=0.6, xytext=(3, 2), textcoords="offset points")
         if log:
             ax.set_xscale("log"); ax.set_yscale("log")
+        # 縦軸・横軸の目盛り範囲を揃える（同じ値が対角線に乗る）
+        if xs:
+            lo, hi = min(xs + ys), max(xs + ys)
+            if log:
+                lo, hi = lo / 1.5, hi * 1.5
+            else:
+                pad = (hi - lo) * 0.05 or 1
+                lo, hi = lo - pad, hi + pad
+            ax.set_xlim(lo, hi); ax.set_ylim(lo, hi)
+            ax.plot([lo, hi], [lo, hi], color="#999", lw=0.8, ls="--", label="X ＝ Threads")
+            ax.set_aspect("equal", adjustable="box")
         ax.set_xlabel(lx); ax.set_ylabel(ly)
         ax.set_title(f"{lx} × {ly}（同時転載 n={n}）", fontsize=10)
         for w, c in colors.items():
