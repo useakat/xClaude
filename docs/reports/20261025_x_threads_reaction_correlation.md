@@ -6,7 +6,7 @@ sidebar:
   hidden: true
 ---
 
-← [変更ログへ](../changelog/)
+← [変更ログへ](../changelog/) ｜ [9/24 以降だけの分析→](../20261025_x_threads_reaction_correlation_since0924/)
 
 ## 背景・動機
 

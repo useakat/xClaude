@@ -46,5 +46,5 @@ description: scripts/ ディレクトリのスクリプト一覧
 | `note_article_daily.py` | note 記事ごとの日別 PV・スキを `note記事日次` に記録し、価格の変更を `note価格履歴` に区間として残す。価格設定ルール（200 PV で上げる／見直す／戻すか判断）の照合と改稿検知を行い、該当があればメールで知らせる（cron 05:55） |
 | `note_price_rule.py` | note 記事の価格設定ルールの判定（200 PV で上げる／見直す／戻すか判断）。`note_article_daily.py` と `note_funnel_export.py` が共用 |
 | `note_funnel_export.py` | note 導線ダッシュボード用の CSV（記事 × 価格区間の CVR¥ を含む 9 本）を発信記録シートから書き出す |
-| `x_threads_corr.py` | X 投稿と Threads 同時転載の反応の相関を出す（outputs で結合、Spearman ρ・中央値・残差・散布図。1 回限りの分析用、X API は呼ばない） |
+| `x_threads_corr.py` | X 投稿と Threads 同時転載の反応の相関を出す（outputs で結合、Spearman ρ・中央値・残差・散布図。X API は呼ばない）。`--since YYYY-MM-DD` で Threads 投稿日以降のペアに絞る（9/24 の配信変化より後だけを見るとき） |
 | `note_funnel_measures.py` | note 導線 改善施策レジストリ（`docs/plans/note_funnel_measures.md`）の施策ごとに検証用の数値を出す（判定は reporter-weekly-ops） |
