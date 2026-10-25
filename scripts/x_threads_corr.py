@@ -203,9 +203,16 @@ def fmt(v, nd=2):
     return "—" if v is None or (isinstance(v, float) and math.isnan(v)) else f"{v:.{nd}f}"
 
 
-def strata(pairs):
+def strata(pairs, since=None):
     use = [p for p in pairs if p["usable"]]
     mir = [p for p in use if p["group"] == "mirror"]
+    if since:
+        return [
+            (f"全体（同時転載・{since:%m/%d} 以降）", mir),
+            ("z01", [p for p in mir if p["what"] == "z01"]),
+            ("W001", [p for p in mir if p["what"] == "W001"]),
+            ("参考：後日転載", [p for p in use if p["group"] == "late"]),
+        ]
     after = [p for p in mir if p["x_dt"] >= REGIME_START]
     return [
         ("全体（同時転載）", mir),
@@ -216,9 +223,11 @@ def strata(pairs):
     ]
 
 
-def write_corr_md(pairs, skipped, today, out_dir, min_age_days):
+def write_corr_md(pairs, skipped, today, out_dir, min_age_days, since=None):
     lines = []
     lines.append(f"# X × Threads 反応の相関（{today:%Y-%m-%d} 取得）\n")
+    if since:
+        lines.append(f"- 対象: Threads 投稿日が {since:%Y-%m-%d} 以降のペアのみ（それより前は除外）")
     tot = len(pairs)
     mir = [p for p in pairs if p["group"] == "mirror"]
     late = [p for p in pairs if p["group"] == "late"]
@@ -235,7 +244,7 @@ def write_corr_md(pairs, skipped, today, out_dir, min_age_days):
                      f"範囲 {min(th_ages)}〜{max(th_ages)} 日")
     lines.append("")
     lines.append("## 相関表（Spearman ρ / p / log Pearson r）\n")
-    strata_list = strata(pairs)
+    strata_list = strata(pairs, since)
     lines.append("| 指標 | " + " | ".join(name for name, _ in strata_list) + " |")
     lines.append("|---|" + "---|" * len(strata_list))
     for label, kx, ky, log in METRICS:
@@ -258,8 +267,8 @@ def write_corr_md(pairs, skipped, today, out_dir, min_age_days):
     lines.append("## 中央値（同時転載・使用分）\n")
     lines.append("| 型 | n | X インプ | Th views | views/インプ | X いいね率 | Th いいね率 | X エンゲ率 | Th エンゲ率 |")
     lines.append("|---|---|---|---|---|---|---|---|---|")
-    for name, ps in strata_list[:4]:
-        if not ps:
+    for name, ps in strata_list:
+        if not ps or name.startswith("参考"):
             continue
         med = lambda k: statistics.median(q[k] for q in ps)  # noqa: E731
         lines.append(f"| {name} | {len(ps)} | {med('x_imp'):,.0f} | {med('th_views'):,.0f} | "
@@ -359,7 +368,8 @@ def scatter(pairs, out_dir):
         for w, c in colors.items():
             if any(p["what"] == w for p in use):
                 ax.scatter([], [], color=c, label=w)
-        ax.scatter([], [], facecolors="none", edgecolors="#555", label=f"白抜き: {REGIME_START:%m/%d} より前")
+        if any(p["x_dt"] < REGIME_START for p in use):
+            ax.scatter([], [], facecolors="none", edgecolors="#555", label=f"白抜き: {REGIME_START:%m/%d} より前")
         ax.legend(fontsize=8)
         ax.grid(alpha=0.3)
         fig.tight_layout()
@@ -374,15 +384,20 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "outputs", "reports", "x_threads_corr"))
     ap.add_argument("--min-age-days", type=int, default=9)
+    ap.add_argument("--since", default=None,
+                    help="YYYY-MM-DD。Threads 投稿日がこの日以降のペアだけを使う（直前 8 週中央値もこの範囲内で取る）")
     args = ap.parse_args()
+    since = datetime.strptime(args.since, "%Y-%m-%d") if args.since else None
     os.makedirs(args.out, exist_ok=True)
     today = datetime.now()
 
     gc = get_client()
     tid_to_what, th_links, x_by_tid, th_by_perma = load(gc)
     pairs, skipped = build_pairs(tid_to_what, th_links, x_by_tid, th_by_perma, today, args.min_age_days)
+    if since:
+        pairs = [p for p in pairs if p["th_dt"] >= since]
     add_baseline_ratio(pairs)
-    md = write_corr_md(pairs, skipped, today, args.out, args.min_age_days)
+    md = write_corr_md(pairs, skipped, today, args.out, args.min_age_days, since)
     csv_path = write_pairs_csv(pairs, args.out)
     pngs = scatter(pairs, args.out)
     print(open(md, encoding="utf-8").read())
