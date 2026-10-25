@@ -26,7 +26,7 @@ import os
 import sys
 import requests
 
-DRIVE_UUID = "960819bd-d145-4f2b-ad5c-e521cc86112e"
+DRIVE_UUID = "Google_Drive"
 
 
 def get_drive_config():

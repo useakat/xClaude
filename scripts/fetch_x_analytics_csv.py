@@ -18,7 +18,7 @@ import urllib.request
 
 # ── 設定 ───────────────────────────────────────────────
 FOLDER_ID  = "1J45co5hN74gzxNateNRyeDtswZu0lMr3"  # Xanalytics/tmp
-DRIVE_UUID = "960819bd-d145-4f2b-ad5c-e521cc86112e"
+DRIVE_UUID = "Google_Drive"
 OUTPUT_PATH = "/tmp/x_analytics_map.json"
 
 # ── Drive MCP プロキシ ────────────────────────────────
