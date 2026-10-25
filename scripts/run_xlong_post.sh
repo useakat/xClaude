@@ -3,6 +3,11 @@
 # cron: 0 17 * * * /bin/bash /root/xClaude/scripts/run_xlong_post.sh
 export MIRROR_THREADS=1  # X投稿を Threads にも転載する
 DIR="$(dirname "$0")"
+# 投稿時間帯ラベル（17時投稿）が付いたメールを件名を問わず先に投稿する
+/bin/bash "$DIR/post_by_label.sh" 17
+rc=$?
+if [ "$rc" -ne 20 ]; then exit $rc; fi   # 投稿した／失敗 → 従来の件名検索に進まない
+# 従来の件名検索（post_from_email.sh は時刻ラベル付きのメールを除外する）
 /bin/bash "$DIR/post_from_email.sh" "【X長文】" W001 x_post_xlong.log
 rc=$?
 # rc=20 → 投稿対象なし。X短文投稿を代替投稿（rc=1 の投稿失敗時は代替しない）

@@ -1,25 +1,36 @@
 #!/bin/bash
 # Gmail メールを X に投稿する汎用スクリプト（全 shell 化版）
 export PATH="/usr/local/bin:$PATH"
-# Usage: bash post_from_email.sh [--dry-run] <件名キーワード> <howID> <ログファイル名>
+# Usage: bash post_from_email.sh [--dry-run] [--label <ラベル名>] <件名キーワード> <howID> <ログファイル名>
 # Example:
 #   bash post_from_email.sh "【ワンポイント解説】" W003 x_post_xonepoint.log
 #   bash post_from_email.sh --dry-run "【ワンポイント解説】" W003 x_post_xonepoint.log
+#   bash post_from_email.sh --label 17時投稿 "【X長文】" W001 x_post_xlong.log
+#
+# 投稿時間帯ラベル（6時投稿 / 12時投稿 / 17時投稿 / 20時投稿）:
+#   --label あり → そのラベルが付いたメールだけを探す（枠の cron が件名を問わず先に拾う。post_by_label.sh 参照）
+#   --label なし → 時刻ラベルが付いたメールをすべて除外して探す（従来どおり件名の枠で投稿）
 
 set -uo pipefail
 
+TIME_LABELS="6時投稿 12時投稿 17時投稿 20時投稿"
+
 DRY_RUN=0
-if [ "${1:-}" = "--dry-run" ]; then
-  DRY_RUN=1
-  shift
-fi
+ONLY_LABEL=""
+while [ $# -gt 0 ]; do
+  case "${1:-}" in
+    --dry-run) DRY_RUN=1; shift ;;
+    --label)   ONLY_LABEL="${2:-}"; shift 2 ;;
+    *) break ;;
+  esac
+done
 
 SUBJECT_KEYWORD="${1:-}"
 HOW_ID="${2:-}"
 LOG_FILE="${3:-x_post.log}"
 
 if [ -z "$SUBJECT_KEYWORD" ] || [ -z "$HOW_ID" ]; then
-  echo "Usage: bash post_from_email.sh <件名キーワード> <howID> <ログファイル名>"
+  echo "Usage: bash post_from_email.sh [--dry-run] [--label <ラベル名>] <件名キーワード> <howID> <ログファイル名>"
   exit 1
 fi
 
@@ -34,10 +45,15 @@ log() {
   echo "[$(date '+%Y-%m-%d %H:%M:%S JST')] $*" | tee -a "$LOG_PATH"
 }
 
-if [ $DRY_RUN -eq 1 ]; then
-  log "開始 [DRY RUN] (subject:$SUBJECT_KEYWORD, howID:$HOW_ID)"
+if [ -n "$ONLY_LABEL" ]; then
+  LABEL_DESC="label:$ONLY_LABEL"
 else
-  log "開始 (subject:$SUBJECT_KEYWORD, howID:$HOW_ID)"
+  LABEL_DESC="時刻ラベル無し"
+fi
+if [ $DRY_RUN -eq 1 ]; then
+  log "開始 [DRY RUN] (subject:$SUBJECT_KEYWORD, howID:$HOW_ID, $LABEL_DESC)"
+else
+  log "開始 (subject:$SUBJECT_KEYWORD, howID:$HOW_ID, $LABEL_DESC)"
 fi
 
 cd "$REPO_ROOT"
@@ -52,11 +68,17 @@ while [ $LOOP_COUNT -lt $MAX_LOOPS ]; do
   LOOP_COUNT=$((LOOP_COUNT + 1))
 
   # STEP 1: 未処理スレッド一覧を取得
-  PARAMS=$(SUBJECT="$SUBJECT_KEYWORD" python3 -c "
+  # 時刻ラベル: --label 指定時はそのラベル付きだけ、無指定時は時刻ラベル付きをすべて除外
+  PARAMS=$(SUBJECT="$SUBJECT_KEYWORD" ONLY_LABEL="$ONLY_LABEL" TIME_LABELS="$TIME_LABELS" python3 -c "
 import json, os
+q = f\"subject:{os.environ['SUBJECT']} in:inbox -label:投稿済み\"
+if os.environ['ONLY_LABEL']:
+    q += f\" label:{os.environ['ONLY_LABEL']}\"
+else:
+    q += ''.join(f' -label:{l}' for l in os.environ['TIME_LABELS'].split())
 print(json.dumps({
     'userId': 'me',
-    'q': f\"subject:{os.environ['SUBJECT']} in:inbox -label:投稿済み\",
+    'q': q,
     'maxResults': 50,
 }))")
   # gws クエリを実行し「クエリ失敗」と「正常に0件」を区別する。
