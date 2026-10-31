@@ -1,0 +1,35 @@
+{
+  "thread_id": "f0c57a78-7a5b-4efc-9c98-389eb3822510",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "画像を編集します。金星の位置を左下方向へずらし、右上に宇宙空間を作るようにします。文字とあかつきは完全に保持します。"
+    },
+    {
+      "type": "assistant",
+      "text": "編集しました。金星の縁が左下から右上へゆるやかに上がり、右上の約30%が宇宙空間になっています。あかつきと文字はそのまま保持されています。\n\n![あかつきサムネイル_金星位置変更](https://a.lovart.ai/artifacts/agent/OaiBRjAOHqFlwhW3.png)\n\n問題があればお知らせください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/OaiBRjAOHqFlwhW3.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/OaiBRjAOHqFlwhW3.png",
+      "local_path": "_lovart/e1_2/lovart_b1d125bb5051.png",
+      "new": true
+    }
+  ]
+}

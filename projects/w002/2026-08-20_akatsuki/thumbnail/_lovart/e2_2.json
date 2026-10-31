@@ -1,0 +1,35 @@
+{
+  "thread_id": "6b2f0aae-14a5-4209-90de-0e4f3fc9fe7e",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "編集を実行します。左側の文字と黒い帯を消し、金星の雲に自然に描き直します。"
+    },
+    {
+      "type": "assistant",
+      "text": "編集が完了しました。\n\n左側の文字と黒い帯をすべて消し、金星の雲（金色〜オレンジ）で自然に修復しています。あかつき機体・パドル・ノズル・噴射、右上の宇宙空間、金星の縁の形と位置、画像サイズ1280×672pxはそのまま保持されています。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/MvWL9Zf1XCFQ5D2z.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/MvWL9Zf1XCFQ5D2z.png",
+      "local_path": "_lovart/e2_2/lovart_591988d3362a.png",
+      "new": true
+    }
+  ]
+}

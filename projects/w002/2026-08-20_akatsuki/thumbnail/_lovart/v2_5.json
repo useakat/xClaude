@@ -1,0 +1,47 @@
+{
+  "thread_id": "435dc996-b243-4d84-8d3d-87dd6432acdc",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "参考画像をもとにサムネイルを生成します。"
+    },
+    {
+      "type": "assistant",
+      "text": "Ideogram 4は画像参照に対応していないため、画像生成ツールを切り替えます。"
+    },
+    {
+      "type": "assistant",
+      "text": "サムネイルを生成しました。確認をお願いします。\n\nご希望があれば、機体の向き・噴射の強弱・文字サイズ・金星の大きさなど調整します。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/D0FiLfIfd6IWY1MH.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "failures": [
+    {
+      "tool": "generate_media",
+      "tool_hint": "generate_image_ideogram_v4",
+      "code": "INPUT_PARAMS_INVALID",
+      "message": "tool_hint \"generate_image_ideogram_v4\" supports text-to-image only; remove image_url, reference_image_urls, and mask_image_url | Suggested fix: This is a non-retryable parameter-validation error. Retrying unchanged will fail again. Correct only the parameter named in the error according to its allowed type, range, or model constraint, then retry. (source: media-capabilities; error code: STRICT_VALIDATION_FAILED)"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/D0FiLfIfd6IWY1MH.png",
+      "local_path": "_lovart/v2_5/lovart_a5102645e7b9.png",
+      "new": true
+    }
+  ]
+}

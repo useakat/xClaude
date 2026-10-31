@@ -1,0 +1,43 @@
+{
+  "thread_id": "823a3cf4-dd34-406a-a427-1d48e93a93a4",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "This is a detailed single-image brief, so I’ll generate the thumbnail directly with the two reference images for spacecraft accuracy."
+    },
+    {
+      "type": "assistant",
+      "text": "作成しました。1280×672px のサムネイルです。\n\n配置や文字はご指定に沿って、左上にタイトル・サブタイトル、右上に「Akatsuki 2010 → 2015」を入れ、金星の縁と「あかつき」を右側に配置しています。機体の形状は参考画像を反映し、下面側にアンテナ円盤が描かれていません。\n\n文字の崩れや色味・構図の調整が必要でしたら、具体的な修正点を教えてください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/nzswHWWCgLAaMi0D.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "failures": [
+    {
+      "tool": "generate_media",
+      "tool_hint": "generate_image_ideogram_v4",
+      "code": "INPUT_PARAMS_INVALID",
+      "message": "tool_hint \"generate_image_ideogram_v4\" supports text-to-image only; remove image_url, reference_image_urls, and mask_image_url | Suggested fix: This is a non-retryable parameter-validation error. Retrying unchanged will fail again. Correct only the parameter named in the error according to its allowed type, range, or model constraint, then retry. (source: media-capabilities; error code: STRICT_VALIDATION_FAILED)"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/nzswHWWCgLAaMi0D.png",
+      "local_path": "_lovart/v2_1/lovart_041156993053.png",
+      "new": true
+    }
+  ]
+}

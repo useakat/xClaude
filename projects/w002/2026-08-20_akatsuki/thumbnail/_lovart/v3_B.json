@@ -1,0 +1,35 @@
+{
+  "thread_id": "cfa98463-34bf-4f4d-a505-ecc6178a1904",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "金星の雲を背景にした「あかつき」のサムネイルを生成します。"
+    },
+    {
+      "type": "assistant",
+      "text": "生成完了です。いかがでしょうか？修正・調整があればお知らせください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/Ah46TlE6aZK9Tkvd.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/Ah46TlE6aZK9Tkvd.png",
+      "local_path": "_lovart/v3_B/lovart_65f362cbe87a.png",
+      "new": true
+    }
+  ]
+}

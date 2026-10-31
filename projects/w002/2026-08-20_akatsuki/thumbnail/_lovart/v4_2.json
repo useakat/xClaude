@@ -1,0 +1,35 @@
+{
+  "thread_id": "712da8e3-1187-424e-b329-8b057d80669c",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "ご依頼の内容を基に、note有料記事サムネイル用の「あかつき」画像を生成します。参照画像の機体形状に忠実に、指定の構図・文字配置で作成します。"
+    },
+    {
+      "type": "assistant",
+      "text": "生成しました。金星の明るい雲を背景に、実機に近い「あかつき」を右側に大きく配置し、左上に指定のタイトルと黒帯テキストを入れた16:9サムネイルです。\n\n気になる点や調整があればお知らせください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/X8fEYtE3h7Ahtlxc.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/X8fEYtE3h7Ahtlxc.png",
+      "local_path": "_lovart/v4_2/lovart_38b815bafae5.png",
+      "new": true
+    }
+  ]
+}

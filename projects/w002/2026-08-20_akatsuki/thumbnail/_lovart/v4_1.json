@@ -1,0 +1,39 @@
+{
+  "thread_id": "7094a0c8-322a-4743-bec7-e437fe222139",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "完成しました。\n\n- 16:9横長、金星の明るい金色〜オレンジの雲を背景に、右側に大きな「あかつき」を配置\n- 下面のメインエンジンから青白い噴射光\n- 左上に大きな白フチ文字「五年後、/ また会おう」\n- その下に黒帯＋白文字「金星探査機　あかつき」\n- ©・透かし・CTA・絵文字などなし\n\n記事一覧の小さな表示でも文字が読みやすいよう、コントラストと文字サイズを意識しています。微調整が必要な点があれば教えてください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/cuH0phhfbiLmdVVA.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "failures": [
+    {
+      "tool": "generate_media",
+      "tool_hint": "generate_image_ideogram_v4",
+      "code": "INPUT_PARAMS_INVALID",
+      "message": "tool_hint \"generate_image_ideogram_v4\" supports text-to-image only; remove image_url, reference_image_urls, and mask_image_url | Suggested fix: This is a non-retryable parameter-validation error. Retrying unchanged will fail again. Correct only the parameter named in the error according to its allowed type, range, or model constraint, then retry. (source: media-capabilities; error code: STRICT_VALIDATION_FAILED)"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/cuH0phhfbiLmdVVA.png",
+      "local_path": "_lovart/v4_1/lovart_0cad17260f7d.png",
+      "new": true
+    }
+  ]
+}

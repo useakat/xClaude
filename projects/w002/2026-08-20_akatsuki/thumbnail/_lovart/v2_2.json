@@ -1,0 +1,35 @@
+{
+  "thread_id": "a67de165-7bb3-423e-8b47-78acd03ff697",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "了解しました。指定に忠実に、note有料記事サムネイルを生成します。"
+    },
+    {
+      "type": "assistant",
+      "text": "生成しました。構成と雰囲気は指定通りになっていますが、以下を確認ください：\n\n- **金星**：画面下端に大きな弧として広がり、クリーム〜黄土色の雲と夜側の影。\n- **あかつき**：右上寄り、金色箱型機体、上下に青いパドル。下面の四隅から青白い噴射光。\n- **文字**：左上にメイン・サブタイトル、右上に「Akatsuki 2010 → 2015」。「静かな執念」が黄色。\n- **サイズ**：1280×672px。\n\n修正・調整が必要な点があればお知らせください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/qFqxFqpkeeEnRZvy.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/qFqxFqpkeeEnRZvy.png",
+      "local_path": "_lovart/v2_2/lovart_fa47a0afd473.png",
+      "new": true
+    }
+  ]
+}

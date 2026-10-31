@@ -1,0 +1,35 @@
+{
+  "thread_id": "69f9443e-6e6c-405d-80f5-1f7004b8e18f",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "この画像を編集します。左側の文字と黒い帯を消し、周囲の金星の雲に自然に描き直します。サイズは 1280×672 px のままです。"
+    },
+    {
+      "type": "assistant",
+      "text": "編集が完了しました。左側のテキストと黒い帯が消え、金星の雲に自然に描き直されています。探査機・宇宙空間・金星の縁・画像サイズはそのまま保持されています。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/kTllXMTKSaIkohr2.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/kTllXMTKSaIkohr2.png",
+      "local_path": "_lovart/e2_1/lovart_d6c162787bd9.png",
+      "new": true
+    }
+  ]
+}

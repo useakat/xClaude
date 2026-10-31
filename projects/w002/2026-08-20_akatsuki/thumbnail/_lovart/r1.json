@@ -1,0 +1,47 @@
+{
+  "thread_id": "979613b7-b5d6-42e4-82b8-beb24a744203",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "I’ll generate the thumbnail now, using the reference image to keep Akatsuki’s shape faithful and emphasizing the exact Japanese text and quiet cinematic mood you described."
+    },
+    {
+      "type": "assistant",
+      "text": "Ideogram 4 cannot use a reference image, so I’ll switch to a model that supports image guidance while keeping the same prompt and exact specs."
+    },
+    {
+      "type": "assistant",
+      "text": "Here is the thumbnail.\n\nComposition checks:\n- Aspect ratio and size: 1280×672 (≈1.9:1) ✓\n- Akatsuki: gold box body, blue solar paddles above and below, dark gray bell nozzle at the bottom center, with a faint blue-white thrust on the lower-left side ✓\n- Venus: large cloud limb on the right, cream-to-ocher tones with a thin atmospheric glow at the edge ✓\n- Title: “五年後、また会おう” in large white bold gothic with black outline ✓\n- Subtitle: “金星を逃した探査機が歩いた、静かな執念の軌道” with “静かな執念” highlighted in yellow ✓\n- Top-right meta: “Akatsuki 2010 → 2015” in small white ✓\n- No watermark, signature, logo, CTA, emoji, or hashtag ✓\n\nPlease let me know if you want any adjustments to text size/placement, spacecraft size, or Venus color balance."
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/AmheGOdY80KFLIV6.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "failures": [
+    {
+      "tool": "generate_media",
+      "tool_hint": "generate_image_ideogram_v4",
+      "code": "INPUT_PARAMS_INVALID",
+      "message": "tool_hint \"generate_image_ideogram_v4\" supports text-to-image only; remove image_url, reference_image_urls, and mask_image_url | Suggested fix: This is a non-retryable parameter-validation error. Retrying unchanged will fail again. Correct only the parameter named in the error according to its allowed type, range, or model constraint, then retry. (source: media-capabilities; error code: STRICT_VALIDATION_FAILED)"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/AmheGOdY80KFLIV6.png",
+      "local_path": "_lovart/t1/lovart_380257534765.png",
+      "new": true
+    }
+  ]
+}

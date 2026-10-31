@@ -1,0 +1,31 @@
+{
+  "thread_id": "ff04e0de-d767-43e3-b327-7e8ca1f5adb5",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "サムネイルを生成しました。\n\n- タイトル「五年後、また会おう」は画面上部、画面幅いっぱいに配置\n- 黒い角丸ラベルに「あかつき」\n- 金星の金色〜オレンジの雲が画面全体を明るく覆い、宇宙は端にわずか\n- あかつきは中央下〜右下に中くらいのサイズで配置\n- 金色の箱型機体、上下の青い太陽電池パドル、下面中央の濃い灰色ベル型ノズルから青白い噴射\n- ノズル面に白いアンテナ円盤はなし\n- ©表記・透かし・ロゴ・CTA・絵文字・ハッシュタグ・枠線なし\n\nよければそのまま使用できます。調整が必要な箇所があれば教えてください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/V2TYvFpkeLIeB8ai.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/V2TYvFpkeLIeB8ai.png",
+      "local_path": "_lovart/v3_D/lovart_03b0901eb501.png",
+      "new": true
+    }
+  ]
+}

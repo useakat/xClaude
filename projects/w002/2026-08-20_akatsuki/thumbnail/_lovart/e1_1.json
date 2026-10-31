@@ -1,0 +1,35 @@
+{
+  "thread_id": "f29e3f1f-3db0-4e39-ba97-343ec71661cc",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "ご依頼の通り、背景の金星の位置のみを変更し、あかつきと文字はそのままにして編集します。"
+    },
+    {
+      "type": "assistant",
+      "text": "編集しました。金星の縁が左下から右上へゆるやかに上がり、右上約30%が宇宙空間になっています。あかつきと文字はそのまま保持されています。\n\n修正が必要な点があればお知らせください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/ej70olhDm7C0mMSo.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/ej70olhDm7C0mMSo.png",
+      "local_path": "_lovart/e1_1/lovart_63a23a256490.png",
+      "new": true
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "thread_id": "c9ece9f0-6692-4aad-9650-386855dbc5c9",
+  "status": "done",
+  "items": [
+    {
+      "type": "assistant",
+      "text": "完成しました。金星の明るい雲を背景に、あかつきを特大で配した横長サムネイルです。\n\n- 金星の昼側の金色〜オレンジ〜クリーム色の雲が画面を覆い、隅にわずかな宇宙が見える\n- あかつきを画面右側に大きく配置、上下の青い太陽電池パドルが画面からはみ出る\n- メインエンジン面から青白い噴射光\n- 左上に黒い角丸帯＋黄色の「五年後、」「また会おう」\n- 右下に白い「あかつき」\n- 透かし・ロゴ・枠線なし\n\n調整が必要な点（機体の向き・パドルの位置・文字の大きさ・雲のトーンなど）があれば、お知らせください。"
+    },
+    {
+      "type": "generator",
+      "artifacts": [
+        {
+          "type": "image",
+          "content": "https://a.lovart.ai/artifacts/agent/fNv5pyTWf1D2Vtgw.png"
+        }
+      ],
+      "name": "artifacts"
+    }
+  ],
+  "failures": [
+    {
+      "tool": "generate_media",
+      "tool_hint": "generate_image_ideogram_v4",
+      "code": "INPUT_PARAMS_INVALID",
+      "message": "tool_hint \"generate_image_ideogram_v4\" supports text-to-image only; remove image_url, reference_image_urls, and mask_image_url | Suggested fix: This is a non-retryable parameter-validation error. Retrying unchanged will fail again. Correct only the parameter named in the error according to its allowed type, range, or model constraint, then retry. (source: media-capabilities; error code: STRICT_VALIDATION_FAILED)"
+    }
+  ],
+  "final_status": "done",
+  "project_id": "ce85a712499a40d980d1dcb51e2eca8a",
+  "generation_succeeded": true,
+  "downloaded": [
+    {
+      "type": "image",
+      "url": "https://a.lovart.ai/artifacts/agent/fNv5pyTWf1D2Vtgw.png",
+      "local_path": "_lovart/v3_C/lovart_8f4eda5b0675.png",
+      "new": true
+    }
+  ]
+}
