@@ -225,7 +225,58 @@ python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/note_funnel_me
 
 # STEP 6: レポート生成・保存
 
-`docs/reports/ops-weekly/[week_id].md` に保存する：
+`docs/reports/ops-weekly/[week_id].md` に保存する。
+
+## ビジュアル要素（Wiki 表示用。2026-11-01 導入、見本は 2026-W44.md）
+
+レポートは Wiki（Starlight）で表示されるため、以下の3要素を本文テンプレートの指定位置に埋め込む。色は必ず Starlight の CSS 変数（`var(--sl-color-red/green/orange/accent/gray-3/gray-4/gray-5)`）を使う（ライト/ダーク両テーマ対応のため。生の色コードは使わない）。
+
+**1. KPI タイル**（冒頭サマリー引用の直後）: 6枚のタイルを次の形で並べる。値は 週間インプ（暫定）＋前週確定 / X投稿本数＋threads転載 / W001本数 / note公開本数 / 投稿0本日 / 当週最大IMP＋倍率。基準未達の数字は `color:var(--sl-color-red)` を付ける。
+
+```html
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:1.2rem 0">
+<div style="border:1px solid var(--sl-color-gray-5);border-radius:8px;padding:10px 12px"><div style="font-size:12px;color:var(--sl-color-gray-3)">[ラベル]</div><div style="font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.3">[値]</div><div style="font-size:12px;color:var(--sl-color-gray-3)">[補足]</div></div>
+（×6枚）
+</div>
+```
+
+**2. W001 分散記録チャート**（① の実績表の直後）: 分散記録の全数値（半減後 7/3〜）から対数スケールの棒グラフ SVG を生成して埋め込む。次のスクリプトを Bash 経由で実行し（`data` に全本の (投稿日 M/D, IMP) を渡す）、出力 SVG をそのまま md に貼る：
+
+```bash
+python3 -c "
+import math
+data = [('7/3',228250),('7/21',1796)]  # ← 分散記録の全数値に置き換える
+W,H = 720,250; ml,mr,mt,mb = 52,10,20,28
+lo,hi = 600,300000
+def y(v): return (H-mb) - (math.log10(v)-math.log10(lo))/(math.log10(hi)-math.log10(lo))*(H-mb-mt)
+n=len(data); step=(W-ml-mr)/n; bw=min(step*0.62,30)
+P=[f'<svg viewBox=\"0 0 {W} {H}\" width=\"100%\" role=\"img\" aria-label=\"W001 長文の実インプレッション（対数スケール）\" style=\"max-width:{W}px;font-family:inherit\">']
+for v,lab in [(1000,'1,000'),(10000,'1万'),(100000,'10万')]:
+    yy=round(y(v),1)
+    P.append(f'<line x1=\"{ml}\" x2=\"{W-mr}\" y1=\"{yy}\" y2=\"{yy}\" style=\"stroke:var(--sl-color-gray-5);stroke-width:1\"/>')
+    P.append(f'<text x=\"{ml-6}\" y=\"{yy+3.5}\" text-anchor=\"end\" style=\"fill:var(--sl-color-gray-3);font-size:11px\">{lab}</text>')
+P.append(f'<line x1=\"{ml}\" x2=\"{W-mr}\" y1=\"{H-mb}\" y2=\"{H-mb}\" style=\"stroke:var(--sl-color-gray-4);stroke-width:1\"/>')
+for i,(d,v) in enumerate(data):
+    x=ml+step*i+(step-bw)/2; yt=round(y(v),1); h=round(H-mb-yt,1)
+    P.append(f'<rect x=\"{x:.1f}\" y=\"{yt}\" width=\"{bw:.1f}\" height=\"{h}\" rx=\"2\" style=\"fill:var(--sl-color-accent)\"><title>{d}: {v:,}</title></rect>')
+    if v>=20000: P.append(f'<text x=\"{x+bw/2:.1f}\" y=\"{yt-5}\" text-anchor=\"middle\" style=\"fill:var(--sl-color-gray-3);font-size:10px\">{v:,}</text>')
+    P.append(f'<text x=\"{x+bw/2:.1f}\" y=\"{H-mb+14}\" text-anchor=\"middle\" style=\"fill:var(--sl-color-gray-3);font-size:9.5px\">{d}</text>')
+P.append('</svg>')
+print(chr(10).join(P))
+"
+```
+
+本数が増えて日付ラベルが重なってきたら（n>26 目安）、ラベルを1本おきに間引く。
+
+**3. 当週の X 投稿バー**（① の後に `### 当週の X 投稿（n本）` セクションとして）: 当週の X 投稿を1本1行で、日付・題材・フック記録（型・謎・自分事）・IMPバー・倍率を表示。バー幅は `sqrt(IMP ÷ 当週最大IMP) × 70`%、最大の1本だけ `var(--sl-color-accent)`、他は `var(--sl-color-gray-4)`。メトリクス未取得の投稿はバー無しで「未取得」と書く。
+
+```html
+<div style="padding:7px 0;border-top:1px solid var(--sl-color-gray-5)"><div style="font-size:13.5px"><span style="color:var(--sl-color-gray-3)">[M/D]</span> <b>[題材]</b> <span style="color:var(--sl-color-gray-3);font-size:12px">[フック型・謎・自分事]</span></div><div style="display:flex;align-items:center;gap:8px;margin-top:3px"><div style="height:12px;border-radius:3px;background:var(--sl-color-gray-4);width:[xx]%"></div><span style="font-size:12px;color:var(--sl-color-gray-3)">[IMP]（[倍率]倍）</span></div></div>
+```
+
+**4. 判定の色付け**: 表内の判定・状態は色付き `<span>` にする — `×`・「未対応」= `var(--sl-color-red)`（font-weight 600〜700）、`○`・「支持」= `var(--sl-color-green)`、「保留」「△」= `var(--sl-color-orange)`。⑨ の未対応行の先頭段落は `<p style="border-left:3px solid var(--sl-color-red);padding-left:12px">` で囲む。
+
+テンプレート：
 
 ```markdown
 ---
@@ -234,7 +285,9 @@ title: 発信運用振り返り [week_label]
 
 ## 【発信運用振り返り　[week_label]】
 
-> 週間インプ: [weekly_imp]（未記入時は「X,XXX（暫定・月〜土合計）」）／ 前週確定: [prev_weekly_imp] ／ 数値詳細は[週報]（../weekly/[week_id]/）を参照
+> 週間インプ: [weekly_imp]（未記入時は「X,XXX（暫定・月〜土合計）」）／ 前週確定: [prev_weekly_imp] ／ 数値詳細は[週報]（../weekly/[week_idを小文字に]/）を参照（リンクは必ず小文字。Astro のルートは小文字で生成される）
+
+（ここにビジュアル要素1: KPI タイル）
 
 ### ⓪ 運用遵守チェック
 
@@ -251,11 +304,19 @@ title: 発信運用振り返り [week_label]
 | W001 長文 | X | X,XXX | X,XXX | XXX,XXX | XXX,XXX |
 | ... | | | | | |
 
+**W001 実IMP の分散記録（半減後 7/3〜・計測済み n=X）** — 縦軸は対数スケール。
+
+（ここにビジュアル要素2: W001 分散記録チャート）
+
 - z01 ベースライン（週中央値）: 今週 X,XXX（先週 X,XXX）
 - W001 分散記録（累積）: `983 / 1,796 / … / 26,914 / 228,250`（n=X）
 - 当週のトップ/ワースト: 「冒頭40字…」（X,XXX）／「…」（XXX）
 
 （threads・note は別行で概況1行ずつ）
+
+### 当週の X 投稿（X本）
+
+（ここにビジュアル要素3: 当週投稿バー。1本1行、フック記録付き）
 
 ### ② 伸びた投稿・沈んだ投稿（z01 は対象外）
 
@@ -344,6 +405,7 @@ bash /root/xClaude/scripts/send_gmail.sh \
 ```
 
 - 送信失敗（exit≠0）の場合はエラー内容を完了報告に明記する（レポート自体は保存・push 済みなので処理は続行する）
+- **メール本文はビジュアルブロック（`<div>…</div>`・`<svg>…</svg>`・色付き `<span>`）を除去したテキスト版にする**（メールでは raw HTML が読めないため）。冒頭に Wiki ページの URL（`https://useakat.github.io/xClaude/reports/ops-weekly/[week_idを小文字に]/`）を1行添える
 
 ---
 
