@@ -92,6 +92,8 @@ export default defineConfig({
             { label: '日報', collapsed: true, items: timeReportItems('reports/daily') },
             { label: '週報', collapsed: true, items: timeReportItems('reports/weekly') },
             { label: '月報', collapsed: true, items: timeReportItems('reports/monthly') },
+            { label: '発信運用振り返り', collapsed: true, items: timeReportItems('reports/ops-weekly') },
+            { label: 'マネタイズ月報', collapsed: true, items: timeReportItems('reports/monetization') },
             { label: '計画', collapsed: true, autogenerate: { directory: 'plans' } },
             { label: '変更報告書', collapsed: true, items: reportsBySectionItems() },
           ],
