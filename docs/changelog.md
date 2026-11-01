@@ -7,6 +7,13 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-11-01
+
+- **Wiki 報告書サイドバーに「発信運用振り返り」「マネタイズ月報」を追加** — サイドバー未掲載だった `reports/ops-weekly`（12本）と `reports/monetization` を日報・週報と同形式で追加。毎週の routine push だけでサイトに自動反映される。W44 分で試作した Dashboard アーティファクトは削除し Wiki 掲載に一本化。[→報告書](../reports/20261101_wiki_reports_sidebar_ops_weekly/)
+- **Gmail ラベルで X 自動投稿の時間帯を指定可能に（6時/12時/17時/20時投稿）** — `post_by_label.sh` 新設と `post_from_email.sh --label` で、下書きに「17時投稿」等のラベルを付けるだけで件名を問わずその枠で投稿（無指定時はラベル付きを除外して二重投稿を防止）。実装は 10/25。[→報告書](../reports/20261101_x_auto_post_time_labels/)
+- **X・Threads 反応相関分析に --since を追加し、9/24 以降（同時転載期）だけの相関分析を実施** — `x_threads_corr.py` の期間指定で全期間と 9/24 以降を比較。実装・分析は 10/25（変更ログへの記載漏れを本日補完）。[→報告書](../reports/20261025_x_threads_reaction_correlation_since0924/)
+- **Drive MCP の DRIVE_UUID を設定キー "Google_Drive" に修正、X アナリティクスマッチングスクリプトを追加** — 古いハードコード UUID でリモートの Drive 取得が失敗していたのを修正。`match_x_analytics.py` が CSV × X投稿一覧 B列の突合から batch update データを生成（update-x-analytics エージェント用）。実装は 10/25。[→報告書](../reports/20261101_drivemcp_uuid_fix_x_analytics_match/)
+
 ## 2026-10-25
 
 - **W001「あかつき76分の沈黙」X長文を制作（結末を note に回す試験設計・ISAS 画像の出典ルール・funnel-brief 更新）** — w002 の切り口を20分ブレーキから76分の沈黙へ変更。結末を書かず、ハッシュタグ・締めなしでセルフリプから note に誘導する試験設計。サムネは ISAS 公式 CG を参照して再生成し、出典「画像: ISAS/JAXA」を本投稿の末尾に置く。[→報告書](../reports/20261025_w001_akatsuki_76min_xlong/)
