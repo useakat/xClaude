@@ -24,7 +24,9 @@ function timeReportItems(subdir) {
   const dir = join(docsDir, subdir);
   return mdFiles(dir).map(f => ({
     label: basename(f, '.md'),
-    link: `/${subdir}/${basename(f, '.md')}`,
+    // Astro はルートのスラグを小文字で生成し、GitHub Pages は大文字小文字を区別するため
+    // リンクは必ず小文字にする（2026-W44 → /…/2026-w44/。大文字のままだと 404）
+    link: `/${subdir}/${basename(f, '.md').toLowerCase()}`,
   }));
 }
 
