@@ -28,6 +28,22 @@ description: scripts/ ディレクトリのスクリプト一覧
 | `run_mond_letter_reply.sh` | mond レター回答の cron ラッパー |
 | `check_auth.sh` | Google / X API 認証チェック |
 
+## 宇宙ダイジェスト（毎朝 7 時のメール）
+
+| スクリプト | 用途 |
+|---|---|
+| `run_space_digest.sh` | cron ラッパー（06:45）。収集 → `claude -p "/space-digest"` → `send_gmail.sh` の順に動かす。`--dry-run` で状態更新と送信を省く。[ワークフロー](../workflows/space-digest/) |
+| `space_digest_fetch.py` | RSS/Atom・arXiv API から直近 48 時間の新着を集め、既読（`logs/space_digest_state.json`）・除外語・キーワードで絞って候補ファイル `logs/space_digest/YYYY-MM-DD_candidates.md` を書く。終了コード 0 候補あり / 20 なし / 1 全ソース失敗 |
+| `space_digest_sources.json` | ソース一覧（種別・言語・上限）、キーワード（強・弱）、除外語、arXiv カテゴリ |
+
+## 競合アカウントの投稿観察（X競合分析シート）
+
+| スクリプト | 用途 |
+|---|---|
+| `fetch_x_user_posts.py` | 指定アカウントの投稿を期間指定で X API から取得し、「X競合分析」に新シート `<username> YYYY-MM` を作って記録（RT・他人へのリプライを除外、自分のスレッド続きは「ツリー続き」）。`--dry-run` / `--from-json` / `--overwrite`。[ワークフロー](../workflows/x-competitor-daily-mail/) |
+| `x_competitor_daily_mail.py` | シートの未送信で最古の投稿を 1 件メール（ツリーは続きも同じメール）し、N 列「送信済み」に送信日を書く。全件送り終えたら「残りなし」を 1 回通知 |
+| `run_x_competitor_daily_mail.sh` | cron ラッパー（07:15）。対象シートは冒頭の `SHEET` で指定。`--dry-run` で送信・記入を省く |
+
 ## Google Drive 関連
 
 | スクリプト | 用途 |

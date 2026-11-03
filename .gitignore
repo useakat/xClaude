@@ -28,6 +28,9 @@ tmux-*.log
 /logs/mcp_gsheets_launch.log
 /logs/sheets_pydeps_install.log
 
+# 宇宙ダイジェストの日次候補・本文（毎日生成。状態ファイルとログは管理内）
+/logs/space_digest/
+
 # W001/W002/W003 投稿フォルダ内の画像はコミットしない（Drive に保存する。リポジトリ肥大を防ぐ）
 /projects/w001/**/*.png
 /projects/w002/**/*.png
@@ -49,3 +52,4 @@ tmux-*.log
 
 # note 導線ダッシュボード用の書き出し（routine が都度生成）
 logs/note_funnel/
+/logs/x_user_posts/
