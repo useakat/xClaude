@@ -13,6 +13,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **競合アカウントの投稿を期間指定で X競合分析シートに記録し、毎日 1 件ずつ古い順にメールする** — `fetch_x_user_posts.py` が X API で指定アカウント・期間の投稿を取得して新シートを作り（RT・他人へのリプライ・「@相手」で始まる本文を除外、ツリー続きは保持）、`x_competitor_daily_mail.py` が未送信最古を 1 件メールして送信済み列に日付を書く cron（07:15）。初回は @ossanworld 2026-05 の 188 行。[→報告書](../reports/20261103_x_competitor_daily_mail/)
 - **週次振り返りに z01 実IMP の分散記録チャートを追加（SKILL.md テンプレートの汎用化）** — W001 と同じ対数棒グラフを z01（7/3〜の 59 本、中央値 1,581 の破線つき）にも入れ、reporter-weekly-ops のスニペットをラベル・縦軸範囲・中央値線・ラベル間引きのパラメータで 2 枚共通にした。[→報告書](../reports/20261103_ops_weekly_z01_imp_chart/)
 - **Wiki で空行なしの単一改行も改行表示する（remark-breaks 導入）** — Starlight の Markdown は単一改行がスペース扱いで、空行を挟まないと改行されなかった。`remark-breaks` を `astro.config.mjs` に登録し、原稿側の空行・全角スペース回避を不要にした。折り返し済みの段落（約 185 ファイル）は折り返し位置で改行される。[→報告書](../reports/20261103_wiki_remark_breaks/)
+- **日報の箇条書き間の空行必須ルールを廃止（reporter-daily・style-reporter）** — Wiki が単一改行を改行表示するようになったため、日報テンプレートと `style-reporter.md` から「すべての箇条書きの間に空行」を外し、空行は媒体ブロックの間だけにした。次回の日報から詰めた形で出る。[→報告書](../reports/20261103_reporter_daily_drop_blank_line_rule/)
 
 ## 2026-11-01
 
