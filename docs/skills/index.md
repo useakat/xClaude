@@ -27,11 +27,13 @@ description: Claude Code で使用できるスキルの一覧
 | [reporter-monetization](/xClaude/skills/reporter-monetization/) | 月次マネタイズ運用状況レポートを作成し、docs/reports/monetization/ に保存する。X・threads 投稿の型別成績（3ヶ月推移）、note マネタイズと X/threads→note 導線（CTR/CVR/売上）、来月のマネタイズ計画案（運用・導線の修正案）を、monetization_metrics.py の集計をもとに生成する。 |
 | [reporter-monthly](/xClaude/skills/reporter-monthly/) | X・note 運用の月報を作成し、docs/reports/monthly/ に保存する。スプレッドシートから月次集計値・note売上を取得し、日報・週報をもとに総評と翌月改善計画をAI生成する。Xクリエイター収益は 0円 をデフォルトで保存（実値判明後に手動更新）。 |
 | [reporter-weekly](/xClaude/skills/reporter-weekly/) | X・note 運用の週報を作成し、docs/reports/weekly/ に保存する。スプレッドシートから週次集計値を取得し、日報をもとに「やったこと」「来週タスク」をAI生成する。 |
+| [reporter-weekly-ops](/xClaude/skills/reporter-weekly-ops/) | 週次の発信運用振り返りレポートを作成し、docs/reports/ops-weekly/ に保存する。プロジェクト別（W001/W003/z01ほか）の投稿実績と伸び・沈みの要因を分析し、前週アクションの消化確認と来週の運用アクションを生成する。数値週報は reporter-weekly、月次マネタイズは reporter-monetization が担当（役割分担）。 |
 
 ## リサーチ・分析
 
 | スキル | 用途 |
 |---|---|
+| [add-neta](/xClaude/skills/add-neta/) | 与えられたネタ（URL または テキスト）を読み、5つのネタシート（newsTopics/onePointNeta/noteNeta/thoughts/teisuNeta）のどれに追加すべきか判断して、そのシートの列構成に合わせて追記する。重複チェック・No採番・追加日の記入まで自動で行う。 |
 | [analyze-target](/xClaude/skills/analyze-target/) | analyze-target スキル |
 | [analyze-x-posts](/xClaude/skills/analyze-x-posts/) | analyze-x-posts スキル |
 | [classify-followers](/xClaude/skills/classify-followers/) | フォロワー全件をペルソナ分類し、前回分類との差分（新規・アンフォロー・消滅）を更新する。初回は全件LLM分類、2回目以降は差分のみを分類して既存JSONに追記・削除する。 |
@@ -46,6 +48,7 @@ description: Claude Code で使用できるスキルの一覧
 | [research_setup-sources](/xClaude/skills/research_setup-sources/) | テーマを受け取り NotebookLM ノートブックを作成して Deep Research でソースを収集・追加し、notebook_id を返す。 |
 | [research_trivia-source](/xClaude/skills/research_trivia-source/) | research_trivia-source スキル |
 | [research_xhook](/xClaude/skills/research_xhook/) | research_xhook スキル |
+| [space-digest](/xClaude/skills/space-digest/) | 毎朝の宇宙ダイジェスト。space_digest_fetch.py が集めた候補（プレスリリース・ニュース・論文）を読み、選別・日本語要約・★ネタ候補付けをして平文の本文ファイルを書く。送信は run_space_digest.sh が行う。無人実行（claude -p）前提 |
 
 ## 品質チェック
 
@@ -56,7 +59,8 @@ description: Claude Code で使用できるスキルの一覧
 | [check-critic](/xClaude/skills/check-critic/) | 原稿を「知識ある読者」になりきった別コンテキストのサブエージェントに読ませ、事実への反論・単純化しすぎの箇所・本文が触れていない前提への疑問を列挙する。改稿はせず、出力は裏取り工程（check-fact-lim / check-fact）への入力として返す。第1引数に分野ヒント（省略可）、残りを本文として受け取る。 |
 | [check-fact](/xClaude/skills/check-fact/) | ファクトチェック付き品質レビュー。テキストまたは Drive ファイル ID を入力として受け付ける。 |
 | [check-fact-lim](/xClaude/skills/check-fact-lim/) | ファクトチェック付き品質レビュー（NotebookLM の特定ノートブックのソースのみを根拠にする）。第1引数に notebook_id、第2引数以降にテキストまたは Drive ファイル ID を受け取る。 |
-| [check-reader](/xClaude/skills/check-reader/) | 原稿を「素朴な読者」になりきったサブエージェントに読ませ、読みながら浮かぶ疑問・誤解した映像・フック未回収を列挙して、疑問が出なくなるまで改稿する。第1引数にペルソナ定義ファイルパス（省略可）、残りを本文として受け取る。`--plan` を先頭に付けると【構成モード】: 執筆前の構成案（agenda）を読者役に読ませ、章ごとの疑問・期待する種明かし・難所の予感を列挙して返す（改稿はしない）。 |
+| [check-reader](/xClaude/skills/check-reader/) | 原稿を「素朴な読者」になりきったサブエージェントに読ませ、誤解を招く箇所・曖昧で意味が確定しない箇所・不自然な日本語・フック未回収を列挙して、それらがなくなるまで改稿する。第1引数にペルソナ定義ファイルパス（省略可）、残りを本文として受け取る。`--plan` を先頭に付けると【構成モード】: 執筆前の構成案（agenda）を読者役に読ませ、章ごとの疑問・期待する種明かし・難所の予感を列挙して返す（改稿はしない）。`--fold` を先頭に付けると【折り返しモード】: タイムラインで実際に見える冒頭280weight分だけを読者役に読ませ、「さらに表示」を押したくなるかを判定して改稿する。 |
+| [check-yohn](/xClaude/skills/check-yohn/) | よーん本人の過去の修正指摘（W001/W002/W003/Z01 のセッション履歴・のべ1400発言）から蒸留した検品ペルソナに原稿を読ませ、「よーんならどこを直させるか」を先回りして列挙・改稿する最終検品。ユーザー提示の直前に実行し、指摘が出なくなるまで改稿する（最大3ループ）。ペルソナは共通コア＋プロジェクト別補足（w001/w003/z01）で、作業フォルダから自動選択。第1引数にペルソナ定義ファイルパス（省略可）、残りを本文（またはファイルパス）として受け取る。 |
 
 ## メール・通知
 
@@ -81,7 +85,7 @@ description: Claude Code で使用できるスキルの一覧
 | スキル | 用途 |
 |---|---|
 | [record](/xClaude/skills/record/) | 変更・実装の記録を残す。docs/changelog.md と直近の git ログを照合し、未記録の変更候補をよーんに提案する。承認後に報告書と変更ログエントリを作成して git push する。 |
-| [record-note-posts](/xClaude/skills/record-note-posts/) | note.com の投稿情報（ビュー・スキ・スキ率・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新する。新規記事を検知したら outputs シートにも自動記録する。 |
+| [record-note-posts](/xClaude/skills/record-note-posts/) | note.com の投稿情報（ビュー・スキ・インプレッション・コメント・売上・サムネ・ハッシュタグ）を取得して Google Sheets の「note投稿一覧」シートに記録・更新し、流入元の日別内訳を「note流入元」シートへ同期する。新規記事を検知したら outputs シートにも自動記録する。 |
 | [save-session](/xClaude/skills/save-session/) | save-session スキル |
 | [sync-x-note-analytics](/xClaude/skills/sync-x-note-analytics/) | outputs/X投稿一覧/note投稿一覧/note購入記録 を集約して「Xnote導線記録」シートを再生成する。W001 ごとの IMP・リンクCTR・購入CVR・売上を 1 行 1 投稿の集計シートにまとめる。 |
 
