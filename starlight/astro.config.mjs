@@ -1,5 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import remarkBreaks from 'remark-breaks';
 import { readdirSync, readFileSync } from 'fs';
 import { join, basename } from 'path';
 import { fileURLToPath } from 'url';
@@ -53,6 +54,9 @@ function reportsBySectionItems() {
 export default defineConfig({
   site: 'https://useakat.github.io',
   base: '/xClaude',
+  markdown: {
+    remarkPlugins: [remarkBreaks],
+  },
   integrations: [
     starlight({
       title: 'xClaude Wiki',

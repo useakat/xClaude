@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@astrojs/starlight": "latest",
-    "astro": "latest"
+    "astro": "latest",
+    "remark-breaks": "^4.0.0"
   }
 }
