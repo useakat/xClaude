@@ -26,6 +26,7 @@ description: Claude Code で使用できるスキルの一覧
 | [reporter-daily](/xClaude/skills/reporter-daily/) | X・note・threads 運用の日報を作成し、docs/reports/daily/ に保存する。スプレッドシートから前日の数値を取得し、投稿実績をもとに特記事項をAI生成する。 |
 | [reporter-monetization](/xClaude/skills/reporter-monetization/) | 月次マネタイズ運用状況レポートを作成し、docs/reports/monetization/ に保存する。X・threads 投稿の型別成績（3ヶ月推移）、note マネタイズと X/threads→note 導線（CTR/CVR/売上）、来月のマネタイズ計画案（運用・導線の修正案）を、monetization_metrics.py の集計をもとに生成する。 |
 | [reporter-monthly](/xClaude/skills/reporter-monthly/) | X・note 運用の月報を作成し、docs/reports/monthly/ に保存する。スプレッドシートから月次集計値・note売上を取得し、日報・週報をもとに総評と翌月改善計画をAI生成する。Xクリエイター収益は 0円 をデフォルトで保存（実値判明後に手動更新）。 |
+| [reporter-monthly-ops](/xClaude/skills/reporter-monthly-ops/) | 月次の発信運用振り返りレポートを作成し、docs/reports/ops-monthly/ に保存する。週次の発信運用振り返り（reporter-weekly-ops）の 1 か月分を束ね、運用遵守の月間達成状況・プロジェクト別の月間実績と前月比・週次アクションの消化率・学びの蒸留・仮説と施策の月次総括・来月の運用方針を出す。数値月報は reporter-monthly、売上・導線は reporter-monetization が担当（役割分担）。 |
 | [reporter-weekly](/xClaude/skills/reporter-weekly/) | X・note 運用の週報を作成し、docs/reports/weekly/ に保存する。スプレッドシートから週次集計値を取得し、日報をもとに「やったこと」「来週タスク」をAI生成する。 |
 | [reporter-weekly-ops](/xClaude/skills/reporter-weekly-ops/) | 週次の発信運用振り返りレポートを作成し、docs/reports/ops-weekly/ に保存する。プロジェクト別（W001/W003/z01ほか）の投稿実績と伸び・沈みの要因を分析し、前週アクションの消化確認と来週の運用アクションを生成する。数値週報は reporter-weekly、月次マネタイズは reporter-monetization が担当（役割分担）。 |
 
