@@ -7,6 +7,12 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-11-03
+
+- **毎朝 7 時の宇宙ダイジェストメールを新設（RSS/arXiv 収集 → claude -p 要約 → Gmail）** — 探査機・宇宙物理・素粒子の新着を 25 ソース＋arXiv から直近 48 時間分集め、既読・除外語・キーワードスコアで 60 件に絞った候補を opus の `claude -p` が選別・日本語要約し ★ネタ候補（最大 3 件）を付けて 07:00 前後に送る cron（06:45）。収集は Python、判断だけ Claude、送信はラッパー。[→報告書](../reports/20261103_space_digest_daily_mail/)
+- **競合アカウントの投稿を期間指定で X競合分析シートに記録し、毎日 1 件ずつ古い順にメールする** — `fetch_x_user_posts.py` が X API で指定アカウント・期間の投稿を取得して新シートを作り（RT・他人へのリプライ・「@相手」で始まる本文を除外、ツリー続きは保持）、`x_competitor_daily_mail.py` が未送信最古を 1 件メールして送信済み列に日付を書く cron（07:15）。初回は @ossanworld 2026-05 の 188 行。[→報告書](../reports/20261103_x_competitor_daily_mail/)
+- **週次振り返りに z01 実IMP の分散記録チャートを追加（SKILL.md テンプレートの汎用化）** — W001 と同じ対数棒グラフを z01（7/3〜の 59 本、中央値 1,581 の破線つき）にも入れ、reporter-weekly-ops のスニペットをラベル・縦軸範囲・中央値線・ラベル間引きのパラメータで 2 枚共通にした。[→報告書](../reports/20261103_ops_weekly_z01_imp_chart/)
+
 ## 2026-11-01
 
 - **Wiki 報告書サイドバーに「発信運用振り返り」「マネタイズ月報」を追加** — サイドバー未掲載だった `reports/ops-weekly`（12本）と `reports/monetization` を日報・週報と同形式で追加。毎週の routine push だけでサイトに自動反映される。W44 分で試作した Dashboard アーティファクトは削除し Wiki 掲載に一本化。[→報告書](../reports/20261101_wiki_reports_sidebar_ops_weekly/)
