@@ -130,6 +130,7 @@ print(f'week_label={monday.strftime(\"%-m月%-d日\")}週')
 - **z01 の位置づけ**: z01 は note ネタの反応観測とアカウント発信力の定点観測が目的で、**改善対象外**。①の実績表・ベースライン監視には載せるが、②の伸び・沈み分析には入れない。フック型の記録など**仮説検証の場**としては使ってよい
 - **ベースライン監視**: z01 の週中央値を毎週記録する（毎週コンスタントに本数が出るため、アカウント配信量の温度計として使う。2026年7月中旬の半減をこの指標で検知した実績）
 - **W001 の分散記録**: W001 全投稿の実IMPを1本ずつ累積リストに追記する（週2本ペースで n=15〜20 に達したら「長文は他の型より強いか」の統計検証が可能になる。当たり率・外れの下限もこのリストで追う）
+- **z01 の分散記録**: outputs で what_id＝z01 の X 投稿（半減後 7/3〜）を X投稿一覧の IMP と tweet ID で突合し、(投稿日, IMP) の全本を時系列で持つ（分散記録チャートに使う。2026-11-03 追加）。z01 は本数が多いので累積リストは本文に書かず、チャートと n・中央値・1万超え本数だけを書く。IMP 未取得の投稿は除いて n に数えない
 - threads は views ベースで別枠（転載は本数のみ）
 - note は当週公開記事の有無とタイトルのみ（ビュー詳細は monetization の領分）
 
@@ -240,17 +241,19 @@ python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/note_funnel_me
 </div>
 ```
 
-**2. W001 分散記録チャート**（① の実績表の直後）: 分散記録の全数値（半減後 7/3〜）から対数スケールの棒グラフ SVG を生成して埋め込む。次のスクリプトを Bash 経由で実行し（`data` に全本の (投稿日 M/D, IMP) を渡す）、出力 SVG をそのまま md に貼る：
+**2. 分散記録チャート（W001 と z01 の2枚）**（① の実績表の直後。W001 → z01 の順）: 分散記録の全数値（半減後 7/3〜）から対数スケールの棒グラフ SVG を生成して埋め込む。次のスクリプトを Bash 経由で2回実行し（`data` に全本の (投稿日 M/D, IMP) を渡す）、出力 SVG をそのまま md に貼る：
 
 ```bash
 python3 -c "
-import math
-data = [('7/3',228250),('7/21',1796)]  # ← 分散記録の全数値に置き換える
+import math, statistics
+data = [('7/3',228250),('7/21',1796)]  # ← 分散記録の全数値に置き換える（時系列順）
+label = 'W001 長文の実インプレッション（2026年7月3日以降のN本、対数スケール）'  # z01 は 'z01 短文の実インプレッション（…）'
+lo,hi = 600,300000   # 縦軸の範囲。z01 は 400,300000（最小 584 が入るように）
+median = False       # z01 は True（全期間の中央値を破線で引く）
 W,H = 720,250; ml,mr,mt,mb = 52,10,20,28
-lo,hi = 600,300000
 def y(v): return (H-mb) - (math.log10(v)-math.log10(lo))/(math.log10(hi)-math.log10(lo))*(H-mb-mt)
-n=len(data); step=(W-ml-mr)/n; bw=min(step*0.62,30)
-P=[f'<svg viewBox=\"0 0 {W} {H}\" width=\"100%\" role=\"img\" aria-label=\"W001 長文の実インプレッション（対数スケール）\" style=\"max-width:{W}px;font-family:inherit\">']
+n=len(data); step=(W-ml-mr)/n; bw=min(step*0.62,30); every=max(1, math.ceil(n/26))  # n>26 なら日付ラベルを間引く
+P=[f'<svg viewBox=\"0 0 {W} {H}\" width=\"100%\" role=\"img\" aria-label=\"{label}\" style=\"max-width:{W}px;font-family:inherit\">']
 for v,lab in [(1000,'1,000'),(10000,'1万'),(100000,'10万')]:
     yy=round(y(v),1)
     P.append(f'<line x1=\"{ml}\" x2=\"{W-mr}\" y1=\"{yy}\" y2=\"{yy}\" style=\"stroke:var(--sl-color-gray-5);stroke-width:1\"/>')
@@ -260,13 +263,19 @@ for i,(d,v) in enumerate(data):
     x=ml+step*i+(step-bw)/2; yt=round(y(v),1); h=round(H-mb-yt,1)
     P.append(f'<rect x=\"{x:.1f}\" y=\"{yt}\" width=\"{bw:.1f}\" height=\"{h}\" rx=\"2\" style=\"fill:var(--sl-color-accent)\"><title>{d}: {v:,}</title></rect>')
     if v>=20000: P.append(f'<text x=\"{x+bw/2:.1f}\" y=\"{yt-5}\" text-anchor=\"middle\" style=\"fill:var(--sl-color-gray-3);font-size:10px\">{v:,}</text>')
-    P.append(f'<text x=\"{x+bw/2:.1f}\" y=\"{H-mb+14}\" text-anchor=\"middle\" style=\"fill:var(--sl-color-gray-3);font-size:9.5px\">{d}</text>')
+    if i%every==0: P.append(f'<text x=\"{x+bw/2:.1f}\" y=\"{H-mb+14}\" text-anchor=\"middle\" style=\"fill:var(--sl-color-gray-3);font-size:9.5px\">{d}</text>')
+if median:
+    m=statistics.median(v for _,v in data); ym=round(y(m),1)
+    P.append(f'<line x1=\"{ml}\" x2=\"{W-mr}\" y1=\"{ym}\" y2=\"{ym}\" style=\"stroke:var(--sl-color-orange);stroke-width:1.2;stroke-dasharray:4 3\"/>')
+    P.append(f'<text x=\"{W-mr-2}\" y=\"{ym-4}\" text-anchor=\"end\" style=\"fill:var(--sl-color-orange);font-size:10px\">中央値 {m:,.0f}</text>')
 P.append('</svg>')
 print(chr(10).join(P))
 "
 ```
 
-本数が増えて日付ラベルが重なってきたら（n>26 目安）、ラベルを1本おきに間引く。
+- **W001**: `lo,hi=600,300000`・`median=False`。見出しは `**W001 実IMP の分散記録（半減後 7/3〜・計測済み n=X・当週の新規 Y 本）** — 縦軸は対数スケール。`
+- **z01**（2026-11-03 追加、見本は 2026-W44.md）: STEP 4-1 の z01 分散記録を `data` に渡し、`lo,hi=400,300000`・`median=True`。見出しは `**z01 実IMP の分散記録（半減後 7/3〜・n=X・当週の新規 Y 本）** — 縦軸は対数スケール、破線は全期間の中央値（X,XXX）。` に続けて、帯（中央値付近に何本収まるか）と 1万超えの本数・日付を1〜2文で書く。W001 の累積リストの行の**前**に置く
+- 日付ラベルは n>26 で自動的に間引かれる（`every`）。IMP が 2万以上の棒だけ値を上に出す
 
 **3. 当週の X 投稿バー**（① の後に `### 当週の X 投稿（n本）` セクションとして）: 当週の X 投稿を1本1行で、日付・題材・フック記録（型・謎・自分事）・IMPバー・倍率を表示。バー幅は `sqrt(IMP ÷ 当週最大IMP) × 70`%、最大の1本だけ `var(--sl-color-accent)`、他は `var(--sl-color-gray-4)`。メトリクス未取得の投稿はバー無しで「未取得」と書く。
 
@@ -306,7 +315,11 @@ title: 発信運用振り返り [week_label]
 
 **W001 実IMP の分散記録（半減後 7/3〜・計測済み n=X）** — 縦軸は対数スケール。
 
-（ここにビジュアル要素2: W001 分散記録チャート）
+（ここにビジュアル要素2a: W001 分散記録チャート）
+
+**z01 実IMP の分散記録（半減後 7/3〜・n=X・当週の新規 Y 本）** — 縦軸は対数スケール、破線は全期間の中央値（X,XXX）。[帯と1万超えの本数を1〜2文]
+
+（ここにビジュアル要素2b: z01 分散記録チャート）
 
 - z01 ベースライン（週中央値）: 今週 X,XXX（先週 X,XXX）
 - W001 分散記録（累積）: `983 / 1,796 / … / 26,914 / 228,250`（n=X）
