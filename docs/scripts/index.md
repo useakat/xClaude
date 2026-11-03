@@ -63,4 +63,5 @@ description: scripts/ ディレクトリのスクリプト一覧
 | `note_price_rule.py` | note 記事の価格設定ルールの判定（200 PV で上げる／見直す／戻すか判断）。`note_article_daily.py` と `note_funnel_export.py` が共用 |
 | `note_funnel_export.py` | note 導線ダッシュボード用の CSV（記事 × 価格区間の CVR¥ を含む 9 本）を発信記録シートから書き出す |
 | `x_threads_corr.py` | X 投稿と Threads 同時転載の反応の相関を出す（outputs で結合、Spearman ρ・中央値・残差・散布図。X API は呼ばない）。`--since YYYY-MM-DD` で Threads 投稿日以降のペアに絞る（9/24 の配信変化より後だけを見るとき） |
+| `ops_monthly_metrics.py` | 月次の発信運用振り返り（`/reporter-monthly-ops`）用の集計。outputs × X投稿一覧 × 日次記録から、対象月と前2か月のプロジェクト別実績・週ごとの運用遵守・0本日・月間インプ・倍率・分散記録と SVG チャートを JSON で出す（判断はスキル側） |
 | `note_funnel_measures.py` | note 導線 改善施策レジストリ（`docs/plans/note_funnel_measures.md`）の施策ごとに検証用の数値を出す（判定は reporter-weekly-ops） |
