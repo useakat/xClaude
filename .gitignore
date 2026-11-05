@@ -54,3 +54,7 @@ tmux-*.log
 logs/note_funnel/
 /logs/x_user_posts/
 /logs/ops_monthly/
+
+# vim スワップファイル（.env.swp に実キーが入っていた事故の再発防止）
+*.swp
+*.swo

@@ -3,7 +3,7 @@
 # NotebookLM SOCKS トンネル管理ヘルパー
 #
 # この環境の IP は NotebookLM にブロックされているため、別の Windows server
-# (<WINDOWS_SERVER_IP>) へ SSH SOCKS トンネルを張り、その IP 経由でアクセスする。
+# (接続先は .env の NOTEBOOKLM_TUNNEL_SSH_HOST=user@host) へ SSH SOCKS トンネルを張り、その IP 経由でアクセスする。
 # 鍵認証済みなのでパスワード不要。トンネルが既に生きていれば何もしない（冪等）。
 #
 # 使い方:
@@ -17,7 +17,16 @@
 set -euo pipefail
 
 PORT=1080
-SSH_HOST="nbtunnel@<WINDOWS_SERVER_IP>"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+if [ -z "${NOTEBOOKLM_TUNNEL_SSH_HOST:-}" ] && [ -f "${REPO_ROOT}/.env" ]; then
+  NOTEBOOKLM_TUNNEL_SSH_HOST="$(grep -E '^NOTEBOOKLM_TUNNEL_SSH_HOST=' "${REPO_ROOT}/.env" | tail -1 | cut -d= -f2- | tr -d "\"'" || true)"
+fi
+SSH_HOST="${NOTEBOOKLM_TUNNEL_SSH_HOST:-}"
+if [ -z "${SSH_HOST}" ]; then
+  echo "✗ NOTEBOOKLM_TUNNEL_SSH_HOST が未設定です（.env に user@host 形式で追加）" >&2
+  exit 1
+fi
+EXIT_IP="${SSH_HOST#*@}"
 PROXY="socks5://127.0.0.1:${PORT}"
 
 is_up() {
@@ -69,10 +78,10 @@ if [ "${1:-}" = "--check" ]; then
   echo "→ 出口IP確認:"
   ip=$(ALL_PROXY="${PROXY}" curl -s --max-time 20 https://api.ipify.org || echo "取得失敗")
   echo "   プロキシ経由の出口IP: ${ip}"
-  if [ "${ip}" = "<WINDOWS_SERVER_IP>" ]; then
+  if [ "${ip}" = "${EXIT_IP}" ]; then
     echo "✓ 想定どおり Windows server 経由です"
   else
-    echo "⚠ 出口IPが想定 (<WINDOWS_SERVER_IP>) と異なります" >&2
+    echo "⚠ 出口IPが想定 (${EXIT_IP}) と異なります" >&2
   fi
 fi
 

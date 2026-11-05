@@ -42,6 +42,8 @@ import sys
 import time
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "vendor"))
@@ -58,7 +60,9 @@ from notebooklm._chat import ChatAPI  # noqa: E402
 # CORS で弾かれる。ブリッジ側で新ドメインへ書き換える。
 OLD_ORIGIN = "https://notebooklm.google.com"
 
-SSH_HOST = "Administrator@<WINDOWS_SERVER_IP>"
+# 接続先（user@host）は公開リポジトリに載せないため .env / 環境変数で渡す
+load_dotenv(ROOT / ".env")
+SSH_HOST = os.environ.get("NOTEBOOKLM_SSH_HOST", "")
 REMOTE_SERVER = r"%USERPROFILE%\nbrpc_server.py"
 
 # ブリッジは Windows の単一 Chrome プロファイル前提。セッション間で直列化する。
@@ -122,6 +126,8 @@ class BrowserBridge:
     """Windows の常駐ブラウザへ RPC を中継する（stdin/stdout の JSON 行プロトコル）。"""
 
     def __init__(self, ssh_host: str = SSH_HOST):
+        if not ssh_host:
+            raise BridgeError("NOTEBOOKLM_SSH_HOST が未設定です（.env に NOTEBOOKLM_SSH_HOST=user@host を追加）")
         self.ssh_host = ssh_host
         self.proc: subprocess.Popen | None = None
         self.csrf = ""
