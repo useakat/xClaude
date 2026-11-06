@@ -3,7 +3,7 @@
 # 各枠の cron ラッパー（run_*_post.sh）が従来の件名検索の前に呼ぶ。
 # Usage: bash post_by_label.sh [--dry-run] <時>      例: bash post_by_label.sh 17
 # 終了コード: 0=投稿成功 / 20=ラベル付きの投稿対象なし / 1=投稿試行失敗
-# 件名 5 種を順に探し、最初に見つかった 1 件だけ投稿する（howID・ログは件名で決まる）。
+# 件名 6 種を順に探し、最初に見つかった 1 件だけ投稿する（howID・ログは件名で決まる）。
 export PATH="/usr/local/bin:$PATH"
 
 DRY=""
@@ -23,6 +23,7 @@ DIR="$(dirname "$0")"
 TARGETS='【ワンポイント解説】|W003|x_post_xonepoint.log
 【質問回答】|W006|x_post_question.log
 【X長文】|W001|x_post_xlong.log
+【note販促】|W007|x_post_promo.log
 【X短文投稿】|z01|x_post_short.log
 【自己開示】|W004|x_post_self.log'
 

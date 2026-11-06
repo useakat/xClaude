@@ -34,6 +34,7 @@ tools: Read, Write, Edit, Bash, mcp__mcp-gsheets__sheets_get_values, mcp__mcp-gs
 | W003 | writer-xonepoint, daily-xonepoint | style-xonepoint |
 | W006 | writer-xonepoint（質問回答も同一スキル経由） | style-xonepoint |
 | W004 | なし（よーん本人が全文手書き。AI は書かない） | — |
+| W007 | writer-xpromo（note 販促 140字） | — |
 
 ---
 

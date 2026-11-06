@@ -8,9 +8,13 @@ DIR="$(dirname "$0")"
 rc=$?
 if [ "$rc" -ne 20 ]; then exit $rc; fi   # 投稿した／失敗 → 従来の件名検索に進まない
 # 従来の件名検索（post_from_email.sh は時刻ラベル付きのメールを除外する）
-# 自己開示（W004）を z01 の穴埋めより優先する
+# 自己開示（W004）→ note販促（W007）を z01 の穴埋めより優先する
 /bin/bash "$DIR/post_from_email.sh" "【自己開示】" W004 x_post_self.log
 rc=$?
+if [ "$rc" -eq 20 ]; then
+  /bin/bash "$DIR/post_from_email.sh" "【note販促】" W007 x_post_promo.log
+  rc=$?
+fi
 if [ "$rc" -eq 20 ]; then
   /bin/bash "$DIR/post_from_email.sh" "【X短文投稿】" z01 x_post_short.log
   rc=$?
