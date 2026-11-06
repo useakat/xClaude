@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 """
-「X競合分析」のシートから、未送信で最も古い投稿を 1 件メールし、送信済み列に送信日を書く
-（毎日 1 件ずつ競合の投稿を読むための cron 用）。
+「X競合分析」のシートから、未送信で最も古い投稿を 1 件 Gmail 下書き（件名【自己開示】）として作り、
+送信済み列に作成日を書く（毎日 1 件ずつ競合の投稿を読むための cron 用）。
+下書きには空の [投稿文] [/投稿文] が付く。よーんが本文を書いて自分宛に送信すると、
+既存の投稿 cron（post_by_label.sh / run_xshort_post.sh）が W004（自己開示）として投稿する。
 
 使い方:
   python3 scripts/x_competitor_daily_mail.py --sheet "ossanworld 2026-05"
-  python3 scripts/x_competitor_daily_mail.py --sheet "ossanworld 2026-05" --dry-run   # 送らず・書かず
+  python3 scripts/x_competitor_daily_mail.py --sheet "ossanworld 2026-05" --dry-run   # 作らず・書かず
+  python3 scripts/x_competitor_daily_mail.py --sheet "ossanworld 2026-05" --mode send  # 下書きでなく送信（従来動作）
 
 対象シートは fetch_x_user_posts.py が作った形（A 投稿日時 … J ツリー, K 会話ID, M 本文, N 送信済み）。
 - 「単独」「ツリー先頭」の未送信行のうち最古のものを選ぶ。ツリー先頭なら同じ会話IDの
   「ツリー続き」行も同じメールに順に載せ、全行に送信日を書く
-- 未送信が無くなったら「残りなし」を 1 回だけメールし、以後は何もしない
+- 未送信が無くなったら「残りなし」を 1 回だけ（これは下書きでなく送信で）メールし、以後は何もしない
   （通知済みは logs/x_competitor_mail_state.json に記録）
 
-認証: Sheets はサービスアカウント（sheets_values.py と同じ）、メールは send_gmail.sh（gws）
+認証: Sheets はサービスアカウント（sheets_values.py と同じ）、送信は send_gmail.sh・下書きは create_gmail_draft.sh（gws）
 """
 
 import argparse
@@ -34,6 +37,7 @@ NOTIFY_TO = "useakat@gmail.com"
 STATE_PATH = REPO_ROOT / "logs" / "x_competitor_mail_state.json"
 LOG_PATH = REPO_ROOT / "logs" / "x_competitor_mail.log"
 SEND_GMAIL = REPO_ROOT / "scripts" / "send_gmail.sh"
+DRAFT_GMAIL = REPO_ROOT / "scripts" / "create_gmail_draft.sh"
 JST = timezone(timedelta(hours=9))
 
 COL_DATE, COL_ID, COL_URL, COL_IMP, COL_LIKE, COL_RT, COL_REPLY, COL_QUOTE, COL_BOOKMARK, \
@@ -93,7 +97,7 @@ def pick(rows: list[list]) -> tuple[list[int], list[list]] | None:
 def build_mail(sheet: str, username: str, vals: list[list], n_done: int, n_total: int, url: str) -> tuple[str, str]:
     head = vals[0]
     date = cell(head, COL_DATE)
-    subject = f"【競合投稿】@{username} {date[:10]}（{n_done + 1}/{n_total}）"
+    subject = f"【自己開示】@{username} {date[:10]}（{n_done + 1}/{n_total}）"
     lines = [
         f"@{username} の投稿（{sheet}、古い順 {n_done + 1}/{n_total}）",
         "",
@@ -109,21 +113,26 @@ def build_mail(sheet: str, username: str, vals: list[list], n_done: int, n_total
     for k, r in enumerate(vals[1:], start=2):
         lines += ["", f"── 続き {k}/{len(vals)}（{cell(r, COL_DATE)}・いいね {fmt_n(cell(r, COL_LIKE))}）──",
                   cell(r, COL_URL), "", cell(r, COL_TEXT)]
-    lines += ["", "────────", f"残り {n_total - n_done - 1} 件", f"シート: {url}"]
+    lines += ["", "────────", f"残り {n_total - n_done - 1} 件", f"シート: {url}", "",
+              "✍️ この投稿を参考に自己開示投稿を書くなら、下の [投稿文] に本文を書いて、このまま自分宛に送信してください"
+              "（時刻ラベルを付ければその枠、付けなければ 20 時に投稿）。書かない日は下書きを消すか放置。",
+              "", "[投稿文]", "", "[/投稿文]", ""]
     return subject, "\n".join(lines)
 
 
-def send_mail(subject: str, body: str) -> bool:
+def send_mail(subject: str, body: str, mode: str = "send") -> bool:
+    """mode=send: 自分宛に送信 / mode=draft: Gmail 下書きを作る。"""
+    script, verb = (SEND_GMAIL, "メール送信") if mode == "send" else (DRAFT_GMAIL, "下書き作成")
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False, encoding="utf-8") as f:
         f.write(body)
         path = f.name
     try:
-        r = subprocess.run(["bash", str(SEND_GMAIL), "--to", NOTIFY_TO, "--subject", subject, "--body-file", path],
+        r = subprocess.run(["bash", str(script), "--to", NOTIFY_TO, "--subject", subject, "--body-file", path],
                            capture_output=True, text=True, timeout=120)
         if r.returncode != 0:
-            log(f"メール送信失敗: {r.stderr.strip()[:300]}")
+            log(f"{verb}失敗: {r.stderr.strip()[:300]}")
             return False
-        log(f"メール送信: {subject}")
+        log(f"{verb}: {subject}")
         return True
     finally:
         os.unlink(path)
@@ -133,7 +142,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--sheet", required=True, help="シート名（例: 'ossanworld 2026-05'）")
     ap.add_argument("--spreadsheet", default=SPREADSHEET_ID)
-    ap.add_argument("--dry-run", action="store_true", help="送信も送信済み記入もしない")
+    ap.add_argument("--dry-run", action="store_true", help="下書き作成も送信済み記入もしない")
+    ap.add_argument("--mode", choices=["draft", "send"], default="draft", help="競合投稿の通知を Gmail 下書きにする（既定）か送信するか")
     args = ap.parse_args()
 
     username = args.sheet.split()[0]
@@ -172,12 +182,12 @@ def main() -> int:
         log(f"[dry-run] {subject} 行={row_nums}")
         print(body)
         return 0
-    if not send_mail(subject, body):
+    if not send_mail(subject, body, args.mode):
         return 1
     today = datetime.now(JST).strftime("%Y-%m-%d")
     ws.batch_update([{"range": f"{SENT_COL_LETTER}{n}", "values": [[today]]} for n in row_nums],
                     value_input_option="RAW")
-    log(f"送信済み記入: 行 {row_nums} ← {today}（{n_done + 1}/{n_total}）")
+    log(f"送信済み（下書き作成日）記入: 行 {row_nums} ← {today}（{n_done + 1}/{n_total}）")
     return 0
 
 

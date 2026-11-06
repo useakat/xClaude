@@ -33,6 +33,7 @@ tools: Read, Write, Edit, Bash, mcp__mcp-gsheets__sheets_get_values, mcp__mcp-gs
 | W002 | writer_note-story | style-note-story |
 | W003 | writer-xonepoint, daily-xonepoint | style-xonepoint |
 | W006 | writer-xonepoint（質問回答も同一スキル経由） | style-xonepoint |
+| W004 | なし（よーん本人が全文手書き。AI は書かない） | — |
 
 ---
 

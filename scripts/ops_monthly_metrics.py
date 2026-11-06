@@ -38,7 +38,7 @@ SS3 = "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"  # X投稿一覧 / 日次�
 HALVING_START = date(2026, 7, 3)  # ベースライン半減後の起点（分散記録）
 HOOK_CSV = os.path.join(REPO, "logs", "hook_records.csv")
 PROJECT_LABEL = {"W001": "W001 長文ストーリー", "W003": "W003 ワンポイント", "z01": "z01 短文",
-                 "W002": "W002 note 販促", "W006": "W006 質問回答"}
+                 "W002": "W002 note 販促", "W006": "W006 質問回答", "W004": "W004 自己開示"}
 
 
 # ---------------------------------------------------------------- utilities
@@ -175,6 +175,7 @@ class Data:
                 "imp": to_int(cell(r, col["インプレッション"])), "likes": to_int(cell(r, col["いいね"])),
                 "bm": to_int(cell(r, col["ブックマーク"])), "eng_rate": to_float(cell(r, col["エンゲ率"])),
                 "clicks": to_int(cell(r, col.get("リンククリック", 99))), "follows": to_int(cell(r, col.get("フォロー増", 99))),
+                "profile": to_int(cell(r, col.get("プロフアクセス", 99))),
             }
             self.x[tid] = rec
             self.x_rows.append((dt, tid, rec["kind"]))
@@ -244,12 +245,32 @@ class Data:
             "date": p["dt"].strftime("%Y-%m-%d"), "time": p["dt"].strftime("%H:%M"), "weekday": "月火水木金土日"[p["dt"].weekday()],
             "tweet_id": p["tid"], "what": p["what"], "head": head(text), "imp": imp, "likes": rec.get("likes"),
             "bm": rec.get("bm"), "eng_rate": rec.get("eng_rate"), "clicks": rec.get("clicks"), "follows": rec.get("follows"),
+            "profile": rec.get("profile"),
             "baseline": base, "ratio": (round(imp / base, 1) if imp and base else None),
             "hook": hk,
         }
 
     def posts_between(self, d0, d1):
         return [p for p in self.posts if d0 <= p["dt"].date() <= d1]
+
+
+def profile_follow_stats(ps):
+    """プロフ率（プロフアクセス÷IMP）の中央値、フォロー増の合算指標。
+
+    プロフ率は IMP≥100 の投稿だけ。フォロー増は 0 が大半で中央値が使えないため、
+    フォロー増が取り込み済み（空欄でない）の投稿だけ合算して IMP・プロフアクセスで割る。
+    """
+    rates = [p["profile"] / p["imp"] for p in ps if p.get("imp") and p["imp"] >= 100 and p.get("profile") is not None]
+    fp = [p for p in ps if p.get("follows") is not None and p.get("imp")]
+    f_sum = sum(p["follows"] for p in fp)
+    imp_sum = sum(p["imp"] for p in fp)
+    prof_sum = sum(p["profile"] for p in fp if p.get("profile") is not None)
+    return {
+        "profile_rate_median": round(statistics.median(rates), 5) if rates else None, "n_profile_rate": len(rates),
+        "n_follow_measured": len(fp), "follow_sum": f_sum if fp else None,
+        "follow_per_10k": round(f_sum / imp_sum * 10000, 2) if fp and imp_sum else None,
+        "follow_per_profile": round(f_sum / prof_sum, 3) if fp and prof_sum else None,
+    }
 
 
 def project_stats(posts):
@@ -269,6 +290,7 @@ def project_stats(posts):
             "top": [{k: p[k] for k in ("date", "head", "imp", "ratio")} for p in ranked[:3]],
             "worst": [{k: p[k] for k in ("date", "head", "imp", "ratio")} for p in ranked[-3:][::-1]] if len(ranked) > 3 else [],
             "over_10k": sum(1 for v in imps if v >= 10000),
+            **profile_follow_stats(ps),
         }
     return out
 
@@ -291,6 +313,9 @@ def month_summary(data, ym, enriched_cache):
     return {
         "month": ym, "start": str(d0), "end": str(d1), "partial": d_eff < d1, "days_counted": (d_eff - d0).days + 1,
         "x_posts": len(posts), "x_posts_all": x_posts_all, "by_project": project_stats(posts), "posts": posts,
+        # 比較群: 非W001・非W004 の通常ポスト（H8 の比較基準）
+        "baseline_profile": profile_follow_stats([p for p in posts if p["what"] not in ("W001", "W004")]),
+        "w004_list": [{k: p[k] for k in ("date", "head", "imp", "profile", "follows")} for p in posts if p["what"] == "W004"],
         "w001_count": sum(1 for p in posts if p["what"] == "W001"),
         "w001_list": [{k: p[k] for k in ("date", "weekday", "time", "head", "imp", "ratio", "clicks")} for p in posts if p["what"] == "W001"],
         "note_published": notes, "threads_original": sum(1 for t in threads if not t["repost"]),
@@ -478,6 +503,10 @@ def fmt(v):
     return f"{v:,}" if isinstance(v, (int, float)) and v is not None else "—"
 
 
+def pct(v):
+    return f"{v * 100:.2f}%" if isinstance(v, (int, float)) else "—"
+
+
 def print_human(res):
     c = res["current"]
     print(f"# {c['month']}（{c['start']}〜{c['end']}）{'※進行中' if c['partial'] else ''}  生成 {res['generated_at']}")
@@ -487,8 +516,11 @@ def print_human(res):
     print("\n## プロジェクト別（当月）")
     for what, s in sorted(c["by_project"].items()):
         print(f"- {s['label']}: n={s['n']}（計測 {s['n_measured']}） 中央値 {fmt(s['median'])} 除外平均 {fmt(s['iqr_mean'])} 最大 {fmt(s['max'])} 倍率中央値 {s['ratio_median']} 1万超 {s['over_10k']} 除外 {s['outliers']} {('実値 ' + str(s['values'])) if s['values'] else ''}")
+        print(f"    プロフ率中央値 {pct(s['profile_rate_median'])}（n={s['n_profile_rate']}） フォロー/1万IMP {s['follow_per_10k'] if s['follow_per_10k'] is not None else '—'} フォロー/プロフ {s['follow_per_profile'] if s['follow_per_profile'] is not None else '—'}（フォロー増取込 {s['n_follow_measured']} 本）")
         for t in s["top"][:2]:
             print(f"    top: {t['date']} {t['head'][:30]} {fmt(t['imp'])}（{t['ratio']}倍）")
+    bp = c.get("baseline_profile") or {}
+    print(f"比較群（非W001・非W004）: プロフ率中央値 {pct(bp.get('profile_rate_median'))}（n={bp.get('n_profile_rate')}） フォロー/1万IMP {bp.get('follow_per_10k')}（取込 {bp.get('n_follow_measured')} 本）")
     print("\n## 前月比")
     for m in res["previous"]:
         print(f"- {m['month']}: インプ {fmt(m['monthly_imp'])} X {m['x_posts']} 本 W001 {m['w001_count']} note {len(m['note_published'])} 0本日 {m['zero_day_count']} フォロワー {m['followers_diff']}")

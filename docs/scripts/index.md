@@ -24,7 +24,7 @@ description: scripts/ ディレクトリのスクリプト一覧
 | `run_xonepoint_post.sh` | ワンポイント投稿の cron ラッパー |
 | `run_question_post.sh` | 質問回答投稿の cron ラッパー |
 | `run_xlong_post.sh` | 長文ストーリー投稿の cron ラッパー |
-| `run_xshort_post.sh` | X短文投稿の cron ラッパー（20 時） |
+| `run_xshort_post.sh` | X短文投稿の cron ラッパー（20 時）。ラベル無しは【自己開示】（W004）→【X短文投稿】（z01）の順に探す |
 | `run_mond_letter_reply.sh` | mond レター回答の cron ラッパー |
 | `check_auth.sh` | Google / X API 認証チェック |
 
@@ -41,7 +41,7 @@ description: scripts/ ディレクトリのスクリプト一覧
 | スクリプト | 用途 |
 |---|---|
 | `fetch_x_user_posts.py` | 指定アカウントの投稿を期間指定で X API から取得し、「X競合分析」に新シート `<username> YYYY-MM` を作って記録（RT・他人へのリプライを除外、自分のスレッド続きは「ツリー続き」）。`--dry-run` / `--from-json` / `--overwrite`。[ワークフロー](../workflows/x-competitor-daily-mail/) |
-| `x_competitor_daily_mail.py` | シートの未送信で最古の投稿を 1 件メール（ツリーは続きも同じメール）し、N 列「送信済み」に送信日を書く。全件送り終えたら「残りなし」を 1 回通知 |
+| `x_competitor_daily_mail.py` | シートの未送信で最古の投稿を 1 件 Gmail 下書き（件名【自己開示】、末尾に空の `[投稿文]`。ツリーは続きも同じ下書き）にし、N 列に作成日を書く。`--mode send` で従来のメール送信。全件終えたら「残りなし」を 1 回送信通知。よーんが本文を書いて送信すると W004 として投稿される |
 | `run_x_competitor_daily_mail.sh` | cron ラッパー（07:15）。対象シートは冒頭の `SHEET` で指定。`--dry-run` で送信・記入を省く |
 
 ## Google Drive 関連
