@@ -15,6 +15,7 @@ description: Claude Code で使用できるスキルの一覧
 | [writer-xnews](/xClaude/skills/writer-xnews/) | writer-xnews スキル |
 | [writer-xonepoint](/xClaude/skills/writer-xonepoint/) | X用ワンポイント解説投稿を1本作成する。受け取ったネタ情報をもとに投稿原稿を生成する。 |
 | [writer-xpost](/xClaude/skills/writer-xpost/) | X投稿用の汎用 writer。投稿テーマと文字数範囲を受け取り、作業フォルダの spec.md/plan.md/brand.md に従って「フォーカス決定→冒頭フック決定→本文作成」を全自動でこなし、X投稿（冒頭フック→本文→締め）を1本作成する。ユーザー確認なし。 |
+| [writer-xpromo](/xClaude/skills/writer-xpromo/) | W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を件名【note販促】の Gmail 下書きにする（X への投稿は行わない） |
 | [writer-xqa](/xClaude/skills/writer-xqa/) | X 上の質問への回答投稿を 1 本作成する。長文化を避け、3 段以内・400 字以内に圧縮し、超える内容は note 誘導で切り上げる。 |
 | [writer-xshort](/xClaude/skills/writer-xshort/) | 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140文字の短文原稿を作成してGmail下書きに保存する（投稿は行わず下書き作成のみ）。ユーザー確認なし全自動。 |
 | [writer-xstory](/xClaude/skills/writer-xstory/) | 宇宙探査や科学発見の執念の物語をテーマにした、X長文投稿を日本語で作成する。テーマを受け取り、Xの投稿文を出す。 |
