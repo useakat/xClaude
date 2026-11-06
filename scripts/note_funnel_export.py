@@ -359,6 +359,13 @@ def main() -> int:
         segs.sort(key=lambda x: x["start"])
         a = articles.get(aid, {})
         pv_days = daily_by_article.get(aid, {})
+        # 後編は前編から読み進める構成なので、PV は前編のものを使う（2026-11-06）
+        _t = a.get("title", "")
+        if _t.startswith("もしも空が赤かったら（後編）"):  # この記事だけの扱い
+            _stem = _t.split("（後編）")[0]
+            _front = next((i for i, x in articles.items() if i != aid and x.get("title", "").startswith(_stem + "（前編）")), "")
+            if _front:
+                pv_days = daily_by_article.get(_front, {})
         assigned: set[int] = set()
         prev_seg: dict | None = None  # 直前の閉じた区間（規則 4 の比較相手）
         for sg in segs:
