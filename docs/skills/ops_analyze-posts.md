@@ -41,6 +41,8 @@ X投稿のパフォーマンスを集計・分析する。stats モードで平�
 | W002 | writer_note-story | style-note-story |
 | W003 | writer-xonepoint, daily-xonepoint | style-xonepoint |
 | W006 | writer-xonepoint（質問回答も同一スキル経由） | style-xonepoint |
+| W004 | なし（よーん本人が全文手書き。AI は書かない） | — |
+| W007 | writer-xpromo（note 販促 140字） | — |
 
 ---
 

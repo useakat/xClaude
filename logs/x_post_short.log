@@ -669,3 +669,2023 @@ PERMALINK=https://www.threads.com/@usephys1/post/Dbyx4RkEltN
 [2026-08-09 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
 [2026-08-09 20:00:01 JST] 投稿対象メールなし。ループ終了
 [2026-08-09 20:00:01 JST] 完了 (result=none, exit=20)
+[2026-08-10 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-10 12:00:04 JST] 処理対象 thread_id=19fe71e65c996a81
+[2026-08-10 12:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2086648757199007762
+[2026-08-10 12:00:06 JST] 投稿成功: https://x.com/i/web/status/2086648757199007762
+✓ 記録完了: ['2026-08-10 12:00:07', 'https://x.com/i/web/status/2086648757199007762', 'z01', 'newsTopics[19]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[19] → I21 = 2026-08-10
+[2026-08-10 12:00:12 JST] Threads 転載開始...
+  本文1/1 投稿 id=18111634190278618
+PERMALINK=https://www.threads.com/@usephys1/post/Db1_33oks0Y
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Db1_33oks0Y（本文1件＋リプ0件）
+[2026-08-10 12:00:27 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Db1_33oks0Y
+✓ 記録完了: ['2026-08-10 12:00:28', 'https://www.threads.com/@usephys1/post/Db1_33oks0Y', '', '', '', '', '', 'https://x.com/i/web/status/2086648757199007762']
+[2026-08-10 12:00:29 JST] 1件処理完了。ループ終了
+[2026-08-10 12:00:29 JST] 完了 (result=posted, exit=0)
+[2026-08-10 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-10 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-10 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-10 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-10 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-10 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-11 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-11 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-11 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-11 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-11 12:00:05 JST] 処理対象 thread_id=19f81d139be9fa48
+[2026-08-11 12:00:06 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2087011147388186727
+[2026-08-11 12:00:07 JST] 投稿成功: https://x.com/i/web/status/2087011147388186727
+✓ 記録完了: ['2026-08-11 12:00:08', 'https://x.com/i/web/status/2087011147388186727', 'z01', 'newsTopics[17]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[17] → I19 = 2026-08-11
+[2026-08-11 12:00:12 JST] Threads 転載開始...
+  本文1/1 投稿 id=18109230536043727
+PERMALINK=https://www.threads.com/@usephys1/post/Db4kqy3oHj6
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Db4kqy3oHj6（本文1件＋リプ0件）
+[2026-08-11 12:00:27 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Db4kqy3oHj6
+✓ 記録完了: ['2026-08-11 12:00:27', 'https://www.threads.com/@usephys1/post/Db4kqy3oHj6', '', '', '', '', '', 'https://x.com/i/web/status/2087011147388186727']
+[2026-08-11 12:00:29 JST] 1件処理完了。ループ終了
+[2026-08-11 12:00:29 JST] 完了 (result=posted, exit=0)
+[2026-08-11 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-11 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-11 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-12 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-12 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-12 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-12 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-12 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-12 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-12 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-12 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-12 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-12 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-12 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-12 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-13 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-13 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-13 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-13 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-13 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-13 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-13 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-13 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-13 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-13 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-13 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-13 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-14 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-14 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-14 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-14 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-14 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-14 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-14 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-14 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-14 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-14 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-14 20:00:02 JST] 処理対象 thread_id=19fff399d8c0ab39
+[2026-08-14 20:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2088219097834365261
+[2026-08-14 20:00:05 JST] 投稿成功: https://x.com/i/web/status/2088219097834365261
+✓ 記録完了: ['2026-08-14 20:00:06', 'https://x.com/i/web/status/2088219097834365261', 'z01', 'noteNeta[84]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[84] → N85 = 2026-08-14
+[2026-08-14 20:00:09 JST] Threads 転載開始...
+  本文1/1 投稿 id=18616597900058594
+PERMALINK=https://www.threads.com/@usephys1/post/DcBJ-u-kh20
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DcBJ-u-kh20（本文1件＋リプ0件）
+[2026-08-14 20:00:26 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DcBJ-u-kh20
+✓ 記録完了: ['2026-08-14 20:00:26', 'https://www.threads.com/@usephys1/post/DcBJ-u-kh20', '', '', '', '', '', 'https://x.com/i/web/status/2088219097834365261']
+[2026-08-14 20:00:28 JST] 1件処理完了。ループ終了
+[2026-08-14 20:00:28 JST] 完了 (result=posted, exit=0)
+[2026-08-15 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-15 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-15 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-15 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-15 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-15 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-15 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-15 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-15 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-15 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-15 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-15 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-16 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-16 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-16 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-16 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-16 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-16 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-16 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-16 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-16 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-17 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-17 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-17 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-17 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-17 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-17 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-17 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-17 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-17 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-18 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-18 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-18 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-18 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-18 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-18 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-18 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-18 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-18 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-18 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-18 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-18 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-19 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-19 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-19 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-19 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-19 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-19 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-19 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-19 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-19 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-19 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-19 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-19 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-20 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-20 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-20 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-20 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-20 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-20 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-20 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-20 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-20 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-20 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-20 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-20 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-21 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-21 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-21 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-21 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-21 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-21 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-21 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-21 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-21 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-21 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-21 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-21 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-22 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-22 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-22 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-22 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-22 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-22 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-22 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-22 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-22 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-22 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-22 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-22 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-23 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-23 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-23 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-23 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-23 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-23 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-23 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-23 17:00:04 JST] 処理対象 thread_id=1a02d1f414f3ee31
+[2026-08-23 17:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2091435295292239905
+[2026-08-23 17:00:06 JST] 投稿成功: https://x.com/i/web/status/2091435295292239905
+✓ 記録完了: ['2026-08-23 17:00:07', 'https://x.com/i/web/status/2091435295292239905', 'z01', 'noteNeta[27]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[27] → N28 = 2026-08-23
+[2026-08-23 17:00:11 JST] Threads 転載開始...
+  本文1/1 投稿 id=18111646739517232
+PERMALINK=https://www.threads.com/@usephys1/post/DcYAiWEICDH
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DcYAiWEICDH（本文1件＋リプ0件）
+[2026-08-23 17:00:21 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DcYAiWEICDH
+✓ 記録完了: ['2026-08-23 17:00:21', 'https://www.threads.com/@usephys1/post/DcYAiWEICDH', '', '', '', '', '', 'https://x.com/i/web/status/2091435295292239905']
+[2026-08-23 17:00:23 JST] 1件処理完了。ループ終了
+[2026-08-23 17:00:23 JST] 完了 (result=posted, exit=0)
+[2026-08-23 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-23 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-23 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-24 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-24 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-08-24 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-08-24 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-24 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-24 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-24 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-24 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-24 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-24 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-24 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-24 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-25 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-25 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-25 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-25 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-25 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-25 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-25 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-25 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-25 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-25 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-25 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-25 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-26 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-26 06:00:03 JST] 処理対象 thread_id=1a02dccc29a1e913
+[2026-08-26 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2092356362919645569
+[2026-08-26 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2092356362919645569
+✓ 記録完了: ['2026-08-26 06:00:07', 'https://x.com/i/web/status/2092356362919645569', 'z01', 'noteNeta[30]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[30] → N31 = 2026-08-26
+[2026-08-26 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=18620257894057302
+PERMALINK=https://www.threads.com/@usephys1/post/DcejY_0kyB3
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DcejY_0kyB3（本文1件＋リプ0件）
+[2026-08-26 06:00:22 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DcejY_0kyB3
+✓ 記録完了: ['2026-08-26 06:00:22', 'https://www.threads.com/@usephys1/post/DcejY_0kyB3', '', '', '', '', '', 'https://x.com/i/web/status/2092356362919645569']
+[2026-08-26 06:00:23 JST] 1件処理完了。ループ終了
+[2026-08-26 06:00:23 JST] 完了 (result=posted, exit=0)
+[2026-08-26 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-26 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-26 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-26 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-26 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-26 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-26 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-26 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-26 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-27 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-27 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-27 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-27 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-27 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-27 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-27 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-27 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-27 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-27 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-27 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-27 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-28 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-28 06:00:03 JST] 処理対象 thread_id=19fa0b716fdd67e5
+[2026-08-28 06:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2093081136931143952
+[2026-08-28 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2093081136931143952
+✓ 記録完了: ['2026-08-28 06:00:06', 'https://x.com/i/web/status/2093081136931143952', 'z01', 'newsTopics[10]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[10] → I11 = 2026-08-28
+[2026-08-28 06:00:11 JST] Threads 転載開始...
+  本文1/1 投稿 id=17895666297601403
+PERMALINK=https://www.threads.com/@usephys1/post/Dcjs-0EE3ua
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dcjs-0EE3ua（本文1件＋リプ0件）
+[2026-08-28 06:00:27 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dcjs-0EE3ua
+✓ 記録完了: ['2026-08-28 06:00:27', 'https://www.threads.com/@usephys1/post/Dcjs-0EE3ua', '', '', '', '', '', 'https://x.com/i/web/status/2093081136931143952']
+[2026-08-28 06:00:28 JST] 1件処理完了。ループ終了
+[2026-08-28 06:00:28 JST] 完了 (result=posted, exit=0)
+[2026-08-28 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-28 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-28 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-28 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-28 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-28 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-28 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-28 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-28 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-29 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-29 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-29 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-29 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-29 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-29 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-29 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-29 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-29 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-30 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-30 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-30 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-30 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-30 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-30 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-30 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-30 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-08-30 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-08-31 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-31 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-31 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-31 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-31 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-31 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-08-31 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-31 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-08-31 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-08-31 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-08-31 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-08-31 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-01 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-01 06:00:03 JST] 処理対象 thread_id=1a04899cab203faf
+[2026-09-01 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2094530690419409101
+[2026-09-01 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2094530690419409101
+[2026-09-01 06:00:05 JST] リプ投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2094530692738871606
+✓ 記録完了: ['2026-09-01 06:00:07', 'https://x.com/i/web/status/2094530690419409101', 'z01', 'newsTopics[15]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[15] → I17 = 2026-09-01
+[2026-09-01 06:00:12 JST] Threads 転載開始...
+  本文1/1 投稿 id=18442277416125039
+  リプ1/1 投稿 id=18217860205339394
+PERMALINK=https://www.threads.com/@usephys1/post/DcuAKXzk5et
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DcuAKXzk5et（本文1件＋リプ1件）
+[2026-09-01 06:00:48 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DcuAKXzk5et
+✓ 記録完了: ['2026-09-01 06:00:48', 'https://www.threads.com/@usephys1/post/DcuAKXzk5et', '', '', '', '', '', 'https://x.com/i/web/status/2094530690419409101']
+[2026-09-01 06:00:49 JST] 1件処理完了。ループ終了
+[2026-09-01 06:00:49 JST] 完了 (result=posted, exit=0)
+[2026-09-01 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-01 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-01 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-01 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-01 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-01 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-01 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-01 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-01 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-02 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-02 06:00:03 JST] 処理対象 thread_id=1a05cdf98d6d8219
+[2026-09-02 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2094893079312683143
+[2026-09-02 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2094893079312683143
+✓ 記録完了: ['2026-09-02 06:00:07', 'https://x.com/i/web/status/2094893079312683143', 'z01', 'newsTopics[3]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[3] → I4 = 2026-09-02
+[2026-09-02 06:00:11 JST] Threads 転載開始...
+  本文1/1 投稿 id=17879689185522552
+PERMALINK=https://www.threads.com/@usephys1/post/Dcwk9MMExVt
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dcwk9MMExVt（本文1件＋リプ0件）
+[2026-09-02 06:00:23 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dcwk9MMExVt
+✓ 記録完了: ['2026-09-02 06:00:23', 'https://www.threads.com/@usephys1/post/Dcwk9MMExVt', '', '', '', '', '', 'https://x.com/i/web/status/2094893079312683143']
+[2026-09-02 06:00:24 JST] 1件処理完了。ループ終了
+[2026-09-02 06:00:24 JST] 完了 (result=posted, exit=0)
+[2026-09-02 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-02 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-02 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-02 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-02 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-02 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-02 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-02 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-02 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-03 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-03 06:00:03 JST] 処理対象 thread_id=1a04aeec6fc502dc
+[2026-09-03 06:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2095255464259043735
+[2026-09-03 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2095255464259043735
+Traceback (most recent call last):
+  File "/root/xClaude/scripts/record_output.py", line 94, in <module>
+    record(args.url, args.how_id, args.neta_id, args.thought_id, args.x_url, args.note_url)
+  File "/root/xClaude/scripts/record_output.py", line 77, in record
+    sheet = client.open_by_key(SPREADSHEET_ID).worksheet(SHEET_NAME)
+  File "/usr/local/lib/python3.10/dist-packages/gspread/client.py", line 174, in open_by_key
+    raise ex
+  File "/usr/local/lib/python3.10/dist-packages/gspread/client.py", line 168, in open_by_key
+    spreadsheet = Spreadsheet(self.http_client, {"id": key})
+  File "/usr/local/lib/python3.10/dist-packages/gspread/spreadsheet.py", line 29, in __init__
+    metadata = self.fetch_sheet_metadata()
+  File "/usr/local/lib/python3.10/dist-packages/gspread/spreadsheet.py", line 230, in fetch_sheet_metadata
+    return self.client.fetch_sheet_metadata(self.id, params=params)
+  File "/usr/local/lib/python3.10/dist-packages/gspread/http_client.py", line 305, in fetch_sheet_metadata
+    r = self.request("get", url, params=params)
+  File "/usr/local/lib/python3.10/dist-packages/gspread/http_client.py", line 128, in request
+    raise APIError(response)
+gspread.exceptions.APIError: APIError: [503]: The service is currently unavailable.
+[2026-09-03 06:00:07 JST] Threads 転載開始...
+  本文1/1 投稿 id=17928309252392345
+PERMALINK=https://www.threads.com/@usephys1/post/DczJvhNE57P
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DczJvhNE57P（本文1件＋リプ0件）
+[2026-09-03 06:00:23 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DczJvhNE57P
+✓ 記録完了: ['2026-09-03 06:00:23', 'https://www.threads.com/@usephys1/post/DczJvhNE57P', '', '', '', '', '', 'https://x.com/i/web/status/2095255464259043735']
+[2026-09-03 06:00:25 JST] 1件処理完了。ループ終了
+[2026-09-03 06:00:25 JST] 完了 (result=posted, exit=0)
+[2026-09-03 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-03 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-03 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-03 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-03 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-03 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-03 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-03 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-03 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-04 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-04 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-04 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-04 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-04 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-04 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-04 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-04 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-04 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-05 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-05 06:00:04 JST] 処理対象 thread_id=1a0625159af11823
+[2026-09-05 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2095980243899277453
+[2026-09-05 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2095980243899277453
+✓ 記録完了: ['2026-09-05 06:00:07', 'https://x.com/i/web/status/2095980243899277453', 'z01', 'noteNeta[113]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[113] → N114 = 2026-09-05
+[2026-09-05 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=18103408403461102
+PERMALINK=https://www.threads.com/@usephys1/post/Dc4TVvDEoF7
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dc4TVvDEoF7（本文1件＋リプ0件）
+[2026-09-05 06:00:26 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dc4TVvDEoF7
+✓ 記録完了: ['2026-09-05 06:00:27', 'https://www.threads.com/@usephys1/post/Dc4TVvDEoF7', '', '', '', '', '', 'https://x.com/i/web/status/2095980243899277453']
+[2026-09-05 06:00:28 JST] 1件処理完了。ループ終了
+[2026-09-05 06:00:28 JST] 完了 (result=posted, exit=0)
+[2026-09-05 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-05 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-05 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-05 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-05 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-05 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-05 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-05 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-05 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-06 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-06 06:00:03 JST] 処理対象 thread_id=1a0657896e3ea037
+[2026-09-06 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2096342629575500140
+[2026-09-06 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2096342629575500140
+✓ 記録完了: ['2026-09-06 06:00:07', 'https://x.com/i/web/status/2096342629575500140', 'z01', 'newsTopics[18]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[18] → I20 = 2026-09-06
+[2026-09-06 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=18215310445352005
+PERMALINK=https://www.threads.com/@usephys1/post/Dc64Ig3EmnD
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dc64Ig3EmnD（本文1件＋リプ0件）
+[2026-09-06 06:00:20 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dc64Ig3EmnD
+✓ 記録完了: ['2026-09-06 06:00:20', 'https://www.threads.com/@usephys1/post/Dc64Ig3EmnD', '', '', '', '', '', 'https://x.com/i/web/status/2096342629575500140']
+[2026-09-06 06:00:22 JST] 1件処理完了。ループ終了
+[2026-09-06 06:00:22 JST] 完了 (result=posted, exit=0)
+[2026-09-06 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-06 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-06 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-06 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-06 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-06 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-06 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-06 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-06 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-07 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-07 06:00:03 JST] 処理対象 thread_id=1a076adc6000c90b
+[2026-09-07 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2096705018934215062
+[2026-09-07 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2096705018934215062
+✓ 記録完了: ['2026-09-07 06:00:07', 'https://x.com/i/web/status/2096705018934215062', 'z01', 'newsTopics[11]', '', '', '', '']
+Traceback (most recent call last):
+  File "/root/xClaude/scripts/record_output.py", line 94, in <module>
+    record(args.url, args.how_id, args.neta_id, args.thought_id, args.x_url, args.note_url)
+  File "/root/xClaude/scripts/record_output.py", line 82, in record
+    record_short_post_usage(client, neta_id)
+  File "/root/xClaude/scripts/record_output.py", line 61, in record_short_post_usage
+    sheet = client.open_by_key(SS1_SPREADSHEET_ID).worksheet(sheet_name)
+  File "/usr/local/lib/python3.10/dist-packages/gspread/client.py", line 174, in open_by_key
+    raise ex
+  File "/usr/local/lib/python3.10/dist-packages/gspread/client.py", line 168, in open_by_key
+    spreadsheet = Spreadsheet(self.http_client, {"id": key})
+  File "/usr/local/lib/python3.10/dist-packages/gspread/spreadsheet.py", line 29, in __init__
+    metadata = self.fetch_sheet_metadata()
+  File "/usr/local/lib/python3.10/dist-packages/gspread/spreadsheet.py", line 230, in fetch_sheet_metadata
+    return self.client.fetch_sheet_metadata(self.id, params=params)
+  File "/usr/local/lib/python3.10/dist-packages/gspread/http_client.py", line 305, in fetch_sheet_metadata
+    r = self.request("get", url, params=params)
+  File "/usr/local/lib/python3.10/dist-packages/gspread/http_client.py", line 128, in request
+    raise APIError(response)
+gspread.exceptions.APIError: APIError: [503]: The service is currently unavailable.
+[2026-09-07 06:00:09 JST] Threads 転載開始...
+  本文1/1 投稿 id=18130386505673638
+PERMALINK=https://www.threads.com/@usephys1/post/Dc9c7TLE4cJ
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dc9c7TLE4cJ（本文1件＋リプ0件）
+[2026-09-07 06:00:24 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dc9c7TLE4cJ
+✓ 記録完了: ['2026-09-07 06:00:25', 'https://www.threads.com/@usephys1/post/Dc9c7TLE4cJ', '', '', '', '', '', 'https://x.com/i/web/status/2096705018934215062']
+[2026-09-07 06:00:26 JST] 1件処理完了。ループ終了
+[2026-09-07 06:00:26 JST] 完了 (result=posted, exit=0)
+[2026-09-07 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-07 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-07 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-07 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-07 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-07 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-07 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-07 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-07 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-08 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-08 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-08 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-08 07:53:21 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-08 07:53:23 JST] 処理対象 thread_id=1a07c2f2040a195f
+[2026-09-08 07:53:24 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2097095923151323260
+[2026-09-08 07:53:25 JST] 投稿成功: https://x.com/i/web/status/2097095923151323260
+✓ 記録完了: ['2026-09-08 07:53:26', 'https://x.com/i/web/status/2097095923151323260', 'z01', 'newsTopics[12]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[12] → I14 = 2026-09-08
+[2026-09-08 07:53:29 JST] Threads 転載開始...
+  本文1/1 投稿 id=17938750233098196
+PERMALINK=https://www.threads.com/@usephys1/post/DdAOsO1kofn
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdAOsO1kofn（本文1件＋リプ0件）
+[2026-09-08 07:53:45 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdAOsO1kofn
+✓ 記録完了: ['2026-09-08 07:53:45', 'https://www.threads.com/@usephys1/post/DdAOsO1kofn', '', '', '', '', '', 'https://x.com/i/web/status/2097095923151323260']
+[2026-09-08 07:53:46 JST] 1件処理完了。ループ終了
+[2026-09-08 07:53:46 JST] 完了 (result=posted, exit=0)
+[2026-09-08 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-08 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-08 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-08 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-08 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-08 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-08 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-08 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-08 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-09 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-09 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-09 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-09 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-09 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-09 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-09 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-09 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-09 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-09 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-09 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-09 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-10 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-10 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-10 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-10 08:45:58 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-10 08:46:00 JST] 処理対象 thread_id=1a0815a8fff353a7
+[2026-09-10 08:46:01 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2097833942242234811
+[2026-09-10 08:46:02 JST] 投稿成功: https://x.com/i/web/status/2097833942242234811
+✓ 記録完了: ['2026-09-10 08:46:03', 'https://x.com/i/web/status/2097833942242234811', 'z01', 'noteNeta[39]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[39] → N40 = 2026-09-10
+[2026-09-10 08:46:07 JST] Threads 転載開始...
+  本文1/1 投稿 id=18007510871950648
+PERMALINK=https://www.threads.com/@usephys1/post/DdFeTdbEjeC
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdFeTdbEjeC（本文1件＋リプ0件）
+[2026-09-10 08:46:22 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdFeTdbEjeC
+✓ 記録完了: ['2026-09-10 08:46:22', 'https://www.threads.com/@usephys1/post/DdFeTdbEjeC', '', '', '', '', '', 'https://x.com/i/web/status/2097833942242234811']
+[2026-09-10 08:46:23 JST] 1件処理完了。ループ終了
+[2026-09-10 08:46:23 JST] 完了 (result=posted, exit=0)
+[2026-09-10 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-10 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-10 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-10 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-10 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-10 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-10 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-10 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-10 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-11 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-11 06:00:03 JST] 処理対象 thread_id=1a08b073054fdf3a
+[2026-09-11 06:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2098154567494234121
+[2026-09-11 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2098154567494234121
+✓ 記録完了: ['2026-09-11 06:00:06', 'https://x.com/i/web/status/2098154567494234121', 'z01', 'noteNeta[31]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[31] → N32 = 2026-09-11
+[2026-09-11 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=17934522075127239
+PERMALINK=https://www.threads.com/@usephys1/post/DdHwG3ok5z6
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdHwG3ok5z6（本文1件＋リプ0件）
+[2026-09-11 06:00:26 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdHwG3ok5z6
+✓ 記録完了: ['2026-09-11 06:00:26', 'https://www.threads.com/@usephys1/post/DdHwG3ok5z6', '', '', '', '', '', 'https://x.com/i/web/status/2098154567494234121']
+[2026-09-11 06:00:27 JST] 1件処理完了。ループ終了
+[2026-09-11 06:00:27 JST] 完了 (result=posted, exit=0)
+[2026-09-11 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-11 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-11 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-11 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-11 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-11 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-11 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-11 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-11 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-12 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-12 06:00:03 JST] 処理対象 thread_id=1a08f73760603464
+[2026-09-12 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2098516957096276206
+[2026-09-12 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2098516957096276206
+[2026-09-12 06:00:06 JST] リプ投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2098516959713509721
+✓ 記録完了: ['2026-09-12 06:00:07', 'https://x.com/i/web/status/2098516957096276206', 'z01', '', 'T002', '', '', '']
+[2026-09-12 06:00:09 JST] Threads 転載開始...
+  本文1/1 投稿 id=18102416959986511
+  リプ1/1 投稿 id=18103322948362231
+PERMALINK=https://www.threads.com/@usephys1/post/DdKU5pfkgfk
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdKU5pfkgfk（本文1件＋リプ1件）
+[2026-09-12 06:00:44 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdKU5pfkgfk
+✓ 記録完了: ['2026-09-12 06:00:44', 'https://www.threads.com/@usephys1/post/DdKU5pfkgfk', '', '', '', '', '', 'https://x.com/i/web/status/2098516957096276206']
+[2026-09-12 06:00:45 JST] 1件処理完了。ループ終了
+[2026-09-12 06:00:45 JST] 完了 (result=posted, exit=0)
+[2026-09-12 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-12 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-12 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-12 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-12 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-12 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-12 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-12 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-12 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-13 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-13 06:00:03 JST] 処理対象 thread_id=1a090abff36e75d4
+[2026-09-13 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2098879345398010330
+[2026-09-13 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2098879345398010330
+✓ 記録完了: ['2026-09-13 06:00:07', 'https://x.com/i/web/status/2098879345398010330', 'z01', '', 'T011', '', '', '']
+[2026-09-13 06:00:08 JST] Threads 転載開始...
+  本文1/1 投稿 id=18464414692140714
+PERMALINK=https://www.threads.com/@usephys1/post/DdM5sfXkhzz
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdM5sfXkhzz（本文1件＋リプ0件）
+[2026-09-13 06:00:24 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdM5sfXkhzz
+✓ 記録完了: ['2026-09-13 06:00:25', 'https://www.threads.com/@usephys1/post/DdM5sfXkhzz', '', '', '', '', '', 'https://x.com/i/web/status/2098879345398010330']
+[2026-09-13 06:00:26 JST] 1件処理完了。ループ終了
+[2026-09-13 06:00:26 JST] 完了 (result=posted, exit=0)
+[2026-09-13 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-13 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-13 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-13 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-13 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-13 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-13 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-13 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-13 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-14 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-14 06:00:03 JST] 処理対象 thread_id=1a09b210fe5bd137
+[2026-09-14 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2099241732554850431
+[2026-09-14 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2099241732554850431
+✓ 記録完了: ['2026-09-14 06:00:07', 'https://x.com/i/web/status/2099241732554850431', 'z01', '', 'T013', '', '', '']
+[2026-09-14 06:00:08 JST] Threads 転載開始...
+  本文1/1 投稿 id=18147936799542597
+PERMALINK=https://www.threads.com/@usephys1/post/DdPefTSEhzL
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdPefTSEhzL（本文1件＋リプ0件）
+[2026-09-14 06:00:19 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdPefTSEhzL
+✓ 記録完了: ['2026-09-14 06:00:19', 'https://www.threads.com/@usephys1/post/DdPefTSEhzL', '', '', '', '', '', 'https://x.com/i/web/status/2099241732554850431']
+[2026-09-14 06:00:20 JST] 1件処理完了。ループ終了
+[2026-09-14 06:00:20 JST] 完了 (result=posted, exit=0)
+[2026-09-14 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-14 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-14 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-14 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-14 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-14 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-14 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-14 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-14 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-15 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-15 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-15 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-15 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-15 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-15 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-15 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-15 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-15 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-15 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-15 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-15 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-16 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-16 06:00:04 JST] 処理対象 thread_id=1a0a54e63c51bd0c
+[2026-09-16 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2099966509678473648
+[2026-09-16 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2099966509678473648
+✓ 記録完了: ['2026-09-16 06:00:07', 'https://x.com/i/web/status/2099966509678473648', 'z01', 'noteNeta[96]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[96] → N97 = 2026-09-16
+[2026-09-16 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=17945846592319609
+PERMALINK=https://www.threads.com/@usephys1/post/DdUoFXVk7GT
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdUoFXVk7GT（本文1件＋リプ0件）
+[2026-09-16 06:00:27 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdUoFXVk7GT
+✓ 記録完了: ['2026-09-16 06:00:27', 'https://www.threads.com/@usephys1/post/DdUoFXVk7GT', '', '', '', '', '', 'https://x.com/i/web/status/2099966509678473648']
+[2026-09-16 06:00:29 JST] 1件処理完了。ループ終了
+[2026-09-16 06:00:29 JST] 完了 (result=posted, exit=0)
+[2026-09-16 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-16 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-16 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-16 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-16 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-16 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-16 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-16 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-16 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-17 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-17 06:00:03 JST] 処理対象 thread_id=1a0aa40a893bffcd
+[2026-09-17 06:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2100328894494802333
+[2026-09-17 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2100328894494802333
+✓ 記録完了: ['2026-09-17 06:00:06', 'https://x.com/i/web/status/2100328894494802333', 'z01', 'noteNeta[105]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[105] → N106 = 2026-09-17
+[2026-09-17 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=18114492697793207
+PERMALINK=https://www.threads.com/@usephys1/post/DdXM4JEEu8g
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdXM4JEEu8g（本文1件＋リプ0件）
+[2026-09-17 06:00:26 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdXM4JEEu8g
+✓ 記録完了: ['2026-09-17 06:00:26', 'https://www.threads.com/@usephys1/post/DdXM4JEEu8g', '', '', '', '', '', 'https://x.com/i/web/status/2100328894494802333']
+[2026-09-17 06:00:27 JST] 1件処理完了。ループ終了
+[2026-09-17 06:00:27 JST] 完了 (result=posted, exit=0)
+[2026-09-17 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-17 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-17 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-17 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-17 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-17 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-17 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-17 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-17 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-18 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-18 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-18 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-18 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-18 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-18 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-18 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-18 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-18 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-19 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-19 06:00:04 JST] 処理対象 thread_id=1a0b37dea0991273
+[2026-09-19 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2101053673199821074
+[2026-09-19 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2101053673199821074
+✓ 記録完了: ['2026-09-19 06:00:07', 'https://x.com/i/web/status/2101053673199821074', 'z01', 'noteNeta[87]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[87] → N88 = 2026-09-19
+[2026-09-19 06:00:11 JST] Threads 転載開始...
+  本文1/1 投稿 id=18110729918277145
+PERMALINK=https://www.threads.com/@usephys1/post/DdcWeC3ErcP
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdcWeC3ErcP（本文1件＋リプ0件）
+[2026-09-19 06:00:26 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdcWeC3ErcP
+✓ 記録完了: ['2026-09-19 06:00:26', 'https://www.threads.com/@usephys1/post/DdcWeC3ErcP', '', '', '', '', '', 'https://x.com/i/web/status/2101053673199821074']
+[2026-09-19 06:00:27 JST] 1件処理完了。ループ終了
+[2026-09-19 06:00:27 JST] 完了 (result=posted, exit=0)
+[2026-09-19 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-19 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-19 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-19 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-19 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-19 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-19 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-19 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-19 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-20 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-20 06:00:04 JST] 処理対象 thread_id=1a0b7c9f16fc13aa
+[2026-09-20 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2101416060721447329
+[2026-09-20 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2101416060721447329
+✓ 記録完了: ['2026-09-20 06:00:07', 'https://x.com/i/web/status/2101416060721447329', 'z01', 'newsTopics[24]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[24] → I26 = 2026-09-20
+[2026-09-20 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=18115540420917408
+PERMALINK=https://www.threads.com/@usephys1/post/Dde7Q2Akjrc
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dde7Q2Akjrc（本文1件＋リプ0件）
+[2026-09-20 06:00:25 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dde7Q2Akjrc
+✓ 記録完了: ['2026-09-20 06:00:25', 'https://www.threads.com/@usephys1/post/Dde7Q2Akjrc', '', '', '', '', '', 'https://x.com/i/web/status/2101416060721447329']
+[2026-09-20 06:00:26 JST] 1件処理完了。ループ終了
+[2026-09-20 06:00:26 JST] 完了 (result=posted, exit=0)
+[2026-09-20 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-20 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-20 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-20 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-20 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-20 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-20 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-20 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-20 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-21 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-21 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-21 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-21 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-21 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-21 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-21 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-21 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-21 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-22 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-22 06:00:03 JST] 処理対象 thread_id=1a0c3b6730d33a8d
+[2026-09-22 06:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2102140834095534431
+[2026-09-22 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2102140834095534431
+✓ 記録完了: ['2026-09-22 06:00:07', 'https://x.com/i/web/status/2102140834095534431', 'z01', 'noteNeta[14]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[14] → N15 = 2026-09-22
+[2026-09-22 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=17918876748432358
+PERMALINK=https://www.threads.com/@usephys1/post/DdkE2gWE7O-
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdkE2gWE7O-（本文1件＋リプ0件）
+[2026-09-22 06:00:27 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdkE2gWE7O-
+✓ 記録完了: ['2026-09-22 06:00:27', 'https://www.threads.com/@usephys1/post/DdkE2gWE7O-', '', '', '', '', '', 'https://x.com/i/web/status/2102140834095534431']
+[2026-09-22 06:00:29 JST] 1件処理完了。ループ終了
+[2026-09-22 06:00:29 JST] 完了 (result=posted, exit=0)
+[2026-09-22 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-22 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-22 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-22 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-22 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-22 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-22 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-22 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-22 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-23 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-23 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-23 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-23 07:33:38 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-23 07:33:40 JST] 処理対象 thread_id=1a0c3efc49e6a61f
+[2026-09-23 07:33:42 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2102526782582960467
+[2026-09-23 07:33:42 JST] 投稿成功: https://x.com/i/web/status/2102526782582960467
+✓ 記録完了: ['2026-09-23 07:33:44', 'https://x.com/i/web/status/2102526782582960467', 'z01', 'noteNeta[43]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[43] → N44 = 2026-09-23
+[2026-09-23 07:33:48 JST] Threads 転載開始...
+  本文1/1 投稿 id=17911818702282884
+PERMALINK=https://www.threads.com/@usephys1/post/Ddm0XJ7Ej6P
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Ddm0XJ7Ej6P（本文1件＋リプ0件）
+[2026-09-23 07:33:58 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Ddm0XJ7Ej6P
+✓ 記録完了: ['2026-09-23 07:33:58', 'https://www.threads.com/@usephys1/post/Ddm0XJ7Ej6P', '', '', '', '', '', 'https://x.com/i/web/status/2102526782582960467']
+[2026-09-23 07:33:59 JST] 1件処理完了。ループ終了
+[2026-09-23 07:33:59 JST] 完了 (result=posted, exit=0)
+[2026-09-23 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-23 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-23 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-23 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-23 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-23 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-23 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-23 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-23 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-24 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-24 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-24 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-24 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-24 12:00:03 JST] 処理対象 thread_id=1a0d091c4cda6dcf
+[2026-09-24 12:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2102956206268764453
+[2026-09-24 12:00:05 JST] 投稿成功: https://x.com/i/web/status/2102956206268764453
+✓ 記録完了: ['2026-09-24 12:00:06', 'https://x.com/i/web/status/2102956206268764453', 'z01', 'noteNeta[18]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[18] → N19 = 2026-09-24
+[2026-09-24 12:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=18074861054713382
+PERMALINK=https://www.threads.com/@usephys1/post/Ddp3pBcnbFP
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Ddp3pBcnbFP（本文1件＋リプ0件）
+[2026-09-24 12:00:26 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Ddp3pBcnbFP
+✓ 記録完了: ['2026-09-24 12:00:26', 'https://www.threads.com/@usephys1/post/Ddp3pBcnbFP', '', '', '', '', '', 'https://x.com/i/web/status/2102956206268764453']
+[2026-09-24 12:00:27 JST] 1件処理完了。ループ終了
+[2026-09-24 12:00:27 JST] 完了 (result=posted, exit=0)
+[2026-09-24 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-24 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-24 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-24 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-24 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-24 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-25 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-25 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-25 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-25 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-25 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-25 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-25 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-25 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-25 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-25 19:13:00 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-25 19:13:01 JST] 処理対象 thread_id=1a0d63067ef28c48
+[2026-09-25 19:13:03 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2103427556158681468
+[2026-09-25 19:13:04 JST] 投稿成功: https://x.com/i/web/status/2103427556158681468
+✓ 記録完了: ['2026-09-25 19:13:05', 'https://x.com/i/web/status/2103427556158681468', 'z01', 'noteNeta[15]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[15] → N16 = 2026-09-25
+[2026-09-25 19:13:07 JST] Threads 転載開始...
+  本文1/1 投稿 id=18134468878710139
+PERMALINK=https://www.threads.com/@usephys1/post/DdtN-7IoNWD
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DdtN-7IoNWD（本文1件＋リプ0件）
+[2026-09-25 19:13:22 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DdtN-7IoNWD
+✓ 記録完了: ['2026-09-25 19:13:23', 'https://www.threads.com/@usephys1/post/DdtN-7IoNWD', '', '', '', '', '', 'https://x.com/i/web/status/2103427556158681468']
+[2026-09-25 19:13:24 JST] 1件処理完了。ループ終了
+[2026-09-25 19:13:24 JST] 完了 (result=posted, exit=0)
+[2026-09-25 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-25 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-25 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-09-26 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-26 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-26 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-26 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-26 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-26 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-26 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-26 17:00:03 JST] 処理対象 thread_id=1a0d6359b511dc15
+[2026-09-26 17:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2103756479786565989
+[2026-09-26 17:00:05 JST] 投稿成功: https://x.com/i/web/status/2103756479786565989
+✓ 記録完了: ['2026-09-26 17:00:06', 'https://x.com/i/web/status/2103756479786565989', 'z01', 'noteNeta[110]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[110] → N111 = 2026-09-26
+[2026-09-26 17:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=18107181754921280
+PERMALINK=https://www.threads.com/@usephys1/post/Ddvjj_XIIec
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Ddvjj_XIIec（本文1件＋リプ0件）
+[2026-09-26 17:00:28 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Ddvjj_XIIec
+✓ 記録完了: ['2026-09-26 17:00:28', 'https://www.threads.com/@usephys1/post/Ddvjj_XIIec', '', '', '', '', '', 'https://x.com/i/web/status/2103756479786565989']
+[2026-09-26 17:00:29 JST] 1件処理完了。ループ終了
+[2026-09-26 17:00:29 JST] 完了 (result=posted, exit=0)
+[2026-09-26 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-26 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-26 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-27 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-27 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-27 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-27 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-27 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-27 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-27 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-27 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-27 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-27 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-27 20:00:02 JST] 処理対象 thread_id=1a0dc7df17dba994
+[2026-09-27 20:00:03 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2104164161332883654
+[2026-09-27 20:00:04 JST] 投稿成功: https://x.com/i/web/status/2104164161332883654
+✓ 記録完了: ['2026-09-27 20:00:05', 'https://x.com/i/web/status/2104164161332883654', 'z01', '', 'T003', '', '', '']
+[2026-09-27 20:00:07 JST] Threads 転載開始...
+  本文1/1 投稿 id=17973985965129004
+PERMALINK=https://www.threads.com/@usephys1/post/Ddyc80bHeSJ
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Ddyc80bHeSJ（本文1件＋リプ0件）
+[2026-09-27 20:00:22 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Ddyc80bHeSJ
+✓ 記録完了: ['2026-09-27 20:00:22', 'https://www.threads.com/@usephys1/post/Ddyc80bHeSJ', '', '', '', '', '', 'https://x.com/i/web/status/2104164161332883654']
+[2026-09-27 20:00:23 JST] 1件処理完了。ループ終了
+[2026-09-27 20:00:23 JST] 完了 (result=posted, exit=0)
+[2026-09-28 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-28 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-28 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-28 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-28 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-28 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-28 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-28 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-28 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-29 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-29 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-29 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-29 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-29 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-29 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-29 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-29 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-09-29 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-09-29 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-29 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-29 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-30 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-30 06:00:04 JST] 処理対象 thread_id=1a0ed619f66e7e9c
+[2026-09-30 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2105039941256515610
+[2026-09-30 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2105039941256515610
+✓ 記録完了: ['2026-09-30 06:00:07', 'https://x.com/i/web/status/2105039941256515610', 'z01', 'noteNeta[140]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[140] → N141 = 2026-09-30
+[2026-09-30 06:00:11 JST] Threads 転載開始...
+  本文1/1 投稿 id=18380657182228259
+PERMALINK=https://www.threads.com/@usephys1/post/Dd4rNmgkm5X
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dd4rNmgkm5X（本文1件＋リプ0件）
+[2026-09-30 06:00:22 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dd4rNmgkm5X
+✓ 記録完了: ['2026-09-30 06:00:22', 'https://www.threads.com/@usephys1/post/Dd4rNmgkm5X', '', '', '', '', '', 'https://x.com/i/web/status/2105039941256515610']
+[2026-09-30 06:00:24 JST] 1件処理完了。ループ終了
+[2026-09-30 06:00:24 JST] 完了 (result=posted, exit=0)
+[2026-09-30 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-30 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-30 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-30 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-30 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-09-30 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-09-30 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-09-30 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-09-30 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-01 06:00:13 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-01 06:00:13 JST] 投稿対象メールなし。ループ終了
+[2026-10-01 06:00:13 JST] 完了 (result=none, exit=20)
+[2026-10-01 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-01 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-01 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-01 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-01 17:00:04 JST] 処理対象 thread_id=1a0f21f9df25304e
+[2026-10-01 17:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2105568422553936351
+[2026-10-01 17:00:06 JST] 投稿成功: https://x.com/i/web/status/2105568422553936351
+✓ 記録完了: ['2026-10-01 17:00:07', 'https://x.com/i/web/status/2105568422553936351', 'z01', '', 'T006', '', '', '']
+[2026-10-01 17:00:09 JST] Threads 転載開始...
+  本文1/1 投稿 id=18111415853017569
+PERMALINK=https://www.threads.com/@usephys1/post/Dd8biSwIF9K
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dd8biSwIF9K（本文1件＋リプ0件）
+[2026-10-01 17:00:26 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dd8biSwIF9K
+✓ 記録完了: ['2026-10-01 17:00:26', 'https://www.threads.com/@usephys1/post/Dd8biSwIF9K', '', '', '', '', '', 'https://x.com/i/web/status/2105568422553936351']
+[2026-10-01 17:00:28 JST] 1件処理完了。ループ終了
+[2026-10-01 17:00:28 JST] 完了 (result=posted, exit=0)
+[2026-10-01 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-01 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-01 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-02 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-02 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-02 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-02 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-02 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-02 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-02 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-02 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-02 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-03 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-03 06:00:03 JST] 処理対象 thread_id=1a0fca0739c78091
+[2026-10-03 06:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2106127099232977316
+[2026-10-03 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2106127099232977316
+✓ 記録完了: ['2026-10-03 06:00:06', 'https://x.com/i/web/status/2106127099232977316', 'z01', '', 'T001', '', '', '']
+[2026-10-03 06:00:07 JST] Threads 転載開始...
+  本文1/1 投稿 id=18096177854403935
+PERMALINK=https://www.threads.com/@usephys1/post/DeAZl08klO2
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DeAZl08klO2（本文1件＋リプ0件）
+[2026-10-03 06:00:19 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DeAZl08klO2
+✓ 記録完了: ['2026-10-03 06:00:19', 'https://www.threads.com/@usephys1/post/DeAZl08klO2', '', '', '', '', '', 'https://x.com/i/web/status/2106127099232977316']
+[2026-10-03 06:00:20 JST] 1件処理完了。ループ終了
+[2026-10-03 06:00:20 JST] 完了 (result=posted, exit=0)
+[2026-10-03 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-03 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-03 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-03 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-03 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-03 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-03 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-03 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-03 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-04 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-04 06:00:03 JST] 処理対象 thread_id=1a0ed75d5b73e064
+[2026-10-04 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2106489489262821434
+[2026-10-04 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2106489489262821434
+✓ 記録完了: ['2026-10-04 06:00:06', 'https://x.com/i/web/status/2106489489262821434', 'z01', 'noteNeta[49]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[49] → N50 = 2026-10-04
+[2026-10-04 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=18104243558526211
+PERMALINK=https://www.threads.com/@usephys1/post/DeC-Y-LEgLB
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DeC-Y-LEgLB（本文1件＋リプ0件）
+[2026-10-04 06:00:25 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DeC-Y-LEgLB
+✓ 記録完了: ['2026-10-04 06:00:25', 'https://www.threads.com/@usephys1/post/DeC-Y-LEgLB', '', '', '', '', '', 'https://x.com/i/web/status/2106489489262821434']
+[2026-10-04 06:00:26 JST] 1件処理完了。ループ終了
+[2026-10-04 06:00:26 JST] 完了 (result=posted, exit=0)
+[2026-10-04 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-04 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-04 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-04 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-04 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-04 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-04 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-04 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-04 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-05 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-05 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-05 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-05 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-05 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-05 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-05 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-05 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-05 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-05 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-05 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-05 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-06 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-06 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-06 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-06 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-06 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-06 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-06 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-06 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-06 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-06 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-06 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-06 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-07 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-07 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-07 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-07 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-07 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-07 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-07 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-07 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-07 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-07 20:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-07 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-07 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-08 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-08 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-08 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-08 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-08 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-08 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-08 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-08 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-08 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-08 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-08 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-08 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-09 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-09 06:00:04 JST] 処理対象 thread_id=1a11ab1c4aeb9394
+[2026-10-09 06:00:06 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2108301433112305785
+[2026-10-09 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2108301433112305785
+✓ 記録完了: ['2026-10-09 06:00:08', 'https://x.com/i/web/status/2108301433112305785', 'z01', 'noteNeta[23]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[23] → N26 = 2026-10-09
+[2026-10-09 06:00:11 JST] Threads 転載開始...
+  本文1/1 投稿 id=18116907511998317
+PERMALINK=https://www.threads.com/@usephys1/post/DeP2XmYkpdr
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DeP2XmYkpdr（本文1件＋リプ0件）
+[2026-10-09 06:00:28 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DeP2XmYkpdr
+✓ 記録完了: ['2026-10-09 06:00:28', 'https://www.threads.com/@usephys1/post/DeP2XmYkpdr', '', '', '', '', '', 'https://x.com/i/web/status/2108301433112305785']
+[2026-10-09 06:00:29 JST] 1件処理完了。ループ終了
+[2026-10-09 06:00:29 JST] 完了 (result=posted, exit=0)
+[2026-10-09 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-09 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-09 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-09 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-09 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-09 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-09 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-09 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-09 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-10 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-10 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-10 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-10 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-10 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-10 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-10 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-10 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-10 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-11 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-11 06:00:04 JST] 処理対象 thread_id=1a12641775340b15
+[2026-10-11 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2109026207102828647
+[2026-10-11 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2109026207102828647
+✓ 記録完了: ['2026-10-11 06:00:08', 'https://x.com/i/web/status/2109026207102828647', 'z01', 'noteNeta[52]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[52] → N55 = 2026-10-11
+[2026-10-11 06:00:12 JST] Threads 転載開始...
+  本文1/1 投稿 id=18219135634356261
+PERMALINK=https://www.threads.com/@usephys1/post/DeU_9b-EtdP
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DeU_9b-EtdP（本文1件＋リプ0件）
+[2026-10-11 06:00:28 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DeU_9b-EtdP
+✓ 記録完了: ['2026-10-11 06:00:28', 'https://www.threads.com/@usephys1/post/DeU_9b-EtdP', '', '', '', '', '', 'https://x.com/i/web/status/2109026207102828647']
+[2026-10-11 06:00:29 JST] 1件処理完了。ループ終了
+[2026-10-11 06:00:29 JST] 完了 (result=posted, exit=0)
+[2026-10-11 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-11 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-11 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-11 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-11 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-11 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-11 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-11 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-11 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-12 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-12 06:00:03 JST] 処理対象 thread_id=1a12b1eba84a2aec
+[2026-10-12 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2109388592959348890
+[2026-10-12 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2109388592959348890
+✓ 記録完了: ['2026-10-12 06:00:07', 'https://x.com/i/web/status/2109388592959348890', 'z01', 'noteNeta[19]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[19] → N22 = 2026-10-12
+[2026-10-12 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=17966364054191705
+PERMALINK=https://www.threads.com/@usephys1/post/DeXkwDXEn-Q
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DeXkwDXEn-Q（本文1件＋リプ0件）
+[2026-10-12 06:00:27 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DeXkwDXEn-Q
+✓ 記録完了: ['2026-10-12 06:00:27', 'https://www.threads.com/@usephys1/post/DeXkwDXEn-Q', '', '', '', '', '', 'https://x.com/i/web/status/2109388592959348890']
+[2026-10-12 06:00:28 JST] 1件処理完了。ループ終了
+[2026-10-12 06:00:28 JST] 完了 (result=posted, exit=0)
+[2026-10-12 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-12 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-12 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-12 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-12 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-12 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-12 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-12 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-12 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-13 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-13 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-13 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-13 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-13 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-13 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-13 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-13 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-13 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-13 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-13 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-13 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-14 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-14 06:00:04 JST] 処理対象 thread_id=1a135a2973033974
+[2026-10-14 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2110113369508446443
+[2026-10-14 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2110113369508446443
+✓ 記録完了: ['2026-10-14 06:00:07', 'https://x.com/i/web/status/2110113369508446443', 'z01', '', 'T008', '', '', '']
+[2026-10-14 06:00:09 JST] Threads 転載開始...
+  本文1/1 投稿 id=17950089195337713
+PERMALINK=https://www.threads.com/@usephys1/post/DecuVpLEoVu
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DecuVpLEoVu（本文1件＋リプ0件）
+[2026-10-14 06:00:25 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DecuVpLEoVu
+✓ 記録完了: ['2026-10-14 06:00:25', 'https://www.threads.com/@usephys1/post/DecuVpLEoVu', '', '', '', '', '', 'https://x.com/i/web/status/2110113369508446443']
+[2026-10-14 06:00:27 JST] 1件処理完了。ループ終了
+[2026-10-14 06:00:27 JST] 完了 (result=posted, exit=0)
+[2026-10-14 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-14 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-14 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-14 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-14 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-14 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-14 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-14 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-14 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-15 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-15 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-15 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-15 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-15 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-15 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-15 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-15 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-15 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-16 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-16 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-16 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-16 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-16 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-16 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-16 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-16 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-16 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-16 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-16 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-16 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-17 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-17 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-17 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-17 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-17 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-17 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-17 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-17 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-17 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-17 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-17 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-17 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-18 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-18 06:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-18 06:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-18 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-18 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-18 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-18 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-18 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-18 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-18 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-18 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-18 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-19 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-19 06:00:03 JST] 処理対象 thread_id=1a13effcc2e784cc
+[2026-10-19 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2111925307687202879
+[2026-10-19 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2111925307687202879
+✓ 記録完了: ['2026-10-19 06:00:07', 'https://x.com/i/web/status/2111925307687202879', 'z01', 'noteNeta[35]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[35] → N38 = 2026-10-19
+[2026-10-19 06:00:11 JST] Threads 転載開始...
+  本文1/1 投稿 id=17981270358128937
+PERMALINK=https://www.threads.com/@usephys1/post/DepmUSTk7zS
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DepmUSTk7zS（本文1件＋リプ0件）
+[2026-10-19 06:00:21 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DepmUSTk7zS
+✓ 記録完了: ['2026-10-19 06:00:22', 'https://www.threads.com/@usephys1/post/DepmUSTk7zS', '', '', '', '', '', 'https://x.com/i/web/status/2111925307687202879']
+[2026-10-19 06:00:23 JST] 1件処理完了。ループ終了
+[2026-10-19 06:00:23 JST] 完了 (result=posted, exit=0)
+[2026-10-19 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-19 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-19 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-19 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-19 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-19 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-19 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-19 20:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-19 20:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-20 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-20 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-20 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-20 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-20 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-20 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-20 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-20 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-20 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-20 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-20 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-20 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-21 06:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-21 06:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-21 06:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-21 12:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-21 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-21 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-21 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-21 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-21 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-21 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-21 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-21 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-22 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-22 06:00:03 JST] 処理対象 thread_id=1a15ebebd8b23a35
+[2026-10-22 06:00:05 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2113012472429138151
+[2026-10-22 06:00:06 JST] 投稿成功: https://x.com/i/web/status/2113012472429138151
+✓ 記録完了: ['2026-10-22 06:00:07', 'https://x.com/i/web/status/2113012472429138151', 'z01', 'noteNeta[41]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[41] → N44 = 2026-10-22
+[2026-10-22 06:00:10 JST] Threads 転載開始...
+  本文1/1 投稿 id=17907687717574482
+PERMALINK=https://www.threads.com/@usephys1/post/DexUsyEk7NX
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DexUsyEk7NX（本文1件＋リプ0件）
+[2026-10-22 06:00:26 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DexUsyEk7NX
+✓ 記録完了: ['2026-10-22 06:00:26', 'https://www.threads.com/@usephys1/post/DexUsyEk7NX', '', '', '', '', '', 'https://x.com/i/web/status/2113012472429138151']
+[2026-10-22 06:00:27 JST] 1件処理完了。ループ終了
+[2026-10-22 06:00:27 JST] 完了 (result=posted, exit=0)
+[2026-10-22 12:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-22 12:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-22 12:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-22 17:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-22 17:00:03 JST] 投稿対象メールなし。ループ終了
+[2026-10-22 17:00:03 JST] 完了 (result=none, exit=20)
+[2026-10-22 20:00:01 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-22 20:00:02 JST] 投稿対象メールなし。ループ終了
+[2026-10-22 20:00:02 JST] 完了 (result=none, exit=20)
+[2026-10-23 06:00:02 JST] 開始 (subject:【X短文投稿】, howID:z01)
+[2026-10-23 06:00:03 JST] 処理対象 thread_id=1a15eaffee2da916
+[2026-10-23 06:00:04 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2113374857773908351
+[2026-10-23 06:00:05 JST] 投稿成功: https://x.com/i/web/status/2113374857773908351
+✓ 記録完了: ['2026-10-23 06:00:06', 'https://x.com/i/web/status/2113374857773908351', 'z01', 'newsTopics[29]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[29] → I30 = 2026-10-23
+[2026-10-23 06:00:09 JST] Threads 転載開始...
+  本文1/1 投稿 id=17913191268494270
+PERMALINK=https://www.threads.com/@usephys1/post/Dez5flYk8kx
+✓ 投稿完了: https://www.threads.com/@usephys1/post/Dez5flYk8kx（本文1件＋リプ0件）
+[2026-10-23 06:00:23 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/Dez5flYk8kx
+✓ 記録完了: ['2026-10-23 06:00:24', 'https://www.threads.com/@usephys1/post/Dez5flYk8kx', '', '', '', '', '', 'https://x.com/i/web/status/2113374857773908351']
+[2026-10-23 06:00:25 JST] 1件処理完了。ループ終了
+[2026-10-23 06:00:25 JST] 完了 (result=posted, exit=0)
+[2026-10-23 08:18:40 JST] 開始 [DRY RUN] (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-23 08:18:40 JST] 投稿対象メールなし。ループ終了
+[2026-10-23 08:18:40 JST] 完了 (result=none, exit=20)
+[2026-10-23 08:18:40 JST] 開始 [DRY RUN] (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-23 08:18:41 JST] 投稿対象メールなし。ループ終了
+[2026-10-23 08:18:41 JST] 完了 (result=none, exit=20)
+[2026-10-23 08:34:34 JST] 開始 [DRY RUN] (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-23 08:34:35 JST] 投稿対象メールなし。ループ終了
+[2026-10-23 08:34:35 JST] 完了 (result=none, exit=20)
+[2026-10-23 08:34:37 JST] 開始 [DRY RUN] (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-23 08:34:38 JST] 処理対象 thread_id=1a162112ec616fa9
+[2026-10-23 08:34:39 JST] [DRY RUN] 投稿テキスト (130字):
+----- POST_TEXT -----
+彗星に金属の弾をぶつけ、噴き出す中身を調べた探査機ディープ・インパクト。任務を果たし、用済みと思われた。だがNASAは捨てなかった。地球の重力を借りて軌道を変え、2010年、別の彗星へ接近させた。一台で二つの彗星を間近に撮った、史上初の探査機となったのだった。
+---------------------
+--- DRY RUN ---
+テキスト: 彗星に金属の弾をぶつけ、噴き出す中身を調べた探査機ディープ・インパクト。任務を果たし、用済みと思われた。だがNASAは捨てなかった。地球の重力を借りて軌道を変え、2010年、別の彗星へ接近させた。一台で二つの彗星を間近に撮った、史上初の探査機となったのだった。
+--- (実際には投稿しません) ---
+[2026-10-23 08:34:39 JST] [DRY RUN] ラベル付与・INBOX解除・record_output はスキップ
+[2026-10-23 08:34:39 JST] [DRY RUN] 1 ループで終了（同じメールが何度も処理されないように）
+[2026-10-23 08:34:39 JST] 完了 (result=posted, exit=0)
+[2026-10-23 08:34:48 JST] 開始 [DRY RUN] (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-23 08:34:49 JST] 処理対象 thread_id=1a162112ec616fa9
+[2026-10-23 08:34:51 JST] [DRY RUN] 投稿テキスト (130字):
+----- POST_TEXT -----
+彗星に金属の弾をぶつけ、噴き出す中身を調べた探査機ディープ・インパクト。任務を果たし、用済みと思われた。だがNASAは捨てなかった。地球の重力を借りて軌道を変え、2010年、別の彗星へ接近させた。一台で二つの彗星を間近に撮った、史上初の探査機となったのだった。
+---------------------
+--- DRY RUN ---
+テキスト: 彗星に金属の弾をぶつけ、噴き出す中身を調べた探査機ディープ・インパクト。任務を果たし、用済みと思われた。だがNASAは捨てなかった。地球の重力を借りて軌道を変え、2010年、別の彗星へ接近させた。一台で二つの彗星を間近に撮った、史上初の探査機となったのだった。
+--- (実際には投稿しません) ---
+[2026-10-23 08:34:51 JST] [DRY RUN] ラベル付与・INBOX解除・record_output はスキップ
+[2026-10-23 08:34:51 JST] [DRY RUN] 1 ループで終了（同じメールが何度も処理されないように）
+[2026-10-23 08:34:51 JST] 完了 (result=posted, exit=0)
+[2026-10-23 08:34:51 JST] 開始 [DRY RUN] (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-23 08:34:51 JST] 投稿対象メールなし。ループ終了
+[2026-10-23 08:34:51 JST] 完了 (result=none, exit=20)
+[2026-10-23 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-23 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-23 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-23 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-23 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-23 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-23 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-23 17:00:05 JST] 処理対象 thread_id=1a162112ec616fa9
+[2026-10-23 17:00:06 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2113540958386368650
+[2026-10-23 17:00:07 JST] 投稿成功: https://x.com/i/web/status/2113540958386368650
+✓ 記録完了: ['2026-10-23 17:00:08', 'https://x.com/i/web/status/2113540958386368650', 'z01', 'noteNeta[76]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[76] → N79 = 2026-10-23
+[2026-10-23 17:00:11 JST] Threads 転載開始...
+  本文1/1 投稿 id=18099184097390803
+PERMALINK=https://www.threads.com/@usephys1/post/De1FBxeILs0
+✓ 投稿完了: https://www.threads.com/@usephys1/post/De1FBxeILs0（本文1件＋リプ0件）
+[2026-10-23 17:00:27 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/De1FBxeILs0
+✓ 記録完了: ['2026-10-23 17:00:27', 'https://www.threads.com/@usephys1/post/De1FBxeILs0', '', '', '', '', '', 'https://x.com/i/web/status/2113540958386368650']
+[2026-10-23 17:00:28 JST] 1件処理完了。ループ終了
+[2026-10-23 17:00:28 JST] 完了 (result=posted, exit=0)
+[2026-10-23 20:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-23 20:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-23 20:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-23 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-23 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-23 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-24 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-10-24 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-24 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-24 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-24 06:00:07 JST] 処理対象 thread_id=1a1629ba31e37e3d
+[2026-10-24 06:00:08 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2113737261045174756
+[2026-10-24 06:00:09 JST] 投稿成功: https://x.com/i/web/status/2113737261045174756
+✓ 記録完了: ['2026-10-24 06:00:10', 'https://x.com/i/web/status/2113737261045174756', 'z01', 'noteNeta[86]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[86] → N89 = 2026-10-24
+[2026-10-24 06:00:13 JST] Threads 転載開始...
+  本文1/1 投稿 id=18218399782344837
+PERMALINK=https://www.threads.com/@usephys1/post/De2eS9Xkg2h
+✓ 投稿完了: https://www.threads.com/@usephys1/post/De2eS9Xkg2h（本文1件＋リプ0件）
+[2026-10-24 06:00:28 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/De2eS9Xkg2h
+✓ 記録完了: ['2026-10-24 06:00:28', 'https://www.threads.com/@usephys1/post/De2eS9Xkg2h', '', '', '', '', '', 'https://x.com/i/web/status/2113737261045174756']
+[2026-10-24 06:00:29 JST] 1件処理完了。ループ終了
+[2026-10-24 06:00:29 JST] 完了 (result=posted, exit=0)
+[2026-10-24 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-24 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-24 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-24 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-24 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-24 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-24 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-24 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-24 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-24 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-24 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-24 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-24 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-24 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-24 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-24 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-24 20:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-24 20:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-25 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-10-25 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-25 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-25 06:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-25 06:00:06 JST] 処理対象 thread_id=1a16dfff69010dde
+[2026-10-25 06:00:08 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2114099647384043801
+[2026-10-25 06:00:08 JST] 投稿成功: https://x.com/i/web/status/2114099647384043801
+✓ 記録完了: ['2026-10-25 06:00:09', 'https://x.com/i/web/status/2114099647384043801', 'z01', 'noteNeta[4]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[4] → N7 = 2026-10-25
+[2026-10-25 06:00:13 JST] Threads 転載開始...
+  本文1/1 投稿 id=18222217411342278
+PERMALINK=https://www.threads.com/@usephys1/post/De5DFwdkqTV
+✓ 投稿完了: https://www.threads.com/@usephys1/post/De5DFwdkqTV（本文1件＋リプ0件）
+[2026-10-25 06:00:23 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/De5DFwdkqTV
+✓ 記録完了: ['2026-10-25 06:00:23', 'https://www.threads.com/@usephys1/post/De5DFwdkqTV', '', '', '', '', '', 'https://x.com/i/web/status/2114099647384043801']
+[2026-10-25 06:00:24 JST] 1件処理完了。ループ終了
+[2026-10-25 06:00:24 JST] 完了 (result=posted, exit=0)
+[2026-10-25 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-25 12:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-25 12:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-25 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-25 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-25 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-25 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-25 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-25 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-25 17:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-25 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-25 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-25 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-25 20:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-25 20:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-25 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-25 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-25 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-26 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-10-26 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-26 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-26 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-26 06:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-26 06:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-26 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-26 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-26 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-26 12:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-26 12:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-10-26 12:00:07 JST] 完了 (result=none, exit=20)
+[2026-10-26 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-26 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-26 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-26 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-26 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-26 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-26 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-26 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-26 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-26 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-26 20:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-26 20:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-27 06:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-10-27 06:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-27 06:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-27 06:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-27 06:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-10-27 06:00:07 JST] 完了 (result=none, exit=20)
+[2026-10-27 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-27 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-27 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-27 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-27 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-27 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-27 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-27 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-27 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-27 17:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-27 17:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-10-27 17:00:07 JST] 完了 (result=none, exit=20)
+[2026-10-27 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-27 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-27 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-27 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-27 20:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-27 20:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-28 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-10-28 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-28 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-28 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-28 06:00:07 JST] 処理対象 thread_id=1a17885f51f68e51
+[2026-10-28 06:00:08 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2115186813719793710
+[2026-10-28 06:00:09 JST] 投稿成功: https://x.com/i/web/status/2115186813719793710
+✓ 記録完了: ['2026-10-28 06:00:10', 'https://x.com/i/web/status/2115186813719793710', 'z01', 'newsTopics[31]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[31] → I32 = 2026-10-28
+[2026-10-28 06:00:14 JST] Threads 転載開始...
+  本文1/1 投稿 id=18079154606422107
+PERMALINK=https://www.threads.com/@usephys1/post/DfAxegek7qI
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfAxegek7qI（本文1件＋リプ0件）
+[2026-10-28 06:00:30 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfAxegek7qI
+✓ 記録完了: ['2026-10-28 06:00:30', 'https://www.threads.com/@usephys1/post/DfAxegek7qI', '', '', '', '', '', 'https://x.com/i/web/status/2115186813719793710']
+[2026-10-28 06:00:32 JST] 1件処理完了。ループ終了
+[2026-10-28 06:00:32 JST] 完了 (result=posted, exit=0)
+[2026-10-28 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-28 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-28 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-28 12:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-28 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-28 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-28 17:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-28 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-28 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-28 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-28 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-28 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-28 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-28 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-28 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-28 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-28 20:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-28 20:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-29 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-10-29 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-29 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-29 06:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 06:00:07 JST] 完了 (result=none, exit=20)
+[2026-10-29 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-29 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-29 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-29 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-29 12:04:39 JST] 開始 [DRY RUN] (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-29 12:04:40 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 12:04:40 JST] 完了 (result=none, exit=20)
+[2026-10-29 12:05:12 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-29 12:05:12 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 12:05:12 JST] 完了 (result=none, exit=20)
+[2026-10-29 12:05:13 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-29 12:05:14 JST] 処理対象 thread_id=1a182e7f0e5683ac
+[2026-10-29 12:05:15 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2115641086211494362
+[2026-10-29 12:05:16 JST] 投稿成功: https://x.com/i/web/status/2115641086211494362
+✓ 記録完了: ['2026-10-29 12:05:17', 'https://x.com/i/web/status/2115641086211494362', 'z01', 'noteNeta[148]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[148] → N151 = 2026-10-29
+[2026-10-29 12:05:20 JST] Threads 転載開始...
+  本文1/1 投稿 id=18119760340778099
+PERMALINK=https://www.threads.com/@usephys1/post/DfEADdSIJiv
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfEADdSIJiv（本文1件＋リプ0件）
+[2026-10-29 12:05:35 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfEADdSIJiv
+✓ 記録完了: ['2026-10-29 12:05:35', 'https://www.threads.com/@usephys1/post/DfEADdSIJiv', '', '', '', '', '', 'https://x.com/i/web/status/2115641086211494362']
+[2026-10-29 12:05:36 JST] 1件処理完了。ループ終了
+[2026-10-29 12:05:36 JST] 完了 (result=posted, exit=0)
+[2026-10-29 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-29 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-29 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-29 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-29 20:00:14 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-29 20:00:15 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 20:00:15 JST] 完了 (result=none, exit=20)
+[2026-10-29 20:00:15 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-29 20:00:15 JST] 投稿対象メールなし。ループ終了
+[2026-10-29 20:00:15 JST] 完了 (result=none, exit=20)
+[2026-10-30 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-10-30 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-30 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-30 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-30 06:00:06 JST] 処理対象 thread_id=1a185845b89706a9
+[2026-10-30 06:00:08 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2115911589639639426
+[2026-10-30 06:00:09 JST] 投稿成功: https://x.com/i/web/status/2115911589639639426
+✓ 記録完了: ['2026-10-30 06:00:10', 'https://x.com/i/web/status/2115911589639639426', 'z01', 'noteNeta[34]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[34] → N37 = 2026-10-30
+[2026-10-30 06:00:14 JST] Threads 転載開始...
+  本文1/1 投稿 id=18334475176302383
+PERMALINK=https://www.threads.com/@usephys1/post/DfF7EPmkk5C
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfF7EPmkk5C（本文1件＋リプ0件）
+[2026-10-30 06:00:29 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfF7EPmkk5C
+✓ 記録完了: ['2026-10-30 06:00:29', 'https://www.threads.com/@usephys1/post/DfF7EPmkk5C', '', '', '', '', '', 'https://x.com/i/web/status/2115911589639639426']
+[2026-10-30 06:00:31 JST] 1件処理完了。ループ終了
+[2026-10-30 06:00:31 JST] 完了 (result=posted, exit=0)
+[2026-10-30 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-30 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-30 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-30 12:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-30 12:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-10-30 12:00:07 JST] 完了 (result=none, exit=20)
+[2026-10-30 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-30 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-30 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-30 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-30 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-30 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-30 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-30 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-30 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-30 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-30 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-30 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-31 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-10-31 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-31 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-31 06:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 06:00:07 JST] 完了 (result=none, exit=20)
+[2026-10-31 12:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-10-31 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-31 12:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-31 12:00:08 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 12:00:08 JST] 完了 (result=none, exit=20)
+[2026-10-31 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-31 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-10-31 17:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-31 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-10-31 17:24:29 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-10-31 17:24:30 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 17:24:30 JST] 完了 (result=none, exit=20)
+[2026-10-31 17:24:31 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-31 17:24:31 JST] 処理対象 thread_id=1a18526ccb842e78
+[2026-10-31 17:24:33 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2116446213419778248
+[2026-10-31 17:24:33 JST] 投稿成功: https://x.com/i/web/status/2116446213419778248
+✓ 記録完了: ['2026-10-31 17:24:34', 'https://x.com/i/web/status/2116446213419778248', 'z01', 'newsTopics[22]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[22] → I24 = 2026-10-31
+[2026-10-31 17:24:38 JST] Threads 転載開始...
+  本文1/1 投稿 id=18002248290030928
+PERMALINK=https://www.threads.com/@usephys1/post/DfJuL0ZILR4
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfJuL0ZILR4（本文1件＋リプ0件）
+[2026-10-31 17:24:54 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfJuL0ZILR4
+✓ 記録完了: ['2026-10-31 17:24:54', 'https://www.threads.com/@usephys1/post/DfJuL0ZILR4', '', '', '', '', '', 'https://x.com/i/web/status/2116446213419778248']
+[2026-10-31 17:24:55 JST] 1件処理完了。ループ終了
+[2026-10-31 17:24:55 JST] 完了 (result=posted, exit=0)
+[2026-10-31 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-10-31 20:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 20:00:04 JST] 完了 (result=none, exit=20)
+[2026-10-31 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-10-31 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-10-31 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-01 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-11-01 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-01 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-01 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-01 06:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-11-01 06:00:07 JST] 完了 (result=none, exit=20)
+[2026-11-01 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-11-01 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-01 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-01 12:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-01 12:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-11-01 12:00:07 JST] 完了 (result=none, exit=20)
+[2026-11-01 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-01 17:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-11-01 17:00:04 JST] 完了 (result=none, exit=20)
+[2026-11-01 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-01 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-01 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-01 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-11-01 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-01 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-01 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-01 20:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-01 20:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-02 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-11-02 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-02 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-02 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-02 06:00:07 JST] 処理対象 thread_id=1a1961ff08ff6f1d
+[2026-11-02 06:00:08 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2116998752800215520
+[2026-11-02 06:00:09 JST] 投稿成功: https://x.com/i/web/status/2116998752800215520
+✓ 記録完了: ['2026-11-02 06:00:10', 'https://x.com/i/web/status/2116998752800215520', 'z01', 'noteNeta[117]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[117] → N120 = 2026-11-02
+[2026-11-02 06:00:14 JST] Threads 転載開始...
+  本文1/1 投稿 id=18181125613428715
+PERMALINK=https://www.threads.com/@usephys1/post/DfNpc5Yk0Xc
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfNpc5Yk0Xc（本文1件＋リプ0件）
+[2026-11-02 06:00:24 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfNpc5Yk0Xc
+✓ 記録完了: ['2026-11-02 06:00:24', 'https://www.threads.com/@usephys1/post/DfNpc5Yk0Xc', '', '', '', '', '', 'https://x.com/i/web/status/2116998752800215520']
+[2026-11-02 06:00:25 JST] 1件処理完了。ループ終了
+[2026-11-02 06:00:25 JST] 完了 (result=posted, exit=0)
+[2026-11-02 12:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-11-02 12:00:08 JST] 投稿対象メールなし。ループ終了
+[2026-11-02 12:00:08 JST] 完了 (result=none, exit=20)
+[2026-11-02 12:00:08 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-02 12:00:09 JST] 投稿対象メールなし。ループ終了
+[2026-11-02 12:00:09 JST] 完了 (result=none, exit=20)
+[2026-11-02 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-02 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-02 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-02 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-02 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-02 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-02 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-11-02 20:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-11-02 20:00:04 JST] 完了 (result=none, exit=20)
+[2026-11-02 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-02 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-02 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-03 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-11-03 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-03 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-03 06:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-03 06:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-03 06:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-03 12:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-11-03 12:00:08 JST] 投稿対象メールなし。ループ終了
+[2026-11-03 12:00:08 JST] 完了 (result=none, exit=20)
+[2026-11-03 12:00:08 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-03 12:00:09 JST] 投稿対象メールなし。ループ終了
+[2026-11-03 12:00:09 JST] 完了 (result=none, exit=20)
+[2026-11-03 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-03 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-03 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-03 17:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-03 17:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-11-03 17:00:07 JST] 完了 (result=none, exit=20)
+[2026-11-03 20:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-11-03 20:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-11-03 20:00:07 JST] 完了 (result=none, exit=20)
+[2026-11-03 20:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-03 20:00:08 JST] 処理対象 thread_id=1a185ec4d2c7114b
+[2026-11-03 20:00:09 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2117572537957970087
+[2026-11-03 20:00:10 JST] 投稿成功: https://x.com/i/web/status/2117572537957970087
+✓ 記録完了: ['2026-11-03 20:00:11', 'https://x.com/i/web/status/2117572537957970087', 'z01', 'noteNeta[133]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[133] → N136 = 2026-11-03
+[2026-11-03 20:00:15 JST] Threads 転載開始...
+  本文1/1 投稿 id=18107265584343446
+PERMALINK=https://www.threads.com/@usephys1/post/DfRuYNeIEn_
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfRuYNeIEn_（本文1件＋リプ0件）
+[2026-11-03 20:00:30 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfRuYNeIEn_
+✓ 記録完了: ['2026-11-03 20:00:30', 'https://www.threads.com/@usephys1/post/DfRuYNeIEn_', '', '', '', '', '', 'https://x.com/i/web/status/2117572537957970087']
+[2026-11-03 20:00:32 JST] 1件処理完了。ループ終了
+[2026-11-03 20:00:32 JST] 完了 (result=posted, exit=0)
+[2026-11-04 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-11-04 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-04 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-04 12:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-04 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-04 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-04 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-04 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-04 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-04 17:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-04 17:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-11-04 17:00:07 JST] 完了 (result=none, exit=20)
+[2026-11-04 20:00:03 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-11-04 20:00:04 JST] 投稿対象メールなし。ループ終了
+[2026-11-04 20:00:04 JST] 完了 (result=none, exit=20)
+[2026-11-04 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-04 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-04 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-05 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-11-05 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-05 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-05 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-05 06:00:07 JST] 処理対象 thread_id=1a1a17a803b2efe2
+[2026-11-05 06:00:08 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2118085914706747792
+[2026-11-05 06:00:09 JST] 投稿成功: https://x.com/i/web/status/2118085914706747792
+✓ 記録完了: ['2026-11-05 06:00:10', 'https://x.com/i/web/status/2118085914706747792', 'z01', 'noteNeta[33]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[33] → N36 = 2026-11-05
+[2026-11-05 06:00:13 JST] Threads 転載開始...
+  本文1/1 投稿 id=18425016106154760
+PERMALINK=https://www.threads.com/@usephys1/post/DfVX1Z5E-e9
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfVX1Z5E-e9（本文1件＋リプ0件）
+[2026-11-05 06:00:24 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfVX1Z5E-e9
+✓ 記録完了: ['2026-11-05 06:00:24', 'https://www.threads.com/@usephys1/post/DfVX1Z5E-e9', '', '', '', '', '', 'https://x.com/i/web/status/2118085914706747792']
+[2026-11-05 06:00:26 JST] 1件処理完了。ループ終了
+[2026-11-05 06:00:26 JST] 完了 (result=posted, exit=0)
+[2026-11-05 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-11-05 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-05 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-05 12:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-05 12:00:07 JST] 投稿対象メールなし。ループ終了
+[2026-11-05 12:00:07 JST] 完了 (result=none, exit=20)
+[2026-11-05 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-05 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-05 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-05 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-05 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-05 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-05 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-11-05 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-05 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-05 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-05 20:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-05 20:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-06 06:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-11-06 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-06 06:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-06 06:00:06 JST] 処理対象 thread_id=1a1a11decead12cc
+[2026-11-06 06:00:08 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2118448302660440227
+[2026-11-06 06:00:09 JST] 投稿成功: https://x.com/i/web/status/2118448302660440227
+✓ 記録完了: ['2026-11-06 06:00:10', 'https://x.com/i/web/status/2118448302660440227', 'z01', 'newsTopics[16]', '', '', '', '']
+✓ 短文最終使用日を更新: newsTopics[16] → I18 = 2026-11-06
+[2026-11-06 06:00:14 JST] Threads 転載開始...
+  本文1/1 投稿 id=18377691523245991
+PERMALINK=https://www.threads.com/@usephys1/post/DfX8oack1vg
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfX8oack1vg（本文1件＋リプ0件）
+[2026-11-06 06:00:31 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfX8oack1vg
+✓ 記録完了: ['2026-11-06 06:00:31', 'https://www.threads.com/@usephys1/post/DfX8oack1vg', '', '', '', '', '', 'https://x.com/i/web/status/2118448302660440227']
+[2026-11-06 06:00:32 JST] 1件処理完了。ループ終了
+[2026-11-06 06:00:32 JST] 完了 (result=posted, exit=0)
+[2026-11-06 12:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-11-06 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-06 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-06 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-06 17:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-06 17:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 17:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-06 17:00:06 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-06 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-06 17:55:24 JST] 開始 [DRY RUN] (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-06 17:55:24 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 17:55:24 JST] 完了 (result=none, exit=20)
+[2026-11-06 17:55:45 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-06 17:55:46 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 17:55:46 JST] 完了 (result=none, exit=20)
+[2026-11-06 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-11-06 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-06 20:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-06 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-06 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-07 06:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-11-07 06:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-07 06:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-07 06:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-07 06:00:08 JST] 投稿対象メールなし。ループ終了
+[2026-11-07 06:00:08 JST] 完了 (result=none, exit=20)
+[2026-11-07 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-11-07 12:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-07 12:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-07 12:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-07 12:00:08 JST] 処理対象 thread_id=1a1b0da1d94fa24f
+[2026-11-07 12:00:09 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2118901293511287031
+[2026-11-07 12:00:10 JST] 投稿成功: https://x.com/i/web/status/2118901293511287031
+✓ 記録完了: ['2026-11-07 12:00:11', 'https://x.com/i/web/status/2118901293511287031', 'z01', 'noteNeta[65]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[65] → N68 = 2026-11-07
+[2026-11-07 12:00:14 JST] Threads 転載開始...
+  本文1/1 投稿 id=18079555616735885
+PERMALINK=https://www.threads.com/@usephys1/post/DfbKoCNIDNe
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfbKoCNIDNe（本文1件＋リプ0件）
+[2026-11-07 12:00:30 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfbKoCNIDNe
+✓ 記録完了: ['2026-11-07 12:00:31', 'https://www.threads.com/@usephys1/post/DfbKoCNIDNe', '', '', '', '', '', 'https://x.com/i/web/status/2118901293511287031']
+[2026-11-07 12:00:32 JST] 1件処理完了。ループ終了
+[2026-11-07 12:00:32 JST] 完了 (result=posted, exit=0)
+[2026-11-07 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-07 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-07 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-07 17:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-07 17:00:08 JST] 投稿対象メールなし。ループ終了
+[2026-11-07 17:00:08 JST] 完了 (result=none, exit=20)
+[2026-11-07 20:00:04 JST] 開始 (subject:【X短文投稿】, howID:z01, label:20時投稿)
+[2026-11-07 20:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-07 20:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-07 20:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-07 20:00:08 JST] 投稿対象メールなし。ループ終了
+[2026-11-07 20:00:08 JST] 完了 (result=none, exit=20)
+[2026-11-08 06:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:6時投稿)
+[2026-11-08 06:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-08 06:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-08 06:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-08 06:00:08 JST] 処理対象 thread_id=1a048c70d715794a
+[2026-11-08 06:00:10 JST] X 投稿実行...
+📤 X に投稿中...
+✓ 投稿完了: https://x.com/i/web/status/2119173087396757925
+[2026-11-08 06:00:11 JST] 投稿成功: https://x.com/i/web/status/2119173087396757925
+✓ 記録完了: ['2026-11-08 06:00:12', 'https://x.com/i/web/status/2119173087396757925', 'z01', 'noteNeta[71]', '', '', '', '']
+✓ 短文最終使用日を更新: noteNeta[71] → N74 = 2026-11-08
+[2026-11-08 06:00:16 JST] Threads 転載開始...
+  本文1/1 投稿 id=18122639141070260
+PERMALINK=https://www.threads.com/@usephys1/post/DfdGOa6E6Sd
+✓ 投稿完了: https://www.threads.com/@usephys1/post/DfdGOa6E6Sd（本文1件＋リプ0件）
+[2026-11-08 06:00:27 JST] Threads 転載成功: https://www.threads.com/@usephys1/post/DfdGOa6E6Sd
+✓ 記録完了: ['2026-11-08 06:00:27', 'https://www.threads.com/@usephys1/post/DfdGOa6E6Sd', '', '', '', '', '', 'https://x.com/i/web/status/2119173087396757925']
+[2026-11-08 06:00:28 JST] 1件処理完了。ループ終了
+[2026-11-08 06:00:28 JST] 完了 (result=posted, exit=0)
+[2026-11-08 12:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:12時投稿)
+[2026-11-08 12:00:05 JST] 投稿対象メールなし。ループ終了
+[2026-11-08 12:00:05 JST] 完了 (result=none, exit=20)
+[2026-11-08 12:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-08 12:00:08 JST] 投稿対象メールなし。ループ終了
+[2026-11-08 12:00:08 JST] 完了 (result=none, exit=20)
+[2026-11-08 17:00:05 JST] 開始 (subject:【X短文投稿】, howID:z01, label:17時投稿)
+[2026-11-08 17:00:06 JST] 投稿対象メールなし。ループ終了
+[2026-11-08 17:00:06 JST] 完了 (result=none, exit=20)
+[2026-11-08 17:00:07 JST] 開始 (subject:【X短文投稿】, howID:z01, 時刻ラベル無し)
+[2026-11-08 17:00:08 JST] 投稿対象メールなし。ループ終了
+[2026-11-08 17:00:08 JST] 完了 (result=none, exit=20)

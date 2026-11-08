@@ -2,3 +2,4 @@ title: 90日の命と言われた探査車、オポチュニティ。火星の�
 what_id: W002
 neta_id:
 draft_edit_url: https://note.com/notes/174474109/edit
+note_url: https://note.com/takaesu7431/n/n976baf0bf70e

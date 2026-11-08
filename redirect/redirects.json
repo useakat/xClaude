@@ -17,10 +17,10 @@
     "threads.usephys.net": {
       "label": "Threads bio",
       "column": "Threads bio",
-      "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+      "target": "https://note.com/takaesu7431/n/n5852f60cdb3f?sub_rt=share_sb",
       "paths": {
         "note": {
-          "target": "https://note.com/takaesu7431/n/n4ce6fbbf837f?sub_rt=share_sb",
+          "target": "https://note.com/takaesu7431/n/n5852f60cdb3f?sub_rt=share_sb",
           "memo": "Threads bioに貼る URL は https://threads.usephys.net/note（/ 直下はスキャナ対策で数えない）"
         }
       }

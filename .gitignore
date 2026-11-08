@@ -54,6 +54,7 @@ tmux-*.log
 
 # note 導線ダッシュボード用の書き出し（routine が都度生成）
 logs/note_funnel/
+logs/imp_timeline/
 /logs/x_user_posts/
 /logs/ops_monthly/
 
