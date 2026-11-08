@@ -12,6 +12,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 - **writer-xpromo を新設し、note 記事の 140 字販促投稿（W007）を投稿 cron に配線** — W002 の公開済み記事から 1 本を選び、140 字の本文＋note 導線セルフリプを 3 案作って Gmail 下書き（件名【note販促】）にする。20 時枠は 【自己開示】→【note販促】→【X短文投稿】 の順。実装は 11/6（記載漏れを本日補完）。[→報告書](../reports/20261108_writer_xpromo_w007/)
 - **reporter-daily の内訳をインプ／views 1 万以上の投稿だけに絞る** — 1 万未満は件数の行のみ。実装は 11/6（記載漏れを本日補完）。[→報告書](../reports/20261108_reporter_daily_breakdown_10k/)
 - **note 導線：「もしも空が赤かったら（後編）」の価格別 CVR の PV を前編の PV で計算** — 後編は前編から読み進める構成のため。実装は 11/6（記載漏れを本日補完）。[→報告書](../reports/20261108_note_funnel_part2_pv_from_part1/)
+- **X / Threads 本体投稿の 24h インプ推移を 15 分刻みで記録する cron を新設** — 投稿から 3h は 15 分刻み・以降 24h まで 1h 刻み（`*/15` の cron 1 本で、`:00` の tick だけ 24h 窓で取得して X の従量課金を月 約 $4 に抑える）。`exclude=retweets,replies` で本体投稿のみ、`logs/imp_timeline/` の月別 CSV に追記（git 管理外）。Threads は同じ間隔。[→報告書](../reports/20261108_imp_timeline_15min_24h/)
 
 ## 2026-11-07
 
