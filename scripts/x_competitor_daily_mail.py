@@ -114,9 +114,7 @@ def build_mail(sheet: str, username: str, vals: list[list], n_done: int, n_total
         lines += ["", f"── 続き {k}/{len(vals)}（{cell(r, COL_DATE)}・いいね {fmt_n(cell(r, COL_LIKE))}）──",
                   cell(r, COL_URL), "", cell(r, COL_TEXT)]
     lines += ["", "────────", f"残り {n_total - n_done - 1} 件", f"シート: {url}", "",
-              "✍️ この投稿を参考に自己開示投稿を書くなら、下の [投稿文] に本文を書いて、このまま自分宛に送信してください"
-              "（時刻ラベルを付ければその枠、付けなければ 20 時に投稿）。書かない日は下書きを消すか放置。",
-              "", "[投稿文]", "", "[/投稿文]", ""]
+              "[投稿文]", "", "[/投稿文]", ""]
     return subject, "\n".join(lines)
 
 
