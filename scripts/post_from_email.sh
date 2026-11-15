@@ -154,6 +154,17 @@ print(ts[-1]['id'] if ts else '')   # 空出力 = 正常に0件
   # [note_url] タグ抽出（任意。W001 販促投稿の誘導先 note URL → outputs!F に記録）
   NOTE_URL=$(printf '%s' "$BODY" | python3 scripts/extract_tag.py note_url 2>/dev/null | tr -d '[:space:]' || true)
 
+  # 本文先頭付近の「what_id: W001r」行（任意。【リライト】が元投稿の what_id+r を指定する）→ 記録用 what_id を上書き
+  BODY_WHAT_ID=$(printf '%s' "$BODY" | python3 -c "
+import re, sys
+m = re.search(r'^what_id[:：]\s*([A-Za-z][A-Za-z0-9_]*)\s*$', sys.stdin.read(), re.M)
+print(m.group(1) if m else '')
+" 2>/dev/null || true)
+  RECORD_HOW_ID="${BODY_WHAT_ID:-$HOW_ID}"
+  if [ -n "$BODY_WHAT_ID" ]; then
+    log "本文の what_id 指定あり → 記録は $RECORD_HOW_ID"
+  fi
+
   # 添付画像 DL
   HAS_IMAGE=0
   if bash scripts/download_gmail_attachment.sh "$MESSAGE_ID" "$TMP_IMAGE" >/dev/null 2>&1; then
@@ -253,7 +264,7 @@ if m:
   if [ -n "$NOTE_URL" ]; then
     NOTE_ARGS="--note-url $NOTE_URL"
   fi
-  eval python3 scripts/record_output.py "$TWEET_URL" "$HOW_ID" $SRC_ARGS $NOTE_ARGS 2>&1 | tee -a "$LOG_PATH"
+  eval python3 scripts/record_output.py "$TWEET_URL" "$RECORD_HOW_ID" $SRC_ARGS $NOTE_ARGS 2>&1 | tee -a "$LOG_PATH"
 
   # ---- Threads 転載（MIRROR_THREADS=1 のときだけ・非致命）----
   # X投稿を Threads にも転載する。画像は pbs.twimg.com URL を syndication API で取得。
