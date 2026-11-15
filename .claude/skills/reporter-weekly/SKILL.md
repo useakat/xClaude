@@ -9,9 +9,12 @@ tools: Bash, Read, Write, Edit, Glob, Grep
 
 ---
 
-# STEP 1: 対象週の決定
+# STEP 1: 対象週の決定（日〜土。2026-11-15 よーん指示で日曜始まりに変更）
 
-引数があればその週の月曜日の日付（YYYY-MM-DD）として解釈する。なければ直近完了週（先週月〜日）を使用する。
+引数があればその日付（YYYY-MM-DD）を含む日〜土週として解釈する。なければ**直近の完了した日〜土週**を使用する（月曜朝の routine 実行では「一昨日の土曜」を末日とする週。実行週の日曜以降の分は翌週の週報に入る）。
+
+- week_id は週内の月曜（開始日曜＋1日）の ISO 週番号、week_label は開始日曜の日付（reporter-weekly-ops と同じ規約）
+- **移行注記**: 2026-W46 までは月〜日集計。日〜土への切替で 11/15（日）は旧 2026-W46 と新 2026-W47（11/15〜11/21）の両方に含まれる（重複1日）。新方式初回のレポート冒頭にその旨を1行書く
 
 ```bash
 python3 -c "
@@ -22,23 +25,26 @@ JST = timezone(timedelta(hours=9))
 args = sys.argv[1:]
 if args:
     base = datetime.strptime(args[0], '%Y-%m-%d').date()
-    monday = base - timedelta(days=base.weekday())
+    sunday = base - timedelta(days=(base.weekday() + 1) % 7)
 else:
     today = datetime.now(JST).date()
-    # 直近完了週の月曜（今週月曜の7日前）
-    monday = today - timedelta(days=today.weekday() + 7)
+    last_sat = today - timedelta(days=(today.weekday() - 5) % 7)
+    if last_sat >= today:
+        last_sat -= timedelta(days=7)
+    sunday = last_sat - timedelta(days=6)
 
-sunday = monday + timedelta(days=6)
+saturday = sunday + timedelta(days=6)
+monday = sunday + timedelta(days=1)
 iso_week = monday.isocalendar()[1]
 year = monday.year
 
-print(f'monday={monday.strftime(\"%Y-%m-%d\")}')
 print(f'sunday={sunday.strftime(\"%Y-%m-%d\")}')
-print(f'monday_sheet={monday.strftime(\"%Y/%m/%d\")}')
+print(f'saturday={saturday.strftime(\"%Y-%m-%d\")}')
 print(f'sunday_sheet={sunday.strftime(\"%Y/%m/%d\")}')
+print(f'saturday_sheet={saturday.strftime(\"%Y/%m/%d\")}')
 print(f'week_id={year}-W{iso_week:02d}')
-print(f'week_label={monday.strftime(\"%-m月%-d日\")}週')
-print(f'prev_sunday_sheet={(monday - timedelta(days=1)).strftime(\"%Y/%m/%d\")}')
+print(f'week_label={sunday.strftime(\"%-m月%-d日\")}週')
+print(f'prev_saturday_sheet={(sunday - timedelta(days=1)).strftime(\"%Y/%m/%d\")}')
 " -- "$1"
 ```
 
@@ -48,23 +54,24 @@ print(f'prev_sunday_sheet={(monday - timedelta(days=1)).strftime(\"%Y/%m/%d\")}'
 
 # STEP 2: 日次記録シートから週集計データ取得
 
-日曜日の行に `週間インプ`・`noteフォロワ数` が集計される。
-月曜日の前日（前週日曜）と当週日曜の `総フォロワ数`・`総フォロー数` の差分でフォロワー増減を計算する。
+フォロワー増減は、当週末（土曜）行と前週末（前週土曜＝開始日曜の前日）行の `総フォロワ数`・`総フォロー数`・`noteフォロワ数` の差分で計算する（各列は毎日記録されている）。
+週間インプは対象週（日〜土）の `インプ` 列の合計で算出する。**シートの `週間インプ` 列（日曜行・月〜日定義）は使わない**（2026-11-15 の日曜始まり切替以降。定義が異なる数字を混ぜない）。
 
 ```bash
 SPREADSHEET_ID="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"
-MONDAY_SHEET="[STEP1の monday_sheet]"
 SUNDAY_SHEET="[STEP1の sunday_sheet]"
-PREV_SUNDAY_SHEET="[STEP1の prev_sunday_sheet]"
+SATURDAY_SHEET="[STEP1の saturday_sheet]"
+PREV_SATURDAY_SHEET="[STEP1の prev_saturday_sheet]"
 
 gws sheets spreadsheets values get \
   --params "{\"spreadsheetId\": \"${SPREADSHEET_ID}\", \"range\": \"日次記録!A:AB\"}" \
   2>/dev/null | python3 -c "
 import json, sys
+from datetime import datetime
 
-monday_s  = '${MONDAY_SHEET}'
-sunday_s  = '${SUNDAY_SHEET}'
-prev_sun_s= '${PREV_SUNDAY_SHEET}'
+sunday_s   = '${SUNDAY_SHEET}'
+saturday_s = '${SATURDAY_SHEET}'
+prev_sat_s = '${PREV_SATURDAY_SHEET}'
 
 d = json.load(sys.stdin)
 rows = d.get('values', [])
@@ -86,17 +93,30 @@ def val(row, name, default=''):
     if i < 0 or i >= len(row): return default
     return row[i].strip() if row[i] else default
 
-prev_row   = get_row(prev_sun_s)
-sunday_row = get_row(sunday_s)
+prev_row     = get_row(prev_sat_s)
+saturday_row = get_row(saturday_s)
 
-# フォロワー数（当週日曜 → 前週日曜の差分）
-fw_end    = val(sunday_row, '総フォロワ数')
-fw_start  = val(prev_row,   '総フォロワ数')
-fo_end    = val(sunday_row, '総フォロー数')
-fo_start  = val(prev_row,   '総フォロー数')
-note_end  = val(sunday_row, 'noteフォロワ数')
-note_start= val(prev_row,   'noteフォロワ数')
-weekly_imp= val(sunday_row, '週間インプ')
+# フォロワー数（当週土曜 → 前週土曜の差分）
+fw_end    = val(saturday_row, '総フォロワ数')
+fw_start  = val(prev_row,     '総フォロワ数')
+fo_end    = val(saturday_row, '総フォロー数')
+fo_start  = val(prev_row,     '総フォロー数')
+note_end  = val(saturday_row, 'noteフォロワ数')
+note_start= val(prev_row,     'noteフォロワ数')
+
+# 週間インプ ＝ 対象週（日〜土）の「インプ」列の合計
+wk_start = datetime.strptime(sunday_s, '%Y/%m/%d').date()
+wk_end   = datetime.strptime(saturday_s, '%Y/%m/%d').date()
+imp_sum = 0; imp_days = 0
+for row in rows[1:]:
+    if not row: continue
+    try: dt = datetime.strptime(row[0], '%Y/%m/%d').date()
+    except: continue
+    if wk_start <= dt <= wk_end:
+        v = val(row, 'インプ')
+        if v:
+            imp_sum += int(v.replace(',', '')); imp_days += 1
+weekly_imp = f'{imp_sum:,}'
 
 def diff(a, b):
     try: return str(int(a.replace(',','')) - int(b.replace(',','')))
@@ -112,6 +132,7 @@ print(f'note_end={note_end}')
 print(f'note_start={note_start}')
 print(f'note_diff={diff(note_end, note_start)}')
 print(f'weekly_imp={weekly_imp}')
+print(f'imp_days={imp_days}')  # 7 未満なら週報に「暫定（記入済み X 日分）」と明記
 "
 ```
 
@@ -121,8 +142,8 @@ print(f'weekly_imp={weekly_imp}')
 
 ```bash
 SPREADSHEET_ID="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c"
-MONDAY_SHEET="[STEP1の monday_sheet]"
 SUNDAY_SHEET="[STEP1の sunday_sheet]"
+SATURDAY_SHEET="[STEP1の saturday_sheet]"
 
 gws sheets spreadsheets values get \
   --params "{\"spreadsheetId\": \"${SPREADSHEET_ID}\", \"range\": \"日次記録!A:F\"}" \
@@ -130,10 +151,10 @@ gws sheets spreadsheets values get \
 import json, sys
 from datetime import datetime, timedelta
 
-monday_s = '${MONDAY_SHEET}'
 sunday_s = '${SUNDAY_SHEET}'
-mon = datetime.strptime(monday_s, '%Y/%m/%d').date()
-sun = datetime.strptime(sunday_s, '%Y/%m/%d').date()
+saturday_s = '${SATURDAY_SHEET}'
+mon = datetime.strptime(sunday_s, '%Y/%m/%d').date()    # 週の開始（日曜）
+sun = datetime.strptime(saturday_s, '%Y/%m/%d').date()  # 週の終了（土曜）
 
 d = json.load(sys.stdin)
 rows = d.get('values', [])
@@ -165,19 +186,19 @@ print(f'total_quotes={total_quotes}')
 
 # STEP 3: 当週の日報を読み込む
 
-`docs/reports/daily/` から当週（月〜日）の日報ファイルを読み込む。
+`docs/reports/daily/` から当週（日〜土）の日報ファイルを読み込む。
 
 ```bash
 REPO_ROOT=$(git -C /root/xClaude rev-parse --show-toplevel)
-MONDAY="[STEP1の monday]"
 SUNDAY="[STEP1の sunday]"
+SATURDAY="[STEP1の saturday]"
 
 python3 -c "
 from datetime import datetime, timedelta
 from pathlib import Path
 
-monday = datetime.strptime('${MONDAY}', '%Y-%m-%d').date()
-sunday = datetime.strptime('${SUNDAY}', '%Y-%m-%d').date()
+monday = datetime.strptime('${SUNDAY}', '%Y-%m-%d').date()    # 週の開始（日曜）
+sunday = datetime.strptime('${SATURDAY}', '%Y-%m-%d').date()  # 週の終了（土曜）
 daily_dir = Path('${REPO_ROOT}/docs/reports/daily')
 
 contents = []
@@ -200,13 +221,13 @@ print('\n---\n'.join(contents) if contents else '(日報ファイルなし)')
 
 ```bash
 REPO_ROOT=$(git -C /root/xClaude rev-parse --show-toplevel)
-MONDAY="[STEP1の monday]"
+SUNDAY="[STEP1の sunday]"
 
 python3 -c "
 from datetime import datetime
 from pathlib import Path
 
-monday = datetime.strptime('${MONDAY}', '%Y-%m-%d').date()
+monday = datetime.strptime('${SUNDAY}', '%Y-%m-%d').date()  # 週の開始（日曜）
 monthly_dir = Path('${REPO_ROOT}/docs/reports/monthly')
 
 # 当月または前月の月報を探す（直近のものを優先）
@@ -259,7 +280,7 @@ STEP 3 の日報内容と STEP 4 の「次月への改善」をもとに、以�
     - `python3 scripts/sheets_values.py get "1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c" "Threads投稿一覧!A:S"`（A:投稿日時 / C:本文 / I:views / J:いいね / K:リプライ。**G:親投稿URL が入っている行は自分のリプライなので投稿数・views 合計に含めない**）
   - 日報は「その投稿がどのプロジェクトか」「note販促用か」の判定と、投稿以外の実績の把握に使う
 - **④ の週間インプと ⑤ の投稿別インプ合計は一致しない。一致させようとしないこと**
-  - ④ 週間インプ＝アカウント全体の日別インプの週合計。**週内に発生した分だけ**だが、**過去投稿やリプライが稼いだ分も含む**（投稿0件の日でも 700 前後計上される）
+  - ④ 週間インプ＝アカウント全体の日別インプの週（日〜土）合計。**週内に発生した分だけ**だが、**過去投稿やリプライが稼いだ分も含む**（投稿0件の日でも 700 前後計上される）
   - ⑤ 投稿別インプ＝今週投稿分の累計値。**今週の投稿に限る**が、**週をまたいで今日までに稼いだ分を含む**
   - 差が大きい週は、末尾に「補足」セクションを設けて上記の基準の違いと差の内訳（投稿0件だった日の平均インプ × 7日 ≒ 過去投稿の残存分）を書く
 - 投稿以外（ツール整備・フロー改善など）は個別の箇条書きで続ける

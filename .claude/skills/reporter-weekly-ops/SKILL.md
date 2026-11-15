@@ -25,7 +25,7 @@ tools: Bash, Read, Write, Edit, Glob, Grep, mcp__mcp-gsheets__sheets_get_values
 |---|---|
 | outputs シート | SS2: `1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc` / `outputs!A:H`（A: 日時 / B: URL / C: what_id / D: neta_id / F: note_url / H: x_url） |
 | X投稿一覧 | SS3: `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c` / `X投稿一覧!A:AF`（B: ポストURL / C: 本文 / K: インプ / L: いいね / O: ブックマーク / R: エンゲ率 / AB: リンククリック） |
-| 日次記録 | SS3 / `日次記録!A:AB`（日曜行に `週間インプ`） |
+| 日次記録 | SS3 / `日次記録!A:AB`（`インプ` 列を日〜土で合計して週間インプにする。シートの `週間インプ` 列は月〜日定義のため使わない） |
 | 日報 | `docs/reports/daily/YYYY-MM-DD.md` |
 | 前週の運用振り返り | `docs/reports/ops-weekly/` の前週ファイル |
 | フック型記録 | `logs/hook_records.csv`（z01/W003/W001 の各制作フローが制作時に追記。冒頭15字で X投稿一覧の本文と突合する） |
@@ -40,9 +40,13 @@ tools: Bash, Read, Write, Edit, Glob, Grep, mcp__mcp-gsheets__sheets_get_values
 
 ---
 
-# STEP 1: 対象週の決定
+# STEP 1: 対象週の決定（日〜土。2026-11-15 よーん指示で日曜始まりに変更）
 
-引数があればその週の月曜日（YYYY-MM-DD）として解釈する。なければ**今週（実行日を含む週）の月曜〜日曜**を対象にする。週の途中（日曜以前）に実行した場合は集計が途中経過になるため、レポート冒頭にその旨を1行明記する。
+引数があればその日付（YYYY-MM-DD）を含む日〜土週として解釈する。なければ**直近の完了した日〜土週**を対象にする（日曜 20:00 の routine 実行では「前週日曜〜昨日（土曜）」。実行日の日曜は翌週の初日として来週のレポートに入る）。全日の日次データが揃った完了週を対象にするため、集計は確定値になる（旧方式の「途中経過」注記は不要）。
+
+- week_id は週内の月曜（開始日曜＋1日）の ISO 週番号（例: 11/15〜11/21 → 2026-W47）
+- week_label は開始日曜の日付（例: 「11月15日週」）
+- **移行注記**: 2026-W46 までは月〜日集計。日〜土への切替で 11/15（日）は旧 2026-W46（11/9〜11/15）と新 2026-W47（11/15〜11/21）の両方に含まれる（重複1日）。新方式初回のレポート冒頭にその旨を1行書く
 
 ```bash
 python3 -c "
@@ -52,18 +56,23 @@ JST = timezone(timedelta(hours=9))
 args = sys.argv[1:]
 if args:
     base = datetime.strptime(args[0], '%Y-%m-%d').date()
-    monday = base - timedelta(days=base.weekday())
+    sunday = base - timedelta(days=(base.weekday() + 1) % 7)
 else:
     today = datetime.now(JST).date()
-    monday = today - timedelta(days=today.weekday())
-sunday = monday + timedelta(days=6)
+    last_sat = today - timedelta(days=(today.weekday() - 5) % 7)
+    if last_sat >= today:
+        last_sat -= timedelta(days=7)
+    sunday = last_sat - timedelta(days=6)
+saturday = sunday + timedelta(days=6)
+monday = sunday + timedelta(days=1)
 iso_week = monday.isocalendar()[1]
 prev_monday = monday - timedelta(days=7)
-print(f'monday={monday}')
 print(f'sunday={sunday}')
+print(f'saturday={saturday}')
 print(f'week_id={monday.year}-W{iso_week:02d}')
 print(f'prev_week_id={prev_monday.year}-W{prev_monday.isocalendar()[1]:02d}')
-print(f'week_label={monday.strftime(\"%-m月%-d日\")}週')
+print(f'week_label={sunday.strftime(\"%-m月%-d日\")}週')
+print(f'funnel_week_start={monday}')  # STEP 5.7 の note_funnel_measures.py に渡す月曜
 " -- "$1"
 ```
 
@@ -73,33 +82,32 @@ print(f'week_label={monday.strftime(\"%-m月%-d日\")}週')
 
 # STEP 2: 当週の投稿一覧とメトリクスを取得
 
-## 2-1. outputs から当週の投稿を抽出
+## 2-1. 当週の X 投稿を X投稿一覧から抽出（X投稿一覧基準。2026-11-15 よーん指示で変更）
 
-`sheets_get_values(spreadsheetId=SS2, range="outputs!A:H")` を取得し、A列日時が当週（月〜日）の行を抽出する。
+`sheets_get_values(spreadsheetId=SS3, range="X投稿一覧!A:AF")` を取得し、投稿日時（A列）が当週（日〜土）の**ポスト種類「通常ポスト」**の行を当週の X 投稿とする（手動投稿を含む全量。旧 outputs 基準では手動投稿が漏れていた＝2026-W46 で判明）。引用RT・リプライは投稿本数に含めず、引用RT は本数だけ別枠で数える。
 
-- 媒体判定: B列 URL が `threads.com` → threads / `note.com` → note / それ以外 → X
-- **threads 転載行（H列に x_url がある行）は「転載」として集計から分け、X 側の本体と二重計上しない**
-- what_id（C列）でプロジェクト分類する。空欄はメディアと URL から推定し「分類不明」として明記する
+- プロジェクト分類は outputs（SS2 `outputs!A:H` の C列 what_id）と tweet ID で突合して付ける
+- outputs に無い投稿は **「分類外（手動）」** とする。本数・IMP は KPI タイル・実績表・当週投稿一覧に含めるが、プロジェクト別の改善分析（②）・H8 の比較群・z01 ベースライン・分散記録には入れない（what_id が無く、事前固定した検証の定義を変えないため）
+- outputs にあって X投稿一覧に未反映の X 投稿（投稿直後など）は「メトリクス未取得」として本数に加える。**数値を推測で埋めない**
+- threads / note の投稿は従来どおり outputs から抽出する（媒体判定: B列 URL が `threads.com` → threads / `note.com` → note。**threads 転載行（H列に x_url がある行）は「転載」として分け、X 側の本体と二重計上しない**）
+- **投稿0本日の判定**も X投稿一覧の通常ポスト（＋未反映分は outputs の X 投稿）の日付で行う（手動投稿も1本と数える。日次記録の「ポスト数」列は引用を含むため補助確認のみ）
 
-## 2-2. X投稿一覧からメトリクスを取得
+## 2-2. メトリクスの紐づけ
 
-`sheets_get_values(spreadsheetId=SS3, range="X投稿一覧!A:AF")` を取得し、2-1 の X 投稿と tweet ID でマッチしてインプ・いいね・ブックマーク・エンゲ率・リンククリックに加え、**Q プロフアクセス・AC フォロー増**（自己開示 W004 の KPI 用。AC は週次 CSV 取り込み前は空欄）を紐づける。
+2-1 の X投稿一覧の行から、インプ（K）・いいね（L）・ブックマーク（O）・エンゲ率（R）・リンククリック（AB）に加え、**Q プロフアクセス・AC フォロー増**（自己開示 W004 の KPI 用。AC は週次 CSV 取り込み前は空欄）をそのまま使う。
 
-- マッチしない投稿（アナリティクス未反映）は「メトリクス未取得」として本数だけ数える。**数値を推測で埋めない**
+## 2-3. 週間インプ（日〜土の日次インプ合計で算出）
 
-## 2-3. 週間インプ（未記入時は暫定値を自動算出）
-
-`sheets_get_values(spreadsheetId=SS3, range="日次記録!A:AB")` の当週日曜行から `週間インプ` を取得する（冒頭サマリー用・これ以上は使わない）。
-
-当週日曜行が未記入の場合（日曜夜実行では通常未記入）、**暫定値＝当週の `日次インプ` 列の合計（実行時点で存在する行、通常は月〜土）** を算出してレポートに採用し、「暫定（月〜土合計）」と明記する。あわせて**前週の確定値**を前週日曜行から取得して併記する（前週レポートが暫定値だった場合の確定情報になる）。
-- 根拠: 週間インプ＝月〜日の日次インプ合計（2026-10-11 週で 20,771＋3,975＝24,746 の一致を確認。2026-10-18 決定）
-- シートへの暫定書き込みは**行わない**（月曜朝の確定記入と衝突するため）。日曜行の記入は従来どおり月曜朝の確定記入のみでよい
+`sheets_get_values(spreadsheetId=SS3, range="日次記録!A:AB")` から、対象週（日〜土）の `日次インプ` 列を合計して週間インプとする（冒頭サマリー用・これ以上は使わない）。完了週が対象のため通常は確定値。前週も同じ日〜土合計で算出して併記する。
+- シートの `週間インプ` 列（日曜行・月曜朝記入）は**月〜日定義のため使わない**（2026-11-15 の日曜始まり切替以降。定義が異なる数字を混ぜない）
+- 対象週内に `日次インプ` 未記入の行があった場合のみ、合計を「暫定（記入済み X 日分）」と明記する
+- シートへの書き込みは**行わない**
 
 ---
 
 # STEP 3: 当週の日報と前週の振り返りを読む
 
-1. `docs/reports/daily/` の当週分（月〜日）を Read し、特記事項・所感を記憶する
+1. `docs/reports/daily/` の当週分（日〜土）を Read し、特記事項・所感を記憶する
 2. `docs/reports/ops-weekly/[prev_week_id].md` があれば Read し、**「来週の運用アクション」セクション**を記憶する（無ければ初回として扱う）
 3. `docs/plans/note_funnel_measures.md`（施策レジストリ）を Read し、順位表の「実施中」の施策と「未着手」の上位 3 件を記憶する（⑧ の判定、⑤ の着手候補、③ の消化確認に使う）
 
@@ -120,7 +128,7 @@ print(f'week_label={monday.strftime(\"%-m月%-d日\")}週')
 
 ## 4-1. プロジェクト別実績（**過去8週ローリング**で集計）
 
-当週だけでなく、**当週を含む過去8週の X 投稿**を outputs から抽出してメトリクスを紐づけ、プロジェクト（what_id）別に整理する：
+当週だけでなく、**当週を含む過去8週の X 投稿**（X投稿一覧の通常ポスト全量。2-1 と同じ基準）を抽出して outputs 突合で what_id 分類し、プロジェクト別に整理する。outputs に無い投稿は「分類外（手動）」行として本数・実値（n≥4 なら中央値等）を別枠で出す：
 
 - 本数・**中央値IMP**・**IQR外れ値除外平均IMP**・最大IMP
   - IQR法: Q1−1.5×IQR 〜 Q3+1.5×IQR の範囲外を外れ値として除外した平均。除外した値はレポートに明記する
@@ -212,8 +220,10 @@ print(f'week_label={monday.strftime(\"%-m月%-d日\")}週')
 1. 数値を出す（発信記録シートから CSV を書き出すので十数秒〜1 分かかる）：
 
 ```bash
-python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/note_funnel_measures.py --week [week_start]
+python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/note_funnel_measures.py --week [funnel_week_start]
 ```
+
+   - `[funnel_week_start]` は STEP 1 の対象週内の月曜。スクリプトの週割りと N 施策の事前固定窓（before/after）は**月曜基準のまま維持する**（レポートの日〜土切替で検証中の数字を変えない。2026-11-15 決定）
 
    - 失敗（exit≠0）してもレポート作成は止めない。⑧ に「未取得（エラー内容）」と書く
    - 詳細（投稿ごとの内訳・週別）が要るときは `--json` を付けて再実行する
@@ -240,7 +250,7 @@ python3 $(git -C /root/xClaude rev-parse --show-toplevel)/scripts/note_funnel_me
 
 レポートは Wiki（Starlight）で表示されるため、以下の3要素を本文テンプレートの指定位置に埋め込む。色は必ず Starlight の CSS 変数（`var(--sl-color-red/green/orange/accent/gray-3/gray-4/gray-5)`）を使う（ライト/ダーク両テーマ対応のため。生の色コードは使わない）。
 
-**1. KPI タイル**（冒頭サマリー引用の直後）: 6枚のタイルを次の形で並べる。値は 週間インプ（暫定）＋前週確定 / X投稿本数＋threads転載 / W001本数 / note公開本数 / 投稿0本日 / 当週最大IMP＋倍率。基準未達の数字は `color:var(--sl-color-red)` を付ける。
+**1. KPI タイル**（冒頭サマリー引用の直後）: 6枚のタイルを次の形で並べる。値は 週間インプ（日〜土合計）＋前週同合計 / X投稿本数（通常ポスト全量・うち手動 X 本）＋threads転載 / W001本数 / note公開本数 / 投稿0本日 / 当週最大IMP＋倍率。基準未達の数字は `color:var(--sl-color-red)` を付ける。
 
 ```html
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:1.2rem 0">
@@ -302,7 +312,7 @@ title: 発信運用振り返り [week_label]
 
 ## 【発信運用振り返り　[week_label]】
 
-> 週間インプ: [weekly_imp]（未記入時は「X,XXX（暫定・月〜土合計）」）／ 前週確定: [prev_weekly_imp] ／ 数値詳細は[週報]（../weekly/[week_idを小文字に]/）を参照（リンクは必ず小文字。Astro のルートは小文字で生成される）
+> 週間インプ（日〜土合計）: [weekly_imp] ／ 前週（同）: [prev_weekly_imp] ／ 数値詳細は[週報]（../weekly/[week_idを小文字に]/）を参照（リンクは必ず小文字。Astro のルートは小文字で生成される）
 
 （ここにビジュアル要素1: KPI タイル）
 
@@ -320,6 +330,7 @@ title: 発信運用振り返り [week_label]
 |---|---:|---:|---:|---:|---|
 | W001 長文 | X | X,XXX | X,XXX | XXX,XXX | XXX,XXX |
 | W004 自己開示 | X | （n<4 は実値を列挙） | | | |
+| 分類外（手動・outputs未記録） | X | （n<4 は実値を列挙） | | | |
 | ... | | | | | |
 
 **自己開示（W004）の KPI** — IMP でなくプロフ率とフォロー増で読む（W004 が無い週は「当週は自己開示なし」と 1 行）
