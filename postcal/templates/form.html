@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}{{ '予約 #' ~ post.id if post.id else '新規予約' }} — postcal{% endblock %}
+{% block body %}
+<h1>{{ '予約 #' ~ post.id if post.id else '新規予約' }}</h1>
+
+{% if errors %}
+<div class="errors"><ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul></div>
+{% endif %}
+
+{% if post.id %}
+<div class="status-box">
+  状態: <span class="chip {{ post.state }}">{{ post.status }}</span>
+  {% if post.x_url %} <a href="{{ post.x_url }}" target="_blank" rel="noopener">X の投稿</a>{% endif %}
+  {% if post.threads_url %} <a href="{{ post.threads_url }}" target="_blank" rel="noopener">Threads の投稿</a>{% endif %}
+  {% if post.posted_at %} <small>投稿 {{ post.posted_at }}</small>{% endif %}
+  {% if post.error %}<div class="err">{{ post.error }}</div>{% endif %}
+</div>
+{% endif %}
+
+{% set locked = post.status in ('posted', 'posting') %}
+<form method="post" action="{{ '/posts/' ~ post.id if post.id else '/posts' }}" enctype="multipart/form-data" class="postform" {% if locked %}data-locked="1"{% endif %}>
+  <div class="row">
+    <label>日付 <input type="date" name="post_date" value="{{ post.post_date }}" required {% if locked %}disabled{% endif %}></label>
+    <label>時刻
+      <select name="slot" {% if locked %}disabled{% endif %}>
+        {% for s in slots %}<option value="{{ s }}" {% if s == post.slot %}selected{% endif %}>{{ s }}:00</option>{% endfor %}
+      </select>
+    </label>
+    <label>種類
+      <select name="kind" {% if locked %}disabled{% endif %}>
+        {% for k, (label, wid) in kinds.items() %}<option value="{{ k }}" {% if k == post.kind %}selected{% endif %}>{{ label }}（{{ wid }}）</option>{% endfor %}
+      </select>
+    </label>
+  </div>
+
+  <label>投稿文
+    <textarea name="text" rows="10" required {% if locked %}readonly{% endif %} data-counter="text-count">{{ post.text }}</textarea>
+    <small class="counter"><span id="text-count">0</span> 字（空白・改行除く）。Threads は 500 字ごとに分割投稿されます</small>
+  </label>
+
+  <label>セルフリプ <small>（複数あるときは <code>=====</code> だけの行で区切る。X では順に返信チェーン、Threads でも同じ順で連結。note.com のリンクを含む段は Threads には載せません。note リンクは投稿時に xpost.usephys.net の転送 URL に自動変換されます）</small>
+    <textarea name="replies" rows="6" {% if locked %}readonly{% endif %}>{{ replies_text }}</textarea>
+  </label>
+
+  <label>note 記事 URL <small>（任意。空ならリプ・本文の note リンクから自動で入ります。outputs シートの note_url 列に記録）</small>
+    <input type="url" name="note_url" value="{{ post.note_url }}" {% if locked %}readonly{% endif %}>
+  </label>
+
+  <fieldset>
+    <legend>画像・動画</legend>
+    {% if post.media %}
+    <ul class="media-list">
+      {% for m in post.media %}
+      <li>
+        {% if m.kind == 'image' %}<img src="/m/{{ m.name }}" alt="">{% else %}<video src="/m/{{ m.name }}" controls preload="metadata"></video>{% endif %}
+        <div><small>{{ m.orig }}</small>
+        {% if not locked %}<label class="inline"><input type="checkbox" name="remove_media" value="{{ m.name }}"> 削除</label>{% endif %}</div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% if not locked %}
+    <input type="file" name="media" multiple accept=".png,.jpg,.jpeg,.gif,.mp4,.mov">
+    <small>画像は png/jpg/gif を最大 {{ max_images }} 枚（jpg/png 5MB・gif 15MB）、または動画 mp4/mov を 1 本（512MB・{{ video_max_seconds }} 秒以内）。混在不可</small>
+    {% endif %}
+  </fieldset>
+
+  <label class="inline"><input type="checkbox" name="threads_enabled" value="1" {% if post.threads_enabled %}checked{% endif %} {% if locked %}disabled{% endif %}> Threads にも投稿する</label>
+
+  {% if not locked %}
+  <div class="actions">
+    <button type="submit" class="btn primary">{{ '更新' if post.id else '登録' }}</button>
+    <a class="btn" href="/?month={{ post.post_date[:7] }}">戻る</a>
+  </div>
+  {% else %}
+  <p class="muted">投稿済み・投稿中の予約は編集できません。</p>
+  <div class="actions"><a class="btn" href="/?month={{ post.post_date[:7] }}">戻る</a></div>
+  {% endif %}
+</form>
+
+{% if post.id and not locked %}
+<form method="post" action="/posts/{{ post.id }}/delete" class="danger" onsubmit="return confirm('この予約を削除しますか？')">
+  <button type="submit" class="btn danger">この予約を削除</button>
+</form>
+{% endif %}
+{% endblock %}

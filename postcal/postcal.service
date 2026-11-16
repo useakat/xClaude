@@ -1,0 +1,13 @@
+[Unit]
+Description=postcal (X post scheduler UI)
+After=network.target
+
+[Service]
+WorkingDirectory=/root/xClaude
+ExecStart=/usr/bin/python3 -m uvicorn postcal.app:app --host 127.0.0.1 --port 8787
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

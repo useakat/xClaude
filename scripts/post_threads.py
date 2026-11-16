@@ -4,11 +4,12 @@
 本文中に「=====」（= を3個以上並べただけの行）があれば、そこを分割位置として必ず切る
 （分割マーカー。転換の合図の直後で1投稿目を終えるための明示指定。マーカー行自体は投稿しない。
 make_threads_draft.py が自動で入れ、Gmail 下書き上で手で動かしてもよい）。
---image-url / --reply-image-url は空白・改行区切りで複数指定可（2枚以上はカルーセル投稿）。
+--image-url / --reply-image-url は空白・改行区切りで複数指定可（2点以上はカルーセル投稿）。
+--video-url / --reply-video-url で動画（mp4/mov の公開 URL）も付けられる（postcal から。画像と混ぜればカルーセル）。
 
 Usage:
-  python3 scripts/post_threads.py --text "本文" [--image-url "URL1 URL2 ..."] \
-      [--reply-text "セルフリプ"] [--reply-image-url "URL ..."] [--dry-run]
+  python3 scripts/post_threads.py --text "本文" [--image-url "URL1 URL2 ..."] [--video-url URL] \
+      [--reply-text "セルフリプ"] [--reply-image-url "URL ..."] [--reply-video-url URL] [--dry-run]
 
 認証: gcp/threads_token.json（access_token, user_id）。要 threads_content_publish スコープ。
 IPv6 が通らない環境向けに DNS を IPv4 固定する。
@@ -149,21 +150,33 @@ def parse_urls(s):
     return [u for u in re.split(r"\s+", (s or "").strip()) if u]
 
 
-def post_one(token, user_id, text, image_urls=None, reply_to_id=None):
-    """1投稿を作成→公開し post_id を返す。画像2枚以上はカルーセルにする。"""
-    image_urls = image_urls or []
-    if len(image_urls) >= 2:
-        # カルーセル: 各画像の item コンテナ → CAROUSEL コンテナ → publish
-        urls = image_urls[:CAROUSEL_MAX]
-        if len(image_urls) > CAROUSEL_MAX:
-            print(f"  ⚠ 画像 {len(image_urls)}枚 → 上限 {CAROUSEL_MAX}枚に切り詰め")
+VIDEO_WAIT = 300  # 動画コンテナの処理待ち上限（秒）。Threads は動画を URL から取得してエンコードするため画像より長い
+
+
+def _media_items(image_urls, video_urls):
+    """(media_type, url) のリスト。画像 → 動画 の順"""
+    return [("IMAGE", u) for u in (image_urls or [])] + [("VIDEO", u) for u in (video_urls or [])]
+
+
+def _media_params(mtype, url):
+    return {"media_type": mtype, ("video_url" if mtype == "VIDEO" else "image_url"): url}
+
+
+def post_one(token, user_id, text, image_urls=None, reply_to_id=None, video_urls=None):
+    """1投稿を作成→公開し post_id を返す。メディア2点以上はカルーセル（画像・動画の混在可）。
+    動画は media_type=VIDEO + video_url（公開 URL。Threads 側が取得してエンコードするので待ちが長い）。"""
+    items = _media_items(image_urls, video_urls)
+    if len(items) >= 2:
+        # カルーセル: 各メディアの item コンテナ → CAROUSEL コンテナ → publish
+        if len(items) > CAROUSEL_MAX:
+            print(f"  ⚠ メディア {len(items)}点 → 上限 {CAROUSEL_MAX}点に切り詰め")
+        items = items[:CAROUSEL_MAX]
         child_ids = []
-        for u in urls:
-            child = _api_post(f"{user_id}/threads", {
-                "access_token": token, "media_type": "IMAGE",
-                "is_carousel_item": "true", "image_url": u,
-            })["id"]
-            _wait_finished(token, child)
+        for mtype, u in items:
+            params = {"access_token": token, "is_carousel_item": "true"}
+            params.update(_media_params(mtype, u))
+            child = _api_post(f"{user_id}/threads", params)["id"]
+            _wait_finished(token, child, timeout=VIDEO_WAIT if mtype == "VIDEO" else 90)
             child_ids.append(child)
         params = {
             "access_token": token, "media_type": "CAROUSEL",
@@ -176,15 +189,16 @@ def post_one(token, user_id, text, image_urls=None, reply_to_id=None):
         time.sleep(3)  # publish 前の整合性バッファ
         return _publish(token, user_id, cid)
 
-    # テキスト or 単一画像
+    # テキスト or 単一メディア
     params = {"access_token": token, "text": text}
-    params["media_type"] = "IMAGE" if image_urls else "TEXT"
-    if image_urls:
-        params["image_url"] = image_urls[0]
+    if items:
+        params.update(_media_params(*items[0]))
+    else:
+        params["media_type"] = "TEXT"
     if reply_to_id:
         params["reply_to_id"] = reply_to_id
     cid = _api_post(f"{user_id}/threads", params)["id"]
-    _wait_finished(token, cid)
+    _wait_finished(token, cid, timeout=VIDEO_WAIT if (items and items[0][0] == "VIDEO") else 90)
     time.sleep(3)  # publish 前の整合性バッファ
     return _publish(token, user_id, cid)
 
@@ -195,6 +209,8 @@ def main():
     ap.add_argument("--image-url", default="")
     ap.add_argument("--reply-text", default="")
     ap.add_argument("--reply-image-url", default="")
+    ap.add_argument("--video-url", default="", help="本文に付ける動画の公開 URL（mp4/mov。空白区切りで複数可）")
+    ap.add_argument("--reply-video-url", default="", help="セルフリプ先頭に付ける動画の公開 URL")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
@@ -202,16 +218,19 @@ def main():
     reply_chunks = split_text(args.reply_text)
     body_imgs = parse_urls(args.image_url)
     reply_imgs = parse_urls(args.reply_image_url)
+    body_vids = parse_urls(args.video_url)
+    reply_vids = parse_urls(args.reply_video_url)
     if not body_chunks:
         sys.exit("本文が空です")
 
     if args.dry_run:
         print(f"--- dry-run: 本文{len(body_chunks)}件＋リプ{len(reply_chunks)}件 ---")
+        nb, nr = len(body_imgs) + len(body_vids), len(reply_imgs) + len(reply_vids)
         for i, c in enumerate(body_chunks, 1):
-            tag = f"[本文画像{len(body_imgs)}枚{'/カルーセル' if len(body_imgs) >= 2 else ''}]" if (i == 1 and body_imgs) else ""
+            tag = f"[本文メディア{nb}点（画像{len(body_imgs)}・動画{len(body_vids)}）{'/カルーセル' if nb >= 2 else ''}]" if (i == 1 and nb) else ""
             print(f"本文{i}({len(c)}字){tag}: {c[:60]}")
         for i, c in enumerate(reply_chunks, 1):
-            tag = f"[リプ画像{len(reply_imgs)}枚{'/カルーセル' if len(reply_imgs) >= 2 else ''}]" if (i == 1 and reply_imgs) else ""
+            tag = f"[リプメディア{nr}点（画像{len(reply_imgs)}・動画{len(reply_vids)}）{'/カルーセル' if nr >= 2 else ''}]" if (i == 1 and nr) else ""
             print(f"リプ{i}({len(c)}字){tag}: {c[:60]}")
         return
 
@@ -221,7 +240,8 @@ def main():
     # 本文スレッド（画像は先頭投稿にまとめて付ける。2枚以上はカルーセル）
     for i, chunk in enumerate(body_chunks):
         imgs = body_imgs if i == 0 else None
-        pid = post_one(token, user_id, chunk, image_urls=imgs, reply_to_id=prev_id)
+        vids = body_vids if i == 0 else None
+        pid = post_one(token, user_id, chunk, image_urls=imgs, reply_to_id=prev_id, video_urls=vids)
         prev_id = pid
         if first_id is None:
             first_id = pid
@@ -229,7 +249,8 @@ def main():
     # セルフリプ（本文末尾に連結）
     for i, chunk in enumerate(reply_chunks):
         imgs = reply_imgs if i == 0 else None
-        pid = post_one(token, user_id, chunk, image_urls=imgs, reply_to_id=prev_id)
+        vids = reply_vids if i == 0 else None
+        pid = post_one(token, user_id, chunk, image_urls=imgs, reply_to_id=prev_id, video_urls=vids)
         prev_id = pid
         print(f"  リプ{i+1}/{len(reply_chunks)} 投稿 id={pid}")
 

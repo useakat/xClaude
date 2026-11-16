@@ -2,6 +2,8 @@
 server.py
 xmcp
 gcp/
+# postcal（予約カレンダー）の DB とアップロード済みメディア（サーバー上の実体。git 管理外）
+/postcal/data/
 *~
 \#*\#
 **/__pycache__/

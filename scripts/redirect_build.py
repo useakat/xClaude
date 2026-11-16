@@ -36,6 +36,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from dotenv import dotenv_values
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONF = REPO_ROOT / "redirect" / "redirects.json"
 TEMPLATE = REPO_ROOT / "redirect" / "template.html"
@@ -94,6 +96,26 @@ DYN_PH_CADDY = "{re.nid.1}"
 DYN_PH_TMPL = '{{placeholder "http.regexp.nid.1"}}'
 DYN_KEY_TMPL = DYN_PH_TMPL + '{{with placeholder "http.regexp.nid.2"}}/{{.}}{{end}}'
 
+# proxies: ローカルの Web アプリ（postcal 等）を Basic 認証付きで公開するサイトブロック（2026-11-15）。
+# public_paths（例 /m/*）は認証を外す（Threads API がメディアを取得する）。
+# ユーザー名とハッシュは .env の auth_env（例 POSTCAL_BASIC_AUTH='yohn:$2a$14$…'）から読んで直接埋め込む
+# （Caddy は caddy ユーザーで動くので .env を読めない。Caddyfile は root 所有・git 外）。
+PROXY_BLOCK = """{host} {{
+{auth_matcher}\tbasic_auth{auth_target} {{
+\t\t{user} {hash}
+\t}}
+\treverse_proxy {upstream}
+\theader X-Robots-Tag "noindex, nofollow"
+\tlog {{
+\t\toutput file {logdir}/{host}.log {{
+\t\t\troll_size 10mb
+\t\t\troll_keep 12
+\t\t}}
+\t\tformat json
+\t}}
+}}
+"""
+
 
 def render(tmpl: str, target: str, key: str) -> str:
     return tmpl.replace("{{TARGET}}", target).replace("{{KEY}}", key)
@@ -107,7 +129,33 @@ def resolves_here(host: str, server_ip: str) -> bool:
         return False
 
 
-def build(conf: dict, check_dns: bool = False) -> tuple[dict[str, str], str]:
+def proxy_blocks(conf: dict, check_dns: bool, strict: bool) -> list[str]:
+    """conf["proxies"] から reverse_proxy のサイトブロックを作る。strict=True（--apply）では認証情報が無ければ中断する
+    （認証なしのホストを書かないため）。プレビューではプレースホルダで表示する"""
+    env = dotenv_values(REPO_ROOT / ".env")
+    server_ip = conf.get("server_ip", "")
+    blocks = []
+    for host, p in (conf.get("proxies") or {}).items():
+        if check_dns and server_ip and not resolves_here(host, server_ip):
+            print(f"⚠ {host}: DNS がこのサーバー（{server_ip}）を向いていないため今回は除外（A レコード追加後に再実行）", file=sys.stderr)
+            continue
+        cred = (env.get(p["auth_env"]) or "").strip()
+        if ":" not in cred:
+            if strict:
+                sys.exit(f"❌ {host}: .env に {p['auth_env']}='ユーザー名:<caddy hash-password の出力>' が無いため中断します")
+            user, hash_ = "<user>", f"<{p['auth_env']} を .env に設定>"
+        else:
+            user, hash_ = cred.split(":", 1)
+        public = p.get("public_paths") or []
+        blocks.append(PROXY_BLOCK.format(
+            host=host, upstream=p["upstream"], logdir=LOG_DIR, user=user, hash=hash_,
+            auth_matcher=(f"\t@auth not path {' '.join(public)}\n" if public else ""),
+            auth_target=(" @auth" if public else ""),
+        ))
+    return blocks
+
+
+def build(conf: dict, check_dns: bool = False, strict: bool = False) -> tuple[dict[str, str], str]:
     """(相対パス→HTML の辞書, Caddyfile 文字列) を返す。check_dns=True なら DNS 未設定のホストを除外する"""
     tmpl = TEMPLATE.read_text(encoding="utf-8")
     landing = LANDING.read_text(encoding="utf-8")
@@ -137,6 +185,7 @@ def build(conf: dict, check_dns: bool = False) -> tuple[dict[str, str], str]:
             map_rows="\n".join(map_rows) if map_rows else "\t\t# (paths なし)",
             default_target=h["target"],
         ))
+    blocks += proxy_blocks(conf, check_dns, strict)
     caddy = "# 生成元: redirect/redirects.json（scripts/redirect_build.py --apply）。手で編集しない\n\n" + "\n".join(blocks)
     return pages, caddy
 
@@ -147,7 +196,7 @@ def main() -> int:
     args = ap.parse_args()
 
     conf = json.loads(CONF.read_text(encoding="utf-8"))
-    pages, caddy = build(conf, check_dns=args.apply)
+    pages, caddy = build(conf, check_dns=args.apply, strict=args.apply)
 
     if not args.apply:
         for host, h in conf["hosts"].items():
@@ -156,6 +205,8 @@ def main() -> int:
                 print(f"  {h['dynamic']['pattern']}  →  {h['dynamic']['target']}  (動的)")
             for key, p in (h.get("paths") or {}).items():
                 print(f"  /{key}  →  {p['target']}  ({p.get('memo', '')})")
+        for host, p in (conf.get("proxies") or {}).items():
+            print(f"{host}  →  reverse_proxy {p['upstream']}  (Basic 認証。認証なし: {' '.join(p.get('public_paths') or []) or 'なし'})")
         print("\n----- Caddyfile -----\n" + caddy)
         return 0
 

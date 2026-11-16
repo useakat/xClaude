@@ -41,8 +41,9 @@ cron の 4 枠（6:00 / 12:00 / 17:00 / 20:00 JST）が受信箱を検索
 
 各枠の処理順：
 
-1. `scripts/post_by_label.sh <時>` — `label:<時>時投稿 in:inbox -label:投稿済み` を件名 5 種（ワンポイント解説 → 質問回答 → X長文 → X短文投稿 → 自己開示）の順に探し、最初の 1 件を投稿する
-2. 無ければ従来の件名検索。`post_from_email.sh` は `--label` 無しのとき、時刻ラベル付きのメールをすべて除外して探す
+1. `scripts/post_scheduled.py <時>` — **postcal（予約カレンダー `https://post.usephys.net/`）** にその日・その枠の予約があれば最優先で投稿する（画像最大 4 枚または動画 1 本、セルフリプは `=====` 区切りで返信チェーン、Threads 転載、outputs 記録まで）。予約が無ければ rc=20 で次へ（2026-11-15）
+2. `scripts/post_by_label.sh <時>` — `label:<時>時投稿 in:inbox -label:投稿済み` を件名 7 種（ワンポイント解説 → 質問回答 → X長文 → note販促 → リライト → X短文投稿 → 自己開示）の順に探し、最初の 1 件を投稿する
+3. 無ければ従来の件名検索。`post_from_email.sh` は `--label` 無しのとき、時刻ラベル付きのメールをすべて除外して探す
 
 ## Gmail → X 投稿の仕組み
 

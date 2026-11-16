@@ -83,5 +83,13 @@
       },
       "_comment": "Threads に手で貼るときに使う（Threads ミラーは note リンクを落とす方針のまま）"
     }
+  },
+  "proxies": {
+    "post.usephys.net": {
+      "_comment": "postcal（X 投稿の予約カレンダー。systemd postcal.service が 127.0.0.1:8787 で待つ）。/m/* はアップロード済みメディアの公開配信で、Threads API が取得するため認証を外す。ユーザー名とハッシュは .env の POSTCAL_BASIC_AUTH='yohn:<caddy hash-password --plaintext …>'（2026-11-15）",
+      "upstream": "127.0.0.1:8787",
+      "public_paths": ["/m/*"],
+      "auth_env": "POSTCAL_BASIC_AUTH"
+    }
   }
 }

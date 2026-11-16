@@ -3,6 +3,10 @@
 # cron: 0 20 * * * /bin/bash /root/xClaude/scripts/run_xshort_post.sh
 export MIRROR_THREADS=1  # X投稿を Threads にも転載する
 DIR="$(dirname "$0")"
+# postcal（予約カレンダー）の 20 時枠の予約を最優先で投稿する（rc=20: 予約なし → Gmail キューへ）
+python3 "$DIR/post_scheduled.py" 20
+rc=$?
+if [ "$rc" -ne 20 ]; then exit $rc; fi
 # 投稿時間帯ラベル（20時投稿）が付いたメールを件名を問わず先に投稿する
 /bin/bash "$DIR/post_by_label.sh" 20
 rc=$?

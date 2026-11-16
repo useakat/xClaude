@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ year }}年{{ month }}月 — postcal{% endblock %}
+{% block body %}
+{% if msg %}<div class="flash">{{ msg }}</div>{% endif %}
+
+<div class="month-nav">
+  <a href="/?month={{ prev_month }}">‹ 前月</a>
+  <h1>{{ year }}年{{ month }}月</h1>
+  <a href="/?month={{ next_month }}">翌月 ›</a>
+</div>
+
+<div class="legend">
+  <span class="chip queued">予約</span>
+  <span class="chip posted">投稿済み</span>
+  <span class="chip failed">失敗</span>
+  <span class="chip overdue">未投稿（枠超過）</span>
+</div>
+
+<table class="cal">
+  <thead><tr>{% for w in weekdays %}<th>{{ w }}</th>{% endfor %}</tr></thead>
+  <tbody>
+  {% for week in weeks %}
+  <tr>
+    {% for d in week %}
+    {% set ds = d.isoformat() %}
+    <td class="{{ 'other' if d.month != month else '' }} {{ 'today' if d == today else '' }}">
+      <div class="daynum">
+        <span>{{ d.day }}</span>
+        {% if d >= today %}<a class="add" href="/new?date={{ ds }}" title="この日に予約">＋</a>{% endif %}
+      </div>
+      {% for p in by_date.get(ds, []) %}
+      <a class="chip {{ p.state }}" href="/posts/{{ p.id }}" title="{{ p.text[:80] }}">
+        {{ p.slot }}時 {{ p.kind_label }}{% if p.media %} 📎{% endif %}
+      </a>
+      {% endfor %}
+    </td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2>今月の予約一覧</h2>
+{% if rows %}
+<table class="list">
+  <thead><tr><th>日時</th><th>種類</th><th>状態</th><th>本文</th><th>リンク</th></tr></thead>
+  <tbody>
+  {% for p in rows %}
+  <tr>
+    <td><a href="/posts/{{ p.id }}">{{ p.post_date }} {{ p.slot }}時</a></td>
+    <td>{{ p.kind_label }} <small>({{ p.what_id }})</small></td>
+    <td><span class="chip {{ p.state }}">{{ {'queued':'予約','posting':'投稿中','posted':'投稿済み','failed':'失敗','skipped':'スキップ','overdue':'未投稿'}[p.state] }}</span></td>
+    <td class="excerpt">{{ p.text[:60] }}{% if p.text|length > 60 %}…{% endif %}
+      {% if p.replies %}<small>＋リプ{{ p.replies|length }}</small>{% endif %}
+      {% if p.media %}<small>＋{{ p.media|length }}ファイル</small>{% endif %}
+      {% if p.error %}<div class="err">{{ p.error[:160] }}</div>{% endif %}</td>
+    <td>{% if p.x_url %}<a href="{{ p.x_url }}" target="_blank" rel="noopener">X</a>{% endif %}
+        {% if p.threads_url %} <a href="{{ p.threads_url }}" target="_blank" rel="noopener">Threads</a>{% endif %}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="muted">この月の予約はありません。</p>
+{% endif %}
+{% endblock %}
