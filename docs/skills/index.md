@@ -18,6 +18,7 @@ description: Claude Code で使用できるスキルの一覧
 | [writer-xpromo](/xClaude/skills/writer-xpromo/) | W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を件名【note販促】の Gmail 下書きにする（X への投稿は行わない） |
 | [writer-xqa](/xClaude/skills/writer-xqa/) | X 上の質問への回答投稿を 1 本作成する。長文化を避け、3 段以内・400 字以内に圧縮し、超える内容は note 誘導で切り上げる。 |
 | [writer-xrewrite](/xClaude/skills/writer-xrewrite/) | 過去の伸びた X 投稿（半年以上前・未リライト・グレード S/A 優先、無ければ IMP 1 万以上の上位 20）を 1 本選び、4 要素に分解して「伸びた理由」を特定したうえで、回数で決まる方式（①冒頭を変える→④驚きの軸を変える→②結末先行→③主人公・視点を変える）でリライトし、z01 と同じチェック（reader/fact/critic/brand/yohn）を通して件名【リライト】の Gmail 下書きを 1 本作る。what_id は元の what_id に r を付ける（W001r/W003r/z01r）。ユーザー確認なし全自動。投稿は行わない。 |
+| [writer-xselfreply](/xClaude/skills/writer-xselfreply/) | X 本体投稿の直下に付けるセルフリプ誘導文を作成する。本編テキストと誘導先（note 記事 URL／プロフ）を受け取り、版管理された生成ルール（現行 v1＝ボイジャー型）に従って本編のフォーカスに合わせた誘導1文＋URL を3案作り、採用案と版を logs/selfreply_records.csv に記録する。N4（セルフリプ誘導文）の検証用。 |
 | [writer-xshort](/xClaude/skills/writer-xshort/) | 4シート（onePointNeta/noteNeta/newsTopics/thoughts）からランダムに1件ネタを選び、135-140文字の短文原稿を作成してGmail下書きに保存する（投稿は行わず下書き作成のみ）。ユーザー確認なし全自動。 |
 | [writer-xstory](/xClaude/skills/writer-xstory/) | 宇宙探査や科学発見の執念の物語をテーマにした、X長文投稿を日本語で作成する。テーマを受け取り、Xの投稿文を出す。 |
 
