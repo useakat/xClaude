@@ -55,9 +55,20 @@ z01（X 短文）の投稿キューは Gmail 受信箱だった（スキルが�
 - 旧スキーマ DB（neta_id なし）→ `connect()` の `ALTER TABLE` で列追加、既存行は空、create/update 動作を確認。
 - 全変更ファイルの `py_compile` / `bash -n` OK。
 
+## VPS 配備と初回取込の結果（2026-11-19 追記）
+
+よーんが VPS で `git pull` → `sudo bash scripts/postcal_install.sh` を実行し、タイマー経由で初回取込まで進んだ。
+
+- **初回取込は成功**：11:17 に `postcal-import` が動き、氷下水の予約ファイルを `登録 #5（2026-11-19 17時 / short→z01）` として登録した（#5 はカレンダーに既存の予約があったため。空いていた 17 時枠に入り、既存予約は上書きしていない）。以降の実行は `集計: skip=1`（取込済み・変更なし）で、タイマーは回っている。
+- **`git pull --ff-only` が拒否される問題が発生**：「detected dubious ownership in repository at '/root/xClaude'」で失敗し、`send_gmail.sh` の失敗通知メールが届いた。
+  - 原因：`/root/xClaude` 本体の所有者が VPS に存在しない uid（`stat` の表示は `UNKNOWN:UNKNOWN`、`.git` は `root:root`）になっており、root で動く git が「他人のリポジトリ」と判定した（git 2.35.2 以降の safe.directory チェック）。タイマーのユニットは `User=` 未指定（`systemctl show` で確認）なので root で動いている。
+  - 対処：フォルダ本体だけを root の持ち物に戻す（`chown root:root /root/xClaude`、非再帰）。代替は `git config --system --add safe.directory /root/xClaude`（`--global` は systemd 経由で HOME が取れず効かない場合があるため `--system`）。ログ上、11:37 の実行に pull 失敗の記録があり、11:40 の実行からは失敗の記録が出ていない（修正の時刻はログからの推定）。
+  - **この間は pull が失敗するため、クラウドから push した予約ファイルが VPS に届かない**。気付かないと新しい予約が取り込まれない状態になる点が実害。
+- 検証できていないこと：17 時の cron による実投稿（X への投稿・カレンダーの「投稿済み」・outputs 記録）は未確認。
+
 ## 今後の課題
 
-- **VPS での有効化**はよーんの操作が必要：`cd /root/xClaude && git pull && sudo bash scripts/postcal_install.sh`（タイマー設置。DB の neta_id 列追加は次回接続時に自動）。
-- **実投稿（cron 経由）での SS1 更新・カレンダー表示**は実運用で確認する（ローカルは dry-run のみ）。
+- **cron 経由の実投稿の確認**：今日 17 時の枠で予約 #5 が投稿されるかを確認する（カレンダーが「投稿済み」になる・X に載る・失敗時は `【postcal】投稿失敗 #5` のメールが届く）。postcal の予約を cron が実際に拾うのは今回が初めての想定。#5 は source が「ユーザー指定」なので neta_id は `postcal[5]` になり SS1 は更新されない（正）。**SS1「短文最終使用日」の更新（neta_id が `noteNeta[..]` のとき）は、次にシート参照つきの予約が投稿されたときに確認する**。
+- **失敗通知の重複抑制**：`postcal_import.py` は失敗のたびに通知するため、pull 失敗のような継続エラーだと 10 分おきに同じメールが届く（今回実際に発生）。「同じエラーは 1 時間に 1 回」にするなどの抑制を入れる（未実装）。
 - **予約方式での「無言の手直し」差分収集**（check-yohn 自己改善の教師データ）は、Gmail 下書き時代の仕組みが使えないため follow-up。予約ファイルの git 履歴（初版 Claude 原文）との差分で代替できる見込み。
 - thoughts 枠は 2026-11-18 に廃止済みのため対象外。今回は z01 のみ差し替え（W001/W003 等は従来の Gmail 下書きのまま）。
