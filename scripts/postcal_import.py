@@ -50,6 +50,8 @@ H_REPLY_RE = re.compile(r"^##[ \t]+セルフリプ[ \t]*$", re.M)
 H_REC_RE = re.compile(r"^##[ \t]+記録[ \t]*$", re.M)
 REPLY_SPLIT_RE = re.compile(r"^[ \t]*={3,}[ \t]*$", re.M)   # post_threads.py / postcal と同じ
 NONE_WORDS = {"", "なし", "（なし）", "(なし)", "-", "—", "ー"}
+# record_output.py が SS1 の「短文最終使用日」更新に使える形（それ以外の source は neta_id にしない）
+NETA_REF_RE = re.compile(r"^(?:noteNeta|newsTopics)\[\d+\]$")
 
 
 def log(msg: str):
@@ -135,10 +137,13 @@ def parse_record(path: str) -> dict | None:
     what_id = (fm.get("what_id") or kinds.KINDS.get(kind, ("", ""))[1] or "z01").strip()
     te = (fm.get("threads_enabled") or "true").strip().lower()
     threads_enabled = te not in ("false", "0", "no", "off", "")
+    source = (fm.get("source") or "").strip()
+    neta_id = source if NETA_REF_RE.match(source) else ""   # シート参照のみ採用（投稿時に SS1 を更新）
     return {
         "uid": uid,
         "kind": kind,
         "what_id": what_id,
+        "neta_id": neta_id,
         "text": post_text,
         "replies": replies,
         "note_url": (fm.get("note_url") or "").strip(),
@@ -155,6 +160,7 @@ def content_hash(rec: dict) -> str:
         "1" if rec["threads_enabled"] else "0",
         rec["kind"],
         rec["what_id"],
+        rec["neta_id"],
     ])
     return hashlib.sha256(key.encode("utf-8")).hexdigest()
 
@@ -228,7 +234,7 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
             if not dry_run:
                 db.update(con, post["id"], {
                     "post_date": post["post_date"], "slot": post["slot"],
-                    "kind": rec["kind"], "what_id": rec["what_id"],
+                    "kind": rec["kind"], "what_id": rec["what_id"], "neta_id": rec["neta_id"],
                     "text": rec["text"], "replies": rec["replies"], "media": post["media"],
                     "threads_enabled": rec["threads_enabled"], "note_url": rec["note_url"],
                 })
@@ -252,7 +258,7 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
         if ds is None:
             return "error"
     post_id = db.create(con, {
-        "post_date": ds, "slot": slot, "kind": rec["kind"], "what_id": rec["what_id"],
+        "post_date": ds, "slot": slot, "kind": rec["kind"], "what_id": rec["what_id"], "neta_id": rec["neta_id"],
         "text": rec["text"], "replies": rec["replies"],
         "threads_enabled": rec["threads_enabled"], "note_url": rec["note_url"],
     })

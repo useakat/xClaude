@@ -3,6 +3,8 @@
 テーブル posts:
   post_date   'YYYY-MM-DD'（JST）   slot 6|12|17|20
   kind        postcal.kinds.KINDS のキー   what_id 記録用
+  neta_id     ネタの出所（例 noteNeta[143] / newsTopics[21]）。z01 の投稿時に record_output.py へ渡し、
+              SS1 の「短文最終使用日」を更新する紐付けキー。無ければ空（投稿時は postcal[id] にフォールバック）
   text        本文   replies_json  セルフリプの配列（X では順に返信チェーン、Threads は ===== 連結）
   media_json  [{"name": "<uuid>.<ext>", "kind": "image"|"video", "orig": "元ファイル名"}]
   threads_enabled 0/1   note_url 任意
@@ -28,6 +30,7 @@ CREATE TABLE IF NOT EXISTS posts (
   slot INTEGER NOT NULL,
   kind TEXT NOT NULL,
   what_id TEXT NOT NULL,
+  neta_id TEXT NOT NULL DEFAULT '',
   text TEXT NOT NULL,
   replies_json TEXT NOT NULL DEFAULT '[]',
   media_json TEXT NOT NULL DEFAULT '[]',
@@ -56,7 +59,16 @@ def connect() -> sqlite3.Connection:
     con.execute("PRAGMA journal_mode=WAL")
     con.execute("PRAGMA busy_timeout=5000")
     con.executescript(SCHEMA)
+    _migrate(con)
     return con
+
+
+def _migrate(con):
+    """既存 DB への後付けカラム（CREATE TABLE IF NOT EXISTS は列を追加しないため）"""
+    cols = {r[1] for r in con.execute("PRAGMA table_info(posts)")}
+    if "neta_id" not in cols:
+        con.execute("ALTER TABLE posts ADD COLUMN neta_id TEXT NOT NULL DEFAULT ''")
+        con.commit()
 
 
 def _row(r):
@@ -93,9 +105,10 @@ def slot_taken(con, post_date: str, slot: int, exclude_id=None):
 def create(con, d: dict) -> int:
     ts = now_jst()
     cur = con.execute(
-        "INSERT INTO posts (post_date, slot, kind, what_id, text, replies_json, media_json, threads_enabled, "
-        "note_url, status, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,'queued',?,?)",
-        (d["post_date"], d["slot"], d["kind"], d["what_id"], d["text"], json.dumps(d.get("replies", []), ensure_ascii=False),
+        "INSERT INTO posts (post_date, slot, kind, what_id, neta_id, text, replies_json, media_json, threads_enabled, "
+        "note_url, status, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,'queued',?,?)",
+        (d["post_date"], d["slot"], d["kind"], d["what_id"], d.get("neta_id", ""), d["text"],
+         json.dumps(d.get("replies", []), ensure_ascii=False),
          json.dumps(d.get("media", []), ensure_ascii=False), 1 if d.get("threads_enabled", True) else 0,
          d.get("note_url", ""), ts, ts))
     con.commit()
@@ -104,9 +117,10 @@ def create(con, d: dict) -> int:
 
 def update(con, post_id: int, d: dict):
     con.execute(
-        "UPDATE posts SET post_date=?, slot=?, kind=?, what_id=?, text=?, replies_json=?, media_json=?, "
+        "UPDATE posts SET post_date=?, slot=?, kind=?, what_id=?, neta_id=?, text=?, replies_json=?, media_json=?, "
         "threads_enabled=?, note_url=?, updated_at=? WHERE id=?",
-        (d["post_date"], d["slot"], d["kind"], d["what_id"], d["text"], json.dumps(d.get("replies", []), ensure_ascii=False),
+        (d["post_date"], d["slot"], d["kind"], d["what_id"], d.get("neta_id", ""), d["text"],
+         json.dumps(d.get("replies", []), ensure_ascii=False),
          json.dumps(d.get("media", []), ensure_ascii=False), 1 if d.get("threads_enabled", True) else 0,
          d.get("note_url", ""), now_jst(), post_id))
     con.commit()

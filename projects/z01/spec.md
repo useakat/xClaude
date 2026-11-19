@@ -302,8 +302,8 @@ echo "$(TZ=Asia/Tokyo date +%F),z01,{①〜⑤+短縮名 例:⑤口火},{投稿�
 - **数値は一次情報で確定し、チェック後の編集で数値・固有名詞を足したら `/check-fact` を再実行する**（上記 STEP 4 の一次情報主義・再チェックを本文修正フェーズでも守る）。
 - **読みにくい一文を残さない**：各文を「の」名詞連鎖3回以上・読点なし35字超・修飾の入れ子2段超で点検し、該当したら語順を「場所→対象→動詞」に整理して一文一義に割る。
 - ネタ選定は noteNeta / newsTopics（1:1、`onePointNeta` / `thoughts` は対象外）。ステータス（≠ボツ）と短文最終使用日（空または6ヶ月＝180日以上前）でフィルタし、通常フローで投稿文を生成する（候補が0件ならネタ枯渇として予約ファイルを作らず終了・フォールバックで条件を緩めない）。
-- 短文最終使用日への書き込みは本フロー（予約ファイル作成時）では行わない（予約が削除・未投稿のまま終わった場合にネタを消費扱いにしないため）。**投稿が実際に行われた時点**で `scripts/post_scheduled.py` → `scripts/record_output.py` が outputs シートに記録する（neta-id は `postcal[<予約id>]`）。
-  - ⚠️ 現状、postcal 経由の投稿では **SS1 の「短文最終使用日」は自動更新されない**（neta-id が元シート参照 `noteNeta[..]` でなく `postcal[id]` のため）。ネタの重複回避は STEP 2.7（`hook_records.csv` 突合）が主に担保する。SS1 側の消費記録を残すかは別課題（follow-up）。
+- 短文最終使用日への書き込みは本フロー（予約ファイル作成時）では行わない（予約が削除・未投稿のまま終わった場合にネタを消費扱いにしないため）。**投稿が実際に行われた時点**で `scripts/post_scheduled.py` → `scripts/record_output.py` が outputs シートに記録し、SS1 の「短文最終使用日」も更新する。
+  - 紐付けの仕組み：予約ファイル front-matter の `source`（**`noteNeta[番号]` / `newsTopics[番号]` の形**）を `postcal_import.py` が予約の `neta_id` 列に保存し、投稿時に `post_scheduled.py` が `--neta-id` として渡す。`record_output.py` がその行を見て SS1（noteNeta は N 列 / newsTopics は I 列）に投稿日を書く。**だから `source` は必ず `{ソースシート}[{ネタ番号}]` の形で書く**（それ以外の形だと `postcal[予約id]` にフォールバックし、SS1 は更新されない）。
 - 反応の良かったネタは plan.md の方針に従い W001 / W002 / W003 へ昇格候補とする（昇格判断は本フロー外で実施）。
 
 ## Verification

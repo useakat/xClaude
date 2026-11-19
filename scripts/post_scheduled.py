@@ -154,7 +154,10 @@ def main() -> int:
                 log(f"✓ リプ{i}: {urls[-1]}")
 
         # ---- 記録（X） ----
-        rec = [PY, os.path.join(SCRIPTS, "record_output.py"), tweet_url, post["what_id"], "--neta-id", f"postcal[{post['id']}]"]
+        # neta_id が元シート参照（noteNeta[..] 等）なら それを使う（record_output.py が z01 の
+        # SS1「短文最終使用日」を更新できる）。無ければ従来どおり予約 id を記録する。
+        neta_id = post.get("neta_id") or f"postcal[{post['id']}]"
+        rec = [PY, os.path.join(SCRIPTS, "record_output.py"), tweet_url, post["what_id"], "--neta-id", neta_id]
         if post["note_url"]:
             rec += ["--note-url", post["note_url"]]
         run(rec, args.dry_run)

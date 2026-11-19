@@ -193,6 +193,10 @@ async def parse_form(request: Request, existing: dict | None):
         note_url = m.group(0) if m else ""
     data["note_url"] = note_url
 
+    # neta_id（ネタの出所。フォームには項目が無いので、編集時は既存値を保つ。
+    # z01 の予約には postcal_import.py が noteNeta[..] 等を入れる）
+    data["neta_id"] = (existing.get("neta_id", "") if existing else "")
+
     # メディア: 既存（削除指定を除く）＋ 新規アップロード
     keep = list(existing["media"]) if existing else []
     remove = set(form.getlist("remove_media"))
