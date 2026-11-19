@@ -45,6 +45,23 @@ cron の 4 枠（6:00 / 12:00 / 17:00 / 20:00 JST）が受信箱を検索
 2. `scripts/post_by_label.sh <時>` — `label:<時>時投稿 in:inbox -label:投稿済み` を件名 7 種（ワンポイント解説 → 質問回答 → X長文 → note販促 → リライト → X短文投稿 → 自己開示）の順に探し、最初の 1 件を投稿する
 3. 無ければ従来の件名検索。`post_from_email.sh` は `--label` 無しのとき、時刻ラベル付きのメールをすべて除外して探す
 
+## z01 短文は予約ファイル経由（2026-11-19〜）
+
+z01（短文）は **Gmail 下書きを作らず、予約ファイル → postcal** に一本化した（`projects/z01/spec.md` STEP 6）。
+
+```
+z01 フローが確定稿を outputs/scheduled-posts/z01/<日時>_<topic>.md に書く（## 投稿文＋## セルフリプ＋## 記録、front-matter に uid）
+    ↓ git push（master）
+VPS の scripts/postcal_import.py（systemd timer postcal-import.timer・10 分ごと）が git pull → 読み取り
+    ↓ 週間短文パターンの「今日以降の最も近い空き短文枠」へ db.create()（uid で upsert・投稿済みは触らない）
+postcal.db に登録 → post.usephys.net のカレンダーに表示
+    ↓ 既存の 4 枠 cron（post_scheduled.py <枠>）がその枠で X / Threads に投稿
+```
+
+- 週間短文枠（よーん決定 2026-11-19）：1 短文の日は 6:00、2 短文の日は 6:00→17:00。月[6] 火[6,17] 水[6] 木[6,17] 金[なし] 土[6] 日[6]。枠の割当は `postcal_import.py` が行う（z01 フローは枠を指定しない）。
+- 予約ファイルは投稿実行（postcal status=posted）までは uid を保ったまま上書き更新でき、インポーターが既存予約を更新する。
+- 取込状態は `postcal/data/import_state.json`（git 管理外）で uid→予約 id を管理。導入手順は `scripts/postcal_install.sh`（`postcal-import.timer` を設置・有効化）。
+
 ## Gmail → X 投稿の仕組み
 
 `scripts/post_from_email.sh` が、件名キーワードで受信箱の未処理メール（`in:inbox -label:投稿済み`）を検索し、本文の `[投稿文]...[/投稿文]` タグ内のテキストを X に投稿する。添付画像があれば画像付き、`[リプ]` があればセルフリプ、`[note_url]` は outputs シートに記録する。

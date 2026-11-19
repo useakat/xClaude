@@ -1,0 +1,10 @@
+[Unit]
+Description=postcal import (scheduled-posts の予約ファイルを postcal.db に取り込む)
+After=network-online.target postcal.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/root/xClaude
+ExecStart=/usr/bin/python3 scripts/postcal_import.py
+Environment=PYTHONUNBUFFERED=1
