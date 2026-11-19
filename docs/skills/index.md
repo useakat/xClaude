@@ -15,7 +15,7 @@ description: Claude Code で使用できるスキルの一覧
 | [writer-xnews](/xClaude/skills/writer-xnews/) | writer-xnews スキル |
 | [writer-xonepoint](/xClaude/skills/writer-xonepoint/) | X用ワンポイント解説投稿を1本作成する。受け取ったネタ情報をもとに投稿原稿を生成する。 |
 | [writer-xpost](/xClaude/skills/writer-xpost/) | X投稿用の汎用 writer。投稿テーマと文字数範囲を受け取り、作業フォルダの spec.md/plan.md/brand.md に従って「フォーカス決定→冒頭フック決定→本文作成」を全自動でこなし、X投稿（冒頭フック→本文→締め）を1本作成する。ユーザー確認なし。 |
-| [writer-xpromo](/xClaude/skills/writer-xpromo/) | W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を件名【note販促】の Gmail 下書きにする（X への投稿は行わない） |
+| [writer-xpromo](/xClaude/skills/writer-xpromo/) | W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を予約ファイル（`outputs/scheduled-posts/w007/`）にして push する（postcal が金曜 6:00 枠に自動登録。X への投稿は行わない） |
 | [writer-xqa](/xClaude/skills/writer-xqa/) | X 上の質問への回答投稿を 1 本作成する。長文化を避け、3 段以内・400 字以内に圧縮し、超える内容は note 誘導で切り上げる。 |
 | [writer-xrewrite](/xClaude/skills/writer-xrewrite/) | 過去の伸びた X 投稿（半年以上前・未リライト・グレード S/A 優先、無ければ IMP 1 万以上の上位 20）を 1 本選び、4 要素に分解して「伸びた理由」を特定したうえで、回数で決まる方式（①冒頭を変える→④驚きの軸を変える→②結末先行→③主人公・視点を変える）でリライトし、z01 と同じチェック（reader/fact/critic/brand/yohn）を通して件名【リライト】の Gmail 下書きを 1 本作る。what_id は元の what_id に r を付ける（W001r/W003r/z01r）。ユーザー確認なし全自動。投稿は行わない。 |
 | [writer-xselfreply](/xClaude/skills/writer-xselfreply/) | X 本体投稿の直下に付けるセルフリプ誘導文を作成する。本編テキストと誘導先（note 記事 URL／プロフ）を受け取り、版管理された生成ルール（現行 v1＝ボイジャー型）に従って本編のフォーカスに合わせた誘導1文＋URL を3案作り、採用案と版を logs/selfreply_records.csv に記録する。N4（セルフリプ誘導文）の検証用。 |

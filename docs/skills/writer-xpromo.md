@@ -1,6 +1,6 @@
 ---
 title: writer-xpromo
-description: "W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を件名【note販促】の Gmail 下書きにする（X への投稿は行わない）"
+description: "W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を予約ファイル（`outputs/scheduled-posts/w007/`）にして push する（postcal が金曜 6:00 枠に自動登録。X への投稿は行わない）"
 category: コンテンツ制作
 ---
 
@@ -8,16 +8,16 @@ category: コンテンツ制作
 
 ## スキル説明
 
-W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を件名【note販促】の Gmail 下書きにする（X への投稿は行わない）
+W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を予約ファイル（`outputs/scheduled-posts/w007/`）にして push する（postcal が金曜 6:00 枠に自動登録。X への投稿は行わない）
 
 ## 詳細内容
 
 W002（note 記事）の公開済み記事から 1 本を選び、その記事へ誘導する **140 字の X 販促投稿**を作る。
-本文には note への誘導を書かず、**誘導はセルフリプ（1 文＋URL）に回す**。投稿は 20 時枠の cron（`run_xshort_post.sh` → 件名【note販促】 → what_id W007）が行う。
+本文には note への誘導を書かず、**誘導はセルフリプ（1 文＋URL）に回す**。投稿は、予約ファイルを VPS の `postcal_import.py` が postcal に登録（**既定は金曜 6:00 枠**。埋まっていれば翌週の金曜）し、既存の 6 時枠 cron が what_id W007 として行う。
 
 入力（`$ARGUMENTS`、任意）: W002 のフォルダ名（例 `2026-08-20_akatsuki`）。指定があればランダム選択を飛ばしてその記事を使う。
 
-**Gmail 下書きは STEP 5 でよーんが採用案を選んだ後に 1 回だけ作る。選択を待たずに作らない。**
+**予約ファイルは STEP 5 でよーんが採用案を確定した後に作る。選択を待たずに作らない。Gmail 下書きは作らない（2026-11-19 に予約ファイル方式へ変更）。**
 
 ---
 
@@ -59,6 +59,7 @@ PY
 - `output/index.md` が無いフォルダは**対象外**にし、完了報告に列挙する（遡及作成フォルダなど）。
 - `output/index.md` はあるが URL がどこにも無いフォルダ（公開直後で `note投稿一覧` 未反映など）は**プールに残す**。その記事が選ばれたら STEP 2 で note の公開 URL をよーんに尋ね、返事を待ってから進む（勝手に URL を推測しない）。
 - **直近の販促を避ける**: `sheets_get_values(spreadsheetId="1LerdRNS7dwPXhjunDY4Z4u7g7LWkQqABsat3_LBeIGc", range="outputs!A:H")` を取得し、F列（note_url）が候補の URL と一致する行（what_id は問わない。W001＝長文販促・W007＝本スキル）のうち、A列の日時が **14 日以内**のものがあればその記事を今回の抽選から外す。全記事が外れる場合はこの規則を無視して全記事を対象にし、その旨を報告する。
+- **未投稿の予約も避ける**: `outputs/scheduled-posts/w007/*.md` の front-matter `note_url` が候補の URL と一致し、まだ投稿されていない（postcal の status が queued。迷ったら `post.usephys.net` で確認）ものがあれば、その記事も今回の抽選から外す（同じ記事の販促が重複して予約されるのを防ぐ）。
 
 ---
 
@@ -81,6 +82,7 @@ python3 -c "import random,sys; print(random.choice(sys.argv[1:]))" {プールの
 2. **分割設計ブリーフ**（あれば）: `projects/w002/【記事フォルダ】/draft/funnel-brief.md` の「note の売り（有料の引き）」「あえて出さない核」を読み、**何を見せて何を伏せるか**の参考にする。
 3. **過去の販促投稿（重複回避）**:
    - STEP 1 で取得した `outputs` の行のうち F列＝【note URL】の行（W001・W007）から B列の投稿 URL を集め、tweet ID で `sheets_get_values(spreadsheetId="1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQuRaw08U-5nw0c", range="X投稿一覧!B:C")`（B=ポストURL、C=本文）を引いて本文を読む。
+   - `outputs/scheduled-posts/w007/*.md` のうち `note_url` が【note URL】のもの（予約済み・投稿済みの確定稿）があれば、`## 投稿文` を読む。
    - `projects/w002/【記事フォルダ】/promo/*.md`（本スキルの過去出力。未投稿の案も含む）があれば読む。
    - 過去に使った **場面・切り口・フック型** を **【過去フォーカス】** として記憶する。無ければ「なし」。
 
@@ -112,7 +114,7 @@ python3 -c "import random,sys; print(random.choice(sys.argv[1:]))" {プールの
 - [ ] 本文に note・URL・ハッシュタグ・反応誘導が無い
 - [ ] 各事実が `output/index.md` のどの段落に基づくか手元で確認した（記事に無い事実が無い）
 - [ ] 3 案の場面・フック型が互いに違い、【過去フォーカス】と重ならない
-- [ ] 本文・リプに `[投稿文]` `[/投稿文]` `[リプ]` `[/リプ]` `[note_url]` の文字列が無い（`extract_tag.py` の早期クローズ防止）
+- [ ] 本文・リプに行頭 `## `（レベル2見出し）や `=====` だけの行が無い（`postcal_import.py` のセクション切り出し・リプ分割を壊さないため）
 - [ ] 締めが疑問形でない。「——」が無い
 
 ---
@@ -140,45 +142,59 @@ C案（{実測字数}字）｜…
 
 ---
 
-# STEP 6: Gmail 下書きの作成（採用案確定後に 1 回だけ）
+# STEP 6: 予約ファイルの作成と push（採用案確定後）
 
-**下書きは 1 回だけ作り、作成後は触らない**（その後の手直しはよーんが Gmail 上で行う）。
+Gmail 下書きは作らない。確定稿を**予約ファイル（Markdown）**として書き、master へ push する。VPS の `scripts/postcal_import.py`（systemd timer・10 分ごと）がこれを読み、**販促（`kind: promo`）は金曜 6:00 の最寄りの空き枠**に予約として登録する（既に埋まっていれば翌週の金曜）。登録された予約は `post.usephys.net` に表示され、6 時枠の cron が X → セルフリプ → Threads の順に投稿する。**本スキルでは投稿は一切行わない。**
 
-1. 本文を `/tmp/xpromo_mail.txt` に Write する：
+> **更新ルール**: 予約ファイルは、**投稿が実行される（postcal の status=posted）までは、修正に合わせて同じファイル（同じ `uid`）を上書きして再 push してよい**（`uid` をキーに既存予約の本文・リプを更新する。枠は動かない）。新しい `uid` のファイルを増やさない。投稿済みになったら変更しない。**1 回の販促につき予約ファイルは 1 つ。**
+
+1. トピック要約を決める（本文の核心を名詞句で **10〜15 字以内**。例:「ボイジャー2号 天王星への道」）。初回だけ `uid` を生成：`python3 -c "import uuid;print(uuid.uuid4().hex)"`。JST 日時：`TZ=Asia/Tokyo date '+%Y%m%d_%H%M%S'`。
+2. `outputs/scheduled-posts/w007/<YYYYMMDD_HHMMSS>_<topicスラッグ>.md` に Write する（スラッグは空白を `_`、記号は除去）。形式：
 
    ```
-   記事: 【記事タイトル】
-   フォルダ: projects/w002/【記事フォルダ】
-   採用案: {A/B/C}（{場面の一言}）
+   ---
+   uid: <32桁hex・以降固定>
+   project: w007
+   what_id: W007
+   kind: promo
+   threads_enabled: true
+   note_url: "【note URL】"
+   source: "w002/【記事フォルダ】"
+   topic: "{トピック要約}"
+   created: "{YYYY-MM-DD HH:MM:SS} JST"
+   ---
 
-   [note_url]
-   【note URL】
-   [/note_url]
+   ## 投稿文
 
-   [投稿文]
-   {採用案の本文}
-   [/投稿文]
+   {採用案の本文（確定稿だけ）}
 
-   [リプ]
+   ## セルフリプ
+
    {採用案の導入1文}
    【note URL】
-   [/リプ]
+
+   ## 記録
+
+   - 記事: 【記事タイトル】（projects/w002/【記事フォルダ】）
+   - 採用案: {A/B/C}（{場面・フック型の一言}）
    ```
 
-2. 件名用トピック要約を作る（本文の核心を名詞句で **10〜15 字以内**。例:「あかつき 満点を狙わない減速」）。
-3. JST 日時を取得する: `TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S'`
-4. 下書きを作成する（添付なし）：
+   - `kind: promo` が金曜 6:00 の既定枠を決める（`what_id` は W007）。
+   - `note_url` は必須。投稿後に outputs シートの note_url 列へ記録される。セルフリプの URL は生 URL のままにする（投稿時に `post_to_x.py` が `xpost.usephys.net` の転送リンクへ自動変換する）。
+   - `source` は `noteNeta[..]` / `newsTopics[..]` の形ではないため、outputs の neta 列は `postcal[予約id]` になる（販促では SS1 の更新は不要）。
+   - **枠を変えたいとき**だけ front-matter に `post_date: YYYY-MM-DD` と `slot: 6|12|17|20` を**両方**書く（新規登録時のみ有効。指定枠が埋まっていると登録されずエラーメールが届く）。登録後に日時を変えるなら `post.usephys.net` で編集する。
+3. **commit & push**: 予約ファイルと STEP 7 の保存ファイルを master へ。**対象ファイルを明示する**（他セッションの未コミット変更を巻き込まない）：
 
    ```bash
-   cd $(git rev-parse --show-toplevel) && bash scripts/create_gmail_draft.sh \
-     --to useakat@gmail.com \
-     --subject "【note販促】{トピック要約} {YYYYMMDD HH:MM:SS}" \
-     --body-file /tmp/xpromo_mail.txt
+   cd $(git rev-parse --show-toplevel) && bash scripts/commit_and_sync.sh \
+     "post(w007): 販促の予約ファイルを追加（{トピック要約}）" \
+     outputs/scheduled-posts/w007/<file>.md \
+     projects/w002/【記事フォルダ】/promo/YYYYMMDD_xpromo.md
    ```
 
-   成功判定は `✓ 下書き作成完了 (id: …)`。gws の認証エラー（Precondition 等）が出たら `bash scripts/gws_auth.sh` の出力をそのままよーんに伝えて再認証してもらい、完了後に再実行する。
+   push が認証エラー／非 fast-forward のときは `git fetch origin master` → origin/master に乗せ直して push、または GitHub MCP で master へ push する。**push しないと VPS のインポーターに届かない。** push 先は master と報告する。
+4. 登録は VPS のインポーターが行うため、push 直後は `post.usephys.net` に出ない（最長 10 分）。
 
-- 投稿枠: よーんが下書きを自分宛に送信すると、**20 時枠**（`run_xshort_post.sh`）が【自己開示】の次に【note販促】を探して W007 として投稿し、`[note_url]` を `outputs!F` に記録する。別の枠で出したいときは Gmail ラベル `6時投稿` / `12時投稿` / `17時投稿` を付ける（`post_by_label.sh` が件名を問わず拾う）。
 - Threads への転載は cron が自動で行う（note リンク入りのセルフリプは Threads には転載しない仕様。2026-10-02）。
 
 ---
@@ -192,7 +208,7 @@ C案（{実測字数}字）｜…
 
 - note: 【note URL】
 - 採用: {A/B/C}
-- Gmail 下書き件名: 【note販促】{トピック要約} {YYYYMMDD HH:MM:SS}
+- 予約ファイル: outputs/scheduled-posts/w007/<file>.md（uid={uid}）
 
 ## A案（{字数}字）｜{場面・フック型}
 {本文}
@@ -210,7 +226,8 @@ C案（{実測字数}字）｜…
 ```
 ✅ 記事選択（projects/w002/【記事フォルダ】 / 【記事タイトル】）
 ✅ 採用案 {A/B/C}（{実測字数}字）
-✅ Gmail 下書き作成完了（件名: 【note販促】{トピック要約} {YYYYMMDD HH:MM:SS}）
+✅ 予約ファイル作成・push 完了（outputs/scheduled-posts/w007/{ファイル名} / uid={uid}）→ master
 ✅ 保存: projects/w002/【記事フォルダ】/promo/YYYYMMDD_xpromo.md
+※ 枠は VPS の postcal_import.py が金曜 6:00 の最寄りの空き枠に自動割当（post.usephys.net で確認）。
 対象外の記事: {フォルダ名: 理由} ／ なし
 ```
