@@ -11,6 +11,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 - **z01 投稿を Gmail 下書き→予約ファイル + postcal インポーターに変更（週間スケジュール自動割当・SS1 更新も postcal 経由に）** — z01 短文は確定稿を `outputs/scheduled-posts/z01/*.md` に書いて push し、VPS の `postcal_import.py`（systemd timer・10分ごと）が週間短文パターン（月[6]火[6,17]水[6]木[6,17]金[なし]土[6]日[6]）の最寄り空き枠へ uid で upsert 登録する（カレンダー表示 → 既存 4 枠 cron が投稿）。クラウドは `post.usephys.net` へ直接つなげない（プロキシ 403）ため git 受け渡し＋VPS インポーター構成。front-matter の `source`（`noteNeta[..]`）を予約の `neta_id` に持たせて投稿時に record_output へ渡し SS1「短文最終使用日」を更新。旧「作成後は触らない」を「posted まで同じ uid で上書き更新可」に変更。[→報告書](../reports/20261119_z01_scheduled_posts_postcal/)
 - **writer-xselfreply のルール4を同一題材優先に緩和し、固定ポストと同じ記事はプロフ誘導（締め定型）にする STEP 2.5 を追加** — 別題材の販促を「同一題材の誘導先が無い場合に限る（本編との共通点1つを予告に入れる）」に緩和。誘導先の note 記事が今の固定ポスト（`固定ポスト履歴` シートで確認。ローカル CSV は見ない）と同じなら note リンクを貼らずプロフ誘導にし、締めを定型「プロフィール固定のnoteに書いてます。」に統一（計測を `固定ポスト日次` に集める）。v1 の after 記録 0 件のため版は据え置き。Threads あかり投稿で初適用。[→報告書](../reports/20261119_writer_xselfreply_pinned_post_rule/)
+- **販促投稿（W007）を Gmail 下書きから予約ファイル方式に変更し、金曜 6:00 枠に自動登録する** — `/writer-xpromo` の STEP 6 を、確定稿を `outputs/scheduled-posts/w007/*.md` に書いて push する手順に変更。`postcal_import.py` は `kind: promo` を金曜 6:00 の最寄りの空き枠（埋まっていれば翌週）へ登録し、front-matter の `post_date`・`slot` で枠を明示指定もできる。ボイジャー2号の記事で初回の予約を登録済み（初投稿は 11/20 金 6 時）。[→報告書](../reports/20261119_w007_promo_scheduled_posts/)
 
 ## 2026-11-18
 
