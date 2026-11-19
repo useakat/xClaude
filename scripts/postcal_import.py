@@ -16,6 +16,9 @@ systemd timer（postcal-import.timer）から定期実行され、次を行う:
 週間スケジュールの短文枠（よーん決定 2026-11-19）: 1短文の日は 6:00、2短文の日は 6:00→17:00。
   月[6] 火[6,17] 水[6] 木[6,17] 金[] 土[6] 日[6]
 
+販促（kind: promo → W007）は短文パターンではなく「金曜 6:00」の最寄りの空き枠へ入れる（よーん決定 2026-11-19）。
+front-matter に post_date（YYYY-MM-DD）と slot（6/12/17/20）を両方書いた場合は、それを優先する（新規登録時のみ有効）。
+
 投稿は一切しない（予約の登録・更新のみ）。X 投稿は既存の 4 枠 cron（post_scheduled.py）が行う。
 失敗（git pull・パース・DB 例外）は send_gmail.sh でよーんに通知する。
 """
@@ -42,6 +45,8 @@ MAIL_TO = "useakat@gmail.com"
 
 # 週間短文パターン: weekday(月=0 … 日=6) -> 使う枠（昇順で近い方＝6 を先に埋める）
 SHORT_SLOTS = {0: [6], 1: [6, 17], 2: [6], 3: [6, 17], 4: [], 5: [6], 6: [6]}
+# 販促（kind: promo）の既定枠: 金曜(4) 6 時。埋まっていれば翌週の金曜へ
+PROMO_SLOTS = {4: [6]}
 SEARCH_DAYS = 120  # 空き短文枠をこの日数先まで探す（事実上いつでも見つかる）
 
 FM_RE = re.compile(r"\A---[ \t]*\n(.*?)\n---[ \t]*\n", re.S)
@@ -139,8 +144,24 @@ def parse_record(path: str) -> dict | None:
     threads_enabled = te not in ("false", "0", "no", "off", "")
     source = (fm.get("source") or "").strip()
     neta_id = source if NETA_REF_RE.match(source) else ""   # シート参照のみ採用（投稿時に SS1 を更新）
+    # 枠の明示指定（任意・両方そろった場合のみ有効）。無ければ種類ごとの既定枠で自動割当
+    want_date = (fm.get("post_date") or "").strip()
+    want_slot = (fm.get("slot") or "").strip()
+    if want_date or want_slot:
+        try:
+            datetime.strptime(want_date, "%Y-%m-%d")
+            slot_n = int(want_slot)
+        except ValueError:
+            raise ValueError(f"{os.path.relpath(path, ROOT)}: post_date は YYYY-MM-DD、slot は整数で両方指定してください")
+        if slot_n not in kinds.SLOTS:
+            raise ValueError(f"{os.path.relpath(path, ROOT)}: slot は {kinds.SLOTS} のいずれかです")
+        want_slot = slot_n
+    else:
+        want_date, want_slot = "", None
     return {
         "uid": uid,
+        "want_date": want_date,
+        "want_slot": want_slot,
         "kind": kind,
         "what_id": what_id,
         "neta_id": neta_id,
@@ -167,17 +188,32 @@ def content_hash(rec: dict) -> str:
 
 # ---------------- 空き短文枠の探索 ----------------
 
-def next_free_short_slot(con, after: datetime):
-    """after（JST）以降で最も近い、週間パターンの空き短文枠 (post_date, slot) を返す。無ければ (None, None)"""
+def next_free_slot(con, after: datetime, pattern: dict):
+    """after（JST）以降で最も近い、pattern（weekday -> 枠のリスト）の空き枠 (post_date, slot) を返す。無ければ (None, None)"""
     for off in range(SEARCH_DAYS):
         day = (after + timedelta(days=off)).date()
-        for slot in sorted(SHORT_SLOTS.get(day.weekday(), [])):
+        for slot in sorted(pattern.get(day.weekday(), [])):
             if off == 0 and slot <= after.hour:
                 continue  # 今日の枠は時刻未経過のものだけ（cron はその時刻にしか拾わない）
             ds = day.isoformat()
             if not db.slot_taken(con, ds, slot):
                 return ds, slot
     return None, None
+
+
+def next_free_short_slot(con, after: datetime):
+    return next_free_slot(con, after, SHORT_SLOTS)
+
+
+def pick_slot(con, rec: dict, now: datetime):
+    """新規予約の (post_date, slot)。明示指定 > 販促の既定(金曜6時) > 短文パターン"""
+    if rec.get("want_date") and rec.get("want_slot"):
+        if db.slot_taken(con, rec["want_date"], rec["want_slot"]):
+            return None, None  # 指定枠が埋まっている（勝手に別枠へ動かさない）
+        return rec["want_date"], rec["want_slot"]
+    if rec["kind"] == "promo":
+        return next_free_slot(con, now, PROMO_SLOTS)
+    return next_free_short_slot(con, now)
 
 
 # ---------------- state ----------------
@@ -245,16 +281,17 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
             return "requeued" if post["status"] == "failed" else "updated"
 
     # 新規
-    ds, slot = next_free_short_slot(con, now)
+    ds, slot = pick_slot(con, rec, now)
     if ds is None:
-        notify("【postcal-import】空き短文枠が見つかりません",
-               f"{rec['path']} を登録する空き短文枠が {SEARCH_DAYS} 日先まで見つかりませんでした。")
+        notify("【postcal-import】空き枠が見つかりません",
+               f"{rec['path']} を登録する空き枠が見つかりませんでした"
+               f"（kind={rec['kind']} / 指定={rec.get('want_date') or 'なし'} {rec.get('want_slot') or ''}）。")
         return "error"
     if dry_run:
         log(f"[DRY] 新規登録予定 → {ds} {slot}時 / {rec['kind']}→{rec['what_id']} / {rec['path']}")
         return "created"
     if db.slot_taken(con, ds, slot):  # 直前の取り合い対策で再確認
-        ds, slot = next_free_short_slot(con, now)
+        ds, slot = pick_slot(con, rec, now)
         if ds is None:
             return "error"
     post_id = db.create(con, {
