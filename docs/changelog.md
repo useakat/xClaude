@@ -7,6 +7,10 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 
 ---
 
+## 2026-11-21
+
+- **postcal の取り込みを下書き方式に変更（「投稿予約」を押すまで投稿されない）** — 予約ファイルを `draft` で登録し、`post.usephys.net` で確認・修正して「投稿予約」を押すと初めて `queued` になり cron が投稿する。画面で編集した下書きは再 push で上書きしない。z01・販促（W007）に適用。[→報告書](../reports/20261121_postcal_draft_review_flow/)
+
 ## 2026-11-19
 
 - **z01 投稿を Gmail 下書き→予約ファイル + postcal インポーターに変更（週間スケジュール自動割当・SS1 更新も postcal 経由に）** — z01 短文は確定稿を `outputs/scheduled-posts/z01/*.md` に書いて push し、VPS の `postcal_import.py`（systemd timer・10分ごと）が週間短文パターン（月[6]火[6,17]水[6]木[6,17]金[なし]土[6]日[6]）の最寄り空き枠へ uid で upsert 登録する（カレンダー表示 → 既存 4 枠 cron が投稿）。クラウドは `post.usephys.net` へ直接つなげない（プロキシ 403）ため git 受け渡し＋VPS インポーター構成。front-matter の `source`（`noteNeta[..]`）を予約の `neta_id` に持たせて投稿時に record_output へ渡し SS1「短文最終使用日」を更新。旧「作成後は触らない」を「posted まで同じ uid で上書き更新可」に変更。[→報告書](../reports/20261119_z01_scheduled_posts_postcal/)
