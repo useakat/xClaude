@@ -10,6 +10,7 @@ description: プロジェクトの変更履歴。各エントリに詳細報告�
 ## 2026-11-21
 
 - **postcal の取り込みを下書き方式に変更（「投稿予約」を押すまで投稿されない）** — 予約ファイルを `draft` で登録し、`post.usephys.net` で確認・修正して「投稿予約」を押すと初めて `queued` になり cron が投稿する。画面で編集した下書きは再 push で上書きしない。z01・販促（W007）に適用。[→報告書](../reports/20261121_postcal_draft_review_flow/)
+- **リライトを予約ファイル方式にして postcal で確認・予約する形に変更し、Gmail【リライト】経路を廃止** — `/writer-xrewrite` が `outputs/scheduled-posts/rewrite/` に予約ファイルを作り、postcal に毎日 20 時枠の仮日時で下書き登録。よーんが画面で確認して「投稿予約」を押すと投稿される（z01r/W003r/W001r の種類を追加、`rewrite[ID]` も引き継ぎ）。cron の件名【リライト】検索は削除。[→報告書](../reports/20261121_rewrite_reservation_file_postcal/)
 
 ## 2026-11-19
 
