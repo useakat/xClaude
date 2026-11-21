@@ -8,9 +8,13 @@ systemd timer（postcal-import.timer）から定期実行され、次を行う:
   1. git pull --ff-only で最新の予約ファイルを取り込む（--no-pull で省略）
   2. outputs/scheduled-posts/**/*.md を走査し、front-matter と「## 投稿文」「## セルフリプ」を取り出す
   3. front-matter の uid をキーに postcal.db へ upsert:
-       - 新規 uid → 週間短文パターンの「今日以降で最も近い空き短文枠」へ db.create()
-       - 既知 uid かつ予約が queued/failed → 本文・リプ・note_url の変更を db.update()（枠は動かさない）
-       - 既知 uid かつ予約が posted/posting → 触らない（投稿済みは確定）
+       - 新規 uid → **下書き（status=draft）**として db.create()。仮の日時は週間短文パターンの
+         「今日以降で最も近い空き短文枠」（他の下書きの仮枠とも重ならないように選ぶ）。
+         下書きは cron に拾われない＝よーんが画面（post.usephys.net）で内容を確認・修正し、
+         「投稿予約」を押して初めて queued になり、枠の cron が投稿する（2026-11-21〜）
+       - 既知 uid かつ予約が draft → ファイルの本文・リプ・note_url の変更を db.update()（枠は動かさない）。
+         ただし画面で編集済みの下書きは上書きしない（画面の編集を正とする）
+       - 既知 uid かつ予約が draft 以外（queued/failed/posted…）→ 触らない（予約・投稿後の本文変更は画面から行う）
   4. 取込状態（uid→post_id・本文ハッシュ）を postcal/data/import_state.json（git管理外）に保存
 
 週間スケジュールの短文枠（よーん決定 2026-11-19）: 1短文の日は 6:00、2短文の日は 6:00→17:00。
@@ -186,6 +190,16 @@ def content_hash(rec: dict) -> str:
     return hashlib.sha256(key.encode("utf-8")).hexdigest()
 
 
+def post_hash(post: dict) -> str:
+    """DB の予約行の内容ハッシュ。content_hash(rec) と同じ項目・同じ式なので、
+    取り込み直後（画面で未編集）なら state の hash と一致し、画面で編集されていれば食い違う"""
+    return content_hash({
+        "text": post["text"], "replies": post["replies"], "note_url": post["note_url"],
+        "threads_enabled": bool(post["threads_enabled"]), "kind": post["kind"],
+        "what_id": post["what_id"], "neta_id": post["neta_id"],
+    })
+
+
 # ---------------- 空き短文枠の探索 ----------------
 
 def next_free_slot(con, after: datetime, pattern: dict):
@@ -196,7 +210,7 @@ def next_free_slot(con, after: datetime, pattern: dict):
             if off == 0 and slot <= after.hour:
                 continue  # 今日の枠は時刻未経過のものだけ（cron はその時刻にしか拾わない）
             ds = day.isoformat()
-            if not db.slot_taken(con, ds, slot):
+            if not db.slot_taken(con, ds, slot, include_drafts=True):   # 他の下書きの仮枠とも重ねない
                 return ds, slot
     return None, None
 
@@ -208,7 +222,7 @@ def next_free_short_slot(con, after: datetime):
 def pick_slot(con, rec: dict, now: datetime):
     """新規予約の (post_date, slot)。明示指定 > 販促の既定(金曜6時) > 短文パターン"""
     if rec.get("want_date") and rec.get("want_slot"):
-        if db.slot_taken(con, rec["want_date"], rec["want_slot"]):
+        if db.slot_taken(con, rec["want_date"], rec["want_slot"], include_drafts=True):
             return None, None  # 指定枠が埋まっている（勝手に別枠へ動かさない）
         return rec["want_date"], rec["want_slot"]
     if rec["kind"] == "promo":
@@ -251,7 +265,7 @@ def git_pull() -> bool:
 # ---------------- メイン ----------------
 
 def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
-    """1 件の予約ファイルを DB に反映。戻り値は action（created/updated/skip/locked/requeued/error）"""
+    """1 件の予約ファイルを DB に反映。戻り値は action（created/updated/skip/locked/edited/error）"""
     uid = rec["uid"]
     h = content_hash(rec)
     st = state.get(uid)
@@ -260,13 +274,23 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
         post = db.get(con, st["post_id"])
         if post is None:
             st = None  # DB から消えている → 新規として作り直す
-        elif post["status"] in ("posted", "posting"):
+        elif post["status"] != "draft":
+            # 予約済み（queued）・投稿済み・失敗などは、ファイルが変わっても本文を動かさない
+            # （投稿予約後・投稿後の修正は画面から行う）。再評価を止めるため記録だけ更新
             if st.get("hash") != h:
-                state[uid]["hash"] = h  # 投稿済みは本文を変えないが、再評価を止めるため記録だけ更新
+                if not dry_run:
+                    state[uid]["hash"] = h
+                log(f"スキップ #{post['id']}（status={post['status']} のため、ファイルの変更は反映しません / {rec['path']}）")
             return "locked"
-        else:  # queued / failed / skipped
+        else:  # draft
             if st.get("hash") == h:
                 return "skip"
+            if post_hash(post) != st.get("hash"):
+                # 画面で編集済みの下書き → 画面の編集を正とし、ファイルでは上書きしない
+                if not dry_run:
+                    state[uid]["hash"] = h
+                log(f"スキップ #{post['id']}（画面で編集済みの下書きのため、ファイルの変更は反映しません / {rec['path']}）")
+                return "edited"
             if not dry_run:
                 db.update(con, post["id"], {
                     "post_date": post["post_date"], "slot": post["slot"],
@@ -274,11 +298,9 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
                     "text": rec["text"], "replies": rec["replies"], "media": post["media"],
                     "threads_enabled": rec["threads_enabled"], "note_url": rec["note_url"],
                 })
-                if post["status"] == "failed":
-                    db.set_status(con, post["id"], "queued", error="")
                 state[uid]["hash"] = h
-            log(f"更新 #{post['id']}（{post['post_date']} {post['slot']}時 / {rec['path']}）")
-            return "requeued" if post["status"] == "failed" else "updated"
+            log(f"更新 #{post['id']}（下書き {post['post_date']} {post['slot']}時 / {rec['path']}）")
+            return "updated"
 
     # 新規
     ds, slot = pick_slot(con, rec, now)
@@ -288,9 +310,9 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
                f"（kind={rec['kind']} / 指定={rec.get('want_date') or 'なし'} {rec.get('want_slot') or ''}）。")
         return "error"
     if dry_run:
-        log(f"[DRY] 新規登録予定 → {ds} {slot}時 / {rec['kind']}→{rec['what_id']} / {rec['path']}")
+        log(f"[DRY] 下書き登録予定 → 仮枠 {ds} {slot}時 / {rec['kind']}→{rec['what_id']} / {rec['path']}")
         return "created"
-    if db.slot_taken(con, ds, slot):  # 直前の取り合い対策で再確認
+    if db.slot_taken(con, ds, slot, include_drafts=True):  # 直前の取り合い対策で再確認
         ds, slot = pick_slot(con, rec, now)
         if ds is None:
             return "error"
@@ -298,9 +320,11 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
         "post_date": ds, "slot": slot, "kind": rec["kind"], "what_id": rec["what_id"], "neta_id": rec["neta_id"],
         "text": rec["text"], "replies": rec["replies"],
         "threads_enabled": rec["threads_enabled"], "note_url": rec["note_url"],
+        "status": "draft",   # よーんが画面で「投稿予約」を押すまで cron は拾わない
     })
     state[uid] = {"post_id": post_id, "hash": h, "file": rec["path"], "post_date": ds, "slot": slot}
-    log(f"登録 #{post_id}（{ds} {slot}時 / {rec['kind']}→{rec['what_id']} / {rec['path']}）")
+    log(f"下書き登録 #{post_id}（仮枠 {ds} {slot}時 / {rec['kind']}→{rec['what_id']} / {rec['path']}）"
+        "→ 画面で確認して「投稿予約」を押すと投稿されます")
     return "created"
 
 

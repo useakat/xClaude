@@ -1,6 +1,6 @@
 ---
 name: writer-xpromo
-description: W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を予約ファイル（`outputs/scheduled-posts/w007/`）にして push する（postcal が金曜 6:00 枠に自動登録。X への投稿は行わない）
+description: W002 の公開済み note 記事をランダムに1本選び、140字の販促投稿（本文＋note 導線セルフリプ）を3案作ってよーんに選んでもらい、採用案を予約ファイル（`outputs/scheduled-posts/w007/`）にして push する（postcal に金曜 6:00 枠の仮日時で下書き登録され、よーんが画面で「投稿予約」を押すと投稿される。X への投稿は行わない）
 tools: Bash, Read, Write, mcp__mcp-gsheets__sheets_get_values
 ---
 
@@ -136,9 +136,9 @@ C案（{実測字数}字）｜…
 
 # STEP 6: 予約ファイルの作成と push（採用案確定後）
 
-Gmail 下書きは作らない。確定稿を**予約ファイル（Markdown）**として書き、master へ push する。VPS の `scripts/postcal_import.py`（systemd timer・10 分ごと）がこれを読み、**販促（`kind: promo`）は金曜 6:00 の最寄りの空き枠**に予約として登録する（既に埋まっていれば翌週の金曜）。登録された予約は `post.usephys.net` に表示され、6 時枠の cron が X → セルフリプ → Threads の順に投稿する。**本スキルでは投稿は一切行わない。**
+Gmail 下書きは作らない。確定稿を**予約ファイル（Markdown）**として書き、master へ push する。VPS の `scripts/postcal_import.py`（systemd timer・10 分ごと）がこれを読み、**販促（`kind: promo`）は金曜 6:00 の最寄りの空き枠を仮の日時として、下書き（draft）で**登録する（既に埋まっていれば翌週の金曜）。下書きは `post.usephys.net` に「下書き（未予約）」と表示され、**よーんが本文を確認して「投稿予約」を押すと**、6 時枠の cron が X → セルフリプ → Threads の順に投稿する（2026-11-21〜。押すまでは投稿されない）。**本スキルでは投稿は一切行わない。**
 
-> **更新ルール**: 予約ファイルは、**投稿が実行される（postcal の status=posted）までは、修正に合わせて同じファイル（同じ `uid`）を上書きして再 push してよい**（`uid` をキーに既存予約の本文・リプを更新する。枠は動かない）。新しい `uid` のファイルを増やさない。投稿済みになったら変更しない。**1 回の販促につき予約ファイルは 1 つ。**
+> **更新ルール**: 予約ファイルを上書きして再 push してよいのは、**postcal 上でまだ下書きの間だけ**（同じファイル・同じ `uid` を上書きすると、既存の下書きの本文・リプが更新される。仮枠は動かない）。新しい `uid` のファイルを増やさない。**よーんが画面で編集した下書きは上書きされず、「投稿予約」後・投稿済みはファイルを変えても反映されない。** **1 回の販促につき予約ファイルは 1 つ。**
 
 1. トピック要約を決める（本文の核心を名詞句で **10〜15 字以内**。例:「ボイジャー2号 天王星への道」）。初回だけ `uid` を生成：`python3 -c "import uuid;print(uuid.uuid4().hex)"`。JST 日時：`TZ=Asia/Tokyo date '+%Y%m%d_%H%M%S'`。
 2. `outputs/scheduled-posts/w007/<YYYYMMDD_HHMMSS>_<topicスラッグ>.md` に Write する（スラッグは空白を `_`、記号は除去）。形式：
@@ -220,6 +220,6 @@ Gmail 下書きは作らない。確定稿を**予約ファイル（Markdown）*
 ✅ 採用案 {A/B/C}（{実測字数}字）
 ✅ 予約ファイル作成・push 完了（outputs/scheduled-posts/w007/{ファイル名} / uid={uid}）→ master
 ✅ 保存: projects/w002/【記事フォルダ】/promo/YYYYMMDD_xpromo.md
-※ 枠は VPS の postcal_import.py が金曜 6:00 の最寄りの空き枠に自動割当（post.usephys.net で確認）。
+※ VPS の postcal_import.py が金曜 6:00 の最寄りの空き枠を仮日時として下書き登録する。よーんが post.usephys.net で確認し「投稿予約」を押すまで投稿されない。
 対象外の記事: {フォルダ名: 理由} ／ なし
 ```

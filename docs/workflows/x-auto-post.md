@@ -53,13 +53,15 @@ z01（短文）は **Gmail 下書きを作らず、予約ファイル → postca
 z01 フローが確定稿を outputs/scheduled-posts/z01/<日時>_<topic>.md に書く（## 投稿文＋## セルフリプ＋## 記録、front-matter に uid）
     ↓ git push（master）
 VPS の scripts/postcal_import.py（systemd timer postcal-import.timer・10 分ごと）が git pull → 読み取り
-    ↓ 週間短文パターンの「今日以降の最も近い空き短文枠」へ db.create()（uid で upsert・投稿済みは触らない）
-postcal.db に登録 → post.usephys.net のカレンダーに表示
-    ↓ 既存の 4 枠 cron（post_scheduled.py <枠>）がその枠で X / Threads に投稿
+    ↓ 下書き（status=draft）として db.create()（仮の日時＝今日以降の最も近い空き短文枠。uid で upsert）
+postcal.db に登録 → post.usephys.net のカレンダーに「下書き（未予約）」と表示（この時点では投稿されない）
+    ↓ よーんが画面で本文を確認・修正し「投稿予約」を押す（draft → queued。枠が過去・埋まっていればエラー→日時を直す）
+    ↓ 既存の 4 枠 cron（post_scheduled.py <枠>。queued しか拾わない）がその枠で X / Threads に投稿
 ```
 
-- 週間短文枠（よーん決定 2026-11-19）：1 短文の日は 6:00、2 短文の日は 6:00→17:00。月[6] 火[6,17] 水[6] 木[6,17] 金[なし] 土[6] 日[6]。枠の割当は `postcal_import.py` が行う（z01 フローは枠を指定しない）。
-- 予約ファイルは投稿実行（postcal status=posted）までは uid を保ったまま上書き更新でき、インポーターが既存予約を更新する。
+- 週間短文枠（よーん決定 2026-11-19）：1 短文の日は 6:00、2 短文の日は 6:00→17:00。月[6] 火[6,17] 水[6] 木[6,17] 金[なし] 土[6] 日[6]。仮の日時の割当は `postcal_import.py` が行う（z01 フローは枠を指定しない）。下書きは枠を占有しない（他の下書きの仮枠とは重ならないよう選ぶ）。
+- **下書き方式（2026-11-21〜）**：確認前の本文が自動投稿されないよう、取り込みは必ず下書き。予約ファイルを上書き更新して再 push してよいのは下書きの間だけで、**画面で編集した下書きは上書きされない**（画面の編集が正）。「投稿予約」後（queued）・投稿済みはファイルを変えても反映されない。「下書きに戻す」ボタンで queued → draft に戻せる。
+- 画面（`/new`）から手で登録した予約は従来どおり即 queued（よーん自身が書いたもの）。
 - 取込状態は `postcal/data/import_state.json`（git 管理外）で uid→予約 id を管理。導入手順は `scripts/postcal_install.sh`（`postcal-import.timer` を設置・有効化）。
 
 ## Gmail → X 投稿の仕組み

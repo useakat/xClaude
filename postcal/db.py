@@ -8,9 +8,12 @@
   text        本文   replies_json  セルフリプの配列（X では順に返信チェーン、Threads は ===== 連結）
   media_json  [{"name": "<uuid>.<ext>", "kind": "image"|"video", "orig": "元ファイル名"}]
   threads_enabled 0/1   note_url 任意
-  status      queued → posting → posted | failed（skipped は手動用）
+  status      draft → queued → posting → posted | failed（skipped は手動用）
+              draft = 予約ファイルから取り込んだだけで、よーんが画面で「投稿予約」を押す前の状態。
+              cron（post_scheduled.py）は queued しか拾わないので、draft は投稿されない
   x_url / threads_url / error / posted_at   ランナーが書く
-同一 post_date・slot は queued/posting/posted で 1 件まで（枠 = 1 投稿）。
+同一 post_date・slot は queued/posting/posted で 1 件まで（枠 = 1 投稿）。draft は枠を占有しない
+（post_date・slot は draft では「仮の日時」。投稿予約の時点で枠が空いていなければエラーにする）。
 """
 import json
 import os
@@ -92,9 +95,14 @@ def get(con, post_id: int):
     return _row(con.execute("SELECT * FROM posts WHERE id=?", (post_id,)).fetchone())
 
 
-def slot_taken(con, post_date: str, slot: int, exclude_id=None):
-    """同じ日・枠に有効な予約（queued/posting/posted）があれば その行を返す"""
-    q = "SELECT * FROM posts WHERE post_date=? AND slot=? AND status IN ('queued','posting','posted')"
+def slot_taken(con, post_date: str, slot: int, exclude_id=None, include_drafts=False):
+    """同じ日・枠に有効な予約（queued/posting/posted）があれば その行を返す。
+
+    include_drafts=True のときは draft（仮の日時）も埋まっているとみなす。
+    インポーターが新しい下書きの仮枠を選ぶときだけ使い、複数の下書きが同じ枠に重ならないようにする。
+    """
+    statuses = "'queued','posting','posted','draft'" if include_drafts else "'queued','posting','posted'"
+    q = f"SELECT * FROM posts WHERE post_date=? AND slot=? AND status IN ({statuses})"
     args = [post_date, slot]
     if exclude_id is not None:
         q += " AND id<>?"
@@ -103,14 +111,18 @@ def slot_taken(con, post_date: str, slot: int, exclude_id=None):
 
 
 def create(con, d: dict) -> int:
+    """d["status"] は "queued"（既定。画面から手で登録したもの）か "draft"（予約ファイルの取り込み）"""
+    status = d.get("status", "queued")
+    if status not in ("queued", "draft"):
+        raise ValueError(f"create() の status は queued / draft のみです: {status}")
     ts = now_jst()
     cur = con.execute(
         "INSERT INTO posts (post_date, slot, kind, what_id, neta_id, text, replies_json, media_json, threads_enabled, "
-        "note_url, status, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,'queued',?,?)",
+        "note_url, status, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
         (d["post_date"], d["slot"], d["kind"], d["what_id"], d.get("neta_id", ""), d["text"],
          json.dumps(d.get("replies", []), ensure_ascii=False),
          json.dumps(d.get("media", []), ensure_ascii=False), 1 if d.get("threads_enabled", True) else 0,
-         d.get("note_url", ""), ts, ts))
+         d.get("note_url", ""), status, ts, ts))
     con.commit()
     return cur.lastrowid
 

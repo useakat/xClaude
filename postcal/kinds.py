@@ -29,7 +29,7 @@ VIDEO_MAX_SECONDS = 140  # X の動画長上限（UI の注意書きのみ。ffp
 # メディアの公開 URL（Threads API がここから取得する）。Caddy で /m/* だけ Basic 認証を外す
 PUBLIC_BASE_URL = os.environ.get("POSTCAL_PUBLIC_URL", "https://post.usephys.net").rstrip("/")
 
-STATUSES = ("queued", "posting", "posted", "failed", "skipped")
+STATUSES = ("draft", "queued", "posting", "posted", "failed", "skipped")
 
 
 def media_url(name: str) -> str:

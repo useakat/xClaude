@@ -272,8 +272,17 @@ async def update_post(request: Request):
         if existing["status"] == "posting":
             return PlainTextResponse("投稿処理中のため編集できません", status_code=409)
         data, errors, uploads = await parse_form(request, existing)
+        # 「投稿予約」（draft → queued）/「下書きに戻す」（queued → draft）。ボタンの name=action で区別する
+        action = ((await request.form()).get("action") or "").strip()
+        approve = action == "approve" and existing["status"] == "draft"
+        unapprove = action == "unapprove" and existing["status"] == "queued"
         if not errors and db.slot_taken(con, data["post_date"], data["slot"], exclude_id=post_id):
             errors.append(f"{data['post_date']} {data['slot']}時 の枠にはすでに予約があります（1 枠 1 投稿）")
+        if approve and not errors:
+            now = datetime.now(db.JST)
+            d = date.fromisoformat(data["post_date"])
+            if d < now.date() or (d == now.date() and data["slot"] <= now.hour):
+                errors.append("過ぎた枠には投稿予約できません。日付・時刻を直してから「投稿予約」を押してください")
         if errors:
             return _render_form_error(request, data, errors, existing)
         data["media"] = data["media"] + [_save_upload(f) for f in uploads]
@@ -281,11 +290,16 @@ async def update_post(request: Request):
         # 失敗した予約を直して保存したら、再び queued に戻す（投稿済みは触らない）
         if existing["status"] == "failed":
             db.set_status(con, post_id, "queued", error="")
+        if approve:
+            db.set_status(con, post_id, "queued")
+        elif unapprove:
+            db.set_status(con, post_id, "draft")
         for name in data["_removed"]:
             _remove_media_file(name)
     finally:
         con.close()
-    return RedirectResponse(f"/?month={data['post_date'][:7]}&msg=更新しました（#{post_id}）", status_code=303)
+    msg = ("投稿予約しました" if approve else "下書きに戻しました" if unapprove else "更新しました") + f"（#{post_id}）"
+    return RedirectResponse(f"/?month={data['post_date'][:7]}&msg={msg}", status_code=303)
 
 
 async def delete_post(request: Request):

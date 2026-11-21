@@ -36,6 +36,7 @@ table.cal td.today { outline: 2px solid var(--accent); outline-offset: -2px; }
 .chip.failed { background: var(--failed); }
 .chip.overdue { background: var(--overdue); }
 .chip.posting, .chip.skipped { background: var(--posting); }
+.chip.draft { background: transparent; border: 1px dashed currentColor; }   /* 下書き（未予約）: 枠だけ */
 .legend .chip, .list .chip, .status-box .chip { display:inline-block; }
 
 table.list { width:100%; border-collapse: collapse; font-size: 0.9rem; }

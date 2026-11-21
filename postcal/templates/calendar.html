@@ -10,6 +10,7 @@
 </div>
 
 <div class="legend">
+  <span class="chip draft">下書き（未予約）</span>
   <span class="chip queued">予約</span>
   <span class="chip posted">投稿済み</span>
   <span class="chip failed">失敗</span>
@@ -49,7 +50,7 @@
   <tr>
     <td><a href="/posts/{{ p.id }}">{{ p.post_date }} {{ p.slot }}時</a></td>
     <td>{{ p.kind_label }} <small>({{ p.what_id }})</small></td>
-    <td><span class="chip {{ p.state }}">{{ {'queued':'予約','posting':'投稿中','posted':'投稿済み','failed':'失敗','skipped':'スキップ','overdue':'未投稿'}[p.state] }}</span></td>
+    <td><span class="chip {{ p.state }}">{{ {'draft':'下書き','queued':'予約','posting':'投稿中','posted':'投稿済み','failed':'失敗','skipped':'スキップ','overdue':'未投稿'}[p.state] }}</span></td>
     <td class="excerpt">{{ p.text[:60] }}{% if p.text|length > 60 %}…{% endif %}
       {% if p.replies %}<small>＋リプ{{ p.replies|length }}</small>{% endif %}
       {% if p.media %}<small>＋{{ p.media|length }}ファイル</small>{% endif %}
