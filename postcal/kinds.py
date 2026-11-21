@@ -14,6 +14,10 @@ KINDS = {
     "self":   ("自己開示",     "W004"),
     "thanks": ("フォロワー感謝", "W004"),
     "promo":  ("販促",         "W007"),
+    # リライト（writer-xrewrite）。what_id は元投稿の what_id に r を付けたもの
+    "rewrite_short":    ("リライト（短文）",         "z01r"),
+    "rewrite_onepoint": ("リライト（ワンポイント）", "W003r"),
+    "rewrite_long":     ("リライト（長文）",         "W001r"),
 }
 
 # cron の 4 枠（run_xonepoint_post.sh 06 / run_question_post.sh 12 / run_xlong_post.sh 17 / run_xshort_post.sh 20）

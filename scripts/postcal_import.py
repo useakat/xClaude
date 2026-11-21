@@ -21,6 +21,8 @@ systemd timer（postcal-import.timer）から定期実行され、次を行う:
   月[6] 火[6,17] 水[6] 木[6,17] 金[] 土[6] 日[6]
 
 販促（kind: promo → W007）は短文パターンではなく「金曜 6:00」の最寄りの空き枠へ入れる（よーん決定 2026-11-19）。
+リライト（kind: rewrite_short|rewrite_onepoint|rewrite_long → z01r/W003r/W001r）は「毎日 20:00」の最寄りの空き枠へ入れる
+（従来の Gmail 運用で 20 時枠が既定だったため踏襲。2026-11-21）。
 front-matter に post_date（YYYY-MM-DD）と slot（6/12/17/20）を両方書いた場合は、それを優先する（新規登録時のみ有効）。
 
 投稿は一切しない（予約の登録・更新のみ）。X 投稿は既存の 4 枠 cron（post_scheduled.py）が行う。
@@ -51,6 +53,8 @@ MAIL_TO = "useakat@gmail.com"
 SHORT_SLOTS = {0: [6], 1: [6, 17], 2: [6], 3: [6, 17], 4: [], 5: [6], 6: [6]}
 # 販促（kind: promo）の既定枠: 金曜(4) 6 時。埋まっていれば翌週の金曜へ
 PROMO_SLOTS = {4: [6]}
+# リライト（kind: rewrite_*）の既定枠: 毎日 20 時。埋まっていれば翌日以降の 20 時へ
+REWRITE_SLOTS = {d: [20] for d in range(7)}
 SEARCH_DAYS = 120  # 空き短文枠をこの日数先まで探す（事実上いつでも見つかる）
 
 FM_RE = re.compile(r"\A---[ \t]*\n(.*?)\n---[ \t]*\n", re.S)
@@ -59,8 +63,10 @@ H_REPLY_RE = re.compile(r"^##[ \t]+セルフリプ[ \t]*$", re.M)
 H_REC_RE = re.compile(r"^##[ \t]+記録[ \t]*$", re.M)
 REPLY_SPLIT_RE = re.compile(r"^[ \t]*={3,}[ \t]*$", re.M)   # post_threads.py / postcal と同じ
 NONE_WORDS = {"", "なし", "（なし）", "(なし)", "-", "—", "ー"}
-# record_output.py が SS1 の「短文最終使用日」更新に使える形（それ以外の source は neta_id にしない）
-NETA_REF_RE = re.compile(r"^(?:noteNeta|newsTopics)\[\d+\]$")
+# neta_id として採用する source の形。noteNeta/newsTopics は record_output.py が z01 投稿時に SS1 の
+# 「短文最終使用日」を更新する紐付けキー。rewrite[ツイートID] はリライト元の記録（outputs の neta_id 列に入り、
+# rewrite_pool.py の「リライト済み」判定に使われる）。それ以外の source は neta_id にしない
+NETA_REF_RE = re.compile(r"^(?:(?:noteNeta|newsTopics)\[\d+\]|rewrite\[\d+\])$")
 
 
 def log(msg: str):
@@ -220,13 +226,15 @@ def next_free_short_slot(con, after: datetime):
 
 
 def pick_slot(con, rec: dict, now: datetime):
-    """新規予約の (post_date, slot)。明示指定 > 販促の既定(金曜6時) > 短文パターン"""
+    """新規予約の (post_date, slot)。明示指定 > 販促の既定(金曜6時) > リライトの既定(毎日20時) > 短文パターン"""
     if rec.get("want_date") and rec.get("want_slot"):
         if db.slot_taken(con, rec["want_date"], rec["want_slot"], include_drafts=True):
             return None, None  # 指定枠が埋まっている（勝手に別枠へ動かさない）
         return rec["want_date"], rec["want_slot"]
     if rec["kind"] == "promo":
         return next_free_slot(con, now, PROMO_SLOTS)
+    if rec["kind"].startswith("rewrite"):
+        return next_free_slot(con, now, REWRITE_SLOTS)
     return next_free_short_slot(con, now)
 
 

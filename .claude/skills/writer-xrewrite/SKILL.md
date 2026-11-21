@@ -1,10 +1,10 @@
 ---
 name: writer-xrewrite
-description: 過去の伸びた X 投稿（半年以上前・未リライト・グレード S/A 優先、無ければ IMP 1 万以上の上位 20）を 1 本選び、4 要素に分解して「伸びた理由」を特定したうえで、回数で決まる方式（①冒頭を変える→④驚きの軸を変える→②結末先行→③主人公・視点を変える）でリライトし、z01 と同じチェック（reader/fact/critic/brand/yohn）を通して件名【リライト】の Gmail 下書きを 1 本作る。what_id は元の what_id に r を付ける（W001r/W003r/z01r）。ユーザー確認なし全自動。投稿は行わない。
+description: 過去の伸びた X 投稿（半年以上前・未リライト・グレード S/A 優先、無ければ IMP 1 万以上の上位 20）を 1 本選び、4 要素に分解して「伸びた理由」を特定したうえで、回数で決まる方式（①冒頭を変える→④驚きの軸を変える→②結末先行→③主人公・視点を変える）でリライトし、z01 と同じチェック（reader/fact/critic/brand/yohn）を通して予約ファイル（`outputs/scheduled-posts/rewrite/`）を 1 本作って push する（postcal に毎日 20 時枠の仮日時で下書き登録され、よーんが画面で「投稿予約」を押すと投稿される）。what_id は元の what_id に r を付ける（W001r/W003r/z01r）。ユーザー確認なし全自動。投稿は行わない。
 tools: Bash, Read, Write, Skill, Agent
 ---
 
-過去の伸びた投稿を**別の切り口で読者に届け直す**。単なる言い換えではなく、元投稿の「伸びた理由」を残したまま、他の要素を動かす。**投稿は一切行わず、Gmail 下書きを 1 本作るだけ。全 STEP を自動で実行する。ユーザーの確認・承認は不要。**
+過去の伸びた投稿を**別の切り口で読者に届け直す**。単なる言い換えではなく、元投稿の「伸びた理由」を残したまま、他の要素を動かす。**投稿は一切行わず、予約ファイルを 1 本作って push するだけ（postcal には下書きとして登録され、よーんが確認して「投稿予約」を押すまで投稿されない）。全 STEP を自動で実行する。ユーザーの確認・承認は不要。**
 
 > 設計の出典：2026-11-14 の計画（半年以上前・S/A 優先・回数で方式固定・4 要素分解・避けたいこと 5 項目）。フック型の実測データは `outputs/reports/20261113_x_top100_hook_list.md`（自アカウント）と `outputs/reports/20261113_x_others_top100_hook_types.md`（競合 3 アカウント）。
 
@@ -25,7 +25,7 @@ python3 scripts/rewrite_pool.py pick
 ```
 
 - JSON が返る。主なキー：`tweet_id` `url` `date` `text`（元本文全文）`chars` `imp` `grade` `what_id` `what_id_source`（`outputs`＝記録あり／`length`＝字数で推定）`new_what_id`（元 what_id＋r）`rewrite_count`（過去のリライト回数）`prev_methods` `prev_elements` `method_candidates`（この回で使える方式。順番どおり・未使用のみ）`pool`（`SA`＝S/A プール／`TOP20`＝IMP 1 万以上上位 20）
-- `{"error": "候補なし"}`（exit 3）なら STEP 8 の枯渇報告を出して終了する。下書きは作らない
+- `{"error": "候補なし"}`（exit 3）なら STEP 9 の枯渇報告を出して終了する。予約ファイルは作らない
 - 候補の条件（スクリプト側で判定）：本体投稿・投稿日が 180 日より前・W006/W004/W007 と質問回答と URL 紹介を除外・リライト済みは最後のリライトから 180 日未満なら除外（1 本あたり年 2 回まで）
 - **STEP 2 の分解で「リライトに向かない」と判断した場合**（時事・サイト紹介・日常報告・引用前提で単体で読めない等）は、その tweet_id を `--exclude` に付けて再度 pick する（最大 3 回。`--exclude` はカンマ区切りで累積）：
 
@@ -99,7 +99,7 @@ python3 scripts/rewrite_pool.py pick --exclude {tweet_id1},{tweet_id2}
 - ②結末先行：先頭に置く「結末」の切り出し方を 3 種類（数値／台詞／情景）
 - ③視点：主人公候補 3 人（機体・チーム・個人、または地上管制室）
 
-3 案それぞれに「伸びた理由を保てているか」を 1 行で自己判定し、**1 案を選んで理由を 1 行**書く。不採用 2 案は冒頭 2 文と選ばなかった理由だけを `[チェック証跡]` の下に `[不採用案]` として残す（よーんが下書きで差し替えられるように。タグ名は `[投稿文]` `[最終原稿]` と絶対に重ねない）。
+3 案それぞれに「伸びた理由を保てているか」を 1 行で自己判定し、**1 案を選んで理由を 1 行**書く。不採用 2 案は冒頭 2 文と選ばなかった理由だけを予約ファイルの `## 記録` の `### 不採用案` として残す（よーんが postcal の下書きで差し替えられるように。`## 投稿文` には確定稿だけを置き、不採用案を混ぜない）。
 
 事実は元投稿の範囲内で書く。④や③で元本文にない事実（別の人物の判断・後年の影響など）を足す場合は、足した事実を列挙しておく（STEP 6 の fact 判定に使う）。
 
@@ -170,33 +170,67 @@ python3 scripts/rewrite_diff.py /tmp/xrewrite_orig.txt /tmp/xrewrite_new.txt
 
 **確定ゲート**（機械チェック）：
 1. 字数が STEP 3 の帯の中にある
-2. 本文に `[投稿文]` `[/投稿文]` `[最終原稿]` `[/最終原稿]` の文字列が含まれない
+2. 本文に行頭 `## `（レベル 2 見出し）が含まれない（インポーターの `## 投稿文` の切り出しを壊さないため）
 3. ハッシュタグ・URL・CTA を含まない
 
 ここを通った本文が確定稿。**STEP 7 以降で本文を変更しない。**
 
 ---
 
-# STEP 7: Gmail 下書き作成（1 回だけ・以後触らない）
+# STEP 7: 予約ファイルの作成（1 つだけ・以後触らない）
 
-**下書きは 1 回だけ作成し、作成後は一切触らない**（2 回目の作成・更新・削除は禁止。修正版はチャットで提示するだけ）。
+Gmail 下書きは作らない。確定稿を**予約ファイル（Markdown）**として書く。VPS の `scripts/postcal_import.py`（systemd timer・10 分ごと）が git pull で取り込み、**下書き（draft）として** postcal に登録する（仮の日時は**毎日 20:00 の最寄りの空き枠**。従来の 20 時枠運用を踏襲）。**下書きは投稿されない。よーんが `post.usephys.net` で本文を確認・修正し「投稿予約」を押すと予約になり、20 時枠の cron が投稿する。**
 
-## 7-1: 本文ファイル `/tmp/xrewrite_mail.txt` を Write
+**予約ファイルは 1 回だけ作成し、無人フローでは作成後に触らない**（2 回目の作成・更新・削除は禁止。修正版はチャットで提示するだけ。よーんの修正は postcal の画面で行う）。
 
-```
+## 7-1: 種類（kind）と枠
+
+| new_what_id | kind |
+|---|---|
+| `z01r` | `rewrite_short` |
+| `W003r` | `rewrite_onepoint` |
+| `W001r` | `rewrite_long` |
+
+- `uid` は初回に 1 度だけ生成する：`python3 -c "import uuid;print(uuid.uuid4().hex)"`
+- JST 日時：`TZ=Asia/Tokyo date '+%Y%m%d_%H%M%S'` と `TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M:%S JST'`
+- トピック要約：確定稿の核心キーワードを名詞句で 10〜15 字以内（ファイル名用に空白は `_`・記号は除去）
+- **枠（日付・時刻）は front-matter に書かない**（インポーターが 20 時枠の最寄りの空きを仮日時として割り当てる）
+
+## 7-2: 予約ファイルを Write
+
+パス: `outputs/scheduled-posts/rewrite/<YYYYMMDD_HHMMSS>_<topicスラッグ>.md`
+
+```md
+---
+uid: <32桁hex>
+project: rewrite
 what_id: {new_what_id}
-ソース: rewrite[{tweet_id}]
+kind: {rewrite_short|rewrite_onepoint|rewrite_long}
+threads_enabled: true
+note_url: ""
+source: "rewrite[{tweet_id}]"
+topic: "{トピック要約}"
+created: "YYYY-MM-DD HH:MM:SS JST"
+---
 
-[メモ]
+## 投稿文
+
+{確定稿だけ。他の行を混ぜない}
+
+## セルフリプ
+
+なし
+
+## 記録
+
+### メモ
 元投稿: {url}（{date} / IMP {imp} / グレード {grade or '未採点'} / {what_id}）
 リライト {rewrite_count+1} 回目 / 方式: {方式} / 刺さった要素: {刺さった要素}（維持）
 伸びた理由: {1 行}
 変更点: {何を動かしたか 1〜2 行}
 字数: 元 {n} 字 → {m} 字
-[/メモ]
 
-[チェック証跡]
-
+### チェック証跡
 check-reader: 実行 / ループ{n}回 / 残疑問{なし等}（＋6.6 最終1パス 提示のみ／該当なし）
 check-reader --fold: 実行 / ループ{n}回 / 判定{押す等}・引き{n}/10
 check-fact:   実行 / ループ{n}回 / 訂正{n}件 ／ または 省略（元投稿の範囲内）
@@ -205,51 +239,21 @@ check-brand:  実行 / 採点ループ{n}回 / 全項目8点以上{達成/未達
 check-yohn:   実行 / ループ{n}回 / 未解消の指摘{なし等} ／ または 省略（方式①・本文は元投稿で実績済み）
 変更箇所フィルタ: 反映{n}件 / 元投稿由来・未反映{n}件（{要点}）
 
-[/チェック証跡]
-
-[不採用案]
+### 不採用案
 B（{具体化}）: {冒頭 2 文} — {選ばなかった理由}
 C（{具体化}）: {冒頭 2 文} — {選ばなかった理由}
-[/不採用案]
-
-[最終原稿]
-
-{確定稿}
-
-[/最終原稿]
-
-[投稿文]
-
-{確定稿（最終原稿と同一）}
-
-[/投稿文]
 ```
 
-- `what_id:` 行は `post_from_email.sh` が記録時の what_id として読む（行頭・半角コロン・値のみ）。`ソース: rewrite[ID]` は既存の解析で outputs の neta_id に入る
-- `[メモ]` `[不採用案]` `[チェック証跡]` の中に `[投稿文]` `[/投稿文]` `[最終原稿]` `[/最終原稿]` の文字列を書かない（extract_tag.py の早期クローズ防止）
+- **`## 投稿文` には確定ゲートを通した確定稿だけ**を置く（インポーターがこのセクションを投稿本文として取り出す）。`## セルフリプ` は「なし」
+- **`## 投稿文` / `## セルフリプ` / `## 記録` 以外にレベル 2 見出し（`## `）を作らない。** 記録の中の小見出しは `###` を使う（インポーターがこの 3 つの位置でセクションを切り出すため）
+- **`source` は必ず `"rewrite[{tweet_id}]"` の形**（インポーターが outputs の neta_id に引き継ぎ、`rewrite_pool.py` の「リライト済み」判定に使う）
 - 画像は付けない
 
-## 7-2: 件名と日時
-
-- トピック要約：確定稿の核心キーワードを名詞句で 10〜15 字以内
-- 日時：`TZ=Asia/Tokyo date '+%Y%m%d %H:%M:%S'`
-
-## 7-3: 下書き作成
-
-```bash
-bash scripts/create_gmail_draft.sh \
-  --to useakat@gmail.com \
-  --subject "【リライト】{トピック要約} {YYYYMMDD HH:MM:SS}" \
-  --body-file /tmp/xrewrite_mail.txt
-```
-
-成功判定は `✓ 下書き作成完了` の出力。クラウド環境では Gmail コネクタの `create_draft` を使う。
-
-投稿は 20 時枠（`run_xshort_post.sh`：【自己開示】→【note販促】→**【リライト】**→【X短文投稿】の順）で cron が拾う。別の枠で出したいときはよーんが Gmail で `6時投稿` 等のラベルを付ける（`post_by_label.sh` が件名を問わず拾う）。
+投稿は、よーんが「投稿予約」を押した後、**20 時枠**の cron（`run_xshort_post.sh`。postcal の予約を最優先で拾う）が行う。別の日・枠で出したいときは、よーんが画面で日付・時刻を直してから「投稿予約」を押す。
 
 ---
 
-# STEP 8: 記録と commit
+# STEP 8: 記録と commit・push
 
 1. リライト記録を追記する：
 
@@ -266,10 +270,10 @@ REPO=$(git rev-parse --show-toplevel)
 echo "$(TZ=Asia/Tokyo date +%F),{new_what_id},{フック型},{冒頭15字},rewrite[{tweet_id}],{方式},{謎},{自分事}" >> "$REPO/logs/hook_records.csv"
 ```
 
-3. **この 2 ファイルだけ** commit & push する（無人フローなので push しないと記録が消える）：
+3. **予約ファイルと記録 CSV の 3 ファイルだけ** commit & push する（無人フローなので push しないと予約も記録も消える。VPS のインポーターは master から `git pull` で取り込む）：
 
 ```bash
-bash "$REPO/scripts/commit_and_sync.sh" "record(rewrite): {new_what_id} リライト記録を追加" logs/rewrite_records.csv logs/hook_records.csv
+bash "$REPO/scripts/commit_and_sync.sh" "record(rewrite): {new_what_id} リライト予約ファイルと記録を追加" outputs/scheduled-posts/rewrite/{ファイル名} logs/rewrite_records.csv logs/hook_records.csv
 ```
 
 リモート環境で push が認証エラーなら GitHub MCP で master へ push する。
@@ -286,8 +290,9 @@ bash "$REPO/scripts/commit_and_sync.sh" "record(rewrite): {new_what_id} リラ�
 ✅ 字数: 元 {n} 字 → {m} 字
 ✅ チェック実行: fold{n}回○ / reader{n}回○ / fact{n}回○ or 省略 / critic{n}回○ or 省略 / brand{n}回○ or 省略（方式①） / yohn{n}回○ or 省略（方式①）
 ✅ 変更箇所フィルタ: 反映{n}件 / 元投稿由来・未反映{n}件
-✅ Gmail 下書き作成完了（件名: 【リライト】{トピック要約} {YYYYMMDD HH:MM:SS}）
-✅ 記録: rewrite_records.csv / hook_records.csv を commit & push（master）
+✅ 予約ファイル作成・push 完了（outputs/scheduled-posts/rewrite/{ファイル名} / uid={uid}）→ master
+✅ 記録: rewrite_records.csv / hook_records.csv も同じ commit & push（master）
+※ postcal に下書きとして登録される（仮日時は毎日 20 時の最寄りの空き枠）。よーんが post.usephys.net で確認し「投稿予約」を押すまで投稿されない。
 
 ---
 【元投稿（冒頭 3 行）】
@@ -304,15 +309,15 @@ bash "$REPO/scripts/commit_and_sync.sh" "record(rewrite): {new_what_id} リラ�
 ```
 ⚠️ リライト候補なし
 180 日より前・未リライト（または最後のリライトから 180 日以上）の本体投稿に、グレード S/A も IMP 1 万以上もありません。
-Gmail 下書きは作成していません。
+予約ファイルは作成していません。
 ```
 
 ---
 
 # その他
 
-- **投稿は一切行わない。** X 投稿は cron 定時実行のみ
-- **下書きは 1 投稿につき 1 回だけ作成し、作成後は一切触らない**
+- **投稿は一切行わない。** X 投稿は cron 定時実行のみ（よーんが postcal で「投稿予約」を押した予約だけが対象）
+- **予約ファイルは 1 投稿につき 1 回だけ作成し、無人フローでは作成後に触らない**
 - 事実は元投稿の範囲内が原則。足した事実は必ず `/check-fact` を通す（STEP 6.2）
 - 時事ネタとの絡めは本スキルの対象外（時事ネタ起点の投稿は別フロー）
 - 同じ元投稿のリライトは 180 日間隔・年 2 回まで（`rewrite_pool.py` が判定）

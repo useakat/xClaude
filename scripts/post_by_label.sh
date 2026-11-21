@@ -20,12 +20,11 @@ MY_LABEL="${HOUR}時投稿"
 DIR="$(dirname "$0")"
 
 # 件名キーワード|howID|ログファイル名
-# 【リライト】の howID は既定値。本文の「what_id: W001r」行があれば post_from_email.sh が記録時に上書きする
+# （リライトは 2026-11-21 から postcal 経由のみ。Gmail の【リライト】は廃止）
 TARGETS='【ワンポイント解説】|W003|x_post_xonepoint.log
 【質問回答】|W006|x_post_question.log
 【X長文】|W001|x_post_xlong.log
 【note販促】|W007|x_post_promo.log
-【リライト】|W003r|x_post_rewrite.log
 【X短文投稿】|z01|x_post_short.log
 【自己開示】|W004|x_post_self.log'
 

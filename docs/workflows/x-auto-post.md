@@ -42,7 +42,7 @@ cron の 4 枠（6:00 / 12:00 / 17:00 / 20:00 JST）が受信箱を検索
 各枠の処理順：
 
 1. `scripts/post_scheduled.py <時>` — **postcal（予約カレンダー `https://post.usephys.net/`）** にその日・その枠の予約があれば最優先で投稿する（画像最大 4 枚または動画 1 本、セルフリプは `=====` 区切りで返信チェーン、Threads 転載、outputs 記録まで）。予約が無ければ rc=20 で次へ（2026-11-15）
-2. `scripts/post_by_label.sh <時>` — `label:<時>時投稿 in:inbox -label:投稿済み` を件名 7 種（ワンポイント解説 → 質問回答 → X長文 → note販促 → リライト → X短文投稿 → 自己開示）の順に探し、最初の 1 件を投稿する
+2. `scripts/post_by_label.sh <時>` — `label:<時>時投稿 in:inbox -label:投稿済み` を件名 6 種（ワンポイント解説 → 質問回答 → X長文 → note販促 → X短文投稿 → 自己開示）の順に探し、最初の 1 件を投稿する
 3. 無ければ従来の件名検索。`post_from_email.sh` は `--label` 無しのとき、時刻ラベル付きのメールをすべて除外して探す
 
 ## z01 短文は予約ファイル経由（2026-11-19〜）
@@ -62,6 +62,15 @@ postcal.db に登録 → post.usephys.net のカレンダーに「下書き（�
 - 週間短文枠（よーん決定 2026-11-19）：1 短文の日は 6:00、2 短文の日は 6:00→17:00。月[6] 火[6,17] 水[6] 木[6,17] 金[なし] 土[6] 日[6]。仮の日時の割当は `postcal_import.py` が行う（z01 フローは枠を指定しない）。下書きは枠を占有しない（他の下書きの仮枠とは重ならないよう選ぶ）。
 - **下書き方式（2026-11-21〜）**：確認前の本文が自動投稿されないよう、取り込みは必ず下書き。予約ファイルを上書き更新して再 push してよいのは下書きの間だけで、**画面で編集した下書きは上書きされない**（画面の編集が正）。「投稿予約」後（queued）・投稿済みはファイルを変えても反映されない。「下書きに戻す」ボタンで queued → draft に戻せる。
 - 画面（`/new`）から手で登録した予約は従来どおり即 queued（よーん自身が書いたもの）。
+
+## リライト（writer-xrewrite）も予約ファイル経由（2026-11-21〜）
+
+リライトも **Gmail 下書き（【リライト】）をやめ、予約ファイル → postcal の下書き → 「投稿予約」** に変更した（`.claude/skills/writer-xrewrite/SKILL.md` STEP 7）。
+
+- 予約ファイル: `outputs/scheduled-posts/rewrite/<日時>_<topic>.md`。front-matter は `kind: rewrite_short|rewrite_onepoint|rewrite_long`（= what_id `z01r`/`W003r`/`W001r`）、`source: "rewrite[<元ツイートID>]"`。メモ・チェック証跡・不採用案は `## 記録` に入れる。
+- 仮の日時は**毎日 20:00 の最寄りの空き枠**（従来の 20 時枠運用を踏襲。インポーターの `REWRITE_SLOTS`）。別の日・時刻にしたいときは、画面で日時を直してから「投稿予約」を押す。
+- `source` の `rewrite[ID]` は予約の `neta_id` に引き継がれ、投稿時に outputs の neta_id 列へ入る（`rewrite_pool.py` の「リライト済み」判定がこれを見る）。
+- 20 時枠の cron（`run_xshort_post.sh`）は postcal の予約を最優先で拾う。**Gmail の【リライト】の経路は廃止した**（`run_xshort_post.sh` と `post_by_label.sh` から件名【リライト】の検索を削除）。リライトは postcal 経由のみ。
 - 取込状態は `postcal/data/import_state.json`（git 管理外）で uid→予約 id を管理。導入手順は `scripts/postcal_install.sh`（`postcal-import.timer` を設置・有効化）。
 
 ## Gmail → X 投稿の仕組み
