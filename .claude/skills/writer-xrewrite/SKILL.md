@@ -209,6 +209,7 @@ kind: {rewrite_short|rewrite_onepoint|rewrite_long}
 threads_enabled: true
 note_url: ""
 source: "rewrite[{tweet_id}]"
+session_url: "{この原稿を作ったセッションの URL。無ければ空文字}"
 topic: "{トピック要約}"
 created: "YYYY-MM-DD HH:MM:SS JST"
 ---
@@ -246,6 +247,7 @@ C（{具体化}）: {冒頭 2 文} — {選ばなかった理由}
 
 - **`## 投稿文` には確定ゲートを通した確定稿だけ**を置く（インポーターがこのセクションを投稿本文として取り出す）。`## セルフリプ` は「なし」
 - **`## 投稿文` / `## セルフリプ` / `## 記録` 以外にレベル 2 見出し（`## `）を作らない。** 記録の中の小見出しは `###` を使う（インポーターがこの 3 つの位置でセクションを切り出すため）
+- **`session_url`**：この原稿を作った Claude セッションの URL（`https://claude.ai/code/session_…`）。システムの commit 署名指示にある `Claude-Session:` の URL をそのまま使う。postcal の画面に「このセッションを開く」リンクとして出て、よーんが修正を頼むときにすぐ開ける。**URL が分からないときは空文字にする（推測で書かない）。**
 - **`source` は必ず `"rewrite[{tweet_id}]"` の形**（インポーターが outputs の neta_id に引き継ぎ、`rewrite_pool.py` の「リライト済み」判定に使う）
 - 画像は付けない
 

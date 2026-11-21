@@ -63,6 +63,9 @@ H_REPLY_RE = re.compile(r"^##[ \t]+セルフリプ[ \t]*$", re.M)
 H_REC_RE = re.compile(r"^##[ \t]+記録[ \t]*$", re.M)
 REPLY_SPLIT_RE = re.compile(r"^[ \t]*={3,}[ \t]*$", re.M)   # post_threads.py / postcal と同じ
 NONE_WORDS = {"", "なし", "（なし）", "(なし)", "-", "—", "ー"}
+# session_url として採用する形（原稿を作った Claude セッションへのリンク。画面に出すので claude.ai のものだけ許可する）
+SESSION_URL_RE = re.compile(r"^https://claude\.ai/code/[A-Za-z0-9_-]+$")
+
 # neta_id として採用する source の形。noteNeta/newsTopics は record_output.py が z01 投稿時に SS1 の
 # 「短文最終使用日」を更新する紐付けキー。rewrite[ツイートID] はリライト元の記録（outputs の neta_id 列に入り、
 # rewrite_pool.py の「リライト済み」判定に使われる）。それ以外の source は neta_id にしない
@@ -154,6 +157,9 @@ def parse_record(path: str) -> dict | None:
     threads_enabled = te not in ("false", "0", "no", "off", "")
     source = (fm.get("source") or "").strip()
     neta_id = source if NETA_REF_RE.match(source) else ""   # シート参照のみ採用（投稿時に SS1 を更新）
+    session_url = (fm.get("session_url") or "").strip()
+    if not SESSION_URL_RE.match(session_url):
+        session_url = ""   # 形が違うもの（claude.ai 以外など）は採用しない
     # 枠の明示指定（任意・両方そろった場合のみ有効）。無ければ種類ごとの既定枠で自動割当
     want_date = (fm.get("post_date") or "").strip()
     want_slot = (fm.get("slot") or "").strip()
@@ -175,6 +181,7 @@ def parse_record(path: str) -> dict | None:
         "kind": kind,
         "what_id": what_id,
         "neta_id": neta_id,
+        "session_url": session_url,
         "text": post_text,
         "replies": replies,
         "note_url": (fm.get("note_url") or "").strip(),
@@ -303,6 +310,7 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
                 db.update(con, post["id"], {
                     "post_date": post["post_date"], "slot": post["slot"],
                     "kind": rec["kind"], "what_id": rec["what_id"], "neta_id": rec["neta_id"],
+                    "session_url": rec["session_url"] or post["session_url"],
                     "text": rec["text"], "replies": rec["replies"], "media": post["media"],
                     "threads_enabled": rec["threads_enabled"], "note_url": rec["note_url"],
                 })
@@ -326,6 +334,7 @@ def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
             return "error"
     post_id = db.create(con, {
         "post_date": ds, "slot": slot, "kind": rec["kind"], "what_id": rec["what_id"], "neta_id": rec["neta_id"],
+        "session_url": rec["session_url"],
         "text": rec["text"], "replies": rec["replies"],
         "threads_enabled": rec["threads_enabled"], "note_url": rec["note_url"],
         "status": "draft",   # よーんが画面で「投稿予約」を押すまで cron は拾わない

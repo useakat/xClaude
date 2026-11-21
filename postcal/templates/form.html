@@ -15,6 +15,9 @@
   {% if post.posted_at %} <small>投稿 {{ post.posted_at }}</small>{% endif %}
   {% if post.error %}<div class="err">{{ post.error }}</div>{% endif %}
 </div>
+{% if post.session_url %}
+<div class="status-box">原稿を作ったセッション: <a href="{{ post.session_url }}" target="_blank" rel="noopener noreferrer">このセッションを開く</a> <small>（修正を頼むときはここから）</small></div>
+{% endif %}
 {% if post.status == 'draft' %}
 <div class="flash">下書きです。まだ投稿されません。内容を確認・修正して「投稿予約」を押すと、{{ post.post_date }} {{ post.slot }}:00 の枠に投稿予約されます（日時は変更できます）。</div>
 {% endif %}

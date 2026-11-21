@@ -97,7 +97,7 @@ async def calendar_view(request: Request):
 def empty_post(post_date: str) -> dict:
     return {"id": None, "post_date": post_date, "slot": 20, "kind": "self", "what_id": "W004", "text": "",
             "replies": [], "media": [], "threads_enabled": 1, "note_url": "", "status": "queued",
-            "x_url": "", "threads_url": "", "error": ""}
+            "x_url": "", "threads_url": "", "error": "", "session_url": ""}
 
 
 async def new_form(request: Request):
@@ -196,6 +196,8 @@ async def parse_form(request: Request, existing: dict | None):
     # neta_id（ネタの出所。フォームには項目が無いので、編集時は既存値を保つ。
     # z01 の予約には postcal_import.py が noteNeta[..] 等を入れる）
     data["neta_id"] = (existing.get("neta_id", "") if existing else "")
+    # session_url（原稿を作った Claude セッション。同じくフォームに項目は無いので、編集時は既存値を保つ）
+    data["session_url"] = (existing.get("session_url", "") if existing else "")
 
     # メディア: 既存（削除指定を除く）＋ 新規アップロード
     keep = list(existing["media"]) if existing else []

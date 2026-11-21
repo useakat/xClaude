@@ -54,6 +54,7 @@
     <td class="excerpt">{{ p.text[:60] }}{% if p.text|length > 60 %}…{% endif %}
       {% if p.replies %}<small>＋リプ{{ p.replies|length }}</small>{% endif %}
       {% if p.media %}<small>＋{{ p.media|length }}ファイル</small>{% endif %}
+      {% if p.session_url %}<small><a href="{{ p.session_url }}" target="_blank" rel="noopener noreferrer">セッション</a></small>{% endif %}
       {% if p.error %}<div class="err">{{ p.error[:160] }}</div>{% endif %}</td>
     <td>{% if p.x_url %}<a href="{{ p.x_url }}" target="_blank" rel="noopener">X</a>{% endif %}
         {% if p.threads_url %} <a href="{{ p.threads_url }}" target="_blank" rel="noopener">Threads</a>{% endif %}</td>
