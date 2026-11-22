@@ -1,12 +1,12 @@
 ---
 name: writer-xrewrite
-description: 過去の伸びた X 投稿（半年以上前・未リライト・グレード S/A 優先、無ければ IMP 1 万以上の上位 20）を 1 本選び、4 要素に分解して「伸びた理由」を特定したうえで、回数で決まる方式（①冒頭を変える→④驚きの軸を変える→②結末先行→③主人公・視点を変える）でリライトし、z01 と同じチェック（reader/fact/critic/brand/yohn）を通して予約ファイル（`outputs/scheduled-posts/rewrite/`）を 1 本作って push する（postcal に毎日 20 時枠の仮日時で下書き登録され、よーんが画面で「投稿予約」を押すと投稿される）。what_id は元の what_id に r を付ける（W001r/W003r/z01r）。ユーザー確認なし全自動。投稿は行わない。
+description: 過去の伸びた X 投稿（半年以上前・未リライト・IMP 1 万以上の上位 20 本からランダム）を 1 本選び、4 要素に分解して「伸びた理由」を特定したうえで、回数で決まる方式（①冒頭を変える→④驚きの軸を変える→②結末先行→③主人公・視点を変える）でリライトし、z01 と同じチェック（reader/fact/critic/brand/yohn）を通して予約ファイル（`outputs/scheduled-posts/rewrite/`）を 1 本作って push する（postcal に毎日 20 時枠の仮日時で下書き登録され、よーんが画面で「投稿予約」を押すと投稿される）。what_id は元の what_id に r を付ける（W001r/W003r/z01r）。ユーザー確認なし全自動。投稿は行わない。
 tools: Bash, Read, Write, Skill, Agent
 ---
 
 過去の伸びた投稿を**別の切り口で読者に届け直す**。単なる言い換えではなく、元投稿の「伸びた理由」を残したまま、他の要素を動かす。**投稿は一切行わず、予約ファイルを 1 本作って push するだけ（postcal には下書きとして登録され、よーんが確認して「投稿予約」を押すまで投稿されない）。全 STEP を自動で実行する。ユーザーの確認・承認は不要。**
 
-> 設計の出典：2026-11-14 の計画（半年以上前・S/A 優先・回数で方式固定・4 要素分解・避けたいこと 5 項目）。フック型の実測データは `outputs/reports/20261113_x_top100_hook_list.md`（自アカウント）と `outputs/reports/20261113_x_others_top100_hook_types.md`（競合 3 アカウント）。
+> 設計の出典：2026-11-14 の計画（半年以上前・回数で方式固定・4 要素分解・避けたいこと 5 項目）。フック型の実測データは `outputs/reports/20261113_x_top100_hook_list.md`（自アカウント）と `outputs/reports/20261113_x_others_top100_hook_types.md`（競合 3 アカウント）。
 
 ---
 
@@ -24,7 +24,7 @@ tools: Bash, Read, Write, Skill, Agent
 python3 scripts/rewrite_pool.py pick
 ```
 
-- JSON が返る。主なキー：`tweet_id` `url` `date` `text`（元本文全文）`chars` `imp` `grade` `what_id` `what_id_source`（`outputs`＝記録あり／`length`＝字数で推定）`new_what_id`（元 what_id＋r）`rewrite_count`（過去のリライト回数）`prev_methods` `prev_elements` `method_candidates`（この回で使える方式。順番どおり・未使用のみ）`pool`（`SA`＝S/A プール／`TOP20`＝IMP 1 万以上上位 20）
+- JSON が返る。主なキー：`tweet_id` `url` `date` `text`（元本文全文）`chars` `imp` `grade` `what_id` `what_id_source`（`outputs`＝記録あり／`length`＝字数で推定）`new_what_id`（元 what_id＋r）`rewrite_count`（過去のリライト回数）`prev_methods` `prev_elements` `method_candidates`（この回で使える方式。順番どおり・未使用のみ）`pool`（`IMP10K`＝IMP 1 万以上の上位 20 本のプール）
 - `{"error": "候補なし"}`（exit 3）なら STEP 9 の枯渇報告を出して終了する。予約ファイルは作らない
 - 候補の条件（スクリプト側で判定）：本体投稿・投稿日が 180 日より前・W006/W004/W007 と質問回答と URL 紹介を除外・リライト済みは最後のリライトから 180 日未満なら除外（1 本あたり年 2 回まで）
 - **STEP 2 の分解で「リライトに向かない」と判断した場合**（時事・サイト紹介・日常報告・引用前提で単体で読めない等）は、その tweet_id を `--exclude` に付けて再度 pick する（最大 3 回。`--exclude` はカンマ区切りで累積）：
@@ -310,7 +310,7 @@ bash "$REPO/scripts/commit_and_sync.sh" "record(rewrite): {new_what_id} リラ�
 
 ```
 ⚠️ リライト候補なし
-180 日より前・未リライト（または最後のリライトから 180 日以上）の本体投稿に、グレード S/A も IMP 1 万以上もありません。
+180 日より前・未リライト（または最後のリライトから 180 日以上）の本体投稿に、IMP 1 万以上のものがありません。
 予約ファイルは作成していません。
 ```
 

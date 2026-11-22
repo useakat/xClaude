@@ -8,8 +8,8 @@ Usage:
   python3 scripts/rewrite_pool.py record --tweet-id ID --method 方式 --element 刺さった要素 \
          --new-what-id W001r --subject 件名 [--count N]
 
-list   : 候補プール（S/A グレード優先プール と IMP 1 万以上の上位 20 プール）を表示
-pick   : プールから 1 本選んで JSON を出力（S/A があればそこからランダム、無ければ上位 20 からランダム）
+list   : 候補プール（IMP 1 万以上の上位 20）を表示
+pick   : IMP 1 万以上の上位 20 本からランダムに 1 本選んで JSON を出力（グレードによる優先はしない。2026-11-22 変更）
          --tweet-id で元投稿を直接指定することもできる（プール外でも可。テスト用）
 record : logs/rewrite_records.csv に 1 行追記（使い回し防止・方式別の効果集計用）
 
@@ -28,7 +28,7 @@ record : logs/rewrite_records.csv に 1 行追記（使い回し防止・方式�
 出力 JSON（pick）の主なキー:
   tweet_id, url, date, text, imp, grade, what_id, what_id_source(outputs|length),
   new_what_id (元 what_id + "r"), rewrite_count (過去のリライト回数), prev_methods, prev_elements,
-  method_candidates (この回で使える方式。回数順・未使用のもの), pool (SA|TOP20)
+  method_candidates (この回で使える方式。回数順・未使用のもの), pool (IMP10K|MANUAL)
 認証: sheets_values.py と同じ（GOOGLE_SERVICE_ACCOUNT_KEY または gcp/ の鍵）
 """
 
@@ -219,13 +219,10 @@ def add_method_candidates(c):
 def cmd_list(args):
     sa, top, cands = build_pools(args.days)
     if args.json:
-        print(json.dumps({"SA": sa, "TOP20": top}, ensure_ascii=False, indent=1))
+        print(json.dumps({"IMP10K": top}, ensure_ascii=False, indent=1))
         return
     print(f"候補母集団: {len(cands)} 本（{args.days} 日より前・除外後）")
-    print(f"\n[S/A プール] {len(sa)} 本")
-    for c in sa:
-        print(f"  {c['grade']} {c['imp']:>9,} {c['date']} {c['what_id']:<5} rw{c['rewrite_count']} {c['text'][:28]!r}")
-    print(f"\n[IMP {MIN_IMP_TOP:,} 以上 上位 {TOP_N}] {len(top)} 本")
+    print(f"\n[IMP {MIN_IMP_TOP:,} 以上上位 {TOP_N}（ここからランダムに選ぶ）] {len(top)} 本")
     for c in top:
         print(f"  {c['grade'] or '-'} {c['imp']:>9,} {c['date']} {c['what_id']:<5}({c['what_id_source'][0]}) rw{c['rewrite_count']} {c['text'][:28]!r}")
 
@@ -234,7 +231,6 @@ def cmd_pick(args):
     sa, top, cands = build_pools(args.days)
     if args.exclude:
         ex = set(args.exclude.split(","))
-        sa = [c for c in sa if c["tweet_id"] not in ex]
         top = [c for c in top if c["tweet_id"] not in ex]
     if args.tweet_id:
         pool = [c for c in cands if c["tweet_id"] == args.tweet_id]
@@ -243,12 +239,10 @@ def cmd_pick(args):
             print(json.dumps({"error": f"tweet_id {args.tweet_id} は候補母集団にありません"}, ensure_ascii=False))
             sys.exit(2)
         c = dict(pool[0], pool="MANUAL")
-    elif sa:
-        c = dict(random.choice(sa), pool="SA")
     elif top:
-        c = dict(random.choice(top), pool="TOP20")
+        c = dict(random.choice(top), pool="IMP10K")
     else:
-        print(json.dumps({"error": "候補なし", "sa": 0, "top20": 0}, ensure_ascii=False))
+        print(json.dumps({"error": "候補なし", "imp10k": 0}, ensure_ascii=False))
         sys.exit(3)
     print(json.dumps(add_method_candidates(c), ensure_ascii=False, indent=1))
 
