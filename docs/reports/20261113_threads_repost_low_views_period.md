@@ -30,7 +30,7 @@ Threads投稿一覧（スプレッドシート `1_0317hOqbgGfcSZQ9D9-JlwgqvKxzQu
 - `scripts/run_threads_post.sh` のヘッダに 09:00 cron を記載（実体は無改修）
 - VPS crontab（git 管理外）に 2 行追加
   - `0 18 * * * run_threads_repost_draft.sh` — 下書き作成
-  - `0 9 * * * run_threads_post.sh` — **投稿の専用枠**。従来【threads投稿】メールは X 投稿 cron（06/12/17/20）で「X に投稿が無かったときだけ」拾われるフォールバックだったため、X 投稿が続くとメールが残り続ける。朝 9 時に必ず拾う枠を足した（20:00 のフォールバックで先に拾われても、受信箱の最古から処理するので順番は崩れない）
+  - `0 9 * * * run_threads_post.sh` — **投稿の専用枠（2026-11-22 に削除。X 投稿 cron 4 枠のフォールバックで拾われるため不要と判断）**。従来【threads投稿】メールは X 投稿 cron（06/12/17/20）で「X に投稿が無かったときだけ」拾われるフォールバックだったため、X 投稿が続くとメールが残り続ける。朝 9 時に必ず拾う枠を足した（20:00 のフォールバックで先に拾われても、受信箱の最古から処理するので順番は崩れない）
 - 既存は無改修：`post_threads.py`、`post_threads_from_email.sh`、`record_output.py`、`fetch_threads_posts.py`
 
 ## 変更ファイル

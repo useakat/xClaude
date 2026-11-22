@@ -1,7 +1,7 @@
 #!/bin/bash
 # Threads 低 views 期（7/24〜9/23）の投稿を順番に再投稿するための【threads投稿】下書きを 1 本作る cron ラッパー。
 # cron: 0 18 * * * /bin/bash /root/xClaude/scripts/run_threads_repost_draft.sh
-# 投稿は 09:00 の run_threads_post.sh（と X 投稿が無い時のフォールバック）が受信箱の【threads投稿】を拾って行う。
+# 投稿は X 投稿 cron（06/12/17/20）の「X に投稿が無い時のフォールバック」（run_threads_post.sh）が受信箱の【threads投稿】を拾って行う。
 export PATH="/usr/local/bin:$PATH"
 DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(dirname "$DIR")"
