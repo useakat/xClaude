@@ -1,6 +1,6 @@
 ---
 name: writer-xrewrite
-description: 過去の伸びた X 投稿（半年以上前・未リライト・IMP 1 万以上の上位 20 本からランダム）を 1 本選び、4 要素に分解して「伸びた理由」を特定したうえで、回数で決まる方式（①冒頭を変える→④驚きの軸を変える→②結末先行→③主人公・視点を変える）でリライトし、z01 と同じチェック（reader/fact/critic/brand/yohn）を通して予約ファイル（`outputs/scheduled-posts/rewrite/`）を 1 本作って push する（postcal に毎日 20 時枠の仮日時で下書き登録され、よーんが画面で「投稿予約」を押すと投稿される）。what_id は元の what_id に r を付ける（W001r/W003r/z01r）。ユーザー確認なし全自動。投稿は行わない。
+description: 過去の伸びた X 投稿（半年以上前・未リライト・IMP 5,000 以上の全候補からランダム）を 1 本選び、4 要素に分解して「伸びた理由」を特定したうえで、回数で決まる方式（①冒頭を変える→④驚きの軸を変える→②結末先行→③主人公・視点を変える）でリライトし、z01 と同じチェック（reader/fact/critic/brand/yohn）を通して予約ファイル（`outputs/scheduled-posts/rewrite/`）を 1 本作って push する（postcal に毎週土曜 20 時枠の仮日時で下書き登録され、よーんが画面で「投稿予約」を押すと投稿される）。what_id は元の what_id に r を付ける（W001r/W003r/z01r）。ユーザー確認なし全自動。投稿は行わない。
 tools: Bash, Read, Write, Skill, Agent
 ---
 
@@ -24,7 +24,7 @@ tools: Bash, Read, Write, Skill, Agent
 python3 scripts/rewrite_pool.py pick
 ```
 
-- JSON が返る。主なキー：`tweet_id` `url` `date` `text`（元本文全文）`chars` `imp` `grade` `what_id` `what_id_source`（`outputs`＝記録あり／`length`＝字数で推定）`new_what_id`（元 what_id＋r）`rewrite_count`（過去のリライト回数）`prev_methods` `prev_elements` `method_candidates`（この回で使える方式。順番どおり・未使用のみ）`pool`（`IMP10K`＝IMP 1 万以上の上位 20 本のプール）
+- JSON が返る。主なキー：`tweet_id` `url` `date` `text`（元本文全文）`chars` `imp` `grade` `what_id` `what_id_source`（`outputs`＝記録あり／`length`＝字数で推定）`new_what_id`（元 what_id＋r）`rewrite_count`（過去のリライト回数）`prev_methods` `prev_elements` `method_candidates`（この回で使える方式。順番どおり・未使用のみ）`pool`（`IMP10K`＝IMP 5,000 以上の全候補のプール）
 - `{"error": "候補なし"}`（exit 3）なら STEP 9 の枯渇報告を出して終了する。予約ファイルは作らない
 - 候補の条件（スクリプト側で判定）：本体投稿・投稿日が 180 日より前・W006/W004/W007 と質問回答と URL 紹介を除外・リライト済みは最後のリライトから 180 日未満なら除外（1 本あたり年 2 回まで）
 - **STEP 2 の分解で「リライトに向かない」と判断した場合**（時事・サイト紹介・日常報告・引用前提で単体で読めない等）は、その tweet_id を `--exclude` に付けて再度 pick する（最大 3 回。`--exclude` はカンマ区切りで累積）：
@@ -179,7 +179,7 @@ python3 scripts/rewrite_diff.py /tmp/xrewrite_orig.txt /tmp/xrewrite_new.txt
 
 # STEP 7: 予約ファイルの作成（1 つだけ・以後触らない）
 
-Gmail 下書きは作らない。確定稿を**予約ファイル（Markdown）**として書く。VPS の `scripts/postcal_import.py`（systemd timer・10 分ごと）が git pull で取り込み、**下書き（draft）として** postcal に登録する（仮の日時は**毎日 20:00 の最寄りの空き枠**。従来の 20 時枠運用を踏襲）。**下書きは投稿されない。よーんが `post.usephys.net` で本文を確認・修正し「投稿予約」を押すと予約になり、20 時枠の cron が投稿する。**
+Gmail 下書きは作らない。確定稿を**予約ファイル（Markdown）**として書く。VPS の `scripts/postcal_import.py`（systemd timer・10 分ごと）が git pull で取り込み、**下書き（draft）として** postcal に登録する（仮の日時は**毎週土曜 20:00 の最寄りの空き枠**。従来の 20 時枠運用を踏襲）。**下書きは投稿されない。よーんが `post.usephys.net` で本文を確認・修正し「投稿予約」を押すと予約になり、20 時枠の cron が投稿する。**
 
 **予約ファイルは 1 回だけ作成し、無人フローでは作成後に触らない**（2 回目の作成・更新・削除は禁止。修正版はチャットで提示するだけ。よーんの修正は postcal の画面で行う）。
 
@@ -294,7 +294,7 @@ bash "$REPO/scripts/commit_and_sync.sh" "record(rewrite): {new_what_id} リラ�
 ✅ 変更箇所フィルタ: 反映{n}件 / 元投稿由来・未反映{n}件
 ✅ 予約ファイル作成・push 完了（outputs/scheduled-posts/rewrite/{ファイル名} / uid={uid}）→ master
 ✅ 記録: rewrite_records.csv / hook_records.csv も同じ commit & push（master）
-※ postcal に下書きとして登録される（仮日時は毎日 20 時の最寄りの空き枠）。よーんが post.usephys.net で確認し「投稿予約」を押すまで投稿されない。
+※ postcal に下書きとして登録される（仮日時は毎週土曜 20 時の最寄りの空き枠）。よーんが post.usephys.net で確認し「投稿予約」を押すまで投稿されない。
 
 ---
 【元投稿（冒頭 3 行）】
@@ -310,7 +310,7 @@ bash "$REPO/scripts/commit_and_sync.sh" "record(rewrite): {new_what_id} リラ�
 
 ```
 ⚠️ リライト候補なし
-180 日より前・未リライト（または最後のリライトから 180 日以上）の本体投稿に、IMP 1 万以上のものがありません。
+180 日より前・未リライト（または最後のリライトから 180 日以上）の本体投稿に、IMP 5,000 以上のものがありません。
 予約ファイルは作成していません。
 ```
 

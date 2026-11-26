@@ -8,8 +8,8 @@ Usage:
   python3 scripts/rewrite_pool.py record --tweet-id ID --method 方式 --element 刺さった要素 \
          --new-what-id W001r --subject 件名 [--count N]
 
-list   : 候補プール（IMP 1 万以上の上位 20）を表示
-pick   : IMP 1 万以上の上位 20 本からランダムに 1 本選んで JSON を出力（グレードによる優先はしない。2026-11-22 変更）
+list   : 候補プール（IMP 5,000 以上の全候補）を表示
+pick   : IMP 5,000 以上の全候補 本からランダムに 1 本選んで JSON を出力（グレードによる優先はしない。2026-11-22 変更）
          --tweet-id で元投稿を直接指定することもできる（プール外でも可。テスト用）
 record : logs/rewrite_records.csv に 1 行追記（使い回し防止・方式別の効果集計用）
 
@@ -58,8 +58,8 @@ METHOD_ORDER = ["①冒頭を変える", "④驚きの軸を変える", "②結�
 METHOD_ORDER_STORY = ["①冒頭を変える", "②結末先行", "③主人公・視点を変える", "④驚きの軸を変える"]
 
 EXCLUDE_WHAT = {"W006", "W004", "W007"}
-MIN_IMP_TOP = 10000
-TOP_N = 20
+MIN_IMP_TOP = 5000
+TOP_N = 10**6  # 上限なし（IMP 閾値以上の全候補からランダム）
 LONG_THRESHOLD = 300  # 字。これ以上なら W001 とみなす
 
 
@@ -222,7 +222,7 @@ def cmd_list(args):
         print(json.dumps({"IMP10K": top}, ensure_ascii=False, indent=1))
         return
     print(f"候補母集団: {len(cands)} 本（{args.days} 日より前・除外後）")
-    print(f"\n[IMP {MIN_IMP_TOP:,} 以上上位 {TOP_N}（ここからランダムに選ぶ）] {len(top)} 本")
+    print(f"\n[IMP {MIN_IMP_TOP:,} 以上の全候補（ここからランダムに選ぶ）] {len(top)} 本")
     for c in top:
         print(f"  {c['grade'] or '-'} {c['imp']:>9,} {c['date']} {c['what_id']:<5}({c['what_id_source'][0]}) rw{c['rewrite_count']} {c['text'][:28]!r}")
 

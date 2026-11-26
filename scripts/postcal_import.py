@@ -21,7 +21,7 @@ systemd timer（postcal-import.timer）から定期実行され、次を行う:
   月[6] 火[6,17] 水[6] 木[6,17] 金[] 土[6] 日[6]
 
 販促（kind: promo → W007）は短文パターンではなく「金曜 6:00」の最寄りの空き枠へ入れる（よーん決定 2026-11-19）。
-リライト（kind: rewrite_short|rewrite_onepoint|rewrite_long → z01r/W003r/W001r）は「毎日 20:00」の最寄りの空き枠へ入れる
+リライト（kind: rewrite_short|rewrite_onepoint|rewrite_long → z01r/W003r/W001r）は「毎週土曜 20:00」の最寄りの空き枠へ入れる
 （従来の Gmail 運用で 20 時枠が既定だったため踏襲。2026-11-21）。
 front-matter に post_date（YYYY-MM-DD）と slot（6/12/17/20）を両方書いた場合は、それを優先する（新規登録時のみ有効）。
 
@@ -53,8 +53,8 @@ MAIL_TO = "useakat@gmail.com"
 SHORT_SLOTS = {0: [6], 1: [6, 17], 2: [6], 3: [6, 17], 4: [], 5: [6], 6: [6]}
 # 販促（kind: promo）の既定枠: 金曜(4) 6 時。埋まっていれば翌週の金曜へ
 PROMO_SLOTS = {4: [6]}
-# リライト（kind: rewrite_*）の既定枠: 毎日 20 時。埋まっていれば翌日以降の 20 時へ
-REWRITE_SLOTS = {d: [20] for d in range(7)}
+# リライト（kind: rewrite_*）の既定枠: 毎週土曜(5) 20 時。埋まっていれば翌週の土曜へ（よーん決定 2026-11-26）
+REWRITE_SLOTS = {5: [20]}
 SEARCH_DAYS = 120  # 空き短文枠をこの日数先まで探す（事実上いつでも見つかる）
 
 FM_RE = re.compile(r"\A---[ \t]*\n(.*?)\n---[ \t]*\n", re.S)
