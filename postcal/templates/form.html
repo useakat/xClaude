@@ -44,9 +44,29 @@
     <small class="counter"><span id="text-count">0</span> 字（空白・改行除く）。Threads は 500 字ごとに分割投稿されます</small>
   </label>
 
-  <label>セルフリプ <small>（複数あるときは <code>=====</code> だけの行で区切る。X では順に返信チェーン、Threads でも同じ順で連結。note.com のリンクを含む段は Threads には載せません。note リンクは投稿時に xpost.usephys.net の転送 URL に自動変換されます）</small>
-    <textarea name="replies" rows="6" {% if locked %}readonly{% endif %}>{{ replies_text }}</textarea>
-  </label>
+  {# 続きの投稿 1 本分のカード。サーバー側の描画と、「＋続きを追加」用の <template> の両方で使う #}
+  {% macro thread_item(no, body) %}
+  <div class="thread-item">
+    <div class="thread-head">
+      <strong class="thread-no">{{ no }} 本目</strong>
+      <small class="counter"><span class="count">0</span> 字</small>
+      {% if not locked %}<button type="button" class="btn small thread-remove">削除</button>{% endif %}
+    </div>
+    <textarea name="reply" rows="5" aria-label="続きの投稿" {% if locked %}readonly{% endif %}>{{ body }}</textarea>
+  </div>
+  {% endmacro %}
+
+  <fieldset class="thread">
+    <legend>続きの投稿（スレッド・セルフリプ） <small id="thread-total"></small></legend>
+    <small>上の投稿文が 1 本目。ここに足した投稿が、上から順に返信としてつながります（X・Threads とも）。セルフリプもここに書きます。note.com のリンクを含む投稿は Threads には載せません。note リンクは投稿時に xpost.usephys.net の転送 URL に自動変換されます。<code>=====</code> だけの行を含む文を貼ると、保存時にその行で分割されます。画像・動画は 1 本目にだけ付きます</small>
+    <div id="thread-items">
+      {% for r in post.replies %}{{ thread_item(loop.index + 1, r) }}{% endfor %}
+    </div>
+    {% if not locked %}
+    <template id="thread-item-tpl">{{ thread_item(0, '') }}</template>
+    <button type="button" class="btn" id="thread-add">＋ 続きを追加</button>
+    {% endif %}
+  </fieldset>
 
   <label>note 記事 URL <small>（任意。空ならリプ・本文の note リンクから自動で入ります。outputs シートの note_url 列に記録）</small>
     <input type="url" name="note_url" value="{{ post.note_url }}" {% if locked %}readonly{% endif %}>

@@ -105,7 +105,7 @@ async def new_form(request: Request):
     if not DATE_RE.match(d):
         d = today_jst().isoformat()
     ctx = ctx_common(request)
-    ctx.update({"post": empty_post(d), "errors": [], "replies_text": ""})
+    ctx.update({"post": empty_post(d), "errors": []})
     return templates.TemplateResponse(request, "form.html", ctx)
 
 
@@ -121,7 +121,7 @@ async def edit_form(request: Request):
     now = datetime.now(db.JST)
     decorate(p, now.date(), now.hour)
     ctx = ctx_common(request)
-    ctx.update({"post": p, "errors": [], "replies_text": "\n=====\n".join(p["replies"])})
+    ctx.update({"post": p, "errors": []})
     return templates.TemplateResponse(request, "form.html", ctx)
 
 
@@ -182,8 +182,12 @@ async def parse_form(request: Request, existing: dict | None):
         errors.append("投稿文が空です")
     data["text"] = text
 
-    replies_raw = (form.get("replies") or "").replace("\r\n", "\n")
-    data["replies"] = [s.strip() for s in REPLY_SPLIT_RE.split(replies_raw) if s.strip()]
+    # 続きの投稿（スレッド・セルフリプ）。カード 1 枚 = 1 投稿で、name=reply が投稿の数だけ届く。
+    # カード内に ===== だけの行があれば そこでも分割する（スレッド全文を 1 枚に貼ったとき用）。
+    # 旧フォームの name=replies（1 欄に ===== 区切り）も受け付ける
+    reply_fields = [v for v in form.getlist("reply") if isinstance(v, str)] + [form.get("replies") or ""]
+    data["replies"] = [s.strip() for raw in reply_fields
+                       for s in REPLY_SPLIT_RE.split(raw.replace("\r\n", "\n")) if s.strip()]
 
     data["threads_enabled"] = bool(form.get("threads_enabled"))
 
@@ -245,7 +249,7 @@ def _render_form_error(request, data, errors, existing):
         except ValueError:
             p["state"] = p["status"]
     ctx = ctx_common(request)
-    ctx.update({"post": p, "errors": errors, "replies_text": "\n=====\n".join(data.get("replies", []))})
+    ctx.update({"post": p, "errors": errors})
     return templates.TemplateResponse(request, "form.html", ctx, status_code=400)
 
 

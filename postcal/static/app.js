@@ -1,11 +1,47 @@
 // 字数カウンタ（空白・改行を除いた文字数。brand の字数基準と同じ数え方）
-document.querySelectorAll("textarea[data-counter]").forEach(function (ta) {
-  var out = document.getElementById(ta.dataset.counter);
-  if (!out) return;
+function bindCounter(ta, out) {
+  if (!ta || !out) return;
   var update = function () { out.textContent = ta.value.replace(/\s/g, "").length; };
   ta.addEventListener("input", update);
   update();
+}
+document.querySelectorAll("textarea[data-counter]").forEach(function (ta) {
+  bindCounter(ta, document.getElementById(ta.dataset.counter));
 });
+
+// 続きの投稿（スレッド）: カード 1 枚 = 1 投稿。追加・削除のたびに「n 本目」を振り直す
+(function () {
+  var box = document.getElementById("thread-items");
+  if (!box) return;
+  var total = document.getElementById("thread-total");
+  var tpl = document.getElementById("thread-item-tpl");
+  var addBtn = document.getElementById("thread-add");
+
+  function renumber() {
+    var items = box.querySelectorAll(".thread-item");
+    items.forEach(function (it, i) { it.querySelector(".thread-no").textContent = (i + 2) + " 本目"; });
+    if (total) total.textContent = items.length ? "全 " + (items.length + 1) + " 本" : "";
+  }
+  function setup(item) {
+    var ta = item.querySelector("textarea");
+    bindCounter(ta, item.querySelector(".count"));
+    var rm = item.querySelector(".thread-remove");
+    if (rm) rm.addEventListener("click", function () {
+      if (ta.value.trim() && !confirm("この投稿を削除しますか？")) return;
+      item.remove();
+      renumber();
+    });
+  }
+  box.querySelectorAll(".thread-item").forEach(setup);
+  renumber();
+  if (addBtn && tpl) addBtn.addEventListener("click", function () {
+    var item = tpl.content.firstElementChild.cloneNode(true);
+    box.appendChild(item);
+    setup(item);
+    renumber();
+    item.querySelector("textarea").focus();
+  });
+})();
 
 // メディア選択時の簡易チェック（サーバー側でも検証する）
 var fileInput = document.querySelector('input[type=file][name=media]');

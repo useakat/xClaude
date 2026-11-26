@@ -31,7 +31,7 @@
       </div>
       {% for p in by_date.get(ds, []) %}
       <a class="chip {{ p.state }}" href="/posts/{{ p.id }}" title="{{ p.text[:80] }}">
-        {{ p.slot }}時 {{ p.kind_label }}{% if p.media %} 📎{% endif %}
+        {{ p.slot }}時 {{ p.kind_label }}{% if p.replies %} ＋{{ p.replies|length }}{% endif %}{% if p.media %} 📎{% endif %}
       </a>
       {% endfor %}
     </td>
@@ -52,7 +52,7 @@
     <td>{{ p.kind_label }} <small>({{ p.what_id }})</small></td>
     <td><span class="chip {{ p.state }}">{{ {'draft':'下書き','queued':'予約','posting':'投稿中','posted':'投稿済み','failed':'失敗','skipped':'スキップ','overdue':'未投稿'}[p.state] }}</span></td>
     <td class="excerpt">{{ p.text[:60] }}{% if p.text|length > 60 %}…{% endif %}
-      {% if p.replies %}<small>＋リプ{{ p.replies|length }}</small>{% endif %}
+      {% if p.replies %}<small>＋続き{{ p.replies|length }}本</small>{% endif %}
       {% if p.media %}<small>＋{{ p.media|length }}ファイル</small>{% endif %}
       {% if p.session_url %}<small><a href="{{ p.session_url }}" target="_blank" rel="noopener noreferrer">セッション</a></small>{% endif %}
       {% if p.error %}<div class="err">{{ p.error[:160] }}</div>{% endif %}</td>

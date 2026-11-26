@@ -52,6 +52,11 @@ form.postform textarea { resize: vertical; }
 form.postform label.inline { display:inline-flex; align-items:center; gap: 6px; margin-right: 12px; }
 form.postform fieldset { border:1px solid var(--line); border-radius: 6px; margin: 12px 0; padding: 8px 12px; }
 form.postform .counter { color: var(--muted); }
+form.postform .thread-item { margin: 10px 0; padding-left: 10px; border-left: 3px solid var(--line); }
+form.postform .thread-head { display:flex; align-items:center; gap: 10px; margin-bottom: 4px; }
+form.postform .thread-head .thread-remove { margin-left: auto; }
+.btn.small { padding: 2px 8px; font-size: 0.8rem; }
+#thread-add { margin-top: 4px; }
 form.postform .actions { margin-top: 16px; display:flex; gap: 10px; }
 form.danger { margin-top: 32px; }
 .status-box { margin: 8px 0 12px; }
