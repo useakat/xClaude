@@ -16,6 +16,10 @@ systemd timer（postcal-import.timer）から定期実行され、次を行う:
          ただし画面で編集済みの下書きは上書きしない（画面の編集を正とする）
        - 既知 uid かつ予約が draft 以外（queued/failed/posted…）→ 触らない（予約・投稿後の本文変更は画面から行う）
   4. 取込状態（uid→post_id・本文ハッシュ）を postcal/data/import_state.json（git管理外）に保存
+  5. 画面で削除された予約（postcal.db の deleted_posts に記録がある）の予約ファイルは、再登録せず、
+     git から消して master に commit・push する（2026-11-27〜。それまではファイルが残っているかぎり
+     次の取り込みで下書きが復活していた）。push できなかったときは元に戻し、次回の実行でやり直す。
+     削除のあとに予約ファイルが書き換えられていた場合は、消さずに新しい下書きとして登録する
 
 週間スケジュールの短文枠（よーん決定 2026-11-19）: 1短文の日は 6:00、2短文の日は 6:00→17:00。
   月[6] 火[6,17] 水[6] 木[6,17] 金[] 土[6] 日[6]
@@ -26,7 +30,7 @@ systemd timer（postcal-import.timer）から定期実行され、次を行う:
 front-matter に post_date（YYYY-MM-DD）と slot（6/12/17/20）を両方書いた場合は、それを優先する（新規登録時のみ有効）。
 
 投稿は一切しない（予約の登録・更新のみ）。X 投稿は既存の 4 枠 cron（post_scheduled.py）が行う。
-失敗（git pull・パース・DB 例外）は send_gmail.sh でよーんに通知する。
+失敗（git pull・パース・DB 例外・予約ファイルの削除が 30 分続けてできない）は send_gmail.sh でよーんに通知する。
 """
 import argparse
 import glob
@@ -277,18 +281,85 @@ def git_pull() -> bool:
     return True
 
 
+def _git(*args):
+    """ROOT で git を実行する。systemd から呼ばれても ~/.gitconfig（コミットの名義）を読めるよう HOME を補う"""
+    env = dict(os.environ)
+    env.setdefault("HOME", os.path.expanduser("~"))
+    try:
+        return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, timeout=180, env=env)
+    except subprocess.TimeoutExpired:
+        return subprocess.CompletedProcess(["git", *args], 124, "", "timeout")
+
+
+def remove_reservation_files(paths: list):
+    """画面で削除された予約のファイルを git から消し、master に commit・push する。
+
+    戻り値は (消せたパスの集合, 消せなかった理由)。失敗したときは作業ツリーを元に戻す（次回の実行でやり直す）。
+      - ローカルの master が origin/master と一致しているときだけ行う
+        （このリポジトリでは他のセッションも作業する。その未 push のコミットを一緒に push しないため）
+      - 対象のパスだけを commit する（作業ツリーの他の変更・ステージ済みの変更は含めない）
+      - 未コミットの変更がある／git 管理外の予約ファイルは消さない（誰かの作業中の可能性があるため）
+    """
+    branch = _git("rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
+    head = _git("rev-parse", "HEAD").stdout.strip()
+    remote = _git("rev-parse", "origin/master").stdout.strip()
+    if branch != "master" or not head or head != remote:
+        return set(), f"ローカルが origin/master と一致していません（branch={branch} HEAD={head[:7]} origin/master={remote[:7]}）"
+
+    clean, skipped = [], []
+    for p in paths:
+        tracked = _git("ls-files", "--error-unmatch", "--", p).returncode == 0
+        dirty = _git("status", "--porcelain", "--", p).stdout.strip()
+        (clean if tracked and not dirty else skipped).append(p)
+    why = f"未コミットの変更がある／git 管理外のため消していません: {', '.join(skipped)}" if skipped else ""
+    if not clean:
+        return set(), why
+
+    def restore():
+        _git("restore", "--source=HEAD", "--staged", "--worktree", "--", *clean)
+
+    r = _git("rm", "--quiet", "--", *clean)
+    if r.returncode != 0:
+        restore()
+        return set(), f"git rm 失敗: {(r.stderr or r.stdout).strip()[-300:]}"
+    msg = (f"postcal: 画面で削除した予約のファイルを削除（{len(clean)} 件）\n\n"
+           + "\n".join(f"- {p}" for p in clean)
+           + "\n\nscripts/postcal_import.py による自動コミット")
+    r = _git("commit", "--quiet", "-m", msg, "--", *clean)
+    if r.returncode != 0:
+        restore()
+        return set(), f"git commit 失敗: {(r.stderr or r.stdout).strip()[-300:]}"
+    sha = _git("rev-parse", "HEAD").stdout.strip()
+    r = _git("push", "--quiet", "origin", "HEAD:master")
+    if r.returncode != 0:
+        # push できなかったコミットを残すと、次回の git pull --ff-only が通らなくなる。自分のコミットだけを取り消す
+        if _git("rev-parse", "HEAD").stdout.strip() == sha and _git("rev-parse", "HEAD~1").stdout.strip() == head:
+            _git("reset", "--quiet", "--soft", head)
+            restore()
+        return set(), f"git push 失敗: {(r.stderr or r.stdout).strip()[-300:]}"
+    return set(clean), why
+
+
 # ---------------- メイン ----------------
 
-def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool) -> str:
-    """1 件の予約ファイルを DB に反映。戻り値は action（created/updated/skip/locked/edited/error）"""
+def upsert(con, rec: dict, state: dict, now: datetime, dry_run: bool, deleted=frozenset()) -> str:
+    """1 件の予約ファイルを DB に反映。戻り値は action（created/updated/skip/locked/edited/deleted/error）。
+    deleted は画面で削除された予約の id（db.deleted_ids）"""
     uid = rec["uid"]
     h = content_hash(rec)
     st = state.get(uid)
 
     if st and st.get("post_id"):
         post = db.get(con, st["post_id"])
-        if post is None:
-            st = None  # DB から消えている → 新規として作り直す
+        if post is None and st["post_id"] in deleted:
+            # 画面で削除された予約 → 再登録しない（ファイルの削除は main() がまとめて行う）
+            if st.get("hash") == h:
+                return "deleted"
+            # 削除のあとに予約ファイルが書き換えられている（改稿）→ まだ誰も見ていない版なので、消さずに新しい下書きにする
+            log(f"削除済み #{st['post_id']} の予約ファイルが書き換えられているため、新しい下書きとして登録します / {rec['path']}")
+            st = None
+        elif post is None:
+            st = None  # 削除の記録が無いのに DB に無い（DB の作り直しなど）→ 新規として作り直す
         elif post["status"] != "draft":
             # 予約済み（queued）・投稿済み・失敗などは、ファイルが変わっても本文を動かさない
             # （投稿予約後・投稿後の修正は画面から行う）。再評価を止めるため記録だけ更新
@@ -364,7 +435,10 @@ def main() -> int:
     counts = {}
     con = db.connect()
     errors = []
+    seen = set()       # 今回の走査で読めた予約ファイルの uid
+    to_remove = []     # 画面で削除された予約の (uid, 予約ファイルのパス)
     try:
+        deleted = db.deleted_ids(con)
         for path in files:
             try:
                 rec = parse_record(path)
@@ -376,17 +450,52 @@ def main() -> int:
             if rec is None:
                 counts["empty"] = counts.get("empty", 0) + 1
                 continue
+            seen.add(rec["uid"])
             try:
-                action = upsert(con, rec, state, now, args.dry_run)
+                action = upsert(con, rec, state, now, args.dry_run, deleted)
             except Exception as e:  # noqa: BLE001
                 log(f"❌ 取込失敗: {rec['path']}: {e}")
                 errors.append(f"{rec['path']}: {e}")
                 action = "error"
+            if action == "deleted":
+                to_remove.append((rec["uid"], rec["path"]))
+                continue
             counts[action] = counts.get(action, 0) + 1
     finally:
         con.close()
 
+    # 画面で削除された予約の予約ファイルを消す（git rm → commit → push）
+    if to_remove and args.dry_run:
+        for _, p in to_remove:
+            log(f"[DRY] 画面で削除済みの予約 → 予約ファイルを削除予定 / {p}")
+        counts["remove_pending"] = len(to_remove)
+    elif to_remove:
+        removed, why = remove_reservation_files([p for _, p in to_remove])
+        stuck = []
+        for uid, p in to_remove:
+            if p in removed:
+                log(f"予約ファイルを削除（画面で削除済み #{state[uid]['post_id']} / {p}）→ master に push しました")
+                del state[uid]   # 同じ uid のファイルがあとで作り直されたら、新規として登録する
+                counts["removed"] = counts.get("removed", 0) + 1
+            else:
+                n = state[uid]["rm_fail"] = state[uid].get("rm_fail", 0) + 1
+                counts["remove_pending"] = counts.get("remove_pending", 0) + 1
+                if n == 3 or n % 144 == 0:   # 30 分続いたら知らせる。その後は 1 日に 1 回
+                    stuck.append(f"{p}（{n} 回目）")
+        if why:
+            log(f"⚠ 予約ファイルを削除できませんでした（次回やり直します。下書きは復活しません）: {why}")
+        if stuck:
+            notify("【postcal-import】削除した予約のファイルを消せません",
+                   "画面で削除した予約の予約ファイルを、git から消して master に push できない状態が続いています。\n"
+                   "下書きが復活することはありませんが、ファイルはリポジトリに残っています。\n\n"
+                   + "\n".join(stuck) + f"\n\n理由: {why}\n\nVPS: {ROOT}")
+
     if not args.dry_run:
+        # 予約ファイルがもう無い「削除済み」の予約は、取込状態から外す
+        for uid in [u for u, st in state.items()
+                    if st.get("post_id") in deleted and u not in seen
+                    and st.get("file") and not os.path.exists(os.path.join(ROOT, st["file"]))]:
+            del state[uid]
         save_state(state)
     log("集計: " + " / ".join(f"{k}={v}" for k, v in sorted(counts.items())) if counts else "集計: 変更なし")
     if errors:

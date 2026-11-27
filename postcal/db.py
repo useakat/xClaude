@@ -16,6 +16,11 @@
   x_url / threads_url / error / posted_at   ランナーが書く
 同一 post_date・slot は queued/posting/posted で 1 件まで（枠 = 1 投稿）。draft は枠を占有しない
 （post_date・slot は draft では「仮の日時」。投稿予約の時点で枠が空いていなければエラーにする）。
+
+テーブル deleted_posts（post_id / deleted_at）: 画面で削除した予約の記録。
+  予約ファイルから取り込んだ予約を画面で消しても、ファイルが残っていると次の取り込みで下書きが復活して
+  しまうため、delete() が「削除済み」をここに残す。scripts/postcal_import.py はこれを見て再登録をやめ、
+  予約ファイルを git から消して master に push する（2026-11-27〜）。id は AUTOINCREMENT で再利用されない
 """
 import json
 import os
@@ -51,6 +56,10 @@ CREATE TABLE IF NOT EXISTS posts (
   posted_at TEXT NOT NULL DEFAULT ''
 );
 CREATE INDEX IF NOT EXISTS idx_posts_date_slot ON posts(post_date, slot);
+CREATE TABLE IF NOT EXISTS deleted_posts (
+  post_id INTEGER PRIMARY KEY,
+  deleted_at TEXT NOT NULL
+);
 """
 
 
@@ -154,8 +163,15 @@ def set_status(con, post_id: int, status: str, **fields):
 
 
 def delete(con, post_id: int):
+    """予約を消し、同じトランザクションで「削除済み」を記録する（取り込みによる復活を止めるため）"""
+    con.execute("INSERT OR REPLACE INTO deleted_posts (post_id, deleted_at) VALUES (?, ?)", (post_id, now_jst()))
     con.execute("DELETE FROM posts WHERE id=?", (post_id,))
     con.commit()
+
+
+def deleted_ids(con) -> set:
+    """画面で削除された予約の id（postcal_import.py が再登録の抑止と予約ファイルの削除に使う）"""
+    return {r[0] for r in con.execute("SELECT post_id FROM deleted_posts")}
 
 
 def claim_due(con, post_date: str, slot: int):
