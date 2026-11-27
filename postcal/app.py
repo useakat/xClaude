@@ -73,16 +73,19 @@ async def calendar_view(request: Request):
     last = date(y, m, calendar.monthrange(y, m)[1])
     now = datetime.now(db.JST)
     today, hour = now.date(), now.hour
+    weeks = calendar.Calendar(firstweekday=6).monthdatescalendar(y, m)  # 日曜始まり
+    # カレンダーには月初・月末の週に前月・翌月の日も並ぶ。その日の予約も見えるよう、表示する全日付の範囲で取る
     con = db.connect()
     try:
-        rows = db.list_range(con, first.isoformat(), last.isoformat())
+        shown = db.list_range(con, weeks[0][0].isoformat(), weeks[-1][-1].isoformat())
     finally:
         con.close()
     by_date = {}
-    for p in rows:
+    for p in shown:
         decorate(p, today, hour)
         by_date.setdefault(p["post_date"], []).append(p)
-    weeks = calendar.Calendar(firstweekday=6).monthdatescalendar(y, m)  # 日曜始まり
+    # 下の「今月の予約一覧」は表示月の分だけ
+    rows = [p for p in shown if first.isoformat() <= p["post_date"] <= last.isoformat()]
     prev_m = (first - timedelta(days=1)).strftime("%Y-%m")
     next_m = (last + timedelta(days=1)).strftime("%Y-%m")
     ctx = ctx_common(request)
