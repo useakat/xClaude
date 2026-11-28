@@ -12,6 +12,8 @@ note 導線ダッシュボード（claude.ai Artifact）用のデータを発信
                          CVR は現在価格の区間（note価格履歴）の 購入 ÷ PV。価格をまたぐ累計は CVR（累計・価格混在）に残す（2026-10-21）
   article_price_cvr.csv … 記事 × 価格区間（note価格履歴）ごとの PV（note記事日次の合計）・購入数（note購入記録を日付で区間に割当）・CVR・販売係数・売上。
                          PV取得日数 < 日数 の区間は日次 PV が揃っていない（バックフィル前）
+  note_daily.csv      … 記事 × 日の PV・スキ（note記事日次）・購入数（note購入記録を購入日と記事で数える）。
+                        PV が 1 以上の行だけ（PV 0 でも購入があった日は残す）。新しい日付順（2026-11-28）
   funnel_weekly.csv   … 週次ファネル（月曜始まり）: X bio / Threads bio の プロフ → クリック → note 到達
                         （固定ポストの表は 2026-10-18 に廃止。固定ポストの IMP はプロフ経由でない分が大きく、
                         プロフの一部として扱えないため。投稿 → プロフ はX投稿一覧のプロフ率で見る）
@@ -433,6 +435,24 @@ def main() -> int:
     rows[1:] = sorted(rows[1:], key=lambda r: (-r[9], -to_int(r[4]), r[2]))
     write(os.path.join(args.out, "articles.csv"), rows)
 
+    # ---- note_daily（記事 × 日。PV が 1 以上の行だけ）----
+    # 購入数は note購入記録 を購入日と記事で数えたもの。PV が 0 でも購入があった日は行を残す（購入を落とさないため）
+    buys_by_day: dict[tuple[str, str], int] = {}
+    for aid, lst in purchase_list.items():
+        for bd, _bp in lst:
+            buys_by_day[(bd.isoformat(), aid)] = buys_by_day.get((bd.isoformat(), aid), 0) + 1
+    rows = [["id", "日付", "記事ID", "記事タイトル", "PV", "スキ", "購入数"]]
+    for d_s, aid in set(daily) | set(buys_by_day):
+        pv, like = daily.get((d_s, aid), ("", ""))
+        buys = buys_by_day.get((d_s, aid), 0)
+        if to_int(pv) <= 0 and not buys:
+            continue
+        rows.append([f"{d_s}|{aid}", d_s, aid, articles.get(aid, {}).get("title", "") or "（タイトル未取得）",
+                     to_int(pv), to_int(like), buys])
+    rows[1:] = sorted(rows[1:], key=lambda r: (r[1], r[4], r[5], r[2]), reverse=True)
+    note_daily_n = len(rows) - 1
+    write(os.path.join(args.out, "note_daily.csv"), rows)
+
     # ---- funnel_posts（投稿ごと累計）----
     def pin_for(media: str, aid: str, post_key: str):
         return next((p for p in pinned if p["媒体"] == media and p["記事ID"] == aid and aid
@@ -653,7 +673,7 @@ def main() -> int:
     stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     with open(os.path.join(args.out, "exported_at.txt"), "w", encoding="utf-8") as f:
         f.write(stamp + "\n")
-    print(f"✅ {args.out} に 8 ファイルを書き出し（{stamp}）: bio {len(bio)-1} 行 / 明細 {len(det_rows)} 行 / 記事 {len(articles)} 件 / "
+    print(f"✅ {args.out} に 10 ファイルを書き出し（{stamp}）: bio {len(bio)-1} 行 / 明細 {len(det_rows)} 行 / 記事 {len(articles)} 件 / 記事日別 {note_daily_n} 行 / "
           f"投稿ファネル {len(posts)}＋不明 {len(unknown)} 件 / 週次 {len(rows)-1} 行")
     return 0
 
